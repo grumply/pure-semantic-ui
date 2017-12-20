@@ -48,6 +48,8 @@ executable semantic-ui-pure
     Semantic
     Semantic.Elements
     Semantic.Elements.Container
+    Semantic.Extensions
+    Semantic.Utils
 
   if impl(ghcjs)
     ghc-options: -O2 -dedupe
@@ -87,12 +89,15 @@ library
     PolyKinds
     NoMonomorphismRestriction
     PatternSynonyms
+    DuplicateRecordFields
     -- END EXTENSIONS
 
   exposed-modules:
     Semantic
     Semantic.Elements
     Semantic.Elements.Container
+    Semantic.Extensions
+    Semantic.Utils
 
   if impl(ghcjs)
     ghc-options: -O2 -dedupe -fexpose-all-unfoldings

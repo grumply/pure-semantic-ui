@@ -9,7 +9,9 @@ module Main where
 
 import Pure.App
 import qualified Pure.App
-import Pure.View
+import Pure.View as HTML
+
+import Semantic
 
 data Routes = HomeR deriving Eq
 
@@ -23,7 +25,7 @@ main = run App {..}
     pages HomeR = pure $ page _Head _Home
 
 _Head = simple "Head" $
-  Head [] []
+  Head [] [ HTML.Link [ Rel "stylesheet", Href "http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.12/semantic.min.css" ] [] ] 
 
 data HomeState ms = HomeState
 
@@ -33,4 +35,4 @@ _Home = Controller {..}
     build = return
     prime = return ()
     model = HomeState
-    view HomeState = Div [] []
+    view HomeState = Container def & TextAlignLeft 
