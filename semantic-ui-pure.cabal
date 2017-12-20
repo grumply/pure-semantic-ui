@@ -1,0 +1,102 @@
+name:              semantic-ui-pure
+version:           0.1.0
+synopsis:          
+homepage:          
+author:            S. M. Hickman
+maintainer:        sean@grump.ly
+license:           BSD3
+license-file:      LICENSE
+cabal-version:     >= 1.10
+build-type:        Simple
+
+executable semantic-ui-pure
+  hs-source-dirs:
+      src
+
+  main-is: Main.hs
+
+  build-depends:
+      base >=4.8
+    , tlc
+    , ef-base
+    , ef
+    , pure
+    -- END DEPENDENCIES
+
+  default-extensions:
+    BangPatterns
+    DataKinds
+    DeriveAnyClass
+    DeriveGeneric
+    FlexibleContexts
+    FlexibleInstances
+    ImplicitParams
+    RecordWildCards
+    TypeFamilies
+    TypeOperators
+    ViewPatterns
+    OverloadedStrings
+    MultiParamTypeClasses
+    PackageImports
+    CPP
+    PolyKinds
+    NoMonomorphismRestriction
+    PatternSynonyms
+    -- END EXTENSIONS
+
+  other-modules:
+    Semantic
+    Semantic.Elements
+    Semantic.Elements.Container
+
+  if impl(ghcjs)
+    ghc-options: -O2 -dedupe
+    build-depends:
+        ghcjs-base
+
+  default-language: Haskell2010
+
+library
+  hs-source-dirs:
+      src
+
+  build-depends:
+      base >=4.8
+    , tlc
+    , ef-base
+    , ef
+    , pure
+    -- END DEPENDENCIES
+
+  default-extensions:
+    BangPatterns
+    DataKinds
+    DeriveAnyClass
+    DeriveGeneric
+    FlexibleContexts
+    FlexibleInstances
+    ImplicitParams
+    RecordWildCards
+    TypeFamilies
+    TypeOperators
+    ViewPatterns
+    OverloadedStrings
+    MultiParamTypeClasses
+    PackageImports
+    CPP
+    PolyKinds
+    NoMonomorphismRestriction
+    PatternSynonyms
+    -- END EXTENSIONS
+
+  exposed-modules:
+    Semantic
+    Semantic.Elements
+    Semantic.Elements.Container
+
+  if impl(ghcjs)
+    ghc-options: -O2 -dedupe -fexpose-all-unfoldings
+    build-depends:
+        ghcjs-base
+
+  default-language: Haskell2010
