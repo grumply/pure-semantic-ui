@@ -42,6 +42,8 @@ executable semantic-ui-pure
     PolyKinds
     NoMonomorphismRestriction
     PatternSynonyms
+    DuplicateRecordFields
+    LambdaCase
     -- END EXTENSIONS
 
   other-modules:
@@ -49,6 +51,9 @@ executable semantic-ui-pure
     Semantic.Elements
     Semantic.Elements.Container
     Semantic.Extensions
+    Semantic.Elements.Label
+    Semantic.Elements.Label.LabelDetail
+    Semantic.Elements.Label.LabelGroup
     Semantic.Utils
 
   if impl(ghcjs)
@@ -90,6 +95,7 @@ library
     NoMonomorphismRestriction
     PatternSynonyms
     DuplicateRecordFields
+    LambdaCase
     -- END EXTENSIONS
 
   exposed-modules:
@@ -97,6 +103,9 @@ library
     Semantic.Elements
     Semantic.Elements.Container
     Semantic.Extensions
+    Semantic.Elements.Label
+    Semantic.Elements.Label.LabelDetail
+    Semantic.Elements.Label.LabelGroup
     Semantic.Utils
 
   if impl(ghcjs)

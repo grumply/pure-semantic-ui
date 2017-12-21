@@ -1,9 +1,12 @@
-module Semantic.Elements.Label where
+module Semantic.Elements.Label (module Semantic.Elements.Label, module Export) where
 
 import GHC.Generics as G
 import Pure.View as View
 
 import Semantic.Utils
+
+import Semantic.Elements.Label.LabelDetail as Export
+import Semantic.Elements.Label.LabelGroup as Export
 
 data Label ms = Label_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -21,14 +24,14 @@ data Label ms = Label_
     , horizontal :: Bool
     , image :: Maybe (View ms)
     , handleClick :: Ef ms IO ()
-    , pointing :: Txt
+    , pointing :: Maybe Txt
     , ribbon :: Maybe Txt
     , size :: Txt
     , tag :: Bool
     } deriving (Generic)
 
 instance Default (Label ms) where
-    def = (G.to gdef) { as = View.Label }
+    def = (G.to gdef) { as = Div }
 
 pattern Label :: Typeable ms => Label ms -> View ms
 pattern Label l = View l

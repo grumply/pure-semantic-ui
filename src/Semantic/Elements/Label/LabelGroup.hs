@@ -17,7 +17,7 @@ data LabelGroup ms = LabelGroup_
     } deriving (Generic)
 
 instance Default (LabelGroup ms) where
-    def = G.to gdef
+    def = (G.to gdef) { as = Div }
 
 pattern LabelGroup :: Typeable ms => LabelGroup ms -> View ms
 pattern LabelGroup lg = View lg
@@ -34,9 +34,10 @@ instance Typeable ms => Pure LabelGroup ms where
                 : "labels"
                 : classes
                 )
-        as 
-            ( ClassList cs
-            : attributes
-            )
-            children
+        in
+            as 
+                ( ClassList cs
+                : attributes
+                )
+                children
             

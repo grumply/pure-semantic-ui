@@ -5,6 +5,7 @@
 {-# LANGUAGE TypeOperators #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE RecordWildCards #-}
+{-# LANGUAGE DuplicateRecordFields #-}
 module Main where
 
 import Pure.App
@@ -35,4 +36,14 @@ _Home = Controller {..}
     build = return
     prime = return ()
     model = HomeState
-    view HomeState = Container def & TextAlignLeft 
+    view HomeState = 
+      Container def 
+        { children = 
+            [ LabelGroup def 
+                { children = 
+                    [ Semantic.Label def { children = [ "Test 1" ] } 
+                    , Semantic.Label def { children = [ "Test 2" ] }
+                    ] 
+                }
+            ]
+        } & TextAlignLeft 
