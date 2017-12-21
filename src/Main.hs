@@ -6,13 +6,16 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE DuplicateRecordFields #-}
+{-# LANGUAGE OverloadedLabels #-}
 module Main where
 
 import Pure.App
 import qualified Pure.App
-import Pure.View as HTML
+import Pure.View as HTML hiding (Label)
 
 import Semantic
+
+import Debug.Trace
 
 data Routes = HomeR deriving Eq
 
@@ -37,13 +40,15 @@ _Home = Controller {..}
     prime = return ()
     model = HomeState
     view HomeState = 
-      Container def 
-        { children = 
-            [ LabelGroup def 
-                { children = 
-                    [ Semantic.Label def { children = [ "Test 1" ] } 
-                    , Semantic.Label def { children = [ "Test 2" ] }
-                    ] 
-                }
-            ]
-        } & TextAlignLeft 
+      Container def & Children
+          [ LabelGroup def & Children
+                [ Label def & Children [ "Test 1" ]
+                , Label def & Children [ "Test 2" ]
+                ] 
+          , Image def & Attributes [ Src "http://via.placeholder.com/350x150" ]
+          , Image def & Attributes [ Src "http://via.placeholder.com/350x150" ]
+          , ImageGroup def & Children
+                [ Image def & Attributes [ Src "http://via.placeholder.com/350x150" ]
+                , Image def & Attributes [ Src "http://via.placeholder.com/350x150" ]
+                ]
+          ]
