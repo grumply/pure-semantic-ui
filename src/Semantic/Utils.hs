@@ -1,7 +1,7 @@
 module Semantic.Utils (module Semantic.Utils, module Export) where
 
 import Pure.Data
-import Pure.View ((<<>>))
+import Pure.View
 
 import Data.Function as Export
 
@@ -15,7 +15,10 @@ textAlignClass (Just ta) =
     AlignedJustified -> "justified"
 
 useKeyOrValueAndKey val key =
-  maybe "" (<<>> key) val
+  maybe key (<<>> key) val
+
+useValueAndKey val key =
+  val ? (val <<>> key) $ key
 
 oneEq :: Eq a => a -> a -> a -> Maybe a
 oneEq l r x = if l == x then Just l else if r == x then Just r else Nothing
@@ -31,3 +34,4 @@ oneEq l r x = if l == x then Just l else if r == x then Just r else Nothing
 -- if x is (Just nil) then y else nil
 (#!?) :: (Cond x, Default a, Cond a) => Maybe x -> a -> a
 (#!?) x y = may (#! y) x
+
