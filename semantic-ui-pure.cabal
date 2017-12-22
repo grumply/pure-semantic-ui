@@ -49,8 +49,10 @@ executable semantic-ui-pure
   other-modules:
     Semantic
     Semantic.Elements
+    Semantic.Elements.Button
     Semantic.Elements.Container
     Semantic.Extensions
+    Semantic.Elements.Icon
     Semantic.Elements.Image
     Semantic.Elements.Image.ImageGroup
     Semantic.Elements.Label
@@ -103,8 +105,10 @@ library
   exposed-modules:
     Semantic
     Semantic.Elements
+    Semantic.Elements.Button
     Semantic.Elements.Container
     Semantic.Extensions
+    Semantic.Elements.Icon
     Semantic.Elements.Image
     Semantic.Elements.Image.ImageGroup
     Semantic.Elements.Label

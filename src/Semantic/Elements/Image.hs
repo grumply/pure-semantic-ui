@@ -51,8 +51,8 @@ instance Typeable ms => Pure Image ms where
                 : inline # "inline"
                 : rounded # "rounded"
                 : useKeyOrValueAndKey spaced "spaced"
-                : useValueAndKey floated "floated"
-                : useValueAndKey verticalAlign "aligned"
+                : floated # ("floated" <<>> floated)
+                : verticalAlign # ("aligned" <<>> verticalAlign)
                 : "image"
                 : classes
                 )

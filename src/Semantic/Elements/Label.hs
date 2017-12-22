@@ -8,6 +8,8 @@ import Semantic.Utils
 import Semantic.Elements.Label.LabelDetail as Export
 import Semantic.Elements.Label.LabelGroup as Export
 
+import Semantic.Elements.Image
+
 data Label ms = Label_
     { as :: [Feature ms] -> [View ms] -> View ms
     , active :: Bool
@@ -22,7 +24,6 @@ data Label ms = Label_
     , empty :: Bool
     , floating :: Bool
     , horizontal :: Bool
-    , image :: Maybe (View ms)
     , handleClick :: Ef ms IO ()
     , pointing :: Maybe Txt
     , ribbon :: Maybe Txt
@@ -46,6 +47,9 @@ instance Typeable ms => Pure Label ms where
                     (oneEq "above" "below" -> Just ab) -> (<<>> ab)
                     "" -> id
                     _  -> const nil
+
+            hasImage =
+                foldPures (\(Image_ {}) -> const True) False children
             
             cs =
                 ( "ui"
@@ -58,7 +62,7 @@ instance Typeable ms => Pure Label ms where
                 : empty # "empty"
                 : floating # "floating"
                 : horizontal # "horizontal"
-                : image #!? "image"
+                : hasImage # "image"
                 : tag # "tag"
                 : corner # "corner"
                 : ribbon # "ribbon"

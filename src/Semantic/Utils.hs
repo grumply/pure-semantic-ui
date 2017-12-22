@@ -15,10 +15,10 @@ textAlignClass (Just ta) =
     AlignedJustified -> "justified"
 
 useKeyOrValueAndKey val key =
-  maybe key (<<>> key) val
-
-useValueAndKey val key =
-  val ? (val <<>> key) $ key
+  case val of
+    Just "" -> key
+    Just v  -> v <<>> key
+    _       -> nil
 
 oneEq :: Eq a => a -> a -> a -> Maybe a
 oneEq l r x = if l == x then Just l else if r == x then Just r else Nothing
@@ -35,3 +35,15 @@ oneEq l r x = if l == x then Just l else if r == x then Just r else Nothing
 (#!?) :: (Cond x, Default a, Cond a) => Maybe x -> a -> a
 (#!?) x y = may (#! y) x
 
+(<>>) x y = 
+  case (notNil x, notNil y) of
+    (True,True) -> x <<>> y
+    (True,_) -> x
+    (_,True) -> y
+    _ -> nil
+(<<>) = (<>>)
+
+foldPures f = foldr $ \x st ->
+  case x of
+      View a -> f a st
+      _      -> st

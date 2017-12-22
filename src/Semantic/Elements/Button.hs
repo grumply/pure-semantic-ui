@@ -1,9 +1,13 @@
 module Semantic.Elements.Button where
 
 import GHC.Generics as G
-import Pure.View
+import Pure.View hiding (Button,Label)
+import qualified Pure.View as HTML
 
 import Semantic.Utils
+
+import Semantic.Elements.Icon
+import Semantic.Elements.Label
 
 data Button ms = Button_
   { as :: [Feature ms] -> [View ms] -> View ms
@@ -20,9 +24,7 @@ data Button ms = Button_
   , disabled :: Bool
   , floated :: Txt
   , fluid :: Bool
-  , icon :: View ms
   , inverted :: Bool
-  , label :: View ms
   , labelPosition :: Txt
   , loading :: Bool
   , negative :: Bool
@@ -36,8 +38,10 @@ data Button ms = Button_
   , focus :: Bool
   } deriving (Generic)
 
+  {- label, content, icon
+  -}
 instance Default (Button ms) where
-    def = (G.to gdef) { as = Div }
+    def = (G.to gdef) { as = HTML.Button }
 
 pattern Button :: Typeable ms => Button ms -> View ms
 pattern Button b = View b
@@ -52,7 +56,7 @@ instance Typeable ms => Pure Button ms where
               : circular # "circular"
               : compact # "compact"
               : fluid # "fluid"
-              : icon # "icon"
+              : hasIcon # "icon"
               : inverted # "inverted"
               : loading # "loading"
               : negative # "negative"
@@ -60,22 +64,34 @@ instance Typeable ms => Pure Button ms where
               : primary # "primary"
               : secondary # "secondary"
               : toggle # "toggle"
-              : useKeyOrValueAndKey animated "animated" 
-              : useKeyOrValueAndKey attached "attached"
+              : (may ("animated" <<>>) animated)
+              : (may ("attached" <<>>) attached)
               : xs
               )
 
+            hasIcon =
+                foldPures (\(Icon_ {}) -> const True) False children
+
+            (label,children') =
+                foldr (\a (st,cs) ->
+                    case a of
+                        View Label {} -> (a,cs)
+                        _             -> (st,a:cs)
+                ) (nil,nil) children
+
             labeledClasses xs =
-                ( labelPosition 
-                  ? useKeyOrValueAndKey labelPosition "labeled"
-                  $ (label # "labeled")
+                ( (labelPosition 
+                    ? (labelPosition <<>> "labeled")
+                    $ (label # "labeled")
+                  )
                 : xs
                 )
 
-            wrapprClasses =
-                [ disabled # "disabled"
-                , floated # "floated"
-                ] 
+            wrapperClasses xs =
+                ( disabled # "disabled"
+                : floated # "floated"
+                : xs
+                ) 
 
             index :: Feature ms
             index = 
@@ -83,26 +99,39 @@ instance Typeable ms => Pure Button ms where
                   ? Tabindex (-1)
                   $ may Tabindex tabIndex 
 
-            hasIconClass =
-                let i = notNil icon
-                    lp = notNil labelPosition
-                    nc = isNil children
-                in i && (lp || nc)
+            isButton =
+                case as [] [] of
+                    HTML.Button _ _ -> True
+                    _ -> False
 
         in 
-            if notNil label
-                then
-                    let buttonClasses = "ui" : baseClasses ("button" : classes)
-                        containerClasses = "ui" : labeledClasses ("button" : classes ++ wrapperClasses)
-                        -- labelElement = def { basic = True, pointing = labelPosition == "left" ? "right" $ "left" }
-                    in
-                        as 
-                            ( ClassList 
-                            : index 
-                            : handleClick # (On "click" def { preventDef = True } (\_ -> return $ Just handleClick))
-                            : attributes
-                            )
-                            ( 
-                            : children
-                            )
-                                
+            let cs = "ui" : baseClasses (wrapperClasses (labeledClasses ("button" : classes)))
+                buttonClasses = "ui" : baseClasses ("button" : classes)
+                containerClasses = "ui" : labeledClasses ("button" : classes ++ wrapperClasses [])
+            in
+                label 
+                  ? as 
+                      ( ClassList containerClasses
+                      : handleClick # (On "click" def { preventDef = True } (\_ -> return $ Just handleClick))
+                      : attributes
+                      )
+                      [ (labelPosition == "left") # label
+                      , HTML.Button 
+                          [ ClassList buttonClasses
+                          , Disabled disabled
+                          , index
+                          ]
+                          children'
+                      , (labelPosition == "right") # label
+                      ]
+                  $ as
+                      ( ClassList cs
+                      : (disabled && isButton) # Disabled True
+                      : onClick handleClick
+                      : Role "button"
+                      : index
+                      : attributes
+                      )
+                      children 
+
+

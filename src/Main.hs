@@ -9,9 +9,9 @@
 {-# LANGUAGE OverloadedLabels #-}
 module Main where
 
-import Pure.App
+import Pure.App hiding (name,(!),(%))
 import qualified Pure.App
-import Pure.View as HTML hiding (Label)
+import qualified Pure.View as HTML
 
 import Semantic
 
@@ -40,15 +40,17 @@ _Home = Controller {..}
     prime = return ()
     model = HomeState
     view HomeState = 
-      Container def & Children
-          [ LabelGroup def & Children
-                [ Label def & Children [ "Test 1" ]
-                , Label def & Children [ "Test 2" ]
-                ] 
-          , Image def & Attributes [ Src "http://via.placeholder.com/350x150" ]
-          , Image def & Attributes [ Src "http://via.placeholder.com/350x150" ]
-          , ImageGroup def & Children
-                [ Image def & Attributes [ Src "http://via.placeholder.com/350x150" ]
-                , Image def & Attributes [ Src "http://via.placeholder.com/350x150" ]
-                ]
-          ]
+      let i = Image def % [ Src "http://via.placeholder.com/200x200" ] & Medium & Circular
+      in
+        Container def !
+            [ LabelGroup def ! 
+                  [ Label def ! "Test 1"
+                  , Label def ! "Test 2" 
+                  ] & Circular
+            , ImageGroup def ! [i,i]
+            , Div [] [ Button def ! "Test" ]
+            , Button def { as = Div } & LabelPosition "right" ! 
+                  [ Button def ! [ NamedIcon def "world" ]
+                  , Label def & Pointing "left" & Basic ! "World" 
+                  ] 
+            ]
