@@ -1,9 +1,11 @@
-module Semantic.Elements.Icon where
+module Semantic.Elements.Icon (module Semantic.Elements.Icon, module Export) where
 
 import GHC.Generics as G
 import Pure.View as View
 
 import Semantic.Utils
+
+import Semantic.Elements.Icon.IconGroup as Export
 
 data Icon ms = Icon_
     { as :: [Feature ms] -> [View ms] -> View ms

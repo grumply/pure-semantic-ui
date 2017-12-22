@@ -17,7 +17,7 @@ instance Default (IconGroup ms) where
     def = (G.to gdef) { as = I }
 
 pattern IconGroup :: Typeable ms => IconGroup ms -> View ms
-pattern IconGroup ig = VIew ig
+pattern IconGroup ig = View ig
 
 instance Typeable ms => Pure IconGroup ms where
     render IconGroup_ {..} =
