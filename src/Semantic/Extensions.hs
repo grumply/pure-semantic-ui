@@ -39,6 +39,7 @@ getChildren c =
         View Label_       {..} -> Just (children,c)
         View LabelDetail_ {..} -> Just (children,c)
         View LabelGroup_  {..} -> Just (children,c)
+        View IconGroup_   {..} -> Just (children,c)
         View Image_       {..} -> Just (children,c)
         View ImageGroup_  {..} -> Just (children,c)
         _                      -> Nothing
@@ -51,6 +52,7 @@ setChildren cs c =
         View Label_       {..} -> View Label_       { children = cs, .. }
         View LabelDetail_ {..} -> View LabelDetail_ { children = cs, .. }
         View LabelGroup_  {..} -> View LabelGroup_  { children = cs, .. }
+        View IconGroup_   {..} -> View IconGroup_   { children = cs, .. }
         View Image_       {..} -> View Image_       { children = cs, .. }
         View ImageGroup_  {..} -> View ImageGroup_  { children = cs, .. }
         _                      -> c
@@ -66,6 +68,8 @@ getClasses c =
         View Label_       {..} -> Just (classes,c)
         View LabelDetail_ {..} -> Just (classes,c)
         View LabelGroup_  {..} -> Just (classes,c)
+        View Icon_        {..} -> Just (classes,c)
+        View IconGroup_   {..} -> Just (classes,c)
         View Image_       {..} -> Just (classes,c)
         View ImageGroup_  {..} -> Just (classes,c)
         _                      -> Nothing
@@ -78,6 +82,8 @@ setClasses cs c =
         View Label_       {..} -> View Label_       { classes = cs, .. }
         View LabelDetail_ {..} -> View LabelDetail_ { classes = cs, .. }
         View LabelGroup_  {..} -> View LabelGroup_  { classes = cs, .. }
+        View Icon_        {..} -> View Icon_        { classes = cs, .. }
+        View IconGroup_   {..} -> View IconGroup_   { classes = cs, .. }
         View Image_       {..} -> View Image_       { classes = cs, .. }
         View ImageGroup_  {..} -> View ImageGroup_  { classes = cs, .. }
         _                      -> c
@@ -94,6 +100,7 @@ getAttributes c =
         View LabelDetail_ {..} -> Just (attributes,c)
         View LabelGroup_  {..} -> Just (attributes,c)
         View Icon_        {..} -> Just (attributes,c)
+        View IconGroup_   {..} -> Just (attributes,c)
         View Image_       {..} -> Just (attributes,c)
         View ImageGroup_  {..} -> Just (attributes,c)
         _                      -> Nothing
@@ -107,6 +114,7 @@ setAttributes cs c =
         View LabelDetail_ {..} -> View LabelDetail_ { attributes = cs, .. }
         View LabelGroup_  {..} -> View LabelGroup_  { attributes = cs, .. }
         View Icon_        {..} -> View Icon_        { attributes = cs, .. }
+        View IconGroup_   {..} -> View IconGroup_   { attributes = cs, .. }
         View Image_       {..} -> View Image_       { attributes = cs, .. }
         View ImageGroup_  {..} -> View ImageGroup_  { attributes = cs, .. }
         _                      -> c
@@ -123,6 +131,7 @@ getAs c =
         View LabelDetail_ {..} -> Just (as,c)
         View LabelGroup_  {..} -> Just (as,c)
         View Icon_        {..} -> Just (as,c)
+        View IconGroup_   {..} -> Just (as,c)
         View Image_       {..} -> Just (as,c)
         View ImageGroup_  {..} -> Just (as,c)
         _                      -> Nothing
@@ -136,6 +145,7 @@ setAs a c =
         View LabelDetail_ {..} -> View LabelDetail_ { as = a, .. }
         View LabelGroup_  {..} -> View LabelGroup_  { as = a, .. }
         View Icon_        {..} -> View Icon_        { as = a, .. }
+        View IconGroup_   {..} -> View IconGroup_   { as = a, .. }
         View Image_       {..} -> View Image_       { as = a, .. }
         View ImageGroup_  {..} -> View ImageGroup_  { as = a, .. }
         _                      -> c
@@ -742,6 +752,7 @@ getSize c =
     case c of
         View Button_ {..} -> size # Just (size,c)
         View Icon_   {..} -> size # Just (size,c)
+        View IconGroup_  {..} -> size # Just (size,c)
         View Image_  {..} -> size # Just (size,c)
         View ImageGroup_ {..} -> size # Just (size,c)
         View Label_  {..} -> size # Just (size,c)
@@ -753,6 +764,7 @@ setSize s c =
     case c of
         View Button_ {..} -> View Button_ { size = s, .. }
         View Icon_   {..} -> View Icon_   { size = s, .. }
+        View IconGroup_ {..} -> View IconGroup_ { size = s, .. }
         View Image_  {..} -> View Image_  { size = s, .. }
         View ImageGroup_  {..} -> View ImageGroup_  { size = s, .. }
         View Label_  {..} -> View Label_  { size = s, .. }

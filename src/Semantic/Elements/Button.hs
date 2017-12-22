@@ -38,8 +38,6 @@ data Button ms = Button_
   , focus :: Bool
   } deriving (Generic)
 
-  {- label, content, icon
-  -}
 instance Default (Button ms) where
     def = (G.to gdef) { as = HTML.Button }
 
