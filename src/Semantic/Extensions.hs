@@ -3,14 +3,11 @@ module Semantic.Extensions where
 import Pure.Data
 import Pure.View (pattern View)
 
-import Semantic.Elements.Container as Container
 import Semantic.Elements.Button as Button
+import Semantic.Elements.Container as Container
 import Semantic.Elements.Label as Label
-import Semantic.Elements.Label.LabelDetail as Label
-import Semantic.Elements.Label.LabelGroup as Label
 import Semantic.Elements.Icon as Icon
 import Semantic.Elements.Image as Image
-import Semantic.Elements.Image.ImageGroup as Image
 
 import Semantic.Utils
 
@@ -34,28 +31,30 @@ pattern Children cs c <- (getChildren -> Just (cs,c)) where
 {-# INLINE getChildren #-}
 getChildren c =
     case c of
-        View Button_      {..} -> Just (children,c)
-        View Container_   {..} -> Just (children,c)
-        View Label_       {..} -> Just (children,c)
-        View LabelDetail_ {..} -> Just (children,c)
-        View LabelGroup_  {..} -> Just (children,c)
-        View IconGroup_   {..} -> Just (children,c)
-        View Image_       {..} -> Just (children,c)
-        View ImageGroup_  {..} -> Just (children,c)
-        _                      -> Nothing
+        View Button_        {..} -> Just (children,c)
+        View ButtonContent_ {..} -> Just (children,c)
+        View Container_     {..} -> Just (children,c)
+        View Label_         {..} -> Just (children,c)
+        View LabelDetail_   {..} -> Just (children,c)
+        View LabelGroup_    {..} -> Just (children,c)
+        View IconGroup_     {..} -> Just (children,c)
+        View Image_         {..} -> Just (children,c)
+        View ImageGroup_    {..} -> Just (children,c)
+        _                        -> Nothing
 
 {-# INLINE setChildren #-}
 setChildren cs c =
     case c of
-        View Button_      {..} -> View Button_      { children = cs, .. }
-        View Container_   {..} -> View Container_   { children = cs, .. }
-        View Label_       {..} -> View Label_       { children = cs, .. }
-        View LabelDetail_ {..} -> View LabelDetail_ { children = cs, .. }
-        View LabelGroup_  {..} -> View LabelGroup_  { children = cs, .. }
-        View IconGroup_   {..} -> View IconGroup_   { children = cs, .. }
-        View Image_       {..} -> View Image_       { children = cs, .. }
-        View ImageGroup_  {..} -> View ImageGroup_  { children = cs, .. }
-        _                      -> c
+        View Button_        {..} -> View Button_        { children = cs, .. }
+        View ButtonContent_ {..} -> View ButtonContent_ { children = cs, .. }
+        View Container_     {..} -> View Container_     { children = cs, .. }
+        View Label_         {..} -> View Label_         { children = cs, .. }
+        View LabelDetail_   {..} -> View LabelDetail_   { children = cs, .. }
+        View LabelGroup_    {..} -> View LabelGroup_    { children = cs, .. }
+        View IconGroup_     {..} -> View IconGroup_     { children = cs, .. }
+        View Image_         {..} -> View Image_         { children = cs, .. }
+        View ImageGroup_    {..} -> View ImageGroup_    { children = cs, .. }
+        _                        -> c
 
 pattern Classes cs c <- (getClasses -> Just (cs,c)) where
     Classes cs c = setClasses cs c
@@ -63,29 +62,31 @@ pattern Classes cs c <- (getClasses -> Just (cs,c)) where
 {-# INLINE getClasses #-}
 getClasses c =
     case c of
-        View Button_      {..} -> Just (classes,c)
-        View Container_   {..} -> Just (classes,c)
-        View Label_       {..} -> Just (classes,c)
-        View LabelDetail_ {..} -> Just (classes,c)
-        View LabelGroup_  {..} -> Just (classes,c)
-        View Icon_        {..} -> Just (classes,c)
-        View IconGroup_   {..} -> Just (classes,c)
-        View Image_       {..} -> Just (classes,c)
-        View ImageGroup_  {..} -> Just (classes,c)
-        _                      -> Nothing
+        View Button_        {..} -> Just (classes,c)
+        View ButtonContent_ {..} -> Just (classes,c)
+        View Container_     {..} -> Just (classes,c)
+        View Label_         {..} -> Just (classes,c)
+        View LabelDetail_   {..} -> Just (classes,c)
+        View LabelGroup_    {..} -> Just (classes,c)
+        View Icon_          {..} -> Just (classes,c)
+        View IconGroup_     {..} -> Just (classes,c)
+        View Image_         {..} -> Just (classes,c)
+        View ImageGroup_    {..} -> Just (classes,c)
+        _                        -> Nothing
 
 {-# INLINE setClasses #-}
 setClasses cs c =
     case c of
-        View Button_      {..} -> View Button_      { classes = cs, .. }
-        View Container_   {..} -> View Container_   { classes = cs, .. }
-        View Label_       {..} -> View Label_       { classes = cs, .. }
-        View LabelDetail_ {..} -> View LabelDetail_ { classes = cs, .. }
-        View LabelGroup_  {..} -> View LabelGroup_  { classes = cs, .. }
-        View Icon_        {..} -> View Icon_        { classes = cs, .. }
-        View IconGroup_   {..} -> View IconGroup_   { classes = cs, .. }
-        View Image_       {..} -> View Image_       { classes = cs, .. }
-        View ImageGroup_  {..} -> View ImageGroup_  { classes = cs, .. }
+        View Button_        {..} -> View Button_        { classes = cs, .. }
+        View ButtonContent_ {..} -> View ButtonContent_ { classes = cs, .. }
+        View Container_     {..} -> View Container_     { classes = cs, .. }
+        View Label_         {..} -> View Label_         { classes = cs, .. }
+        View LabelDetail_   {..} -> View LabelDetail_   { classes = cs, .. }
+        View LabelGroup_    {..} -> View LabelGroup_    { classes = cs, .. }
+        View Icon_          {..} -> View Icon_          { classes = cs, .. }
+        View IconGroup_     {..} -> View IconGroup_     { classes = cs, .. }
+        View Image_         {..} -> View Image_         { classes = cs, .. }
+        View ImageGroup_    {..} -> View ImageGroup_    { classes = cs, .. }
         _                      -> c
 
 pattern Attributes as c <- (getAttributes -> Just (as,c)) where
@@ -94,30 +95,32 @@ pattern Attributes as c <- (getAttributes -> Just (as,c)) where
 {-# INLINE getAttributes #-}
 getAttributes c =
     case c of
-        View Button_      {..} -> Just (attributes,c)
-        View Container_   {..} -> Just (attributes,c)
-        View Label_       {..} -> Just (attributes,c)
-        View LabelDetail_ {..} -> Just (attributes,c)
-        View LabelGroup_  {..} -> Just (attributes,c)
-        View Icon_        {..} -> Just (attributes,c)
-        View IconGroup_   {..} -> Just (attributes,c)
-        View Image_       {..} -> Just (attributes,c)
-        View ImageGroup_  {..} -> Just (attributes,c)
-        _                      -> Nothing
+        View Button_        {..} -> Just (attributes,c)
+        View ButtonContent_ {..} -> Just (attributes,c)
+        View Container_     {..} -> Just (attributes,c)
+        View Label_         {..} -> Just (attributes,c)
+        View LabelDetail_   {..} -> Just (attributes,c)
+        View LabelGroup_    {..} -> Just (attributes,c)
+        View Icon_          {..} -> Just (attributes,c)
+        View IconGroup_     {..} -> Just (attributes,c)
+        View Image_         {..} -> Just (attributes,c)
+        View ImageGroup_    {..} -> Just (attributes,c)
+        _                        -> Nothing
 
 {-# INLINE setAttributes #-}
 setAttributes cs c =
     case c of
-        View Button_      {..} -> View Button_      { attributes = cs, .. }
-        View Container_   {..} -> View Container_   { attributes = cs, .. }
-        View Label_       {..} -> View Label_       { attributes = cs, .. }
-        View LabelDetail_ {..} -> View LabelDetail_ { attributes = cs, .. }
-        View LabelGroup_  {..} -> View LabelGroup_  { attributes = cs, .. }
-        View Icon_        {..} -> View Icon_        { attributes = cs, .. }
-        View IconGroup_   {..} -> View IconGroup_   { attributes = cs, .. }
-        View Image_       {..} -> View Image_       { attributes = cs, .. }
-        View ImageGroup_  {..} -> View ImageGroup_  { attributes = cs, .. }
-        _                      -> c
+        View Button_        {..} -> View Button_        { attributes = cs, .. }
+        View ButtonContent_ {..} -> View ButtonContent_ { attributes = cs, .. }
+        View Container_     {..} -> View Container_     { attributes = cs, .. }
+        View Label_         {..} -> View Label_         { attributes = cs, .. }
+        View LabelDetail_   {..} -> View LabelDetail_   { attributes = cs, .. }
+        View LabelGroup_    {..} -> View LabelGroup_    { attributes = cs, .. }
+        View Icon_          {..} -> View Icon_          { attributes = cs, .. }
+        View IconGroup_     {..} -> View IconGroup_     { attributes = cs, .. }
+        View Image_         {..} -> View Image_         { attributes = cs, .. }
+        View ImageGroup_    {..} -> View ImageGroup_    { attributes = cs, .. }
+        _                        -> c
 
 pattern As as c <- (getAs -> Just (as,c)) where
     As as c = setAs as c
@@ -125,30 +128,32 @@ pattern As as c <- (getAs -> Just (as,c)) where
 {-# INLINE getAs #-}
 getAs c =
     case c of
-        View Button_      {..} -> Just (as,c)
-        View Container_   {..} -> Just (as,c)
-        View Label_       {..} -> Just (as,c)
-        View LabelDetail_ {..} -> Just (as,c)
-        View LabelGroup_  {..} -> Just (as,c)
-        View Icon_        {..} -> Just (as,c)
-        View IconGroup_   {..} -> Just (as,c)
-        View Image_       {..} -> Just (as,c)
-        View ImageGroup_  {..} -> Just (as,c)
-        _                      -> Nothing
+        View Button_        {..} -> Just (as,c)
+        View ButtonContent_ {..} -> Just (as,c)
+        View Container_     {..} -> Just (as,c)
+        View Label_         {..} -> Just (as,c)
+        View LabelDetail_   {..} -> Just (as,c)
+        View LabelGroup_    {..} -> Just (as,c)
+        View Icon_          {..} -> Just (as,c)
+        View IconGroup_     {..} -> Just (as,c)
+        View Image_         {..} -> Just (as,c)
+        View ImageGroup_    {..} -> Just (as,c)
+        _                        -> Nothing
 
 {-# INLINE setAs #-}
 setAs a c =
     case c of
-        View Button_      {..} -> View Button_      { as = a, .. }
-        View Container_   {..} -> View Container_   { as = a, .. }
-        View Label_       {..} -> View Label_       { as = a, .. }
-        View LabelDetail_ {..} -> View LabelDetail_ { as = a, .. }
-        View LabelGroup_  {..} -> View LabelGroup_  { as = a, .. }
-        View Icon_        {..} -> View Icon_        { as = a, .. }
-        View IconGroup_   {..} -> View IconGroup_   { as = a, .. }
-        View Image_       {..} -> View Image_       { as = a, .. }
-        View ImageGroup_  {..} -> View ImageGroup_  { as = a, .. }
-        _                      -> c
+        View Button_        {..} -> View Button_        { as = a, .. }
+        View ButtonContent_ {..} -> View ButtonContent_ { as = a, .. }
+        View Container_     {..} -> View Container_     { as = a, .. }
+        View Label_         {..} -> View Label_         { as = a, .. }
+        View LabelDetail_   {..} -> View LabelDetail_   { as = a, .. }
+        View LabelGroup_    {..} -> View LabelGroup_    { as = a, .. }
+        View Icon_          {..} -> View Icon_          { as = a, .. }
+        View IconGroup_     {..} -> View IconGroup_     { as = a, .. }
+        View Image_         {..} -> View Image_         { as = a, .. }
+        View ImageGroup_    {..} -> View ImageGroup_    { as = a, .. }
+        _                        -> c
 
 pattern TextAlign ta c <- (getTextAlign -> Just (Just ta,c)) where
     TextAlign ta c = setTextAlign ta c
@@ -489,14 +494,16 @@ pattern Hidden c <- (getHidden -> (True,c)) where
 {-# INLINE getHidden #-}
 getHidden c =
     case c of
-        View Image_ {..} -> (hidden,c)
-        _                -> (False,c)
+        View Image_         {..} -> (hidden,c)
+        View ButtonContent_ {..} -> (hidden,c)
+        _                        -> (False,c)
 
 {-# INLINE setHidden #-}
 setHidden c =
     case c of
-        View Image_ {..} -> View Image_ { hidden = True, .. }
-        _                -> c
+        View Image_         {..} -> View Image_         { hidden = True, .. }
+        View ButtonContent_ {..} -> View ButtonContent_ { hidden = True, .. }
+        _                        -> c
 
 pattern Horizontal c <- (getHorizontal -> (True,c)) where
     Horizontal c = setHorizontal c
@@ -871,6 +878,21 @@ setVerticalAlign va c =
     case c of
         View Image_ {..} -> View Image_ { verticalAlign = va, .. }
         _                -> c
+
+pattern Visible c <- (getVisible -> (True,c)) where
+    Visible c = setVisible c
+
+{-# INLINE getVisible #-}
+getVisible c =
+    case c of
+        View ButtonContent_ {..} -> (visible,c)
+        _                        -> (False,c)
+
+{-# INLINE setVisible #-}
+setVisible c =
+    case c of
+        View ButtonContent_ {..} -> View ButtonContent_ { visible = True, .. }
+        _                        -> c
 
 pattern Wrapped c <- (getWrapped -> (True,c)) where
     Wrapped c = setWrapped c
