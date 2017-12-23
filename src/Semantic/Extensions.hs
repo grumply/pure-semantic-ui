@@ -33,6 +33,7 @@ getChildren c =
     case c of
         View Button_        {..} -> Just (children,c)
         View ButtonContent_ {..} -> Just (children,c)
+        View ButtonGroup_   {..} -> Just (children,c)
         View Container_     {..} -> Just (children,c)
         View Label_         {..} -> Just (children,c)
         View LabelDetail_   {..} -> Just (children,c)
@@ -47,6 +48,7 @@ setChildren cs c =
     case c of
         View Button_        {..} -> View Button_        { children = cs, .. }
         View ButtonContent_ {..} -> View ButtonContent_ { children = cs, .. }
+        View ButtonGroup_   {..} -> View ButtonGroup_   { children = cs, .. }
         View Container_     {..} -> View Container_     { children = cs, .. }
         View Label_         {..} -> View Label_         { children = cs, .. }
         View LabelDetail_   {..} -> View LabelDetail_   { children = cs, .. }
@@ -64,6 +66,7 @@ getClasses c =
     case c of
         View Button_        {..} -> Just (classes,c)
         View ButtonContent_ {..} -> Just (classes,c)
+        View ButtonGroup_   {..} -> Just (classes,c)
         View Container_     {..} -> Just (classes,c)
         View Label_         {..} -> Just (classes,c)
         View LabelDetail_   {..} -> Just (classes,c)
@@ -78,7 +81,7 @@ getClasses c =
 setClasses cs c =
     case c of
         View Button_        {..} -> View Button_        { classes = cs, .. }
-        View ButtonContent_ {..} -> View ButtonContent_ { classes = cs, .. }
+        View ButtonGroup_   {..} -> View ButtonGroup_   { classes = cs, .. }
         View Container_     {..} -> View Container_     { classes = cs, .. }
         View Label_         {..} -> View Label_         { classes = cs, .. }
         View LabelDetail_   {..} -> View LabelDetail_   { classes = cs, .. }
@@ -97,6 +100,7 @@ getAttributes c =
     case c of
         View Button_        {..} -> Just (attributes,c)
         View ButtonContent_ {..} -> Just (attributes,c)
+        View ButtonGroup_   {..} -> Just (attributes,c)
         View Container_     {..} -> Just (attributes,c)
         View Label_         {..} -> Just (attributes,c)
         View LabelDetail_   {..} -> Just (attributes,c)
@@ -112,6 +116,7 @@ setAttributes cs c =
     case c of
         View Button_        {..} -> View Button_        { attributes = cs, .. }
         View ButtonContent_ {..} -> View ButtonContent_ { attributes = cs, .. }
+        View ButtonGroup_   {..} -> View ButtonGroup_   { attributes = cs, .. }
         View Container_     {..} -> View Container_     { attributes = cs, .. }
         View Label_         {..} -> View Label_         { attributes = cs, .. }
         View LabelDetail_   {..} -> View LabelDetail_   { attributes = cs, .. }
@@ -130,6 +135,7 @@ getAs c =
     case c of
         View Button_        {..} -> Just (as,c)
         View ButtonContent_ {..} -> Just (as,c)
+        View ButtonGroup_   {..} -> Just (as,c)
         View Container_     {..} -> Just (as,c)
         View Label_         {..} -> Just (as,c)
         View LabelDetail_   {..} -> Just (as,c)
@@ -145,6 +151,7 @@ setAs a c =
     case c of
         View Button_        {..} -> View Button_        { as = a, .. }
         View ButtonContent_ {..} -> View ButtonContent_ { as = a, .. }
+        View ButtonGroup_   {..} -> View ButtonGroup_   { as = a, .. }
         View Container_     {..} -> View Container_     { as = a, .. }
         View Label_         {..} -> View Label_         { as = a, .. }
         View LabelDetail_   {..} -> View LabelDetail_   { as = a, .. }
@@ -154,19 +161,6 @@ setAs a c =
         View Image_         {..} -> View Image_         { as = a, .. }
         View ImageGroup_    {..} -> View ImageGroup_    { as = a, .. }
         _                        -> c
-
-pattern TextAlign ta c <- (getTextAlign -> Just (Just ta,c)) where
-    TextAlign ta c = setTextAlign ta c
-
-{-# INLINE getTextAlign #-}
-getTextAlign c =
-    case c of
-        View Container_  {..} -> Just (textAlign,c)
-
-{-# INLINE setTextAlign #-}
-setTextAlign ta c =
-    case c of
-        View Container_  {..} -> View Container_ { textAlign = Just ta, .. }
 
 pattern Active c <- (getActive -> (True,c)) where
     Active c = setActive c
@@ -211,16 +205,18 @@ pattern ToBottom = "bottom"
 {-# INLINE getAttached #-}
 getAttached c =
     case c of
-        View Button_ {..} -> (attached,c)
-        View Label_  {..} -> attached ? (Just attached,c) $ (Nothing,c)
-        _                 -> (Nothing,c)
+        View Button_      {..} -> (attached,c)
+        View ButtonGroup_ {..} -> (attached,c)
+        View Label_       {..} -> attached ? (Just attached,c) $ (Nothing,c)
+        _                      -> (Nothing,c)
 
 {-# INLINE setAttached #-}
 setAttached a c =
     case c of
-        View Button_ {..} -> View Button_ { attached = Just a, .. }
-        View Label_  {..} -> View Label_  { attached = a, .. }
-        _                 -> c
+        View Button_      {..} -> View Button_      { attached = Just a, .. }
+        View ButtonGroup_ {..} -> View ButtonGroup_ { attached = Just a, .. }
+        View Label_       {..} -> View Label_       { attached = a, .. }
+        _                      -> c
 
 pattern Avatar c <- (getAvatar -> (True,c)) where
     Avatar c = setAvatar c
@@ -244,16 +240,18 @@ pattern Basic c <- (getBasic -> (True,c)) where
 {-# INLINE getBasic #-}
 getBasic c = 
     case c of
-        View Button_ {..} -> (basic,c)
-        View Label_  {..} -> (basic,c)
-        _                 -> (False,c)
+        View Button_      {..} -> (basic,c)
+        View ButtonGroup_ {..} -> (basic,c)
+        View Label_       {..} -> (basic,c)
+        _                      -> (False,c)
 
 {-# INLINE setBasic #-}
 setBasic c =
     case c of
-        View Button_ {..} -> View Button_ { basic = True, .. }
-        View Label_  {..} -> View Label_  { basic = True, .. }
-        _                 -> c
+        View Button_      {..} -> View Button_      { basic = True, .. }
+        View ButtonGroup_ {..} -> View ButtonGroup_ { basic = True, .. }
+        View Label_       {..} -> View Label_       { basic = True, .. }
+        _                      -> c
 
 pattern Bordered c <- (getBordered -> (True,c)) where
     Bordered c = setBordered c
@@ -331,20 +329,22 @@ pattern Black = "black"
 {-# INLINE getColor #-}
 getColor c =
     case c of
-        View Button_ {..} -> color # Just (color,c)
-        View Icon_   {..} -> color # Just (color,c)
-        View Label_  {..} -> color # Just (color,c)
-        View LabelGroup_ {..} -> color # Just (color,c)
-        _                 -> Nothing
+        View Button_      {..} -> color # Just (color,c)
+        View ButtonGroup_ {..} -> color # Just (color,c)
+        View Icon_        {..} -> color # Just (color,c)
+        View Label_       {..} -> color # Just (color,c)
+        View LabelGroup_  {..} -> color # Just (color,c)
+        _                      -> Nothing
 
 {-# INLINE setColor #-}
 setColor col c =
     case c of
-        View Button_ {..} -> View Button_ { color = col, .. }
-        View Icon_   {..} -> View Icon_   { color = col, .. }
-        View Label_  {..} -> View Label_  { color = col, .. }
-        View LabelGroup_ {..} -> View LabelGroup_ { color = col, .. }
-        _                 -> c
+        View Button_      {..} -> View Button_      { color = col, .. }
+        View ButtonGroup_ {..} -> View ButtonGroup_ { color = col, .. }
+        View Icon_        {..} -> View Icon_        { color = col, .. }
+        View Label_       {..} -> View Label_       { color = col, .. }
+        View LabelGroup_  {..} -> View LabelGroup_  { color = col, .. }
+        _                      -> c
 
 pattern Corner cor c <- (getCorner -> (Just cor,c)) where
     Corner cor c = setCorner cor c
@@ -369,14 +369,16 @@ pattern Compact c <- (getCompact -> (True,c)) where
 {-# INLINE getCompact #-}
 getCompact c =
     case c of
-        View Button_ {..} -> (compact,c)
-        _                 -> (False,c)
+        View Button_      {..} -> (compact,c)
+        View ButtonGroup_ {..} -> (compact,c)
+        _                      -> (False,c)
 
 {-# INLINE setCompact #-}
 setCompact c =
     case c of
-        View Button_ {..} -> View Button_ { compact = True, .. }
-        _                 -> c
+        View Button_      {..} -> View Button_      { compact = True, .. }
+        View ButtonGroup_ {..} -> View ButtonGroup_ { compact = True, .. }
+        _                      -> c
 
 pattern Disabled c <- (getDisabled -> (True,c)) where
     Disabled c = setDisabled c
@@ -463,16 +465,18 @@ pattern Floated f c <- (getFloated -> Just (f,c)) where
 {-# INLINE getFloated #-}
 getFloated c =
     case c of
-        View Button_ {..} -> floated # Just (floated,c)
-        View Image_  {..} -> floated # Just (floated,c)
-        _                 -> Nothing
+        View Button_      {..} -> floated # Just (floated,c)
+        View ButtonGroup_ {..} -> floated # Just (floated,c)
+        View Image_       {..} -> floated # Just (floated,c)
+        _                      -> Nothing
 
 {-# INLINE setFloated #-}
 setFloated f c =
     case c of
-        View Button_ {..} -> View Button_ { floated = f, .. }
-        View Image_  {..} -> View Image_  { floated = f, .. }
-        _                 -> c
+        View Button_      {..} -> View Button_      { floated = f, .. }
+        View ButtonGroup_ {..} -> View ButtonGroup_ { floated = f, .. }
+        View Image_       {..} -> View Image_       { floated = f, .. }
+        _                      -> c
 
 -- pattern ToLeft = "left"
 -- pattern ToRight = "right"
@@ -498,18 +502,20 @@ pattern Fluid c <- (getFluid -> (True,c)) where
 {-# INLINE getFluid #-}
 getFluid c =
     case c of
-        View Button_    {..} -> (fluid,c)
-        View Container_ {..} -> (fluid,c)
-        View Image_     {..} -> (fluid,c)
-        _                    -> (False,c)
+        View Button_      {..} -> (fluid,c)
+        View ButtonGroup_ {..} -> (fluid,c)
+        View Container_   {..} -> (fluid,c)
+        View Image_       {..} -> (fluid,c)
+        _                      -> (False,c)
 
 {-# INLINE setFluid #-}
 setFluid c =
     case c of
-        View Container_ {..} -> View Container_ { fluid = True, .. }
-        View Button_    {..} -> View Button_    { fluid = True, .. }
-        View Image_     {..} -> View Image_     { fluid = True, .. }
-        _                -> c
+        View Button_      {..} -> View Button_      { fluid = True, .. }
+        View ButtonGroup_ {..} -> View ButtonGroup_ { fluid = True, .. }
+        View Container_   {..} -> View Container_   { fluid = True, .. }
+        View Image_       {..} -> View Image_       { fluid = True, .. }
+        _                      -> c
 
 pattern Hidden c <- (getHidden -> (True,c)) where
     Hidden c = setHidden c
@@ -564,16 +570,33 @@ pattern Inverted c <- (getInverted -> (True,c)) where
 {-# INLINE getInverted #-}
 getInverted c =
     case c of
-        View Button_ {..} -> (inverted,c)
-        View Icon_   {..} -> (inverted,c)
-        _                 -> (False,c)
+        View Button_      {..} -> (inverted,c)
+        View ButtonGroup_ {..} -> (inverted,c)
+        View Icon_        {..} -> (inverted,c)
+        _                      -> (False,c)
 
 {-# INLINE setInverted #-}
 setInverted c =
     case c of
-        View Button_ {..} -> View Button_ { inverted = True, .. }
-        View Icon_   {..} -> View Icon_   { inverted = True, .. }
-        _                 -> c
+        View Button_      {..} -> View Button_      { inverted = True, .. }
+        View ButtonGroup_ {..} -> View ButtonGroup_ { inverted = True, .. }
+        View Icon_        {..} -> View Icon_        { inverted = True, .. }
+        _                      -> c
+
+pattern Labeled c <- (getLabeled -> (True,c)) where
+    Labeled c = setLabeled c
+
+{-# INLINE getLabeled #-}
+getLabeled c =
+    case c of
+        View ButtonGroup_ {..} -> (labeled,c)
+        _                      -> (False,c)
+
+{-# INLINE setLabeled #-}
+setLabeled c =
+    case c of
+        View ButtonGroup_ {..} -> View ButtonGroup_ { labeled = True, .. }
+        _                      -> c
 
 pattern LabelPosition p c <- (getLabelPosition -> Just (p,c)) where
     LabelPosition p c = setLabelPosition p c
@@ -643,14 +666,16 @@ pattern Negative c <- (getNegative -> (True,c)) where
 {-# INLINE getNegative #-}
 getNegative c =
     case c of
-        View Button_ {..} -> (negative,c)
-        _                 -> (False,c)
+        View Button_      {..} -> (negative,c)
+        View ButtonGroup_ {..} -> (negative,c)
+        _                      -> (False,c)
 
 {-# INLINE setNegative #-}
 setNegative c =
     case c of
-        View Button_ {..} -> View Button_ { negative = True, .. }
-        _                 -> c
+        View Button_      {..} -> View Button_      { negative = True, .. }
+        View ButtonGroup_ {..} -> View ButtonGroup_ { negative = True, .. }
+        _                      -> c
 
 pattern HandleClick h c <- (getHandleClick -> Just (h,c)) where
     HandleClick h c = setHandleClick h c
@@ -690,14 +715,16 @@ pattern Positive c <- (getPositive -> (True,c)) where
 {-# INLINE getPositive #-}
 getPositive c =
     case c of
-        View Button_ {..} -> (positive,c)
-        _                 -> (False,c)
+        View Button_      {..} -> (positive,c)
+        View ButtonGroup_ {..} -> (positive,c)
+        _                      -> (False,c)
 
 {-# INLINE setPositive #-}
 setPositive c =
     case c of
-        View Button_ {..} -> View Button_ { positive = True, .. }
-        _                 -> c
+        View Button_      {..} -> View Button_      { positive = True, .. }
+        View ButtonGroup_ {..} -> View ButtonGroup_ { positive = True, .. }
+        _                      -> c
 
 pattern Primary c <- (getPrimary -> (True,c)) where
     Primary c = setPrimary c
@@ -705,14 +732,16 @@ pattern Primary c <- (getPrimary -> (True,c)) where
 {-# INLINE getPrimary #-}
 getPrimary c =
     case c of
-        View Button_ {..} -> (primary,c)
-        _                 -> (False,c)
+        View Button_      {..} -> (primary,c)
+        View ButtonGroup_ {..} -> (primary,c)
+        _                      -> (False,c)
 
 {-# INLINE setPrimary #-}
 setPrimary c =
     case c of
-        View Button_ {..} -> View Button_ { primary = True, .. }
-        _                 -> c
+        View Button_      {..} -> View Button_      { primary = True, .. }
+        View ButtonGroup_ {..} -> View ButtonGroup_ { primary = True, .. }
+        _                      -> c
 
 pattern Ribbon r c <- (getRibbon -> (Just r,c)) where
     Ribbon r c = setRibbon r c
@@ -765,14 +794,19 @@ pattern Secondary c <- (getSecondary -> (True,c)) where
 {-# INLINE getSecondary #-}
 getSecondary c =
     case c of
-        View Button_ {..} -> (secondary,c)
-        _                 -> (False,c)
+        View Button_      {..} -> (secondary,c)
+        View ButtonGroup_ {..} -> (secondary,c)
+        _                      -> (False,c)
 
 {-# INLINE setSecondary #-}
 setSecondary c =
     case c of
-        View Button_ {..} -> View Button_ { secondary = True, .. }
+        View Button_      {..} -> View Button_      { secondary = True, .. }
+        View ButtonGroup_ {..} -> View ButtonGroup_ { secondary = True, .. }
         _                 -> c
+
+pattern Size s c <- (getSize -> Just (s,c)) where
+    Size s c = setSize s c
 
 pattern Mini c = Size "mini" c
 pattern Tiny c = Size "tiny" c
@@ -783,32 +817,31 @@ pattern Big c = Size "big" c
 pattern Huge c = Size "huge" c
 pattern Massive c = Size "massive" c
 
-pattern Size s c <- (getSize -> Just (s,c)) where
-    Size s c = setSize s c
-
 {-# INLINE getSize #-}
 getSize c =
     case c of
-        View Button_ {..} -> size # Just (size,c)
-        View Icon_   {..} -> size # Just (size,c)
-        View IconGroup_  {..} -> size # Just (size,c)
-        View Image_  {..} -> size # Just (size,c)
-        View ImageGroup_ {..} -> size # Just (size,c)
-        View Label_  {..} -> size # Just (size,c)
-        View LabelGroup_ {..} -> size # Just (size,c)
-        _                 -> Nothing
+        View Button_      {..} -> size # Just (size,c)
+        View ButtonGroup_ {..} -> size # Just (size,c)
+        View Icon_        {..} -> size # Just (size,c)
+        View IconGroup_   {..} -> size # Just (size,c)
+        View Image_       {..} -> size # Just (size,c)
+        View ImageGroup_  {..} -> size # Just (size,c)
+        View Label_       {..} -> size # Just (size,c)
+        View LabelGroup_  {..} -> size # Just (size,c)
+        _                      -> Nothing
 
 {-# INLINE setSize #-}
 setSize s c =
     case c of
-        View Button_ {..} -> View Button_ { size = s, .. }
-        View Icon_   {..} -> View Icon_   { size = s, .. }
-        View IconGroup_ {..} -> View IconGroup_ { size = s, .. }
-        View Image_  {..} -> View Image_  { size = s, .. }
+        View Button_      {..} -> View Button_      { size = s, .. }
+        View ButtonGroup_ {..} -> View ButtonGroup_ { size = s, .. }
+        View Icon_        {..} -> View Icon_        { size = s, .. }
+        View IconGroup_   {..} -> View IconGroup_   { size = s, .. }
+        View Image_       {..} -> View Image_       { size = s, .. }
         View ImageGroup_  {..} -> View ImageGroup_  { size = s, .. }
-        View Label_  {..} -> View Label_  { size = s, .. }
-        View LabelGroup_ {..} -> View LabelGroup_ { size = s, .. }
-        _                 -> c
+        View Label_       {..} -> View Label_       { size = s, .. }
+        View LabelGroup_  {..} -> View LabelGroup_  { size = s, .. }
+        _                       -> c
 
 pattern Spaced s c <- (getSpaced -> (Just s,c)) where
     Spaced s c = setSpaced s c
@@ -857,23 +890,35 @@ setTag c =
         View LabelGroup_ {..} -> View LabelGroup_ { tag = True, .. }
         _                -> c
 
+pattern TextAlign ta c <- (getTextAlign -> Just (Just ta,c)) where
+    TextAlign ta c = setTextAlign ta c
+
+{-# INLINE getTextAlign #-}
+getTextAlign c =
+    case c of
+        View Container_  {..} -> Just (textAlign,c)
+
+{-# INLINE setTextAlign #-}
+setTextAlign ta c =
+    case c of
+        View Container_  {..} -> View Container_ { textAlign = Just ta, .. }
+
 pattern Toggle c <- (getToggle -> (True,c)) where
     Toggle c = setToggle c
 
 {-# INLINE getToggle #-}
 getToggle c =
     case c of
-        View Button_ {..} -> (toggle,c)
-        _                 -> (False,c)
+        View Button_      {..} -> (toggle,c)
+        View ButtonGroup_ {..} -> (toggle,c)
+        _                      -> (False,c)
 
 {-# INLINE setToggle #-}
 setToggle c =
     case c of
-        View Button_ {..} -> View Button_ { toggle = True, .. }
-        _                 -> c
-
-pattern UI c <- (getUI -> (True,c)) where
-    UI c = setUI c
+        View Button_      {..} -> View Button_      { toggle = True, .. }
+        View ButtonGroup_ {..} -> View ButtonGroup_ { toggle = True, .. }
+        _                      -> c
 
 -- pattern Transition t c <- (getTransition -> Just (t,c)) where
 --     Transition t c = setTransition t c
@@ -918,6 +963,9 @@ pattern Bounce = "bounce"
 --     case c of
 --         _ -> c
 
+pattern UI c <- (getUI -> (True,c)) where
+    UI c = setUI c
+
 {-# INLINE getUI #-}
 getUI c =
     case c of
@@ -929,6 +977,21 @@ setUI c =
     case c of
         View Image_ {..} -> View Image_ { ui = True, .. }
         _                -> c
+
+pattern Vertical c <- (getVertical -> (True,c)) where
+    Vertical c = setVertical c
+
+{-# INLINE getVertical #-}
+getVertical c =
+    case c of
+        View ButtonGroup_ {..} -> (vertical,c)
+        _                      -> (False,c)
+
+{-# INLINE setVertical #-}
+setVertical c =
+    case c of
+        View ButtonGroup_ {..} -> View ButtonGroup_ { vertical = True, .. }
+        _                      -> c
 
 pattern VerticalAlign va c <- (getVerticalAlign -> Just (va,c)) where
     VerticalAlign va c = setVerticalAlign va c
@@ -983,6 +1046,21 @@ pattern Widescreen = "widescreen"
 --     case c of
 --         _ -> c
 
+pattern Widths w c <- (getWidths -> Just (w,c)) where
+    Widths w c = setWidths w c
+
+{-# INLINE getWidths #-}
+getWidths c =
+    case c of
+        View ButtonGroup_ {..} -> Just (widths,c)
+        _                      -> Nothing
+
+{-# INLINE setWidths #-}
+setWidths w c =
+    case c of
+        View ButtonGroup_ {..} -> View ButtonGroup_ { widths = w, .. }
+        _                      -> c
+
 pattern Wrapped c <- (getWrapped -> (True,c)) where
     Wrapped c = setWrapped c
 
@@ -1003,9 +1081,9 @@ pattern TextAlignCenter c = TextAlign AlignedCenter c
 pattern TextAlignRight c = TextAlign AlignedRight c
 pattern TextAlignJustified c = TextAlign AlignedJustified c
 
-pattern Animate = "animate"
+-- pattern Animate = "animate"
 -- pattern Fade = "fade"
-pattern Vertical = "vertical"
+-- pattern Vertical = "vertical"
 
 ----------------------------------
 
