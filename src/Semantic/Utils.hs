@@ -5,10 +5,16 @@ import Pure.View hiding (one,two,Width)
 
 import Data.Function as Export
 
-data TextAlignment = AlignedLeft | AlignedCenter | AlignedRight | AlignedJustified deriving (Eq,Ord,Generic,Default)
+data TextAlignment = Unaligned | AlignedLeft | AlignedCenter | AlignedRight | AlignedJustified deriving (Eq,Ord,Generic,Default,Cond)
+instance Monoid TextAlignment where
+  mempty = Unaligned
+  mappend Unaligned ta = ta
+  mappend ta Unaligned = ta
+  mappend _ ta = ta
 
-textAlignClass (Just ta) = 
+textAlignClass ta = 
   case ta of
+    Unaligned   -> ""
     AlignedLeft -> "left aligned"
     AlignedCenter -> "center aligned"
     AlignedRight -> "right aligned"

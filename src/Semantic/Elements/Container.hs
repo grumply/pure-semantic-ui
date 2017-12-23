@@ -12,7 +12,7 @@ data Container ms = Container_
   , classes :: [Txt]
   , fluid :: Bool
   , text :: Bool
-  , textAlign :: Maybe TextAlignment
+  , textAlign :: TextAlignment
   } deriving (Generic)
 
 instance Default (Container ms) where

@@ -66,6 +66,7 @@ getClasses c =
     case c of
         View Button_        {..} -> Just (classes,c)
         View ButtonContent_ {..} -> Just (classes,c)
+        View ButtonOr_      {..} -> Just (classes,c)
         View ButtonGroup_   {..} -> Just (classes,c)
         View Container_     {..} -> Just (classes,c)
         View Label_         {..} -> Just (classes,c)
@@ -82,6 +83,7 @@ setClasses cs c =
     case c of
         View Button_        {..} -> View Button_        { classes = cs, .. }
         View ButtonGroup_   {..} -> View ButtonGroup_   { classes = cs, .. }
+        View ButtonOr_      {..} -> View ButtonOr_      { classes = cs, .. }
         View Container_     {..} -> View Container_     { classes = cs, .. }
         View Label_         {..} -> View Label_         { classes = cs, .. }
         View LabelDetail_   {..} -> View LabelDetail_   { classes = cs, .. }
@@ -101,6 +103,7 @@ getAttributes c =
         View Button_        {..} -> Just (attributes,c)
         View ButtonContent_ {..} -> Just (attributes,c)
         View ButtonGroup_   {..} -> Just (attributes,c)
+        View ButtonOr_      {..} -> Just (attributes,c)
         View Container_     {..} -> Just (attributes,c)
         View Label_         {..} -> Just (attributes,c)
         View LabelDetail_   {..} -> Just (attributes,c)
@@ -117,6 +120,7 @@ setAttributes cs c =
         View Button_        {..} -> View Button_        { attributes = cs, .. }
         View ButtonContent_ {..} -> View ButtonContent_ { attributes = cs, .. }
         View ButtonGroup_   {..} -> View ButtonGroup_   { attributes = cs, .. }
+        View ButtonOr_      {..} -> View ButtonOr_      { attributes = cs, .. }
         View Container_     {..} -> View Container_     { attributes = cs, .. }
         View Label_         {..} -> View Label_         { attributes = cs, .. }
         View LabelDetail_   {..} -> View LabelDetail_   { attributes = cs, .. }
@@ -136,6 +140,7 @@ getAs c =
         View Button_        {..} -> Just (as,c)
         View ButtonContent_ {..} -> Just (as,c)
         View ButtonGroup_   {..} -> Just (as,c)
+        View ButtonOr_      {..} -> Just (as,c)
         View Container_     {..} -> Just (as,c)
         View Label_         {..} -> Just (as,c)
         View LabelDetail_   {..} -> Just (as,c)
@@ -152,6 +157,7 @@ setAs a c =
         View Button_        {..} -> View Button_        { as = a, .. }
         View ButtonContent_ {..} -> View ButtonContent_ { as = a, .. }
         View ButtonGroup_   {..} -> View ButtonGroup_   { as = a, .. }
+        View ButtonOr_      {..} -> View ButtonOr_      { as = a, .. }
         View Container_     {..} -> View Container_     { as = a, .. }
         View Label_         {..} -> View Label_         { as = a, .. }
         View LabelDetail_   {..} -> View LabelDetail_   { as = a, .. }
@@ -645,6 +651,21 @@ setLoading c =
         View Icon_   {..} -> View Icon_   { loading = True, .. }
         _                 -> c
 
+pattern Localize t c <- (getLocalize -> Just (t,c)) where
+    Localize t c = setLocalize t c
+
+{-# INLINE getLocalize #-}
+getLocalize c =
+    case c of
+        View ButtonOr_ {..} -> Just (localize,c)
+        _                   -> Nothing
+
+{-# INLINE setLocalize #-}
+setLocalize l c =
+    case c of
+        View ButtonOr_ {..} -> View ButtonOr_ { localize = l, .. }
+        _                   -> c
+
 pattern Name n c <- (getName -> Just (n,c)) where
     Name n c = setName n c
 
@@ -890,18 +911,20 @@ setTag c =
         View LabelGroup_ {..} -> View LabelGroup_ { tag = True, .. }
         _                -> c
 
-pattern TextAlign ta c <- (getTextAlign -> Just (Just ta,c)) where
+pattern TextAlign ta c <- (getTextAlign -> Just (ta,c)) where
     TextAlign ta c = setTextAlign ta c
 
 {-# INLINE getTextAlign #-}
 getTextAlign c =
     case c of
         View Container_  {..} -> Just (textAlign,c)
+        _                     -> Nothing
 
 {-# INLINE setTextAlign #-}
 setTextAlign ta c =
     case c of
-        View Container_  {..} -> View Container_ { textAlign = Just ta, .. }
+        View Container_  {..} -> View Container_ { textAlign = ta, .. }
+        _                     -> c
 
 pattern Toggle c <- (getToggle -> (True,c)) where
     Toggle c = setToggle c

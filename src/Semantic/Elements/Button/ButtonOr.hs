@@ -10,7 +10,7 @@ data ButtonOr ms = ButtonOr_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]
     , classes :: [Txt]
-    , text :: Txt
+    , localize :: Txt
     } deriving (Generic)
 
 instance Default (ButtonOr ms) where
@@ -23,7 +23,7 @@ instance Typeable ms => Pure ButtonOr ms where
     render ButtonOr_ {..} =
         as
             ( ClassList ( "or" : classes )
-            : text # Attr "data-text" text
+            : localize # Attr "data-text" localize
             : attributes
             )
             []
