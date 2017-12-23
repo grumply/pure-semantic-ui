@@ -1,4 +1,4 @@
-module Semantic.Elements.Button where
+module Semantic.Elements.Button (module Semantic.Elements.Button, module Export) where
 
 import GHC.Generics as G
 import Pure.View hiding (Button,Label)
@@ -8,6 +8,8 @@ import Semantic.Utils
 
 import Semantic.Elements.Icon
 import Semantic.Elements.Label
+
+import Semantic.Elements.Button.ButtonContent as Export
 
 data Button ms = Button_
   { as :: [Feature ms] -> [View ms] -> View ms
