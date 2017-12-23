@@ -203,6 +203,11 @@ setAnimated a c =
 pattern Attached a c <- (getAttached -> (Just a,c)) where
     Attached a c = setAttached a c
 
+pattern ToLeft = "left"
+pattern ToRight = "right"
+pattern ToTop = "top"
+pattern ToBottom = "bottom"
+
 {-# INLINE getAttached #-}
 getAttached c =
     case c of
@@ -307,6 +312,21 @@ setCircular c =
 
 pattern Color col c <- (getColor -> Just (col,c)) where
     Color col c = setColor col c
+
+pattern Red = "red"
+pattern Orange = "orange"
+pattern Yellow = "yellow"
+pattern Olive = "olive"
+pattern Green = "green"
+pattern Teal = "teal"
+pattern Blue = "blue"
+pattern Violet = "violet"
+pattern Purple = "purple"
+pattern Pink = "pink"
+pattern Brown = "brown"
+pattern Grey = "grey"
+pattern Gray = "grey"
+pattern Black = "black"
 
 {-# INLINE getColor #-}
 getColor c =
@@ -453,6 +473,9 @@ setFloated f c =
         View Button_ {..} -> View Button_ { floated = f, .. }
         View Image_  {..} -> View Image_  { floated = f, .. }
         _                 -> c
+
+-- pattern ToLeft = "left"
+-- pattern ToRight = "right"
 
 pattern Floating c <- (getFloating -> (True,c)) where
     Floating c = setFloating c
@@ -751,6 +774,15 @@ setSecondary c =
         View Button_ {..} -> View Button_ { secondary = True, .. }
         _                 -> c
 
+pattern Mini c = Size "mini" c
+pattern Tiny c = Size "tiny" c
+pattern Small c = Size "small" c
+pattern Medium c = Size "medium" c
+pattern Large c = Size "large" c
+pattern Big c = Size "big" c
+pattern Huge c = Size "huge" c
+pattern Massive c = Size "massive" c
+
 pattern Size s c <- (getSize -> Just (s,c)) where
     Size s c = setSize s c
 
@@ -777,15 +809,6 @@ setSize s c =
         View Label_  {..} -> View Label_  { size = s, .. }
         View LabelGroup_ {..} -> View LabelGroup_ { size = s, .. }
         _                 -> c
-
-pattern Mini c = Size "mini" c
-pattern Tiny c = Size "tiny" c
-pattern Small c = Size "small" c
-pattern Medium c = Size "medium" c
-pattern Large c = Size "large" c
-pattern Big c = Size "big" c
-pattern Huge c = Size "huge" c
-pattern Massive c = Size "massive" c
 
 pattern Spaced s c <- (getSpaced -> (Just s,c)) where
     Spaced s c = setSpaced s c
@@ -852,6 +875,49 @@ setToggle c =
 pattern UI c <- (getUI -> (True,c)) where
     UI c = setUI c
 
+-- pattern Transition t c <- (getTransition -> Just (t,c)) where
+--     Transition t c = setTransition t c
+
+pattern Scale = "scale"
+pattern Fade = "fade"
+pattern FadeUp = "fade up"
+pattern FadeDown = "fade down"
+pattern FadeLeft = "fade left"
+pattern FadeRight = "fade right"
+pattern HorizontalFlip = "horizontal flip"
+pattern VerticalFlip = "vertical flip"
+pattern Drop = "drop"
+pattern FlyLeft = "fly left"
+pattern FlyRight = "fly right"
+pattern FlyUp = "fly up"
+pattern FlyDown = "fly down"
+pattern SwingLeft = "swing left"
+pattern SwingRight = "swing right"
+pattern SwingUp = "swing up"
+pattern SwingDown = "swing down"
+pattern Browse = "browse"
+pattern BrowseRight = "browse right"
+pattern SlideDown = "slide down"
+pattern SlideUp = "slide up"
+pattern SlideRight = "slide right"
+
+pattern Jiggle = "jiggle"
+pattern Flash = "flash"
+pattern Shake = "shake"
+pattern Pulse = "pulse"
+pattern Tada = "tada"
+pattern Bounce = "bounce"
+
+-- {-# INLINE getTransition #-}
+-- getTransition c =
+--     case c of
+--         _ -> Nothing
+
+-- {-# INLINE setTransition #-}
+-- setTransition t c =
+--     case c of
+--         _ -> c
+
 {-# INLINE getUI #-}
 getUI c =
     case c of
@@ -866,6 +932,10 @@ setUI c =
 
 pattern VerticalAlign va c <- (getVerticalAlign -> Just (va,c)) where
     VerticalAlign va c = setVerticalAlign va c
+
+pattern Middle = "middle"
+-- pattern Bottom = "bottom"
+-- pattern Top = "top"
 
 {-# INLINE getVerticalAlign #-}
 getVerticalAlign c =
@@ -894,6 +964,25 @@ setVisible c =
         View ButtonContent_ {..} -> View ButtonContent_ { visible = True, .. }
         _                        -> c
 
+-- pattern Visibility v c <- (getVisibility -> Just (v,c)) where
+--     Visibility v c = setVisibility v c
+
+pattern Mobile = "mobile"
+pattern Tablet = "tablet"
+pattern Computer = "computer"
+pattern LargeScreen = "large screen"
+pattern Widescreen = "widescreen"
+
+-- {-# INLINE getVisibility #-}
+-- getVisibility c =
+--     case c of
+--         _ -> Nothing
+
+-- {-# INLINE setVisibility #-}
+-- setVisibility c =
+--     case c of
+--         _ -> c
+
 pattern Wrapped c <- (getWrapped -> (True,c)) where
     Wrapped c = setWrapped c
 
@@ -915,7 +1004,7 @@ pattern TextAlignRight c = TextAlign AlignedRight c
 pattern TextAlignJustified c = TextAlign AlignedJustified c
 
 pattern Animate = "animate"
-pattern Fade = "fade"
+-- pattern Fade = "fade"
 pattern Vertical = "vertical"
 
 ----------------------------------

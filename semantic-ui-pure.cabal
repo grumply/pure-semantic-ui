@@ -51,6 +51,7 @@ executable semantic-ui-pure
     Semantic.Elements
     Semantic.Elements.Button
     Semantic.Elements.Button.ButtonContent
+    Semantic.Elements.Button.ButtonGroup
     Semantic.Elements.Container
     Semantic.Elements.Icon
     Semantic.Elements.Icon.IconGroup
@@ -109,6 +110,7 @@ library
     Semantic.Elements
     Semantic.Elements.Button
     Semantic.Elements.Button.ButtonContent
+    Semantic.Elements.Button.ButtonGroup
     Semantic.Elements.Container
     Semantic.Elements.Icon
     Semantic.Elements.Icon.IconGroup

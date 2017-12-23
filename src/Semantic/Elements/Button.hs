@@ -10,6 +10,7 @@ import Semantic.Elements.Icon
 import Semantic.Elements.Label
 
 import Semantic.Elements.Button.ButtonContent as Export
+import Semantic.Elements.Button.ButtonGroup as Export
 
 data Button ms = Button_
   { as :: [Feature ms] -> [View ms] -> View ms

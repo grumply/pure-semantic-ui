@@ -1,7 +1,7 @@
 module Semantic.Utils (module Semantic.Utils, module Export) where
 
 import Pure.Data
-import Pure.View
+import Pure.View hiding (one,two,Width)
 
 import Data.Function as Export
 
@@ -19,6 +19,50 @@ useKeyOrValueAndKey val key =
     Just "" -> key
     Just v  -> v <<>> key
     _       -> nil
+
+widthProp :: Width -> Txt -> Bool -> Txt
+widthProp val widthClass canEqual =
+  if canEqual && val == equal
+    then "equal width"
+    else toTxt val <>> widthClass
+
+newtype Width = Width Txt deriving (Eq)
+instance Default Width where def = one
+instance ToTxt Width where toTxt (Width w) = w
+
+equal = Width "equal"
+one = Width "one"
+_1 = one
+two = Width "two"
+_2 = two
+three = Width "three"
+_3 = three
+four = Width "four"
+_4 = four
+five = Width "five"
+_5 = five
+six = Width "six"
+_6 = six
+seven = Width "seven"
+_7 = seven
+eight = Width "eight"
+_8 = eight
+nine = Width "nine"
+_9 = nine
+ten = Width "ten"
+_10 = ten
+eleven = Width "eleven"
+_11 = eleven
+twelve = Width "twelve"
+_12 = twelve
+thirteen = Width "thirteen"
+_13 = thirteen
+fourteen = Width "fourteen"
+_14 = fourteen
+fifteen = Width "fifteen"
+_15 = fifteen
+sixteen = Width "sixteen"
+_16 = sixteen
 
 oneEq :: Eq a => a -> a -> a -> Maybe a
 oneEq l r x = if l == x then Just l else if r == x then Just r else Nothing
