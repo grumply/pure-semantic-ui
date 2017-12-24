@@ -3,12 +3,13 @@ module Semantic.Extensions where
 import Pure.Data
 import Pure.View (pattern View)
 
-import Semantic.Elements.Button as Button
-import Semantic.Elements.Container as Container
-import Semantic.Elements.Divider as Container
-import Semantic.Elements.Label as Label
-import Semantic.Elements.Icon as Icon
-import Semantic.Elements.Image as Image
+import Semantic.Elements.Button
+import Semantic.Elements.Container
+import Semantic.Elements.Divider
+import Semantic.Elements.Label
+import Semantic.Elements.Icon
+import Semantic.Elements.Image
+import Semantic.Elements.Input
 
 import Semantic.Utils
 
@@ -37,6 +38,7 @@ getChildren c =
         View ButtonGroup_   {..} -> Just (children,c)
         View Container_     {..} -> Just (children,c)
         View Divider_       {..} -> Just (children,c)
+        View Input_         {..} -> Just (children,c)
         View Label_         {..} -> Just (children,c)
         View LabelDetail_   {..} -> Just (children,c)
         View LabelGroup_    {..} -> Just (children,c)
@@ -53,6 +55,7 @@ setChildren cs c =
         View ButtonGroup_   {..} -> View ButtonGroup_   { children = cs, .. }
         View Container_     {..} -> View Container_     { children = cs, .. }
         View Divider_       {..} -> View Divider_       { children = cs, .. }
+        View Input_         {..} -> View Input_         { children = cs, .. }
         View Label_         {..} -> View Label_         { children = cs, .. }
         View LabelDetail_   {..} -> View LabelDetail_   { children = cs, .. }
         View LabelGroup_    {..} -> View LabelGroup_    { children = cs, .. }
@@ -73,6 +76,7 @@ getClasses c =
         View ButtonGroup_   {..} -> Just (classes,c)
         View Container_     {..} -> Just (classes,c)
         View Divider_       {..} -> Just (classes,c)
+        View Input_         {..} -> Just (classes,c)
         View Label_         {..} -> Just (classes,c)
         View LabelDetail_   {..} -> Just (classes,c)
         View LabelGroup_    {..} -> Just (classes,c)
@@ -90,6 +94,7 @@ setClasses cs c =
         View ButtonOr_      {..} -> View ButtonOr_      { classes = cs, .. }
         View Container_     {..} -> View Container_     { classes = cs, .. }
         View Divider_       {..} -> View Divider_       { classes = cs, .. }
+        View Input_         {..} -> View Input_         { classes = cs, .. }
         View Label_         {..} -> View Label_         { classes = cs, .. }
         View LabelDetail_   {..} -> View LabelDetail_   { classes = cs, .. }
         View LabelGroup_    {..} -> View LabelGroup_    { classes = cs, .. }
@@ -111,6 +116,7 @@ getAttributes c =
         View ButtonOr_      {..} -> Just (attributes,c)
         View Container_     {..} -> Just (attributes,c)
         View Divider_       {..} -> Just (attributes,c)
+        View Input_         {..} -> Just (attributes,c)
         View Label_         {..} -> Just (attributes,c)
         View LabelDetail_   {..} -> Just (attributes,c)
         View LabelGroup_    {..} -> Just (attributes,c)
@@ -129,6 +135,7 @@ setAttributes cs c =
         View ButtonOr_      {..} -> View ButtonOr_      { attributes = cs, .. }
         View Container_     {..} -> View Container_     { attributes = cs, .. }
         View Divider_       {..} -> View Divider_       { attributes = cs, .. }
+        View Input_         {..} -> View Input_         { attributes = cs, .. }
         View Label_         {..} -> View Label_         { attributes = cs, .. }
         View LabelDetail_   {..} -> View LabelDetail_   { attributes = cs, .. }
         View LabelGroup_    {..} -> View LabelGroup_    { attributes = cs, .. }
@@ -150,6 +157,7 @@ getAs c =
         View ButtonOr_      {..} -> Just (as,c)
         View Container_     {..} -> Just (as,c)
         View Divider_       {..} -> Just (as,c)
+        View Input_         {..} -> Just (as,c)
         View Label_         {..} -> Just (as,c)
         View LabelDetail_   {..} -> Just (as,c)
         View LabelGroup_    {..} -> Just (as,c)
@@ -168,6 +176,7 @@ setAs a c =
         View ButtonOr_      {..} -> View ButtonOr_      { as = a, .. }
         View Container_     {..} -> View Container_     { as = a, .. }
         View Divider_       {..} -> View Divider_       { as = a, .. }
+        View Input_         {..} -> View Input_         { as = a, .. }
         View Label_         {..} -> View Label_         { as = a, .. }
         View LabelDetail_   {..} -> View LabelDetail_   { as = a, .. }
         View LabelGroup_    {..} -> View LabelGroup_    { as = a, .. }
@@ -300,6 +309,21 @@ setCentered c =
         View Image_ {..} -> View Image_ { centered = True, .. }
         _                -> c
 
+pattern Change f c <- (getChange -> Just (f,c)) where
+    Change f c = setChange f c
+
+{-# INLINE getChange #-}
+getChange c =
+    case c of
+        View Input_ {..} -> Just (onChange,c)
+        _                -> Nothing
+
+{-# INLINE setChange #-}
+setChange f c =
+    case c of
+        View Input_ {..} -> View Input_ { onChange = f, .. }
+        _                -> c
+
 pattern Circular c <- (getCircular -> (True,c)) where
     Circular c = setCircular c
 
@@ -421,6 +445,7 @@ getDisabled c =
         View Button_ {..} -> (disabled,c)
         View Icon_   {..} -> (disabled,c)
         View Image_  {..} -> (disabled,c)
+        View Input_  {..} -> (disabled,c)
         _                 -> (False,c)
 
 {-# INLINE setDisabled #-}
@@ -429,6 +454,7 @@ setDisabled c =
         View Button_ {..} -> View Button_ { disabled = True, .. }
         View Icon_   {..} -> View Icon_   { disabled = True, .. }
         View Image_  {..} -> View Image_  { disabled = True, .. }
+        View Input_  {..} -> View Input_  { disabled = True, .. }
         _                 -> c
 
 pattern Empty c <- (getEmpty -> (True,c)) where
@@ -444,6 +470,21 @@ getEmpty c =
 setEmpty c =
     case c of
         View Label_ {..} -> View Label_ { empty = True, .. }
+        _                -> c
+
+pattern Error c <- (getError -> (True,c)) where
+    Error c = setError c
+
+{-# INLINE getError #-}
+getError c =
+    case c of
+        View Input_ {..} -> (error,c)
+        _                -> (False,c)
+
+{-# INLINE setError #-}
+setError c =
+    case c of
+        View Input_ {..} -> View Input_ { error = True, .. }
         _                -> c
 
 pattern Fitted c <- (getFitted -> (True,c)) where
@@ -462,21 +503,6 @@ setFitted c =
         View Icon_    {..} -> View Icon_    { fitted = True, .. }
         View Divider_ {..} -> View Divider_ { fitted = True, .. }
         _                  -> c
-
-pattern Focus c <- (getFocus -> (True,c)) where
-    Focus c = setFocus c
-
-{-# INLINE getFocus #-}
-getFocus c =
-    case c of
-        View Button_ {..} -> (focus,c)
-        _                 -> (False,c)
-
-{-# INLINE setFocus #-}
-setFocus c =
-    case c of
-        View Button_ {..} -> View Button_ { focus = True, .. }
-        _                 -> c
 
 pattern Flipped f c <- (getFlipped -> Just (f,c)) where
     Flipped f c = setFlipped f c
@@ -540,6 +566,7 @@ getFluid c =
         View ButtonGroup_ {..} -> (fluid,c)
         View Container_   {..} -> (fluid,c)
         View Image_       {..} -> (fluid,c)
+        View Input_       {..} -> (fluid,c)
         _                      -> (False,c)
 
 {-# INLINE setFluid #-}
@@ -549,7 +576,40 @@ setFluid c =
         View ButtonGroup_ {..} -> View ButtonGroup_ { fluid = True, .. }
         View Container_   {..} -> View Container_   { fluid = True, .. }
         View Image_       {..} -> View Image_       { fluid = True, .. }
+        View Input_       {..} -> View Input_       { fluid = True, .. }
         _                      -> c
+
+pattern Focus c <- (getFocus -> (True,c)) where
+    Focus c = setFocus c
+
+{-# INLINE getFocus #-}
+getFocus c =
+    case c of
+        View Button_ {..} -> (focus,c)
+        View Input_  {..} -> (focus,c)
+        _                 -> (False,c)
+
+{-# INLINE setFocus #-}
+setFocus c =
+    case c of
+        View Button_ {..} -> View Button_ { focus = True, .. }
+        View Input_  {..} -> View Input_  { focus = True, .. }
+        _                 -> c
+
+pattern Focused c <- (getFocused -> (True,c)) where
+    Focused c = setFocused c
+
+{-# INLINE getFocused #-}
+getFocused c =
+    case c of
+        View Input_ {..} -> (focused,c)
+        _                -> (False,c)
+
+{-# INLINE setFocused #-}
+setFocused c =
+    case c of
+        View Input_ {..} -> View Input_ { focused = True, .. }
+        _                -> c
 
 pattern Hidden c <- (getHidden -> (True,c)) where
     Hidden c = setHidden c
@@ -612,6 +672,7 @@ getInverted c =
         View ButtonGroup_ {..} -> (inverted,c)
         View Divider_     {..} -> (inverted,c)
         View Icon_        {..} -> (inverted,c)
+        View Input_       {..} -> (inverted,c)
         _                      -> (False,c)
 
 {-# INLINE setInverted #-}
@@ -621,6 +682,7 @@ setInverted c =
         View ButtonGroup_ {..} -> View ButtonGroup_ { inverted = True, .. }
         View Divider_     {..} -> View Divider_     { inverted = True, .. }
         View Icon_        {..} -> View Icon_        { inverted = True, .. }
+        View Input_       {..} -> View Input_       { inverted = True, .. }
         _                      -> c
 
 pattern Labeled c <- (getLabeled -> (True,c)) where
@@ -676,6 +738,7 @@ getLoading c =
     case c of
         View Button_ {..} -> (loading,c)
         View Icon_   {..} -> (loading,c)
+        View Input_  {..} -> (loading,c)
         _                 -> (False,c)
 
 {-# INLINE setLoading #-}
@@ -683,6 +746,7 @@ setLoading c =
     case c of
         View Button_ {..} -> View Button_ { loading = True, .. }
         View Icon_   {..} -> View Icon_   { loading = True, .. }
+        View Input_  {..} -> View Input_  { loading = True, .. }
         _                 -> c
 
 pattern Localize t c <- (getLocalize -> Just (t,c)) where
@@ -896,6 +960,7 @@ getSize c =
         View IconGroup_   {..} -> size # Just (size,c)
         View Image_       {..} -> size # Just (size,c)
         View ImageGroup_  {..} -> size # Just (size,c)
+        View Input_       {..} -> size # Just (size,c)
         View Label_       {..} -> size # Just (size,c)
         View LabelGroup_  {..} -> size # Just (size,c)
         _                      -> Nothing
@@ -909,6 +974,7 @@ setSize s c =
         View IconGroup_   {..} -> View IconGroup_   { size = s, .. }
         View Image_       {..} -> View Image_       { size = s, .. }
         View ImageGroup_  {..} -> View ImageGroup_  { size = s, .. }
+        View Input_       {..} -> View Input_       { size = s, .. }
         View Label_       {..} -> View Label_       { size = s, .. }
         View LabelGroup_  {..} -> View LabelGroup_  { size = s, .. }
         _                       -> c
@@ -935,12 +1001,14 @@ pattern TabIndex n c <- (getTabIndex -> Just (n,c)) where
 getTabIndex c =
     case c of
         View Button_ {..} -> Just (tabIndex,c)
+        View Input_  {..} -> Just (tabIndex,c)
         _                 -> Nothing
 
 {-# INLINE setTabIndex #-}
 setTabIndex n c =
     case c of
         View Button_ {..} -> View Button_ { tabIndex = n, .. }
+        View Input_  {..} -> View Input_  { tabIndex = n, .. }
         _                 -> c
 
 pattern Tag c <- (getTag -> (True,c)) where
@@ -1034,6 +1102,36 @@ pattern Bounce = "bounce"
 -- setTransition t c =
 --     case c of
 --         _ -> c
+
+pattern Transparent c <- (getTransparent -> (True,c)) where
+    Transparent c = setTransparent c
+
+{-# INLINE getTransparent #-}
+getTransparent c =
+    case c of
+        View Input_ {..} -> (transparent,c)
+        _                -> (False,c)
+
+{-# INLINE setTransparent #-}
+setTransparent c =
+    case c of
+        View Input_ {..} -> View Input_ { transparent = True, .. }
+        _                -> c
+
+pattern Type t c <- (getType -> Just (t,c)) where
+    Type t c = setType t c
+
+{-# INLINE getType #-}
+getType c =
+    case c of
+        View Input_ {..} -> Just (_type,c)
+        _                -> Nothing
+
+{-# INLINE setType #-}
+setType t c =
+    case c of
+        View Input_ {..} -> View Input_ { _type = t, .. }
+        _                -> c
 
 pattern UI c <- (getUI -> (True,c)) where
     UI c = setUI c
