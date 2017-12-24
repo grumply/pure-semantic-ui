@@ -5,6 +5,7 @@ import Pure.View (pattern View)
 
 import Semantic.Elements.Button as Button
 import Semantic.Elements.Container as Container
+import Semantic.Elements.Divider as Container
 import Semantic.Elements.Label as Label
 import Semantic.Elements.Icon as Icon
 import Semantic.Elements.Image as Image
@@ -35,6 +36,7 @@ getChildren c =
         View ButtonContent_ {..} -> Just (children,c)
         View ButtonGroup_   {..} -> Just (children,c)
         View Container_     {..} -> Just (children,c)
+        View Divider_       {..} -> Just (children,c)
         View Label_         {..} -> Just (children,c)
         View LabelDetail_   {..} -> Just (children,c)
         View LabelGroup_    {..} -> Just (children,c)
@@ -50,6 +52,7 @@ setChildren cs c =
         View ButtonContent_ {..} -> View ButtonContent_ { children = cs, .. }
         View ButtonGroup_   {..} -> View ButtonGroup_   { children = cs, .. }
         View Container_     {..} -> View Container_     { children = cs, .. }
+        View Divider_       {..} -> View Divider_       { children = cs, .. }
         View Label_         {..} -> View Label_         { children = cs, .. }
         View LabelDetail_   {..} -> View LabelDetail_   { children = cs, .. }
         View LabelGroup_    {..} -> View LabelGroup_    { children = cs, .. }
@@ -69,6 +72,7 @@ getClasses c =
         View ButtonOr_      {..} -> Just (classes,c)
         View ButtonGroup_   {..} -> Just (classes,c)
         View Container_     {..} -> Just (classes,c)
+        View Divider_       {..} -> Just (classes,c)
         View Label_         {..} -> Just (classes,c)
         View LabelDetail_   {..} -> Just (classes,c)
         View LabelGroup_    {..} -> Just (classes,c)
@@ -85,6 +89,7 @@ setClasses cs c =
         View ButtonGroup_   {..} -> View ButtonGroup_   { classes = cs, .. }
         View ButtonOr_      {..} -> View ButtonOr_      { classes = cs, .. }
         View Container_     {..} -> View Container_     { classes = cs, .. }
+        View Divider_       {..} -> View Divider_       { classes = cs, .. }
         View Label_         {..} -> View Label_         { classes = cs, .. }
         View LabelDetail_   {..} -> View LabelDetail_   { classes = cs, .. }
         View LabelGroup_    {..} -> View LabelGroup_    { classes = cs, .. }
@@ -105,6 +110,7 @@ getAttributes c =
         View ButtonGroup_   {..} -> Just (attributes,c)
         View ButtonOr_      {..} -> Just (attributes,c)
         View Container_     {..} -> Just (attributes,c)
+        View Divider_       {..} -> Just (attributes,c)
         View Label_         {..} -> Just (attributes,c)
         View LabelDetail_   {..} -> Just (attributes,c)
         View LabelGroup_    {..} -> Just (attributes,c)
@@ -122,6 +128,7 @@ setAttributes cs c =
         View ButtonGroup_   {..} -> View ButtonGroup_   { attributes = cs, .. }
         View ButtonOr_      {..} -> View ButtonOr_      { attributes = cs, .. }
         View Container_     {..} -> View Container_     { attributes = cs, .. }
+        View Divider_       {..} -> View Divider_       { attributes = cs, .. }
         View Label_         {..} -> View Label_         { attributes = cs, .. }
         View LabelDetail_   {..} -> View LabelDetail_   { attributes = cs, .. }
         View LabelGroup_    {..} -> View LabelGroup_    { attributes = cs, .. }
@@ -142,6 +149,7 @@ getAs c =
         View ButtonGroup_   {..} -> Just (as,c)
         View ButtonOr_      {..} -> Just (as,c)
         View Container_     {..} -> Just (as,c)
+        View Divider_       {..} -> Just (as,c)
         View Label_         {..} -> Just (as,c)
         View LabelDetail_   {..} -> Just (as,c)
         View LabelGroup_    {..} -> Just (as,c)
@@ -159,6 +167,7 @@ setAs a c =
         View ButtonGroup_   {..} -> View ButtonGroup_   { as = a, .. }
         View ButtonOr_      {..} -> View ButtonOr_      { as = a, .. }
         View Container_     {..} -> View Container_     { as = a, .. }
+        View Divider_       {..} -> View Divider_       { as = a, .. }
         View Label_         {..} -> View Label_         { as = a, .. }
         View LabelDetail_   {..} -> View LabelDetail_   { as = a, .. }
         View LabelGroup_    {..} -> View LabelGroup_    { as = a, .. }
@@ -314,6 +323,23 @@ setCircular c =
         View LabelGroup_ {..} -> View LabelGroup_ { circular = True, .. }
         _                 -> c
 
+pattern Clearing c <- (getClearing -> (True,c)) where
+    Clearing c = setClearing c
+
+{-# INLINE getClearing #-}
+getClearing c =
+    case c of
+        View Divider_ {..} -> (clearing,c)
+        _                  -> (False,c)
+
+{-# INLINE setClearing #-}
+setClearing c =
+    case c of
+        View Divider_ {..} -> View Divider_ { clearing = True, .. }
+        _                  -> c
+
+
+
 pattern Color col c <- (getColor -> Just (col,c)) where
     Color col c = setColor col c
 
@@ -426,14 +452,16 @@ pattern Fitted c <- (getFitted -> (True,c)) where
 {-# INLINE getFitted #-}
 getFitted c =
     case c of
-        View Icon_ {..} -> (fitted,c)
-        _               -> (False,c)
+        View Icon_    {..} -> (fitted,c)
+        View Divider_ {..} -> (fitted,c)
+        _                  -> (False,c)
 
 {-# INLINE setFitted #-}
 setFitted c =
     case c of
-        View Icon_ {..} -> View Icon_ { fitted = True, .. }
-        _               -> c
+        View Icon_    {..} -> View Icon_    { fitted = True, .. }
+        View Divider_ {..} -> View Divider_ { fitted = True, .. }
+        _                  -> c
 
 pattern Focus c <- (getFocus -> (True,c)) where
     Focus c = setFocus c
@@ -529,6 +557,7 @@ pattern Hidden c <- (getHidden -> (True,c)) where
 {-# INLINE getHidden #-}
 getHidden c =
     case c of
+        View Divider_       {..} -> (hidden,c)
         View Image_         {..} -> (hidden,c)
         View ButtonContent_ {..} -> (hidden,c)
         _                        -> (False,c)
@@ -536,6 +565,7 @@ getHidden c =
 {-# INLINE setHidden #-}
 setHidden c =
     case c of
+        View Divider_       {..} -> View Divider_       { hidden = True, .. }
         View Image_         {..} -> View Image_         { hidden = True, .. }
         View ButtonContent_ {..} -> View ButtonContent_ { hidden = True, .. }
         _                        -> c
@@ -546,14 +576,16 @@ pattern Horizontal c <- (getHorizontal -> (True,c)) where
 {-# INLINE getHorizontal #-}
 getHorizontal c = 
     case c of
-        View Label_ {..} -> (horizontal,c)
-        _                -> (False,c)
+        View Divider_ {..} -> (horizontal,c)
+        View Label_   {..} -> (horizontal,c)
+        _                  -> (False,c)
 
 {-# INLINE setHorizontal #-}
 setHorizontal c =
     case c of
-        View Label_ {..} -> View Label_ { horizontal = True, .. }
-        _                -> c
+        View Divider_ {..} -> View Divider_ { horizontal = True, .. }
+        View Label_   {..} -> View Label_   { horizontal = True, .. }
+        _                  -> c
 
 pattern Inline c <- (getInline -> (True,c)) where
     Inline c = setInline c
@@ -578,6 +610,7 @@ getInverted c =
     case c of
         View Button_      {..} -> (inverted,c)
         View ButtonGroup_ {..} -> (inverted,c)
+        View Divider_     {..} -> (inverted,c)
         View Icon_        {..} -> (inverted,c)
         _                      -> (False,c)
 
@@ -586,6 +619,7 @@ setInverted c =
     case c of
         View Button_      {..} -> View Button_      { inverted = True, .. }
         View ButtonGroup_ {..} -> View ButtonGroup_ { inverted = True, .. }
+        View Divider_     {..} -> View Divider_     { inverted = True, .. }
         View Icon_        {..} -> View Icon_        { inverted = True, .. }
         _                      -> c
 
@@ -826,6 +860,21 @@ setSecondary c =
         View ButtonGroup_ {..} -> View ButtonGroup_ { secondary = True, .. }
         _                 -> c
 
+pattern Section c <- (getSection -> (True,c)) where
+    Section c = setSection c
+
+{-# INLINE getSection #-}
+getSection c =
+    case c of
+        View Divider_ {..} -> (section,c)
+        _                  -> (False,c)
+
+{-# INLINE setSection #-}
+setSection c =
+    case c of
+        View Divider_ {..} -> View Divider_ { section = True, .. }
+        _                  -> c
+
 pattern Size s c <- (getSize -> Just (s,c)) where
     Size s c = setSize s c
 
@@ -1008,12 +1057,14 @@ pattern Vertical c <- (getVertical -> (True,c)) where
 getVertical c =
     case c of
         View ButtonGroup_ {..} -> (vertical,c)
+        View Divider_     {..} -> (vertical,c)
         _                      -> (False,c)
 
 {-# INLINE setVertical #-}
 setVertical c =
     case c of
         View ButtonGroup_ {..} -> View ButtonGroup_ { vertical = True, .. }
+        View Divider_     {..} -> View Divider_     { vertical = True, .. }
         _                      -> c
 
 pattern VerticalAlign va c <- (getVerticalAlign -> Just (va,c)) where
