@@ -67,6 +67,7 @@ executable semantic-ui-pure
     Semantic.Elements.Label.LabelGroup
     Semantic.Elements.List
     Semantic.Elements.List.ListContent
+    Semantic.Elements.List.ListDescription
     Semantic.Elements.List.ListItem
     Semantic.Extensions
     Semantic.Utils
@@ -134,6 +135,7 @@ library
     Semantic.Elements.Label.LabelGroup
     Semantic.Elements.List
     Semantic.Elements.List.ListContent
+    Semantic.Elements.List.ListDescription
     Semantic.Elements.List.ListItem
     Semantic.Extensions
     Semantic.Utils
