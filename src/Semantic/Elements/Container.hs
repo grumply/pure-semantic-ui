@@ -12,7 +12,7 @@ data Container ms = Container_
   , classes :: [Txt]
   , fluid :: Bool
   , text :: Bool
-  , textAlign :: TextAlignment
+  , textAlign :: Txt
   } deriving (Generic)
 
 instance Default (Container ms) where
@@ -27,7 +27,7 @@ instance Typeable ms => Pure Container ms where
               ( "ui"
               : text # "text"
               : fluid # "fluid"
-              : textAlign # textAlignClass textAlign
+              : textAlign
               : "container"
               : classes
               )

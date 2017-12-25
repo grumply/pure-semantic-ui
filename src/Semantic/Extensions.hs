@@ -1031,6 +1031,12 @@ setTag c =
 pattern TextAlign ta c <- (getTextAlign -> Just (ta,c)) where
     TextAlign ta c = setTextAlign ta c
 
+pattern Unaligned c = TextAlign "" c
+pattern LeftAligned c = TextAlign "left aligned" c
+pattern RightAligned c = TextAlign "right aligned" c
+pattern CenterAligned c = TextAlign "center aligned" c
+pattern Justified c = TextAlign "justified" c
+
 {-# INLINE getTextAlign #-}
 getTextAlign c =
     case c of
@@ -1247,11 +1253,6 @@ setWrapped c =
     case c of
         View Image_ {..} -> View Image_ { wrapped = True, .. }
         _                -> c
-
-pattern TextAlignLeft c = TextAlign AlignedLeft c
-pattern TextAlignCenter c = TextAlign AlignedCenter c
-pattern TextAlignRight c = TextAlign AlignedRight c
-pattern TextAlignJustified c = TextAlign AlignedJustified c
 
 -- pattern Animate = "animate"
 -- pattern Fade = "fade"
