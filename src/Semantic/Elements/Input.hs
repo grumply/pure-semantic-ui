@@ -69,16 +69,18 @@ instance Typeable ms => Pure Input ms where
             addInputProps :: View ms -> View ms
             addInputProps (HTML.Input fs cs) =
                 HTML.Input 
-                    ( HostRef ((focused #) . _focus)
+                    (( HostRef ((focused #) . _focus)
                     : Disabled disabled 
                     : Type _type 
                     : index 
-                    : onInputChange onChange 
-                    : fs
-                    ) 
+                    : onInput onChange 
+                    : inputAttrs
+                    ) ++ fs)
                     cs
             
             addInputProps c = c
+
+            (inputAttrs,otherAttrs) = extractInputAttrs attributes
 
             index = maybe (disabled # Tabindex (-1)) Tabindex tabIndex
 
@@ -103,6 +105,6 @@ instance Typeable ms => Pure Input ms where
         in
             as
                 ( ClassList cs
-                : attributes
+                : otherAttrs
                 )
-                ( mapPures addInputProps children )
+                ( map addInputProps children )

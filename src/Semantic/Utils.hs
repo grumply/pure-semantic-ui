@@ -97,3 +97,23 @@ foldPures f = foldr $ \x st ->
   case x of
       View a -> f a st
       _      -> st
+
+extractInputAttrs = foldr go ([],[])
+    where
+        go x ~(inputAttrs,otherAttrs) =
+            let isInputAttr =
+                    case x of
+                        On ev _ f -> ev `elem` 
+                            ["keydown","keypress","keyup","focus","blur","change","input","click","contextmenu"
+                            ,"drag","dragend","dragenter","dragexit","dragleave","dragover","dragstart","drop"
+                            ,"mousedown","mouseenter","mouseleave","mousemove","mouseout","mouseover","mouseup"
+                            ,"select","touchcancel","touchend","touchmove","touchstart"]
+                        Prop p v -> p `elem`
+                            ["autocapitalize","autocomplete","autocorrect","autofocus","checked","disabled","form"
+                            ,"id","list","max","maxlength","min","minlength","multiple","name","pattern","placeholder"
+                            ,"readonly","required","step","type","value"]
+                        _ -> False
+            in if isInputAttr 
+                   then (x:inputAttrs,otherAttrs)
+                   else (inputAttrs,x:otherAttrs)
+ 
