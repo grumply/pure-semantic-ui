@@ -6,7 +6,7 @@ import Pure.View hiding (onClick)
 
 import Semantic.Utils
 
--- import Semantic.Elements.List.ListContent as Export
+import Semantic.Elements.List.ListContent as Export
 -- import Semantic.Elements.List.ListDescription as Export
 -- import Semantic.Elements.List.ListHeader as Export
 -- import Semantic.Elements.List.ListIcon as Export
