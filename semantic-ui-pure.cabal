@@ -69,6 +69,7 @@ executable semantic-ui-pure
     Semantic.Elements.List.ListContent
     Semantic.Elements.List.ListDescription
     Semantic.Elements.List.ListHeader
+    Semantic.Elements.List.ListIcon
     Semantic.Elements.List.ListItem
     Semantic.Extensions
     Semantic.Utils
@@ -138,6 +139,7 @@ library
     Semantic.Elements.List.ListContent
     Semantic.Elements.List.ListDescription
     Semantic.Elements.List.ListHeader
+    Semantic.Elements.List.ListIcon
     Semantic.Elements.List.ListItem
     Semantic.Extensions
     Semantic.Utils
