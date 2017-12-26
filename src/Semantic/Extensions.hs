@@ -54,6 +54,7 @@ getChildren c =
         View ListContent_     {..} -> Just (children,c)
         View ListDescription_ {..} -> Just (children,c)
         View ListHeader_      {..} -> Just (children,c)
+        View ListItem_        {..} -> Just (children,c)
         _                          -> Nothing
 
 {-# INLINE setChildren #-}
@@ -78,6 +79,7 @@ setChildren cs c =
         View ListContent_     {..} -> View ListContent_     { children = cs, .. }
         View ListDescription_ {..} -> View ListDescription_ { children = cs, .. }
         View ListHeader_      {..} -> View ListHeader_      { children = cs, .. }
+        View ListItem_        {..} -> View ListItem_        { children = cs, .. }
         _                          -> c
 
 pattern Classes cs c <- (getClasses -> Just (cs,c)) where
@@ -108,6 +110,7 @@ getClasses c =
         View ListDescription_ {..} -> Just (classes,c)
         View ListHeader_      {..} -> Just (classes,c)
         View ListIcon_        {..} -> Just (classes,c)
+        View ListItem_        {..} -> Just (classes,c)
         _                          -> Nothing
 
 {-# INLINE setClasses #-}
@@ -134,6 +137,7 @@ setClasses cs c =
         View ListDescription_ {..} -> View ListDescription_ { classes = cs, .. }
         View ListHeader_      {..} -> View ListHeader_      { classes = cs, .. }
         View ListIcon_        {..} -> View ListIcon_        { classes = cs, .. }
+        View ListItem_        {..} -> View ListItem_        { classes = cs, .. }
         _                          -> c
 
 pattern Attributes as c <- (getAttributes -> Just (as,c)) where
@@ -164,6 +168,7 @@ getAttributes c =
         View ListDescription_ {..} -> Just (attributes,c)
         View ListHeader_      {..} -> Just (attributes,c)
         View ListIcon_        {..} -> Just (attributes,c)
+        View ListItem_        {..} -> Just (attributes,c)
         _                          -> Nothing
 
 {-# INLINE setAttributes #-}
@@ -191,6 +196,7 @@ setAttributes cs c =
         View ListDescription_ {..} -> View ListDescription_ { attributes = cs, .. }
         View ListHeader_      {..} -> View ListHeader_      { attributes = cs, .. }
         View ListIcon_        {..} -> View ListIcon_        { attributes = cs, .. }
+        View ListItem_        {..} -> View ListItem_        { attributes = cs, .. }
         _                          -> c
 
 pattern As :: VC ms => ([Feature ms] -> [View ms] -> View ms) -> View ms -> View ms
@@ -222,6 +228,7 @@ getAs c =
         View ListDescription_ {..} -> Just (as,c)
         View ListHeader_      {..} -> Just (as,c)
         View ListIcon_        {..} -> Just (as,c)
+        View ListItem_        {..} -> Just (as,c)
         _                          -> Nothing
 
 {-# INLINE setAs #-}
@@ -249,6 +256,7 @@ setAs a c =
         View ListDescription_ {..} -> View ListDescription_ { as = a, .. }
         View ListHeader_      {..} -> View ListHeader_      { as = a, .. }
         View ListIcon_        {..} -> View ListIcon_        { as = a, .. }
+        View ListItem_        {..} -> View ListItem_        { as = a, .. }
         _                          -> c
 
 pattern Active c <- (getActive -> (True,c)) where
@@ -257,16 +265,18 @@ pattern Active c <- (getActive -> (True,c)) where
 {-# INLINE getActive #-}
 getActive c = 
     case c of
-        View Button_ {..} -> (active,c)
-        View Label_  {..} -> (active,c)
-        _                 -> (False,c)
+        View Button_   {..} -> (active,c)
+        View Label_    {..} -> (active,c)
+        View ListItem_ {..} -> (active,c)
+        _                   -> (False,c)
 
 {-# INLINE setActive #-}
 setActive c =
     case c of
-        View Button_ {..} -> View Button_ { active = True, .. }
-        View Label_  {..} -> View Label_  { active = True, .. }
-        _                 -> c
+        View Button_   {..} -> View Button_   { active = True, .. }
+        View Label_    {..} -> View Label_    { active = True, .. }
+        View ListItem_ {..} -> View ListItem_ { active = True, .. }
+        _                   -> c
 
 pattern Animated a c <- (getAnimated -> Just (a,c)) where
     Animated a c = setAnimated a c
@@ -486,16 +496,18 @@ pattern Click h c <- (getClick -> Just (h,c)) where
 {-# INLINE getClick #-}
 getClick c =
     case c of
-        View Button_ {..} -> click # Just (click,c)
-        View Label_  {..} -> click # Just (click,c)
-        _                 -> Nothing
+        View Button_   {..} -> click # Just (click,c)
+        View Label_    {..} -> click # Just (click,c)
+        View ListItem_ {..} -> click # Just (click,c)
+        _                   -> Nothing
 
 {-# INLINE setClick #-}
 setClick h c =
     case c of
-        View Button_ {..} -> View Button_ { click = h, .. }
-        View Label_  {..} -> View Label_  { click = h, .. }
-        _                 -> c
+        View Button_   {..} -> View Button_   { click = h, .. }
+        View Label_    {..} -> View Label_    { click = h, .. }
+        View ListItem_ {..} -> View ListItem_ { click = h, .. }
+        _                   -> c
 
 pattern Color col c <- (getColor -> Just (col,c)) where
     Color col c = setColor col c
@@ -587,6 +599,7 @@ getDisabled c =
         View Image_    {..} -> (disabled,c)
         View Input_    {..} -> (disabled,c)
         View ListIcon_ {..} -> (disabled,c)
+        View ListItem_ {..} -> (disabled,c)
         _                   -> (False,c)
 
 {-# INLINE setDisabled #-}
@@ -598,6 +611,7 @@ setDisabled c =
         View Image_    {..} -> View Image_    { disabled = True, .. }
         View Input_    {..} -> View Input_    { disabled = True, .. }
         View ListIcon_ {..} -> View ListIcon_ { disabled = True, .. }
+        View ListItem_ {..} -> View ListItem_ { disabled = True, .. }
         _                   -> c
 
 pattern Divided c <- (getDivided -> (True,c)) where
@@ -1421,6 +1435,21 @@ setUI c =
     case c of
         View Image_ {..} -> View Image_ { ui = True, .. }
         _                -> c
+
+pattern Value v c <- (getValue -> Just (v,c)) where
+    Value c = setValue c
+
+{-# INLINE getValue #-}
+getValue c =
+    case c of
+        View ListItem_ {..} -> value # Just (value,c)
+        _                   -> Nothing
+
+{-# INLINE setValue #-}
+setValue v c =
+    case c of
+        View ListItem_ {..} -> View ListItem_ { value = v, .. }
+        _                   -> c
 
 pattern Vertical c <- (getVertical -> (True,c)) where
     Vertical c = setVertical c
