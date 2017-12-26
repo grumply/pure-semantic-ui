@@ -55,6 +55,7 @@ getChildren c =
         View ListDescription_ {..} -> Just (children,c)
         View ListHeader_      {..} -> Just (children,c)
         View ListItem_        {..} -> Just (children,c)
+        View ListList_        {..} -> Just (children,c)
         _                          -> Nothing
 
 {-# INLINE setChildren #-}
@@ -80,6 +81,7 @@ setChildren cs c =
         View ListDescription_ {..} -> View ListDescription_ { children = cs, .. }
         View ListHeader_      {..} -> View ListHeader_      { children = cs, .. }
         View ListItem_        {..} -> View ListItem_        { children = cs, .. }
+        View ListList_        {..} -> View ListList_        { children = cs, .. }
         _                          -> c
 
 pattern Classes cs c <- (getClasses -> Just (cs,c)) where
@@ -111,6 +113,7 @@ getClasses c =
         View ListHeader_      {..} -> Just (classes,c)
         View ListIcon_        {..} -> Just (classes,c)
         View ListItem_        {..} -> Just (classes,c)
+        View ListList_        {..} -> Just (classes,c)
         _                          -> Nothing
 
 {-# INLINE setClasses #-}
@@ -138,6 +141,7 @@ setClasses cs c =
         View ListHeader_      {..} -> View ListHeader_      { classes = cs, .. }
         View ListIcon_        {..} -> View ListIcon_        { classes = cs, .. }
         View ListItem_        {..} -> View ListItem_        { classes = cs, .. }
+        View ListList_        {..} -> View ListList_        { classes = cs, .. }
         _                          -> c
 
 pattern Attributes as c <- (getAttributes -> Just (as,c)) where
@@ -169,6 +173,7 @@ getAttributes c =
         View ListHeader_      {..} -> Just (attributes,c)
         View ListIcon_        {..} -> Just (attributes,c)
         View ListItem_        {..} -> Just (attributes,c)
+        View ListList_        {..} -> Just (attributes,c)
         _                          -> Nothing
 
 {-# INLINE setAttributes #-}
@@ -197,6 +202,7 @@ setAttributes cs c =
         View ListHeader_      {..} -> View ListHeader_      { attributes = cs, .. }
         View ListIcon_        {..} -> View ListIcon_        { attributes = cs, .. }
         View ListItem_        {..} -> View ListItem_        { attributes = cs, .. }
+        View ListList_        {..} -> View ListList_        { attributes = cs, .. }
         _                          -> c
 
 pattern As :: VC ms => ([Feature ms] -> [View ms] -> View ms) -> View ms -> View ms
@@ -229,6 +235,7 @@ getAs c =
         View ListHeader_      {..} -> Just (as,c)
         View ListIcon_        {..} -> Just (as,c)
         View ListItem_        {..} -> Just (as,c)
+        View ListList_        {..} -> Just (as,c)
         _                          -> Nothing
 
 {-# INLINE setAs #-}
@@ -257,6 +264,7 @@ setAs a c =
         View ListHeader_      {..} -> View ListHeader_      { as = a, .. }
         View ListIcon_        {..} -> View ListIcon_        { as = a, .. }
         View ListItem_        {..} -> View ListItem_        { as = a, .. }
+        View ListList_        {..} -> View ListList_        { as = a, .. }
         _                          -> c
 
 pattern Active c <- (getActive -> (True,c)) where
