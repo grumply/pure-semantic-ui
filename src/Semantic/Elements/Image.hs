@@ -7,6 +7,8 @@ import Semantic.Utils
 
 import Semantic.Elements.Image.ImageGroup as Export
 
+import Semantic.Extensions.Children
+
 data Image ms = Image_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]
@@ -62,3 +64,8 @@ instance Typeable ms => Pure Image ms where
                 : attributes
                 )
                 children
+
+instance HasChildren (Image ms) where
+    type Child (Image ms) = View ms
+    getChildren = children
+    setChildren cs i = i { children = cs }

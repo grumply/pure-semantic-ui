@@ -5,6 +5,8 @@ import Pure.View as View
 
 import Semantic.Utils
 
+import Semantic.Extensions.Children
+
 data ImageGroup ms = ImageGroup_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]
@@ -29,3 +31,8 @@ instance Typeable ms => Pure ImageGroup ms where
                 ) ++ [ "images" ]
         in 
             as (ClassList cs : attributes) children
+
+instance HasChildren (ImageGroup ms) where
+    type Child (ImageGroup ms) = View ms
+    getChildren = children
+    setChildren cs ig = ig { children = cs }

@@ -13,6 +13,8 @@ import Semantic.Elements.List.ListIcon as Export
 import Semantic.Elements.List.ListItem as Export
 import Semantic.Elements.List.ListList as Export
 
+import Semantic.Extensions.Children
+
 data List ms = List_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]
@@ -70,4 +72,9 @@ instance VC ms => Pure List ms where
                 : attributes
                 )
                 children'
+
+instance HasChildren (List ms) where
+    type Child (List ms) = View ms
+    getChildren = children
+    setChildren cs l = l { children = cs }
         

@@ -11,6 +11,8 @@ import Semantic.Elements.Button
 import Semantic.Elements.Icon
 import Semantic.Elements.Label
 
+import Semantic.Extensions.Children
+
 data Input ms = Input_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]
@@ -108,3 +110,8 @@ instance Typeable ms => Pure Input ms where
                 : otherAttrs
                 )
                 ( map addInputProps children )
+
+instance HasChildren (Input ms) where
+    type Child (Input ms) = View ms
+    getChildren = children
+    setChildren cs i = i { children = cs }

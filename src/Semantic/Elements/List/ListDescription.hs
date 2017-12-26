@@ -5,6 +5,8 @@ import Pure.View
 
 import Semantic.Utils
 
+import Semantic.Extensions.Children
+
 data ListDescription ms = ListDescription_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms] 
@@ -21,3 +23,8 @@ pattern ListDescription ld = View ld
 instance Typeable ms => Pure ListDescription ms where
     render ListDescription_ {..} =
         as ( ClassList (classes ++ [ "description" ]) : attributes ) children
+
+instance HasChildren (ListDescription ms) where
+    type Child (ListDescription ms) = View ms
+    getChildren = children
+    setChildren cs ld = ld { children = cs }

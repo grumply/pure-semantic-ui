@@ -10,6 +10,8 @@ import Semantic.Elements.Label.LabelGroup as Export
 
 import Semantic.Elements.Image
 
+import Semantic.Extensions.Children
+
 data Label ms = Label_
     { as :: [Feature ms] -> [View ms] -> View ms
     , active :: Bool
@@ -77,3 +79,8 @@ instance Typeable ms => Pure Label ms where
                 : attributes
                 )
                 children
+
+instance HasChildren (Label ms) where
+    type Child (Label ms) = View ms
+    getChildren = children
+    setChildren cs l = l { children = cs }

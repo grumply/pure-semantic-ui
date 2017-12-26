@@ -5,6 +5,8 @@ import Pure.View
 
 import Semantic.Utils
 
+import Semantic.Extensions.Children
+
 data HeaderContent ms = HeaderContent_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]
@@ -25,3 +27,8 @@ instance Typeable ms => Pure HeaderContent ms where
             : attributes 
             ) 
             children
+
+instance HasChildren (HeaderContent ms) where
+    type Child (HeaderContent ms) = View ms
+    getChildren = children
+    setChildren cs hc = hc { children = cs }

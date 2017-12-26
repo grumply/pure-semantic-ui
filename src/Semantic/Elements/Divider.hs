@@ -5,6 +5,8 @@ import Pure.View as View
 
 import Semantic.Utils
 
+import Semantic.Extensions.Children
+
 data Divider ms = Divider_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]
@@ -43,3 +45,8 @@ instance Typeable ms => Pure Divider ms where
                 : attributes
                 )
                 children
+
+instance HasChildren (Divider ms) where
+    type Child (Divider ms) = View ms
+    getChildren = children
+    setChildren cs d = d { children = cs }

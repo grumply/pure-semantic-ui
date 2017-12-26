@@ -5,6 +5,8 @@ import Pure.View as View
 
 import Semantic.Utils
 
+import Semantic.Extensions.Children
+
 data LabelGroup ms = LabelGroup_ 
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]
@@ -40,4 +42,8 @@ instance Typeable ms => Pure LabelGroup ms where
                 : attributes
                 )
                 children
-            
+
+instance HasChildren (LabelGroup ms) where
+    type Child (LabelGroup ms) = View ms
+    getChildren = children
+    setChildren cs lg = lg { children = cs } 

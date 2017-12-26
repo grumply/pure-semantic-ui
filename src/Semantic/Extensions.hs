@@ -19,76 +19,14 @@ import Semantic.Utils
 
 import Debug.Trace
 
-infixl 1 !
-(!) c cs = Children cs c
-
 infixl 2 %
 (%) c as = Attributes as c
 
-infixl 1 !%
-(!%) c cs as = Children (cs (Attributes as c))
+-- infixl 1 !%
+-- (!%) c cs as = Children (cs (Attributes as c))
 
-infixl 1 %!
-(%!) c as cs = Attributes (as (Children cs c))
-
-pattern Children cs c <- (getChildren -> Just (cs,c)) where
-    Children cs c = setChildren cs c
-
-{-# INLINE getChildren #-}
-getChildren c =
-    case c of
-        View Button_          {..} -> Just (children,c)
-        View ButtonContent_   {..} -> Just (children,c)
-        View ButtonGroup_     {..} -> Just (children,c)
-        View Container_       {..} -> Just (children,c)
-        View Divider_         {..} -> Just (children,c)
-        View Header_          {..} -> Just (children,c)
-        View HeaderContent_   {..} -> Just (children,c)
-        View HeaderSubheader_ {..} -> Just (children,c)
-        View IconGroup_       {..} -> Just (children,c)
-        View Image_           {..} -> Just (children,c)
-        View ImageGroup_      {..} -> Just (children,c)
-        View Input_           {..} -> Just (children,c)
-        View Label_           {..} -> Just (children,c)
-        View LabelDetail_     {..} -> Just (children,c)
-        View LabelGroup_      {..} -> Just (children,c)
-        View List_            {..} -> Just (children,c)
-        View ListContent_     {..} -> Just (children,c)
-        View ListDescription_ {..} -> Just (children,c)
-        View ListHeader_      {..} -> Just (children,c)
-        View ListItem_        {..} -> Just (children,c)
-        View ListList_        {..} -> Just (children,c)
-        View Loader_          {..} -> Just (children,c)
-        View Rail_            {..} -> Just (children,c)
-        _                          -> Nothing
-
-{-# INLINE setChildren #-}
-setChildren cs c =
-    case c of
-        View Button_          {..} -> View Button_          { children = cs, .. }
-        View ButtonContent_   {..} -> View ButtonContent_   { children = cs, .. }
-        View ButtonGroup_     {..} -> View ButtonGroup_     { children = cs, .. }
-        View Container_       {..} -> View Container_       { children = cs, .. }
-        View Divider_         {..} -> View Divider_         { children = cs, .. }
-        View Header_          {..} -> View Header_          { children = cs, .. }
-        View HeaderContent_   {..} -> View HeaderContent_   { children = cs, .. }
-        View HeaderSubheader_ {..} -> View HeaderSubheader_ { children = cs, .. }
-        View IconGroup_       {..} -> View IconGroup_       { children = cs, .. }
-        View Image_           {..} -> View Image_           { children = cs, .. }
-        View ImageGroup_      {..} -> View ImageGroup_      { children = cs, .. }
-        View Input_           {..} -> View Input_           { children = cs, .. }
-        View Label_           {..} -> View Label_           { children = cs, .. }
-        View LabelDetail_     {..} -> View LabelDetail_     { children = cs, .. }
-        View LabelGroup_      {..} -> View LabelGroup_      { children = cs, .. }
-        View List_            {..} -> View List_            { children = cs, .. }
-        View ListContent_     {..} -> View ListContent_     { children = cs, .. }
-        View ListDescription_ {..} -> View ListDescription_ { children = cs, .. }
-        View ListHeader_      {..} -> View ListHeader_      { children = cs, .. }
-        View ListItem_        {..} -> View ListItem_        { children = cs, .. }
-        View ListList_        {..} -> View ListList_        { children = cs, .. }
-        View Loader_          {..} -> View Loader_          { children = cs, .. }
-        View Rail_            {..} -> View Rail_            { children = cs, .. }
-        _                          -> c
+-- infixl 1 %!
+-- (%!) c as cs = Attributes (as (Children cs c))
 
 pattern Classes cs c <- (getClasses -> Just (cs,c)) where
     Classes cs c = setClasses cs c

@@ -5,6 +5,8 @@ import Pure.View
 
 import Semantic.Utils
 
+import Semantic.Extensions.Children
+
 data ListList ms = ListList_ 
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]
@@ -33,3 +35,8 @@ instance Typeable ms => Pure ListList ms where
                 : attributes
                 )
                 children
+
+instance HasChildren (ListList ms) where
+    type Child (ListList ms) = View ms
+    getChildren = children
+    setChildren cs ll = ll { children = cs }

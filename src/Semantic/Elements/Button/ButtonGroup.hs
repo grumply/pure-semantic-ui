@@ -8,6 +8,8 @@ import Semantic.Utils
 
 import Semantic.Elements.Icon
 
+import Semantic.Extensions.Children
+
 data ButtonGroup ms = ButtonGroup_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attached :: Maybe Txt
@@ -71,3 +73,8 @@ instance Typeable ms => Pure ButtonGroup ms where
                 : attributes
                 )
                 children
+
+instance HasChildren (ButtonGroup ms) where
+    type Child (ButtonGroup ms) = View ms
+    getChildren = children
+    setChildren cs bg = bg { children = cs }
