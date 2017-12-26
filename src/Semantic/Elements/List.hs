@@ -26,7 +26,7 @@ data List ms = List_
     , horizontal :: Bool
     , inverted :: Bool
     , link :: Bool
-    , onItemClick :: ListItem ms -> Ef ms IO ()
+    , itemClick :: ListItem ms -> Ef ms IO ()
     , ordered :: Bool
     , relaxed :: Maybe Txt
     , selection :: Bool
@@ -44,7 +44,7 @@ instance VC ms => Pure List ms where
     render List_ {..} =
         let
             children' =
-                mapPures (\li@(ListItem_ {..}) -> ListItem_ { onClick = onClick >> onItemClick li, .. }) children
+                mapPures (\li@(ListItem_ {}) -> li { click = click li >> itemClick li }) children
 
             cs =
                 ( "ui"

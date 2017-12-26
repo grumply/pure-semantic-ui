@@ -1,8 +1,7 @@
 module Semantic.Elements.List.ListItem where
 
 import GHC.Generics as G
-import Pure.View hiding (onClick)
-import qualified Pure.View as HTML
+import Pure.View
 
 import Semantic.Utils
 
@@ -13,7 +12,7 @@ data ListItem ms = ListItem_
     , classes :: [Txt]
     , active :: Bool
     , disabled :: Bool
-    , onClick :: Ef ms IO ()
+    , click :: Ef ms IO ()
     , value :: Txt
     } deriving (Generic)
 
@@ -40,7 +39,7 @@ instance Typeable ms => Pure ListItem ms where
             valueProp = li ? Value value $ Prop "data-value" value
         in
             as
-                ( HTML.onClick onClick
+                ( onClick click
                 : valueProp
                 : ClassList cs
                 : Role "listitem"

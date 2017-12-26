@@ -11,6 +11,7 @@ import Semantic.Elements.Label
 import Semantic.Elements.Icon
 import Semantic.Elements.Image
 import Semantic.Elements.Input
+import Semantic.Elements.List
 
 import Semantic.Utils
 
@@ -46,6 +47,7 @@ getChildren c =
         View Label_           {..} -> Just (children,c)
         View LabelDetail_     {..} -> Just (children,c)
         View LabelGroup_      {..} -> Just (children,c)
+        View List_            {..} -> Just (children,c)
         View IconGroup_       {..} -> Just (children,c)
         View Image_           {..} -> Just (children,c)
         View ImageGroup_      {..} -> Just (children,c)
@@ -67,6 +69,7 @@ setChildren cs c =
         View LabelDetail_     {..} -> View LabelDetail_     { children = cs, .. }
         View LabelGroup_      {..} -> View LabelGroup_      { children = cs, .. }
         View IconGroup_       {..} -> View IconGroup_       { children = cs, .. }
+        View List_            {..} -> View List_            { children = cs, .. }
         View Image_           {..} -> View Image_           { children = cs, .. }
         View ImageGroup_      {..} -> View ImageGroup_      { children = cs, .. }
         _                          -> c
@@ -90,6 +93,7 @@ getClasses c =
         View Label_           {..} -> Just (classes,c)
         View LabelDetail_     {..} -> Just (classes,c)
         View LabelGroup_      {..} -> Just (classes,c)
+        View List_            {..} -> Just (classes,c)
         View Icon_            {..} -> Just (classes,c)
         View IconGroup_       {..} -> Just (classes,c)
         View Image_           {..} -> Just (classes,c)
@@ -111,6 +115,7 @@ setClasses cs c =
         View Label_           {..} -> View Label_           { classes = cs, .. }
         View LabelDetail_     {..} -> View LabelDetail_     { classes = cs, .. }
         View LabelGroup_      {..} -> View LabelGroup_      { classes = cs, .. }
+        View List_            {..} -> View List_            { classes = cs, .. }
         View Icon_            {..} -> View Icon_            { classes = cs, .. }
         View IconGroup_       {..} -> View IconGroup_       { classes = cs, .. }
         View Image_           {..} -> View Image_           { classes = cs, .. }
@@ -136,6 +141,7 @@ getAttributes c =
         View Label_           {..} -> Just (attributes,c)
         View LabelDetail_     {..} -> Just (attributes,c)
         View LabelGroup_      {..} -> Just (attributes,c)
+        View List_            {..} -> Just (attributes,c)
         View Icon_            {..} -> Just (attributes,c)
         View IconGroup_       {..} -> Just (attributes,c)
         View Image_           {..} -> Just (attributes,c)
@@ -158,6 +164,7 @@ setAttributes cs c =
         View Label_           {..} -> View Label_           { attributes = cs, .. }
         View LabelDetail_     {..} -> View LabelDetail_     { attributes = cs, .. }
         View LabelGroup_      {..} -> View LabelGroup_      { attributes = cs, .. }
+        View List_            {..} -> View List_            { attributes = cs, .. }
         View Icon_            {..} -> View Icon_            { attributes = cs, .. }
         View IconGroup_       {..} -> View IconGroup_       { attributes = cs, .. }
         View Image_           {..} -> View Image_           { attributes = cs, .. }
@@ -183,6 +190,7 @@ getAs c =
         View Label_           {..} -> Just (as,c)
         View LabelDetail_     {..} -> Just (as,c)
         View LabelGroup_      {..} -> Just (as,c)
+        View List_            {..} -> Just (as,c)
         View Icon_            {..} -> Just (as,c)
         View IconGroup_       {..} -> Just (as,c)
         View Image_           {..} -> Just (as,c)
@@ -205,6 +213,7 @@ setAs a c =
         View Label_           {..} -> View Label_           { as = a, .. }
         View LabelDetail_     {..} -> View LabelDetail_     { as = a, .. }
         View LabelGroup_      {..} -> View LabelGroup_      { as = a, .. }
+        View List_            {..} -> View List_            { as = a, .. }
         View Icon_            {..} -> View Icon_            { as = a, .. }
         View IconGroup_       {..} -> View IconGroup_       { as = a, .. }
         View Image_           {..} -> View Image_           { as = a, .. }
@@ -235,12 +244,14 @@ pattern Animated a c <- (getAnimated -> Just (a,c)) where
 getAnimated c =
     case c of
         View Button_ {..} -> animated # Just (animated,c)
+        View List_   {..} -> animated # Just (Just "",c)
         _                 -> Nothing
 
 {-# INLINE setAnimated #-}
 setAnimated a c =
     case c of
         View Button_ {..} -> View Button_ { animated = a, .. }
+        View List_   {..} -> View List_   { animated = True, .. }
         _                 -> c
 
 pattern Attached a c <- (getAttached -> (Just a,c)) where
@@ -336,6 +347,36 @@ setBordered c =
         View Image_ {..} -> View Image_ { bordered = True, .. }
         c                -> c
 
+pattern Bulleted c <- (getBulleted -> (True,c)) where
+    Bulleted c = setBulleted c
+
+{-# INLINE getBulleted #-}
+getBulleted c =
+    case c of
+        View List_ {..} -> (bulleted,c)
+        _               -> (False,c)
+
+{-# INLINE setBulleted #-}
+setBulleted c =
+    case c of
+        View List_ {..} -> View List_ { bulleted = True, .. }
+        _               -> c
+
+pattern Celled c <- (getCelled -> (True,c)) where
+    Celled c = setCelled c
+
+{-# INLINE getCelled #-}
+getCelled c =
+    case c of
+        View List_ {..} -> (celled,c)
+        _               -> (False,c)
+
+{-# INLINE setCelled #-}
+setCelled c =
+    case c of
+        View List_ {..} -> View List_ { celled = True, .. }
+        _               -> c
+
 pattern Centered c <- (getCentered -> (True,c)) where
     Centered c = setCentered c
 
@@ -403,6 +444,23 @@ setClearing c =
     case c of
         View Divider_ {..} -> View Divider_ { clearing = True, .. }
         _                  -> c
+
+pattern Click h c <- (getClick -> Just (h,c)) where
+    Click h c = setClick h c
+
+{-# INLINE getClick #-}
+getClick c =
+    case c of
+        View Button_ {..} -> click # Just (click,c)
+        View Label_  {..} -> click # Just (click,c)
+        _                 -> Nothing
+
+{-# INLINE setClick #-}
+setClick h c =
+    case c of
+        View Button_ {..} -> View Button_ { click = h, .. }
+        View Label_  {..} -> View Label_  { click = h, .. }
+        _                 -> c
 
 pattern Color col c <- (getColor -> Just (col,c)) where
     Color col c = setColor col c
@@ -501,6 +559,22 @@ setDisabled c =
         View Input_  {..} -> View Input_  { disabled = True, .. }
         _                 -> c
 
+pattern Divided c <- (getDivided -> (True,c)) where
+    Divided c = setDivided c
+
+{-# INLINE getDivided #-}
+getDivided c =
+    case c of
+        View List_ {..} -> (divided,c)
+        _               -> (False,c)
+
+{-# INLINE setDivided #-}
+setDivided c =
+    case c of
+        View List_ {..} -> View List_ { divided = True, .. }
+        _               -> c
+
+
 pattern Dividing c <- (getDividing -> (True,c)) where
     Dividing c = setDividing c
 
@@ -588,6 +662,7 @@ getFloated c =
         View ButtonGroup_ {..} -> floated # Just (floated,c)
         View Header_      {..} -> floated # Just (floated,c)
         View Image_       {..} -> floated # Just (floated,c)
+        View List_        {..} -> floated # Just (floated,c)
         _                      -> Nothing
 
 {-# INLINE setFloated #-}
@@ -597,6 +672,7 @@ setFloated f c =
         View ButtonGroup_ {..} -> View ButtonGroup_ { floated = f, .. }
         View Header_      {..} -> View Header_      { floated = f, .. }
         View Image_       {..} -> View Image_       { floated = f, .. }
+        View List_        {..} -> View List_        { floated = f, .. }
         _                      -> c
 
 -- pattern ToLeft = "left"
@@ -699,6 +775,7 @@ getHorizontal c =
     case c of
         View Divider_ {..} -> (horizontal,c)
         View Label_   {..} -> (horizontal,c)
+        View List_    {..} -> (horizontal,c)
         _                  -> (False,c)
 
 {-# INLINE setHorizontal #-}
@@ -706,6 +783,7 @@ setHorizontal c =
     case c of
         View Divider_ {..} -> View Divider_ { horizontal = True, .. }
         View Label_   {..} -> View Label_   { horizontal = True, .. }
+        View List_    {..} -> View List_    { horizontal = True, .. }
         _                  -> c
 
 pattern Inline c <- (getInline -> (True,c)) where
@@ -735,6 +813,7 @@ getInverted c =
         View Header_      {..} -> (inverted,c)
         View Icon_        {..} -> (inverted,c)
         View Input_       {..} -> (inverted,c)
+        View List_        {..} -> (inverted,c)
         _                      -> (False,c)
 
 {-# INLINE setInverted #-}
@@ -746,7 +825,23 @@ setInverted c =
         View Header_      {..} -> View Header_      { inverted = True, .. }
         View Icon_        {..} -> View Icon_        { inverted = True, .. }
         View Input_       {..} -> View Input_       { inverted = True, .. }
+        View List_        {..} -> View List_        { inverted = True, .. }
         _                      -> c
+
+pattern ItemClick f c <- (getItemClick -> Just (f,c)) where
+    ItemClick f c = setItemClick f c
+
+{-# INLINE getItemClick #-}
+getItemClick c =
+    case c of
+        View List_ {..} -> Just (itemClick,c)
+        _               -> Nothing
+
+{-# INLINE setItemClick #-}
+setItemClick f c =
+    case c of
+        View List_ {..} -> View List_ { itemClick = f, .. }
+        _               -> c
 
 pattern Labeled c <- (getLabeled -> (True,c)) where
     Labeled c = setLabeled c
@@ -785,12 +880,14 @@ pattern Link c <- (getLink -> (True,c)) where
 getLink c =
     case c of
         View Icon_ {..} -> (link,c)
+        View List_ {..} -> (link,c)
         _               -> (False,c)
 
 {-# INLINE setLink #-}
 setLink c =
     case c of
         View Icon_ {..} -> View Icon_ { link = True, .. }
+        View List_ {..} -> View List_ { link = True, .. }
         _               -> c
 
 pattern Loading c <- (getLoading -> (True,c)) where
@@ -859,22 +956,20 @@ setNegative c =
         View ButtonGroup_ {..} -> View ButtonGroup_ { negative = True, .. }
         _                      -> c
 
-pattern HandleClick h c <- (getHandleClick -> Just (h,c)) where
-    HandleClick h c = setHandleClick h c
+pattern Ordered c <- (getOrdered -> (True,c)) where
+    Ordered c = setOrdered c
 
-{-# INLINE getHandleClick #-}
-getHandleClick c =
+{-# INLINE getOrdered #-}
+getOrdered c =
     case c of
-        View Button_ {..} -> handleClick # Just (handleClick,c)
-        View Label_  {..} -> handleClick # Just (handleClick,c)
-        _                 -> Nothing
+        View List_ {..} -> (ordered,c)
+        _               -> (False,c)
 
-{-# INLINE setHandleClick #-}
-setHandleClick h c =
+{-# INLINE setOrdered #-}
+setOrdered c =
     case c of
-        View Button_ {..} -> View Button_ { handleClick = h, .. }
-        View Label_  {..} -> View Label_  { handleClick = h, .. }
-        _                 -> c
+        View List_ {..} -> View List_ { ordered = True, .. }
+        _               -> c
 
 pattern Pointing t c <- (getPointing -> Just (t,c)) where
     Pointing t c = setPointing t c
@@ -924,6 +1019,21 @@ setPrimary c =
         View Button_      {..} -> View Button_      { primary = True, .. }
         View ButtonGroup_ {..} -> View ButtonGroup_ { primary = True, .. }
         _                      -> c
+
+pattern Relaxed r c <- (getRelaxed -> (Just r,c)) where
+    Relaxed r c = setRelaxed r c
+
+{-# INLINE getRelaxed #-}
+getRelaxed c =
+    case c of
+        View List_ {..} -> (relaxed,c)
+        _               -> (Nothing,c)
+
+{-# INLINE setRelaxed #-}
+setRelaxed r c =
+    case c of
+        View List_ {..} -> View List_ { relaxed = Just r, .. }
+        _               -> c
 
 pattern Ribbon r c <- (getRibbon -> (Just r,c)) where
     Ribbon r c = setRibbon r c
@@ -1002,6 +1112,21 @@ setSection c =
         View Divider_ {..} -> View Divider_ { section = True, .. }
         _                  -> c
 
+pattern Selection c <- (getSelection -> (True,c)) where
+    Selection c = setSelection c
+
+{-# INLINE getSelection #-}
+getSelection c =
+    case c of
+        View List_ {..} -> (selection,c)
+        _               -> (False,c)
+
+{-# INLINE setSelection #-}
+setSelection c =
+    case c of
+        View List_ {..} -> View List_ { selection = True, .. }
+        _               -> c
+
 pattern Size s c <- (getSize -> Just (s,c)) where
     Size s c = setSize s c
 
@@ -1027,6 +1152,7 @@ getSize c =
         View Input_       {..} -> size # Just (size,c)
         View Label_       {..} -> size # Just (size,c)
         View LabelGroup_  {..} -> size # Just (size,c)
+        View List_        {..} -> size # Just (size,c)
         _                      -> Nothing
 
 {-# INLINE setSize #-}
@@ -1042,6 +1168,7 @@ setSize s c =
         View Input_       {..} -> View Input_       { size = s, .. }
         View Label_       {..} -> View Label_       { size = s, .. }
         View LabelGroup_  {..} -> View LabelGroup_  { size = s, .. }
+        View List_        {..} -> View List_        { size = s, .. }
         _                       -> c
 
 pattern Spaced s c <- (getSpaced -> (Just s,c)) where
@@ -1264,12 +1391,14 @@ pattern Middle = "middle"
 getVerticalAlign c =
     case c of
         View Image_ {..} -> Just (verticalAlign,c)
+        View List_  {..} -> Just (verticalAlign,c)
         _                -> Nothing
 
 {-# INLINE setVerticalAlign #-}
 setVerticalAlign va c =
     case c of
         View Image_ {..} -> View Image_ { verticalAlign = va, .. }
+        View List_  {..} -> View List_  { verticalAlign = va, .. }
         _                -> c
 
 pattern Visible c <- (getVisible -> (True,c)) where

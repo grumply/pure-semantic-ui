@@ -32,7 +32,7 @@ data Button ms = Button_
   , labelPosition :: Txt
   , loading :: Bool
   , negative :: Bool
-  , handleClick :: Ef ms IO ()
+  , click :: Ef ms IO ()
   , positive :: Bool
   , primary :: Bool
   , secondary :: Bool 
@@ -114,7 +114,7 @@ instance Typeable ms => Pure Button ms where
                 label 
                   ? as 
                       ( ClassList containerClasses
-                      : handleClick # (On "click" def { preventDef = True } (\_ -> return $ Just handleClick))
+                      : click # (On "click" def { preventDef = True } (\_ -> return $ Just click))
                       : attributes
                       )
                       [ (labelPosition == "left") # label
@@ -129,7 +129,7 @@ instance Typeable ms => Pure Button ms where
                   $ as
                       ( ClassList cs
                       : (disabled && isButton) # Disabled True
-                      : onClick handleClick
+                      : onClick click
                       : Role "button"
                       : index
                       : attributes

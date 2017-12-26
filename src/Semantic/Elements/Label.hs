@@ -24,7 +24,7 @@ data Label ms = Label_
     , empty :: Bool
     , floating :: Bool
     , horizontal :: Bool
-    , handleClick :: Ef ms IO ()
+    , click :: Ef ms IO ()
     , pointing :: Maybe Txt
     , ribbon :: Maybe Txt
     , size :: Txt
@@ -73,7 +73,7 @@ instance Typeable ms => Pure Label ms where
         in
             as 
                 ( ClassList cs
-                : handleClick # onClick handleClick
+                : click # onClick click
                 : attributes
                 )
                 children
