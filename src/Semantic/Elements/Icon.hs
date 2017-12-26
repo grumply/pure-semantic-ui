@@ -1,11 +1,13 @@
 module Semantic.Elements.Icon (module Semantic.Elements.Icon, module Export) where
 
 import GHC.Generics as G
-import Pure.View as View
+import Pure.View as View hiding (name)
 
 import Semantic.Utils
 
 import Semantic.Elements.Icon.IconGroup as Export
+
+import Semantic.Extensions.Name
 
 data Icon ms = Icon_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -59,3 +61,7 @@ instance Typeable ms => Pure Icon ms where
                 : attributes
                 )
                 []
+
+instance HasName (Icon ms) where
+    getName = name
+    setName n i = i { name = n }

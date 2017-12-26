@@ -1,11 +1,11 @@
 module Semantic.Elements.List.ListIcon where
 
 import GHC.Generics as G
-import Pure.View hiding (verticalAlign)
+import Pure.View hiding (name,verticalAlign)
 
 import Semantic.Utils
 
-import Semantic.Elements.Icon as Icon hiding (IconGroup(..))
+import Semantic.Extensions.Name
 
 data ListIcon ms = ListIcon_ 
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -61,3 +61,7 @@ instance Typeable ms => Pure ListIcon ms where
                 : attributes
                 )
                 []
+
+instance HasName (ListIcon ms) where
+    getName = name
+    setName n li = li { name = n }

@@ -76,6 +76,7 @@ executable semantic-ui-pure
     Semantic.Elements.Rail
     Semantic.Elements.Reveal
     Semantic.Extensions
+    Semantic.Extensions.Name
     Semantic.Utils
 
   if impl(ghcjs)
@@ -150,6 +151,7 @@ library
     Semantic.Elements.Rail
     Semantic.Elements.Reveal
     Semantic.Extensions
+    Semantic.Extensions.Name
     Semantic.Utils
 
   if impl(ghcjs)

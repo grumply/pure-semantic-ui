@@ -925,7 +925,7 @@ getInline c =
 setInline i c =
     case c of
         View Image_  {..} -> View Image_  { inline = True, .. }
-        View Loader_ {..} -> View Loader_ { inline = Just i }
+        View Loader_ {..} -> View Loader_ { inline = Just i, ..  }
         _                 -> c
 
 pattern Internal c <- (getInternal -> (True,c)) where
@@ -1072,23 +1072,6 @@ getLocalize c =
 setLocalize l c =
     case c of
         View ButtonOr_ {..} -> View ButtonOr_ { localize = l, .. }
-        _                   -> c
-
-pattern Name n c <- (getName -> Just (n,c)) where
-    Name n c = setName n c
-
-{-# INLINE getName #-}
-getName c =
-    case c of
-        View Icon_     {..} -> name # Just (name,c)
-        View ListIcon_ {..} -> name # Just (name,c)
-        _                   -> Nothing
-
-{-# INLINE setName #-}
-setName n c =
-    case c of
-        View Icon_     {..} -> View Icon_     { name = n, .. }
-        View ListIcon_ {..} -> View ListIcon_ { name = n, .. }
         _                   -> c
 
 pattern Negative c <- (getNegative -> (True,c)) where
@@ -1664,8 +1647,6 @@ setWrapped c =
 -- pattern Vertical = "vertical"
 
 ----------------------------------
-
-pattern NamedIcon i name = Name name (Icon i)
 
 pattern TextContainer c <- (getTextContainer -> (True,c)) where
     TextContainer c = setTextContainer c
