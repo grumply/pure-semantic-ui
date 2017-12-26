@@ -50,6 +50,7 @@ getChildren c =
         View List_            {..} -> Just (children,c)
         View ListContent_     {..} -> Just (children,c)
         View ListDescription_ {..} -> Just (children,c)
+        View ListHeader_      {..} -> Just (children,c)
         View IconGroup_       {..} -> Just (children,c)
         View Image_           {..} -> Just (children,c)
         View ImageGroup_      {..} -> Just (children,c)
@@ -74,6 +75,7 @@ setChildren cs c =
         View List_            {..} -> View List_            { children = cs, .. }
         View ListContent_     {..} -> View ListContent_     { children = cs, .. }
         View ListDescription_ {..} -> View ListDescription_ { children = cs, .. }
+        View ListHeader_      {..} -> View ListHeader_      { children = cs, .. }
         View Image_           {..} -> View Image_           { children = cs, .. }
         View ImageGroup_      {..} -> View ImageGroup_      { children = cs, .. }
         _                          -> c
@@ -100,6 +102,7 @@ getClasses c =
         View List_            {..} -> Just (classes,c)
         View ListContent_     {..} -> Just (classes,c)
         View ListDescription_ {..} -> Just (classes,c)
+        View ListHeader_      {..} -> Just (classes,c)
         View Icon_            {..} -> Just (classes,c)
         View IconGroup_       {..} -> Just (classes,c)
         View Image_           {..} -> Just (classes,c)
@@ -124,6 +127,7 @@ setClasses cs c =
         View List_            {..} -> View List_            { classes = cs, .. }
         View ListContent_     {..} -> View ListContent_     { classes = cs, .. }
         View ListDescription_ {..} -> View ListDescription_ { classes = cs, .. }
+        View ListHeader_      {..} -> View ListHeader_      { classes = cs, .. }
         View Icon_            {..} -> View Icon_            { classes = cs, .. }
         View IconGroup_       {..} -> View IconGroup_       { classes = cs, .. }
         View Image_           {..} -> View Image_           { classes = cs, .. }
@@ -152,6 +156,7 @@ getAttributes c =
         View List_            {..} -> Just (attributes,c)
         View ListContent_     {..} -> Just (attributes,c)
         View ListDescription_ {..} -> Just (attributes,c)
+        View ListHeader_      {..} -> Just (attributes,c)
         View Icon_            {..} -> Just (attributes,c)
         View IconGroup_       {..} -> Just (attributes,c)
         View Image_           {..} -> Just (attributes,c)
@@ -177,6 +182,7 @@ setAttributes cs c =
         View List_            {..} -> View List_            { attributes = cs, .. }
         View ListContent_     {..} -> View ListContent_     { attributes = cs, .. }
         View ListDescription_ {..} -> View ListDescription_ { attributes = cs, .. }
+        View ListHeader_      {..} -> View ListHeader_      { attributes = cs, .. }
         View Icon_            {..} -> View Icon_            { attributes = cs, .. }
         View IconGroup_       {..} -> View IconGroup_       { attributes = cs, .. }
         View Image_           {..} -> View Image_           { attributes = cs, .. }
@@ -205,6 +211,7 @@ getAs c =
         View List_            {..} -> Just (as,c)
         View ListContent_     {..} -> Just (as,c)
         View ListDescription_ {..} -> Just (as,c)
+        View ListHeader_      {..} -> Just (as,c)
         View Icon_            {..} -> Just (as,c)
         View IconGroup_       {..} -> Just (as,c)
         View Image_           {..} -> Just (as,c)
@@ -230,6 +237,7 @@ setAs a c =
         View List_            {..} -> View List_            { as = a, .. }
         View ListContent_     {..} -> View ListContent_     { as = a, .. }
         View ListDescription_ {..} -> View ListDescription_ { as = a, .. }
+        View ListHeader_      {..} -> View ListHeader_      { as = a, .. }
         View Icon_            {..} -> View Icon_            { as = a, .. }
         View IconGroup_       {..} -> View IconGroup_       { as = a, .. }
         View Image_           {..} -> View Image_           { as = a, .. }
@@ -1411,6 +1419,7 @@ getVerticalAlign c =
         View Image_       {..} -> Just (verticalAlign,c)
         View List_        {..} -> Just (verticalAlign,c)
         View ListContent_ {..} -> Just (verticalAlign,c)
+        View ListIcon_    {..} -> Just (verticalAlign,c)
         _                      -> Nothing
 
 {-# INLINE setVerticalAlign #-}
@@ -1419,6 +1428,7 @@ setVerticalAlign va c =
         View Image_        {..} -> View Image_        { verticalAlign = va, .. }
         View List_         {..} -> View List_         { verticalAlign = va, .. }
         View ListContent_  {..} -> View ListContent_  { verticalAlign = va, .. }
+        View ListIcon_     {..} -> View ListIcon_     { verticalAlign = va, .. }
         _                       -> c
 
 pattern Visible c <- (getVisible -> (True,c)) where
