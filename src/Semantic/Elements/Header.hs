@@ -12,6 +12,7 @@ import Semantic.Elements.Image
 import Semantic.Elements.Header.HeaderContent as Export
 import Semantic.Elements.Header.HeaderSubheader as Export
 
+import Semantic.Extensions.Attributes
 import Semantic.Extensions.Children
 
 data Header ms = Header_
@@ -65,6 +66,11 @@ instance Typeable ms => Pure Header ms where
                : attributes
                )
                children
+
+instance HasAttributes (Header ms) where
+    type Attribute (Header ms) = Feature ms
+    getAttributes = attributes 
+    setAttributes cs h = h { attributes = cs }
 
 instance HasChildren (Header ms) where
     type Child (Header ms) = View ms

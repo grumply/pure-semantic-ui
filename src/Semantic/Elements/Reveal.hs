@@ -5,6 +5,7 @@ import Pure.View
 
 import Semantic.Utils
 
+import Semantic.Extensions.Attributes
 import Semantic.Extensions.Children
 
 data Reveal ms = Reveal_
@@ -42,6 +43,11 @@ instance Typeable ms => Pure Reveal ms where
                 : attributes
                 )
                 children
+
+instance HasAttributes (Reveal ms) where
+    type Attribute (Reveal ms) = Feature ms
+    getAttributes = attributes 
+    setAttributes cs r = r { attributes = cs }
 
 instance HasChildren (Reveal ms) where
     type Child (Reveal ms) = View ms

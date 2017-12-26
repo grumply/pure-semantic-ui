@@ -6,6 +6,8 @@ import qualified Pure.View as HTML
 
 import Semantic.Utils
 
+import Semantic.Extensions.Attributes
+
 data ButtonOr ms = ButtonOr_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]
@@ -27,3 +29,8 @@ instance Typeable ms => Pure ButtonOr ms where
             : attributes
             )
             []
+
+instance HasAttributes (ButtonOr ms) where
+    type Attribute (ButtonOr ms) = Feature ms
+    getAttributes = attributes 
+    setAttributes cs bo = bo { attributes = cs }

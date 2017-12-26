@@ -7,6 +7,7 @@ import Semantic.Utils
 
 import Semantic.Elements.Icon.IconGroup as Export
 
+import Semantic.Extensions.Attributes
 import Semantic.Extensions.Name
 
 data Icon ms = Icon_
@@ -61,6 +62,11 @@ instance Typeable ms => Pure Icon ms where
                 : attributes
                 )
                 []
+
+instance HasAttributes (Icon ms) where
+    type Attribute (Icon ms) = Feature ms
+    getAttributes = attributes 
+    setAttributes cs i = i { attributes = cs }
 
 instance HasName (Icon ms) where
     getName = name

@@ -19,9 +19,6 @@ import Semantic.Utils
 
 import Debug.Trace
 
-infixl 2 %
-(%) c as = Attributes as c
-
 -- infixl 1 !%
 -- (!%) c cs as = Children (cs (Attributes as c))
 
@@ -90,71 +87,6 @@ setClasses cs c =
         View ListList_        {..} -> View ListList_        { classes = cs, .. }
         View Loader_          {..} -> View Loader_          { classes = cs, .. }
         View Rail_            {..} -> View Rail_            { classes = cs, .. }
-        _                          -> c
-
-pattern Attributes as c <- (getAttributes -> Just (as,c)) where
-    Attributes as c = setAttributes as c
-
-{-# INLINE getAttributes #-}
-getAttributes c =
-    case c of
-        View Button_          {..} -> Just (attributes,c)
-        View ButtonContent_   {..} -> Just (attributes,c)
-        View ButtonGroup_     {..} -> Just (attributes,c)
-        View ButtonOr_        {..} -> Just (attributes,c)
-        View Container_       {..} -> Just (attributes,c)
-        View Divider_         {..} -> Just (attributes,c)
-        View Header_          {..} -> Just (attributes,c)
-        View HeaderContent_   {..} -> Just (attributes,c)
-        View HeaderSubheader_ {..} -> Just (attributes,c)
-        View Icon_            {..} -> Just (attributes,c)
-        View IconGroup_       {..} -> Just (attributes,c)
-        View Image_           {..} -> Just (attributes,c)
-        View ImageGroup_      {..} -> Just (attributes,c)
-        View Input_           {..} -> Just (attributes,c)
-        View Label_           {..} -> Just (attributes,c)
-        View LabelDetail_     {..} -> Just (attributes,c)
-        View LabelGroup_      {..} -> Just (attributes,c)
-        View List_            {..} -> Just (attributes,c)
-        View ListContent_     {..} -> Just (attributes,c)
-        View ListDescription_ {..} -> Just (attributes,c)
-        View ListHeader_      {..} -> Just (attributes,c)
-        View ListIcon_        {..} -> Just (attributes,c)
-        View ListItem_        {..} -> Just (attributes,c)
-        View ListList_        {..} -> Just (attributes,c)
-        View Loader_          {..} -> Just (attributes,c)
-        View Rail_            {..} -> Just (attributes,c)
-        _                          -> Nothing
-
-{-# INLINE setAttributes #-}
-setAttributes cs c =
-    case c of
-        View Button_          {..} -> View Button_          { attributes = cs, .. }
-        View ButtonContent_   {..} -> View ButtonContent_   { attributes = cs, .. }
-        View ButtonGroup_     {..} -> View ButtonGroup_     { attributes = cs, .. }
-        View ButtonOr_        {..} -> View ButtonOr_        { attributes = cs, .. }
-        View Container_       {..} -> View Container_       { attributes = cs, .. }
-        View Divider_         {..} -> View Divider_         { attributes = cs, .. }
-        View Header_          {..} -> View Header_          { attributes = cs, .. }
-        View HeaderContent_   {..} -> View HeaderContent_   { attributes = cs, .. }
-        View HeaderSubheader_ {..} -> View HeaderSubheader_ { attributes = cs, .. }
-        View Icon_            {..} -> View Icon_            { attributes = cs, .. }
-        View IconGroup_       {..} -> View IconGroup_       { attributes = cs, .. }
-        View Image_           {..} -> View Image_           { attributes = cs, .. }
-        View ImageGroup_      {..} -> View ImageGroup_      { attributes = cs, .. }
-        View Input_           {..} -> View Input_           { attributes = cs, .. }
-        View Label_           {..} -> View Label_           { attributes = cs, .. }
-        View LabelDetail_     {..} -> View LabelDetail_     { attributes = cs, .. }
-        View LabelGroup_      {..} -> View LabelGroup_      { attributes = cs, .. }
-        View List_            {..} -> View List_            { attributes = cs, .. }
-        View ListContent_     {..} -> View ListContent_     { attributes = cs, .. }
-        View ListDescription_ {..} -> View ListDescription_ { attributes = cs, .. }
-        View ListHeader_      {..} -> View ListHeader_      { attributes = cs, .. }
-        View ListIcon_        {..} -> View ListIcon_        { attributes = cs, .. }
-        View ListItem_        {..} -> View ListItem_        { attributes = cs, .. }
-        View ListList_        {..} -> View ListList_        { attributes = cs, .. }
-        View Loader_          {..} -> View Loader_          { attributes = cs, .. }
-        View Rail_            {..} -> View Rail_            { attributes = cs, .. }
         _                          -> c
 
 pattern As :: VC ms => ([Feature ms] -> [View ms] -> View ms) -> View ms -> View ms

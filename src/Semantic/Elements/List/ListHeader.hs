@@ -5,6 +5,7 @@ import Pure.View
 
 import Semantic.Utils
 
+import Semantic.Extensions.Attributes
 import Semantic.Extensions.Children
 
 data ListHeader ms = ListHeader_ 
@@ -23,6 +24,11 @@ pattern ListHeader lh = View lh
 instance Typeable ms => Pure ListHeader ms where
     render ListHeader_ {..} =
         as ( ClassList ( "header" : classes ) : attributes ) children
+
+instance HasAttributes (ListHeader ms) where
+    type Attribute (ListHeader ms) = Feature ms
+    getAttributes = attributes 
+    setAttributes cs lh = lh { attributes = cs }
 
 instance HasChildren (ListHeader ms) where
     type Child (ListHeader ms) = View ms

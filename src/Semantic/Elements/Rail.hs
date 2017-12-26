@@ -5,6 +5,7 @@ import Pure.View hiding (verticalAlign)
 
 import Semantic.Utils
 
+import Semantic.Extensions.Attributes
 import Semantic.Extensions.Children
 
 data Rail ms = Rail_
@@ -46,6 +47,11 @@ instance Typeable ms => Pure Rail ms where
                 : attributes
                 )
                 children
+
+instance HasAttributes (Rail ms) where
+    type Attribute (Rail ms) = Feature ms
+    getAttributes = attributes 
+    setAttributes cs r = r { attributes = cs }
 
 instance HasChildren (Rail ms) where
     type Child (Rail ms) = View ms

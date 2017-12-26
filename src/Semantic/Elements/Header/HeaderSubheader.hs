@@ -5,6 +5,7 @@ import Pure.View
 
 import Semantic.Utils
 
+import Semantic.Extensions.Attributes
 import Semantic.Extensions.Children
 
 data HeaderSubheader ms = HeaderSubheader_
@@ -27,6 +28,11 @@ instance Typeable ms => Pure HeaderSubheader ms where
             : attributes
             )
             children
+
+instance HasAttributes (HeaderSubheader ms) where
+    type Attribute (HeaderSubheader ms) = Feature ms
+    getAttributes = attributes 
+    setAttributes cs hs = hs { attributes = cs }
 
 instance HasChildren (HeaderSubheader ms) where
     type Child (HeaderSubheader ms) = View ms

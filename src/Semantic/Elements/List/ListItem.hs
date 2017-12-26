@@ -5,6 +5,7 @@ import Pure.View
 
 import Semantic.Utils
 
+import Semantic.Extensions.Attributes
 import Semantic.Extensions.Children
 
 data ListItem ms = ListItem_ 
@@ -48,6 +49,11 @@ instance Typeable ms => Pure ListItem ms where
                 : attributes
                 )
                 children
+
+instance HasAttributes (ListItem ms) where
+    type Attribute (ListItem ms) = Feature ms
+    getAttributes = attributes 
+    setAttributes cs li = li { attributes = cs }
 
 instance HasChildren (ListItem ms) where
     type Child (ListItem ms) = View ms

@@ -13,6 +13,7 @@ import Semantic.Elements.Button.ButtonContent as Export
 import Semantic.Elements.Button.ButtonGroup as Export
 import Semantic.Elements.Button.ButtonOr as Export
 
+import Semantic.Extensions.Attributes
 import Semantic.Extensions.Children
 
 data Button ms = Button_
@@ -138,7 +139,10 @@ instance Typeable ms => Pure Button ms where
                       )
                       children 
 
-
+instance HasAttributes (Button ms) where
+    type Attribute (Button ms) = Feature ms
+    getAttributes = attributes 
+    setAttributes cs b = b { attributes = cs }
 
 instance HasChildren (Button ms) where
     type Child (Button ms) = View ms

@@ -5,6 +5,7 @@ import Pure.View
 
 import Semantic.Utils
 
+import Semantic.Extensions.Attributes
 import Semantic.Extensions.Children
 
 data Container ms = Container_
@@ -34,6 +35,11 @@ instance Typeable ms => Pure Container ms where
               : classes
               )
         in as (ClassList cs : attributes) children
+
+instance HasAttributes (Container ms) where
+    type Attribute (Container ms) = Feature ms
+    getAttributes = attributes 
+    setAttributes cs c = c { attributes = cs }
 
 instance HasChildren (Container ms) where
     type Child (Container ms) = View ms
