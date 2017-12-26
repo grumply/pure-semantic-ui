@@ -13,6 +13,7 @@ import Semantic.Elements.Image
 import Semantic.Elements.Input
 import Semantic.Elements.List
 import Semantic.Elements.Loader
+import Semantic.Elements.Rail
 
 import Semantic.Utils
 
@@ -58,6 +59,7 @@ getChildren c =
         View ListItem_        {..} -> Just (children,c)
         View ListList_        {..} -> Just (children,c)
         View Loader_          {..} -> Just (children,c)
+        View Rail_            {..} -> Just (children,c)
         _                          -> Nothing
 
 {-# INLINE setChildren #-}
@@ -85,6 +87,7 @@ setChildren cs c =
         View ListItem_        {..} -> View ListItem_        { children = cs, .. }
         View ListList_        {..} -> View ListList_        { children = cs, .. }
         View Loader_          {..} -> View Loader_          { children = cs, .. }
+        View Rail_            {..} -> View Rail_            { children = cs, .. }
         _                          -> c
 
 pattern Classes cs c <- (getClasses -> Just (cs,c)) where
@@ -118,6 +121,7 @@ getClasses c =
         View ListItem_        {..} -> Just (classes,c)
         View ListList_        {..} -> Just (classes,c)
         View Loader_          {..} -> Just (classes,c)
+        View Rail_            {..} -> Just (classes,c)
         _                          -> Nothing
 
 {-# INLINE setClasses #-}
@@ -147,6 +151,7 @@ setClasses cs c =
         View ListItem_        {..} -> View ListItem_        { classes = cs, .. }
         View ListList_        {..} -> View ListList_        { classes = cs, .. }
         View Loader_          {..} -> View Loader_          { classes = cs, .. }
+        View Rail_            {..} -> View Rail_            { classes = cs, .. }
         _                          -> c
 
 pattern Attributes as c <- (getAttributes -> Just (as,c)) where
@@ -180,6 +185,7 @@ getAttributes c =
         View ListItem_        {..} -> Just (attributes,c)
         View ListList_        {..} -> Just (attributes,c)
         View Loader_          {..} -> Just (attributes,c)
+        View Rail_            {..} -> Just (attributes,c)
         _                          -> Nothing
 
 {-# INLINE setAttributes #-}
@@ -210,6 +216,7 @@ setAttributes cs c =
         View ListItem_        {..} -> View ListItem_        { attributes = cs, .. }
         View ListList_        {..} -> View ListList_        { attributes = cs, .. }
         View Loader_          {..} -> View Loader_          { attributes = cs, .. }
+        View Rail_            {..} -> View Rail_            { attributes = cs, .. }
         _                          -> c
 
 pattern As :: VC ms => ([Feature ms] -> [View ms] -> View ms) -> View ms -> View ms
@@ -244,6 +251,7 @@ getAs c =
         View ListItem_        {..} -> Just (as,c)
         View ListList_        {..} -> Just (as,c)
         View Loader_          {..} -> Just (as,c)
+        View Rail_            {..} -> Just (as,c)
         _                          -> Nothing
 
 {-# INLINE setAs #-}
@@ -274,6 +282,7 @@ setAs a c =
         View ListItem_        {..} -> View ListItem_        { as = a, .. }
         View ListList_        {..} -> View ListList_        { as = a, .. }
         View Loader_          {..} -> View Loader_          { as = a, .. }
+        View Rail_            {..} -> View Rail_            { as = a, .. }
         _                          -> c
 
 pattern Active c <- (getActive -> (True,c)) where
@@ -329,6 +338,7 @@ getAttached c =
         View ButtonGroup_ {..} -> (attached,c)
         View Header_      {..} -> (attached,c)
         View Label_       {..} -> attached ? (Just attached,c) $ (Nothing,c)
+        View Rail_        {..} -> attached ? (Just "",c) $ (Nothing,c)
         _                      -> (Nothing,c)
 
 {-# INLINE setAttached #-}
@@ -338,6 +348,7 @@ setAttached a c =
         View ButtonGroup_ {..} -> View ButtonGroup_ { attached = Just a, .. }
         View Header_      {..} -> View Header_      { attached = Just a, .. }
         View Label_       {..} -> View Label_       { attached = a, .. }
+        View Rail_        {..} -> View Rail_        { attached = True, ..}
         _                      -> c
 
 pattern Avatar c <- (getAvatar -> (True,c)) where
@@ -528,6 +539,21 @@ setClick h c =
         View ListItem_ {..} -> View ListItem_ { click = h, .. }
         _                   -> c
 
+pattern Close t c <- (getClose -> (Just t,c)) where
+    Close t c = setClose t c
+
+{-# INLINE getClose #-}
+getClose c =
+    case c of
+        View Rail_ {..} -> (close,c)
+        _               -> (Nothing,c)
+
+{-# INLINE setClose #-}
+setClose t c =
+    case c of
+        View Rail_ {..} -> View Rail_ { close = Just t, .. }
+        _               -> c
+
 pattern Color col c <- (getColor -> Just (col,c)) where
     Color col c = setColor col c
 
@@ -658,12 +684,14 @@ pattern Dividing c <- (getDividing -> (True,c)) where
 getDividing c =
     case c of
         View Header_ {..} -> (dividing,c)
+        View Rail_   {..} -> (dividing,c)
         _                 -> (False,c)
 
 {-# INLINE setDividing #-}
 setDividing c =
     case c of
         View Header_ {..} -> View Header_ { dividing = True, .. }
+        View Rail_   {..} -> View Rail_   { dividing = True, .. }
         _                 -> c
 
 pattern Empty c <- (getEmpty -> (True,c)) where
@@ -900,6 +928,21 @@ setInline i c =
         View Loader_ {..} -> View Loader_ { inline = Just i }
         _                 -> c
 
+pattern Internal c <- (getInternal -> (True,c)) where
+    Internal c = setInternal c
+
+{-# INLINE getInternal #-}
+getInternal c =
+    case c of
+        View Rail_ {..} -> (internal,c)
+        _               -> (False,c)
+
+{-# INLINE setInternal #-}
+setInternal c =
+    case c of
+        View Rail_ {..} -> View Rail_ { internal = True, .. }
+        _               -> c
+
 pattern Inverted c <- (getInverted -> (True,c)) where
     Inverted c = setInverted c
 
@@ -1095,6 +1138,21 @@ setPointing t c =
         View Label_ {..} -> View Label_ { pointing = Just t, .. }
         _                -> c
 
+pattern Position p c <- (getPosition -> Just (p,c)) where
+    Position p c = setPosition p c
+
+{-# INLINE getPosition #-}
+getPosition c =
+    case c of
+        View Rail_ {..} -> Just (position,c)
+        _               -> Nothing
+
+{-# INLINE setPosition #-}
+setPosition p c =
+    case c of
+        View Rail_ {..} -> View Rail_ { position = p, .. }
+        _               -> c
+
 pattern Positive c <- (getPositive -> (True,c)) where
     Positive c = setPositive c
 
@@ -1266,6 +1324,7 @@ getSize c =
         View List_        {..} -> size # Just (size,c)
         View ListIcon_    {..} -> size # Just (size,c)
         View Loader_      {..} -> size # Just (size,c)
+        View Rail_        {..} -> size # Just (size,c)
         _                      -> Nothing
 
 {-# INLINE setSize #-}
@@ -1284,7 +1343,8 @@ setSize s c =
         View List_        {..} -> View List_        { size = s, .. }
         View ListIcon_    {..} -> View ListIcon_    { size = s, .. }
         View Loader_      {..} -> View Loader_      { size = s, .. }
-        _                       -> c
+        View Rail_        {..} -> View Rail_        { size = s, .. }
+        _                      -> c
 
 pattern Spaced s c <- (getSpaced -> (Just s,c)) where
     Spaced s c = setSpaced s c
