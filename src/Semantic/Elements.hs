@@ -11,3 +11,4 @@ import Semantic.Elements.Label as Export
 import Semantic.Elements.List as Export
 import Semantic.Elements.Loader as Export
 import Semantic.Elements.Rail as Export
+import Semantic.Elements.Reveal as Export
