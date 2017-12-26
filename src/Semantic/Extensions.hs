@@ -12,6 +12,7 @@ import Semantic.Elements.Icon
 import Semantic.Elements.Image
 import Semantic.Elements.Input
 import Semantic.Elements.List
+import Semantic.Elements.Loader
 
 import Semantic.Utils
 
@@ -56,6 +57,7 @@ getChildren c =
         View ListHeader_      {..} -> Just (children,c)
         View ListItem_        {..} -> Just (children,c)
         View ListList_        {..} -> Just (children,c)
+        View Loader_          {..} -> Just (children,c)
         _                          -> Nothing
 
 {-# INLINE setChildren #-}
@@ -82,6 +84,7 @@ setChildren cs c =
         View ListHeader_      {..} -> View ListHeader_      { children = cs, .. }
         View ListItem_        {..} -> View ListItem_        { children = cs, .. }
         View ListList_        {..} -> View ListList_        { children = cs, .. }
+        View Loader_          {..} -> View Loader_          { children = cs, .. }
         _                          -> c
 
 pattern Classes cs c <- (getClasses -> Just (cs,c)) where
@@ -114,6 +117,7 @@ getClasses c =
         View ListIcon_        {..} -> Just (classes,c)
         View ListItem_        {..} -> Just (classes,c)
         View ListList_        {..} -> Just (classes,c)
+        View Loader_          {..} -> Just (classes,c)
         _                          -> Nothing
 
 {-# INLINE setClasses #-}
@@ -142,6 +146,7 @@ setClasses cs c =
         View ListIcon_        {..} -> View ListIcon_        { classes = cs, .. }
         View ListItem_        {..} -> View ListItem_        { classes = cs, .. }
         View ListList_        {..} -> View ListList_        { classes = cs, .. }
+        View Loader_          {..} -> View Loader_          { classes = cs, .. }
         _                          -> c
 
 pattern Attributes as c <- (getAttributes -> Just (as,c)) where
@@ -174,6 +179,7 @@ getAttributes c =
         View ListIcon_        {..} -> Just (attributes,c)
         View ListItem_        {..} -> Just (attributes,c)
         View ListList_        {..} -> Just (attributes,c)
+        View Loader_          {..} -> Just (attributes,c)
         _                          -> Nothing
 
 {-# INLINE setAttributes #-}
@@ -203,6 +209,7 @@ setAttributes cs c =
         View ListIcon_        {..} -> View ListIcon_        { attributes = cs, .. }
         View ListItem_        {..} -> View ListItem_        { attributes = cs, .. }
         View ListList_        {..} -> View ListList_        { attributes = cs, .. }
+        View Loader_          {..} -> View Loader_          { attributes = cs, .. }
         _                          -> c
 
 pattern As :: VC ms => ([Feature ms] -> [View ms] -> View ms) -> View ms -> View ms
@@ -236,6 +243,7 @@ getAs c =
         View ListIcon_        {..} -> Just (as,c)
         View ListItem_        {..} -> Just (as,c)
         View ListList_        {..} -> Just (as,c)
+        View Loader_          {..} -> Just (as,c)
         _                          -> Nothing
 
 {-# INLINE setAs #-}
@@ -265,6 +273,7 @@ setAs a c =
         View ListIcon_        {..} -> View ListIcon_        { as = a, .. }
         View ListItem_        {..} -> View ListItem_        { as = a, .. }
         View ListList_        {..} -> View ListList_        { as = a, .. }
+        View Loader_          {..} -> View Loader_          { as = a, .. }
         _                          -> c
 
 pattern Active c <- (getActive -> (True,c)) where
@@ -276,6 +285,7 @@ getActive c =
         View Button_   {..} -> (active,c)
         View Label_    {..} -> (active,c)
         View ListItem_ {..} -> (active,c)
+        View Loader_   {..} -> (active,c)
         _                   -> (False,c)
 
 {-# INLINE setActive #-}
@@ -284,6 +294,7 @@ setActive c =
         View Button_   {..} -> View Button_   { active = True, .. }
         View Label_    {..} -> View Label_    { active = True, .. }
         View ListItem_ {..} -> View ListItem_ { active = True, .. }
+        View Loader_   {..} -> View Loader_   { active = True, .. }
         _                   -> c
 
 pattern Animated a c <- (getAnimated -> Just (a,c)) where
@@ -608,6 +619,7 @@ getDisabled c =
         View Input_    {..} -> (disabled,c)
         View ListIcon_ {..} -> (disabled,c)
         View ListItem_ {..} -> (disabled,c)
+        View Loader_   {..} -> (disabled,c)
         _                   -> (False,c)
 
 {-# INLINE setDisabled #-}
@@ -620,6 +632,7 @@ setDisabled c =
         View Input_    {..} -> View Input_    { disabled = True, .. }
         View ListIcon_ {..} -> View ListIcon_ { disabled = True, .. }
         View ListItem_ {..} -> View ListItem_ { disabled = True, .. }
+        View Loader_   {..} -> View Loader_   { disabled = True, .. }
         _                   -> c
 
 pattern Divided c <- (getDivided -> (True,c)) where
@@ -855,20 +868,37 @@ setHorizontal c =
         View List_    {..} -> View List_    { horizontal = True, .. }
         _                  -> c
 
-pattern Inline c <- (getInline -> (True,c)) where
-    Inline c = setInline c
+pattern Indeterminate c <- (getIndeterminate -> (True,c)) where
+    Indeterminate c = setIndeterminate c
+
+{-# INLINE getIndeterminate #-}
+getIndeterminate c =
+    case c of
+        View Loader_ {..} -> (indeterminate,c)
+        _                 -> (False,c)
+
+{-# INLINE setIndeterminate #-}
+setIndeterminate c =
+    case c of
+        View Loader_ {..} -> View Loader_ { indeterminate = True, .. }
+        _                 -> c
+
+pattern Inline i c <- (getInline -> (Just i,c)) where
+    Inline i c = setInline i c
 
 {-# INLINE getInline #-}
 getInline c =
     case c of
-        View Image_ {..} -> (inline,c)
-        _                -> (False,c)
+        View Image_  {..} -> inline # (Just "",c)
+        View Loader_ {..} -> (inline,c)
+        _                 -> (Nothing,c)
 
 {-# INLINE setInline #-}
-setInline c =
+setInline i c =
     case c of
-        View Image_ {..} -> View Image_ { inline = True, .. }
-        _                -> c
+        View Image_  {..} -> View Image_  { inline = True, .. }
+        View Loader_ {..} -> View Loader_ { inline = Just i }
+        _                 -> c
 
 pattern Inverted c <- (getInverted -> (True,c)) where
     Inverted c = setInverted c
@@ -884,6 +914,7 @@ getInverted c =
         View Input_       {..} -> (inverted,c)
         View List_        {..} -> (inverted,c)
         View ListIcon_    {..} -> (inverted,c)
+        View Loader_      {..} -> (inverted,c)
         _                      -> (False,c)
 
 {-# INLINE setInverted #-}
@@ -897,6 +928,7 @@ setInverted c =
         View Input_       {..} -> View Input_       { inverted = True, .. }
         View List_        {..} -> View List_        { inverted = True, .. }
         View ListIcon_    {..} -> View ListIcon_    { inverted = True, .. }
+        View Loader_      {..} -> View Loader_      { inverted = True, .. }
         _                      -> c
 
 pattern ItemClick f c <- (getItemClick -> Just (f,c)) where
@@ -1233,6 +1265,7 @@ getSize c =
         View LabelGroup_  {..} -> size # Just (size,c)
         View List_        {..} -> size # Just (size,c)
         View ListIcon_    {..} -> size # Just (size,c)
+        View Loader_      {..} -> size # Just (size,c)
         _                      -> Nothing
 
 {-# INLINE setSize #-}
@@ -1250,6 +1283,7 @@ setSize s c =
         View LabelGroup_  {..} -> View LabelGroup_  { size = s, .. }
         View List_        {..} -> View List_        { size = s, .. }
         View ListIcon_    {..} -> View ListIcon_    { size = s, .. }
+        View Loader_      {..} -> View Loader_      { size = s, .. }
         _                       -> c
 
 pattern Spaced s c <- (getSpaced -> (Just s,c)) where
