@@ -1,7 +1,7 @@
 module Semantic.Extensions where
 
 import Pure.Data
-import Pure.View (pattern View)
+import Pure.View (VC,Feature,View,pattern View)
 
 import Semantic.Elements.Button
 import Semantic.Elements.Container
@@ -43,6 +43,9 @@ getChildren c =
         View Header_          {..} -> Just (children,c)
         View HeaderContent_   {..} -> Just (children,c)
         View HeaderSubheader_ {..} -> Just (children,c)
+        View IconGroup_       {..} -> Just (children,c)
+        View Image_           {..} -> Just (children,c)
+        View ImageGroup_      {..} -> Just (children,c)
         View Input_           {..} -> Just (children,c)
         View Label_           {..} -> Just (children,c)
         View LabelDetail_     {..} -> Just (children,c)
@@ -51,9 +54,6 @@ getChildren c =
         View ListContent_     {..} -> Just (children,c)
         View ListDescription_ {..} -> Just (children,c)
         View ListHeader_      {..} -> Just (children,c)
-        View IconGroup_       {..} -> Just (children,c)
-        View Image_           {..} -> Just (children,c)
-        View ImageGroup_      {..} -> Just (children,c)
         _                          -> Nothing
 
 {-# INLINE setChildren #-}
@@ -67,17 +67,17 @@ setChildren cs c =
         View Header_          {..} -> View Header_          { children = cs, .. }
         View HeaderContent_   {..} -> View HeaderContent_   { children = cs, .. }
         View HeaderSubheader_ {..} -> View HeaderSubheader_ { children = cs, .. }
+        View IconGroup_       {..} -> View IconGroup_       { children = cs, .. }
+        View Image_           {..} -> View Image_           { children = cs, .. }
+        View ImageGroup_      {..} -> View ImageGroup_      { children = cs, .. }
         View Input_           {..} -> View Input_           { children = cs, .. }
         View Label_           {..} -> View Label_           { children = cs, .. }
         View LabelDetail_     {..} -> View LabelDetail_     { children = cs, .. }
         View LabelGroup_      {..} -> View LabelGroup_      { children = cs, .. }
-        View IconGroup_       {..} -> View IconGroup_       { children = cs, .. }
         View List_            {..} -> View List_            { children = cs, .. }
         View ListContent_     {..} -> View ListContent_     { children = cs, .. }
         View ListDescription_ {..} -> View ListDescription_ { children = cs, .. }
         View ListHeader_      {..} -> View ListHeader_      { children = cs, .. }
-        View Image_           {..} -> View Image_           { children = cs, .. }
-        View ImageGroup_      {..} -> View ImageGroup_      { children = cs, .. }
         _                          -> c
 
 pattern Classes cs c <- (getClasses -> Just (cs,c)) where
@@ -95,6 +95,10 @@ getClasses c =
         View Header_          {..} -> Just (classes,c)
         View HeaderContent_   {..} -> Just (classes,c)
         View HeaderSubheader_ {..} -> Just (classes,c)
+        View Icon_            {..} -> Just (classes,c)
+        View IconGroup_       {..} -> Just (classes,c)
+        View Image_           {..} -> Just (classes,c)
+        View ImageGroup_      {..} -> Just (classes,c)
         View Input_           {..} -> Just (classes,c)
         View Label_           {..} -> Just (classes,c)
         View LabelDetail_     {..} -> Just (classes,c)
@@ -103,10 +107,7 @@ getClasses c =
         View ListContent_     {..} -> Just (classes,c)
         View ListDescription_ {..} -> Just (classes,c)
         View ListHeader_      {..} -> Just (classes,c)
-        View Icon_            {..} -> Just (classes,c)
-        View IconGroup_       {..} -> Just (classes,c)
-        View Image_           {..} -> Just (classes,c)
-        View ImageGroup_      {..} -> Just (classes,c)
+        View ListIcon_        {..} -> Just (classes,c)
         _                          -> Nothing
 
 {-# INLINE setClasses #-}
@@ -120,6 +121,10 @@ setClasses cs c =
         View Header_          {..} -> View Header_          { classes = cs, .. }
         View HeaderContent_   {..} -> View HeaderContent_   { classes = cs, .. }
         View HeaderSubheader_ {..} -> View HeaderSubheader_ { classes = cs, .. }
+        View Icon_            {..} -> View Icon_            { classes = cs, .. }
+        View IconGroup_       {..} -> View IconGroup_       { classes = cs, .. }
+        View Image_           {..} -> View Image_           { classes = cs, .. }
+        View ImageGroup_      {..} -> View ImageGroup_      { classes = cs, .. }
         View Input_           {..} -> View Input_           { classes = cs, .. }
         View Label_           {..} -> View Label_           { classes = cs, .. }
         View LabelDetail_     {..} -> View LabelDetail_     { classes = cs, .. }
@@ -128,10 +133,7 @@ setClasses cs c =
         View ListContent_     {..} -> View ListContent_     { classes = cs, .. }
         View ListDescription_ {..} -> View ListDescription_ { classes = cs, .. }
         View ListHeader_      {..} -> View ListHeader_      { classes = cs, .. }
-        View Icon_            {..} -> View Icon_            { classes = cs, .. }
-        View IconGroup_       {..} -> View IconGroup_       { classes = cs, .. }
-        View Image_           {..} -> View Image_           { classes = cs, .. }
-        View ImageGroup_      {..} -> View ImageGroup_      { classes = cs, .. }
+        View ListIcon_        {..} -> View ListIcon_        { classes = cs, .. }
         _                          -> c
 
 pattern Attributes as c <- (getAttributes -> Just (as,c)) where
@@ -149,6 +151,10 @@ getAttributes c =
         View Header_          {..} -> Just (attributes,c)
         View HeaderContent_   {..} -> Just (attributes,c)
         View HeaderSubheader_ {..} -> Just (attributes,c)
+        View Icon_            {..} -> Just (attributes,c)
+        View IconGroup_       {..} -> Just (attributes,c)
+        View Image_           {..} -> Just (attributes,c)
+        View ImageGroup_      {..} -> Just (attributes,c)
         View Input_           {..} -> Just (attributes,c)
         View Label_           {..} -> Just (attributes,c)
         View LabelDetail_     {..} -> Just (attributes,c)
@@ -157,10 +163,7 @@ getAttributes c =
         View ListContent_     {..} -> Just (attributes,c)
         View ListDescription_ {..} -> Just (attributes,c)
         View ListHeader_      {..} -> Just (attributes,c)
-        View Icon_            {..} -> Just (attributes,c)
-        View IconGroup_       {..} -> Just (attributes,c)
-        View Image_           {..} -> Just (attributes,c)
-        View ImageGroup_      {..} -> Just (attributes,c)
+        View ListIcon_        {..} -> Just (attributes,c)
         _                          -> Nothing
 
 {-# INLINE setAttributes #-}
@@ -175,6 +178,10 @@ setAttributes cs c =
         View Header_          {..} -> View Header_          { attributes = cs, .. }
         View HeaderContent_   {..} -> View HeaderContent_   { attributes = cs, .. }
         View HeaderSubheader_ {..} -> View HeaderSubheader_ { attributes = cs, .. }
+        View Icon_            {..} -> View Icon_            { attributes = cs, .. }
+        View IconGroup_       {..} -> View IconGroup_       { attributes = cs, .. }
+        View Image_           {..} -> View Image_           { attributes = cs, .. }
+        View ImageGroup_      {..} -> View ImageGroup_      { attributes = cs, .. }
         View Input_           {..} -> View Input_           { attributes = cs, .. }
         View Label_           {..} -> View Label_           { attributes = cs, .. }
         View LabelDetail_     {..} -> View LabelDetail_     { attributes = cs, .. }
@@ -183,12 +190,10 @@ setAttributes cs c =
         View ListContent_     {..} -> View ListContent_     { attributes = cs, .. }
         View ListDescription_ {..} -> View ListDescription_ { attributes = cs, .. }
         View ListHeader_      {..} -> View ListHeader_      { attributes = cs, .. }
-        View Icon_            {..} -> View Icon_            { attributes = cs, .. }
-        View IconGroup_       {..} -> View IconGroup_       { attributes = cs, .. }
-        View Image_           {..} -> View Image_           { attributes = cs, .. }
-        View ImageGroup_      {..} -> View ImageGroup_      { attributes = cs, .. }
+        View ListIcon_        {..} -> View ListIcon_        { attributes = cs, .. }
         _                          -> c
 
+pattern As :: VC ms => ([Feature ms] -> [View ms] -> View ms) -> View ms -> View ms
 pattern As as c <- (getAs -> Just (as,c)) where
     As as c = setAs as c
 
@@ -204,6 +209,10 @@ getAs c =
         View Header_          {..} -> Just (as,c)
         View HeaderContent_   {..} -> Just (as,c)
         View HeaderSubheader_ {..} -> Just (as,c)
+        View Icon_            {..} -> Just (as,c)
+        View IconGroup_       {..} -> Just (as,c)
+        View Image_           {..} -> Just (as,c)
+        View ImageGroup_      {..} -> Just (as,c)
         View Input_           {..} -> Just (as,c)
         View Label_           {..} -> Just (as,c)
         View LabelDetail_     {..} -> Just (as,c)
@@ -212,10 +221,7 @@ getAs c =
         View ListContent_     {..} -> Just (as,c)
         View ListDescription_ {..} -> Just (as,c)
         View ListHeader_      {..} -> Just (as,c)
-        View Icon_            {..} -> Just (as,c)
-        View IconGroup_       {..} -> Just (as,c)
-        View Image_           {..} -> Just (as,c)
-        View ImageGroup_      {..} -> Just (as,c)
+        View ListIcon_        {..} -> Just (as,c)
         _                          -> Nothing
 
 {-# INLINE setAs #-}
@@ -230,6 +236,10 @@ setAs a c =
         View Header_          {..} -> View Header_          { as = a, .. }
         View HeaderContent_   {..} -> View HeaderContent_   { as = a, .. }
         View HeaderSubheader_ {..} -> View HeaderSubheader_ { as = a, .. }
+        View Icon_            {..} -> View Icon_            { as = a, .. }
+        View IconGroup_       {..} -> View IconGroup_       { as = a, .. }
+        View Image_           {..} -> View Image_           { as = a, .. }
+        View ImageGroup_      {..} -> View ImageGroup_      { as = a, .. }
         View Input_           {..} -> View Input_           { as = a, .. }
         View Label_           {..} -> View Label_           { as = a, .. }
         View LabelDetail_     {..} -> View LabelDetail_     { as = a, .. }
@@ -238,10 +248,7 @@ setAs a c =
         View ListContent_     {..} -> View ListContent_     { as = a, .. }
         View ListDescription_ {..} -> View ListDescription_ { as = a, .. }
         View ListHeader_      {..} -> View ListHeader_      { as = a, .. }
-        View Icon_            {..} -> View Icon_            { as = a, .. }
-        View IconGroup_       {..} -> View IconGroup_       { as = a, .. }
-        View Image_           {..} -> View Image_           { as = a, .. }
-        View ImageGroup_      {..} -> View ImageGroup_      { as = a, .. }
+        View ListIcon_        {..} -> View ListIcon_        { as = a, .. }
         _                          -> c
 
 pattern Active c <- (getActive -> (True,c)) where
@@ -360,16 +367,18 @@ pattern Bordered c <- (getBordered -> (True,c)) where
 {-# INLINE getBordered #-}
 getBordered c =
     case c of
-        View Icon_  {..} -> (bordered,c)
-        View Image_ {..} -> (bordered,c)
-        _                -> (False,c)
+        View Icon_     {..} -> (bordered,c)
+        View Image_    {..} -> (bordered,c)
+        View ListIcon_ {..} -> (bordered,c)
+        _                    -> (False,c)
 
 {-# INLINE setBordered #-}
 setBordered c =
     case c of
-        View Icon_  {..} -> View Icon_  { bordered = True, .. }
-        View Image_ {..} -> View Image_ { bordered = True, .. }
-        c                -> c
+        View Icon_     {..} -> View Icon_      { bordered = True, .. }
+        View Image_    {..} -> View Image_     { bordered = True, .. }
+        View ListIcon_ {..} -> View ListIcon_  { bordered = True, .. }
+        c                   -> c
 
 pattern Bulleted c <- (getBulleted -> (True,c)) where
     Bulleted c = setBulleted c
@@ -437,22 +446,24 @@ pattern Circular c <- (getCircular -> (True,c)) where
 {-# INLINE getCircular #-}
 getCircular c =
     case c of
-        View Button_ {..} -> (circular,c)
-        View Icon_   {..} -> (circular,c)
-        View Image_  {..} -> (circular,c)
-        View Label_  {..} -> (circular,c)
+        View Button_     {..} -> (circular,c)
+        View Icon_       {..} -> (circular,c)
+        View Image_      {..} -> (circular,c)
+        View Label_      {..} -> (circular,c)
         View LabelGroup_ {..} -> (circular,c)
+        View ListIcon_   {..} -> (circular,c)
         _                 -> (False,c)
 
 {-# INLINE setCircular #-}
 setCircular c =
     case c of
-        View Button_ {..} -> View Button_ { circular = True, .. }
-        View Icon_   {..} -> View Icon_   { circular = True, .. }
-        View Image_  {..} -> View Image_  { circular = True, .. }
-        View Label_  {..} -> View Label_  { circular = True, .. }
+        View Button_     {..} -> View Button_     { circular = True, .. }
+        View Icon_       {..} -> View Icon_       { circular = True, .. }
+        View Image_      {..} -> View Image_      { circular = True, .. }
+        View Label_      {..} -> View Label_      { circular = True, .. }
         View LabelGroup_ {..} -> View LabelGroup_ { circular = True, .. }
-        _                 -> c
+        View ListIcon_   {..} -> View ListIcon_   { circular = True, .. }
+        _                     -> c
 
 pattern Clearing c <- (getClearing -> (True,c)) where
     Clearing c = setClearing c
@@ -513,6 +524,7 @@ getColor c =
         View Icon_        {..} -> color # Just (color,c)
         View Label_       {..} -> color # Just (color,c)
         View LabelGroup_  {..} -> color # Just (color,c)
+        View ListIcon_    {..} -> color # Just (color,c)
         _                      -> Nothing
 
 {-# INLINE setColor #-}
@@ -524,6 +536,7 @@ setColor col c =
         View Icon_        {..} -> View Icon_        { color = col, .. }
         View Label_       {..} -> View Label_       { color = col, .. }
         View LabelGroup_  {..} -> View LabelGroup_  { color = col, .. }
+        View ListIcon_    {..} -> View ListIcon_    { color = col, .. }
         _                      -> c
 
 pattern Corner cor c <- (getCorner -> (Just cor,c)) where
@@ -532,16 +545,18 @@ pattern Corner cor c <- (getCorner -> (Just cor,c)) where
 {-# INLINE getCorner #-}
 getCorner c =
     case c of
-        View Icon_  {..} -> corner ? (Just "",c) $ (Nothing,c)
-        View Label_ {..} -> (corner,c)
+        View Icon_     {..} -> corner ? (Just "",c) $ (Nothing,c)
+        View Label_    {..} -> (corner,c)
+        View ListIcon_ {..} -> corner ? (Just "",c) $ (Nothing,c)
         _                -> (Nothing,c)
 
 {-# INLINE setCorner #-}
 setCorner cor c =
     case c of
-        View Icon_  {..} -> View Icon_  { corner = True, .. }
-        View Label_ {..} -> View Label_ { corner = Just cor, .. }
-        _                -> c
+        View Icon_     {..} -> View Icon_     { corner = True, .. }
+        View Label_    {..} -> View Label_    { corner = Just cor, .. }
+        View ListIcon_ {..} -> View ListIcon_ { corner = True, .. }
+        _                   -> c
 
 pattern Compact c <- (getCompact -> (True,c)) where
     Compact c = setCompact c
@@ -566,22 +581,24 @@ pattern Disabled c <- (getDisabled -> (True,c)) where
 {-# INLINE getDisabled #-}
 getDisabled c =
     case c of
-        View Button_ {..} -> (disabled,c)
-        View Header_ {..} -> (disabled,c)
-        View Icon_   {..} -> (disabled,c)
-        View Image_  {..} -> (disabled,c)
-        View Input_  {..} -> (disabled,c)
-        _                 -> (False,c)
+        View Button_   {..} -> (disabled,c)
+        View Header_   {..} -> (disabled,c)
+        View Icon_     {..} -> (disabled,c)
+        View Image_    {..} -> (disabled,c)
+        View Input_    {..} -> (disabled,c)
+        View ListIcon_ {..} -> (disabled,c)
+        _                   -> (False,c)
 
 {-# INLINE setDisabled #-}
 setDisabled c =
     case c of
-        View Button_ {..} -> View Button_ { disabled = True, .. }
-        View Header_ {..} -> View Header_ { disabled = True, .. }
-        View Icon_   {..} -> View Icon_   { disabled = True, .. }
-        View Image_  {..} -> View Image_  { disabled = True, .. }
-        View Input_  {..} -> View Input_  { disabled = True, .. }
-        _                 -> c
+        View Button_   {..} -> View Button_   { disabled = True, .. }
+        View Header_   {..} -> View Header_   { disabled = True, .. }
+        View Icon_     {..} -> View Icon_     { disabled = True, .. }
+        View Image_    {..} -> View Image_    { disabled = True, .. }
+        View Input_    {..} -> View Input_    { disabled = True, .. }
+        View ListIcon_ {..} -> View ListIcon_ { disabled = True, .. }
+        _                   -> c
 
 pattern Divided c <- (getDivided -> (True,c)) where
     Divided c = setDivided c
@@ -650,15 +667,17 @@ pattern Fitted c <- (getFitted -> (True,c)) where
 {-# INLINE getFitted #-}
 getFitted c =
     case c of
-        View Icon_    {..} -> (fitted,c)
-        View Divider_ {..} -> (fitted,c)
-        _                  -> (False,c)
+        View Icon_     {..} -> (fitted,c)
+        View Divider_  {..} -> (fitted,c)
+        View ListIcon_ {..} -> (fitted,c)
+        _                   -> (False,c)
 
 {-# INLINE setFitted #-}
 setFitted c =
     case c of
-        View Icon_    {..} -> View Icon_    { fitted = True, .. }
-        View Divider_ {..} -> View Divider_ { fitted = True, .. }
+        View Icon_     {..} -> View Icon_     { fitted = True, .. }
+        View Divider_  {..} -> View Divider_  { fitted = True, .. }
+        View ListIcon_ {..} -> View ListIcon_ { fitted = True, .. }
         _                  -> c
 
 pattern Flipped f c <- (getFlipped -> Just (f,c)) where
@@ -667,13 +686,15 @@ pattern Flipped f c <- (getFlipped -> Just (f,c)) where
 {-# INLINE getFlipped #-}
 getFlipped c =
     case c of
-        View Icon_ {..} -> flipped # Just (flipped,c)
+        View Icon_     {..} -> flipped # Just (flipped,c)
+        View ListIcon_ {..} -> flipped # Just (flipped,c)
         _               -> Nothing
 
 {-# INLINE setFlipped #-}
 setFlipped f c =
     case c of
-        View Icon_ {..} -> View Icon_ { flipped = f, .. }
+        View Icon_     {..} -> View Icon_     { flipped = f, .. }
+        View ListIcon_ {..} -> View ListIcon_ { flipped = f, .. }
         _               -> c
 
 pattern Floated f c <- (getFloated -> Just (f,c)) where
@@ -840,6 +861,7 @@ getInverted c =
         View Icon_        {..} -> (inverted,c)
         View Input_       {..} -> (inverted,c)
         View List_        {..} -> (inverted,c)
+        View ListIcon_    {..} -> (inverted,c)
         _                      -> (False,c)
 
 {-# INLINE setInverted #-}
@@ -852,6 +874,7 @@ setInverted c =
         View Icon_        {..} -> View Icon_        { inverted = True, .. }
         View Input_       {..} -> View Input_       { inverted = True, .. }
         View List_        {..} -> View List_        { inverted = True, .. }
+        View ListIcon_    {..} -> View ListIcon_    { inverted = True, .. }
         _                      -> c
 
 pattern ItemClick f c <- (getItemClick -> Just (f,c)) where
@@ -905,16 +928,18 @@ pattern Link c <- (getLink -> (True,c)) where
 {-# INLINE getLink #-}
 getLink c =
     case c of
-        View Icon_ {..} -> (link,c)
-        View List_ {..} -> (link,c)
-        _               -> (False,c)
+        View Icon_     {..} -> (link,c)
+        View List_     {..} -> (link,c)
+        View ListIcon_ {..} -> (link,c)
+        _                   -> (False,c)
 
 {-# INLINE setLink #-}
 setLink c =
     case c of
-        View Icon_ {..} -> View Icon_ { link = True, .. }
-        View List_ {..} -> View List_ { link = True, .. }
-        _               -> c
+        View Icon_     {..} -> View Icon_     { link = True, .. }
+        View List_     {..} -> View List_     { link = True, .. }
+        View ListIcon_ {..} -> View ListIcon_ { link = True, .. }
+        _                   -> c
 
 pattern Loading c <- (getLoading -> (True,c)) where
     Loading c = setLoading c
@@ -922,17 +947,19 @@ pattern Loading c <- (getLoading -> (True,c)) where
 {-# INLINE getLoading #-}
 getLoading c =
     case c of
-        View Button_ {..} -> (loading,c)
-        View Icon_   {..} -> (loading,c)
-        View Input_  {..} -> (loading,c)
-        _                 -> (False,c)
+        View Button_   {..} -> (loading,c)
+        View Icon_     {..} -> (loading,c)
+        View Input_    {..} -> (loading,c)
+        View ListIcon_ {..} -> (loading,c)
+        _                   -> (False,c)
 
 {-# INLINE setLoading #-}
 setLoading c =
     case c of
-        View Button_ {..} -> View Button_ { loading = True, .. }
-        View Icon_   {..} -> View Icon_   { loading = True, .. }
-        View Input_  {..} -> View Input_  { loading = True, .. }
+        View Button_   {..} -> View Button_   { loading = True, .. }
+        View Icon_     {..} -> View Icon_     { loading = True, .. }
+        View Input_    {..} -> View Input_    { loading = True, .. }
+        View ListIcon_ {..} -> View ListIcon_ { loading = True, .. }
         _                 -> c
 
 pattern Localize t c <- (getLocalize -> Just (t,c)) where
@@ -956,14 +983,16 @@ pattern Name n c <- (getName -> Just (n,c)) where
 {-# INLINE getName #-}
 getName c =
     case c of
-        View Icon_ {..} -> name # Just (name,c)
-        _               -> Nothing
+        View Icon_     {..} -> name # Just (name,c)
+        View ListIcon_ {..} -> name # Just (name,c)
+        _                   -> Nothing
 
 {-# INLINE setName #-}
 setName n c =
     case c of
-        View Icon_ {..} -> View Icon_ { name = n, .. }
-        _               -> c
+        View Icon_     {..} -> View Icon_     { name = n, .. }
+        View ListIcon_ {..} -> View ListIcon_ { name = n, .. }
+        _                   -> c
 
 pattern Negative c <- (getNegative -> (True,c)) where
     Negative c = setNegative c
@@ -1082,14 +1111,16 @@ pattern Rotated r c <- (getRotated -> Just (r,c)) where
 {-# INLINE getRotated #-}
 getRotated c =
     case c of
-        View Icon_ {..} -> rotated # Just (rotated,c)
-        _               -> Nothing
+        View Icon_     {..} -> rotated # Just (rotated,c)
+        View ListIcon_ {..} -> rotated # Just (rotated,c)
+        _                   -> Nothing
 
 {-# INLINE setRotated #-}
 setRotated r c =
     case c of
-        View Icon_ {..} -> View Icon_ { rotated = r, .. }
-        _               -> c
+        View Icon_     {..} -> View Icon_     { rotated = r, .. }
+        View ListIcon_ {..} -> View ListIcon_ { rotated = r, .. }
+        _                   -> c
 
 pattern Rounded c <- (getRounded -> (True,c)) where
     Rounded c = setRounded c
@@ -1179,6 +1210,7 @@ getSize c =
         View Label_       {..} -> size # Just (size,c)
         View LabelGroup_  {..} -> size # Just (size,c)
         View List_        {..} -> size # Just (size,c)
+        View ListIcon_    {..} -> size # Just (size,c)
         _                      -> Nothing
 
 {-# INLINE setSize #-}
@@ -1195,6 +1227,7 @@ setSize s c =
         View Label_       {..} -> View Label_       { size = s, .. }
         View LabelGroup_  {..} -> View LabelGroup_  { size = s, .. }
         View List_        {..} -> View List_        { size = s, .. }
+        View ListIcon_    {..} -> View ListIcon_    { size = s, .. }
         _                       -> c
 
 pattern Spaced s c <- (getSpaced -> (Just s,c)) where
