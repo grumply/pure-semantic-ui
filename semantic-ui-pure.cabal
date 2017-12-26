@@ -73,6 +73,7 @@ executable semantic-ui-pure
     Semantic.Elements.List.ListItem
     Semantic.Elements.List.ListList
     Semantic.Elements.Loader
+    Semantic.Elements.Rail
     Semantic.Extensions
     Semantic.Utils
 
@@ -145,6 +146,7 @@ library
     Semantic.Elements.List.ListItem
     Semantic.Elements.List.ListList
     Semantic.Elements.Loader
+    Semantic.Elements.Rail
     Semantic.Extensions
     Semantic.Utils
 

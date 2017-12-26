@@ -10,3 +10,4 @@ import Semantic.Elements.Input as Export
 import Semantic.Elements.Label as Export
 import Semantic.Elements.List as Export
 import Semantic.Elements.Loader as Export
+import Semantic.Elements.Rail as Export
