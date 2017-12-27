@@ -1,7 +1,7 @@
 module Semantic.Elements.Icon (module Semantic.Elements.Icon, module Export) where
 
 import GHC.Generics as G
-import Pure.View as View hiding (name)
+import Pure.View as View hiding (color,name)
 
 import Semantic.Utils
 
@@ -12,6 +12,7 @@ import Semantic.Properties.Attributes
 import Semantic.Properties.Bordered
 import Semantic.Properties.Circular
 import Semantic.Properties.Classes
+import Semantic.Properties.Color
 import Semantic.Properties.Name
 
 data Icon ms = Icon_
@@ -92,3 +93,7 @@ instance HasNameProp (Icon ms) where
 instance HasClassesProp (Icon ms) where
     getClasses = classes
     setClasses cs i = i { classes = cs }
+
+instance HasColorProp (Icon ms) where
+    getColor = color
+    setColor c i = i { color = c }

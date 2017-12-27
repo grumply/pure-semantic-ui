@@ -1,7 +1,7 @@
 module Semantic.Elements.List.ListIcon where
 
 import GHC.Generics as G
-import Pure.View hiding (name,verticalAlign)
+import Pure.View hiding (color,name,verticalAlign)
 
 import Semantic.Utils
 
@@ -10,6 +10,7 @@ import Semantic.Properties.Attributes
 import Semantic.Properties.Bordered
 import Semantic.Properties.Circular
 import Semantic.Properties.Classes
+import Semantic.Properties.Color
 import Semantic.Properties.Name
 
 data ListIcon ms = ListIcon_ 
@@ -92,3 +93,7 @@ instance HasNameProp (ListIcon ms) where
 instance HasClassesProp (ListIcon ms) where
     getClasses = classes
     setClasses cs li = li { classes = cs }
+
+instance HasColorProp (ListIcon ms) where
+    getColor = color
+    setColor c li = li { color = c }

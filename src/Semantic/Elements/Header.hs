@@ -1,7 +1,7 @@
 module Semantic.Elements.Header (module Semantic.Elements.Header, module Export) where
 
 import GHC.Generics as G
-import Pure.View hiding (block,Header)
+import Pure.View hiding (block,color,Header)
 import qualified Pure.View as HTML
 
 import Semantic.Utils
@@ -18,6 +18,7 @@ import Semantic.Properties.Attributes
 import Semantic.Properties.Block
 import Semantic.Properties.Children
 import Semantic.Properties.Classes
+import Semantic.Properties.Color
 
 data Header ms = Header_
     { as :: [Feature ms] -> [View ms] -> View ms 
@@ -98,3 +99,7 @@ instance HasChildrenProp (Header ms) where
 instance HasClassesProp (Header ms) where
     getClasses = classes
     setClasses cs h = h { classes = cs }
+
+instance HasColorProp (Header ms) where
+    getColor = color
+    setColor c h = h { color = c }

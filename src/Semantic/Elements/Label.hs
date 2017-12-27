@@ -1,7 +1,7 @@
 module Semantic.Elements.Label (module Semantic.Elements.Label, module Export) where
 
 import GHC.Generics as G
-import Pure.View as View hiding (active,onClick)
+import Pure.View as View hiding (active,color,onClick)
 import qualified Pure.View as HTML
 
 import Semantic.Utils
@@ -19,6 +19,7 @@ import Semantic.Properties.Basic
 import Semantic.Properties.Children
 import Semantic.Properties.Circular
 import Semantic.Properties.Classes
+import Semantic.Properties.Color
 import Semantic.Properties.OnClick
 
 data Label ms = Label_
@@ -129,3 +130,7 @@ instance HasOnClickProp (Label ms) where
     type OnClickProp (Label ms) = Ef ms IO ()
     getOnClick = onClick
     setOnClick oc l = l { onClick = oc }
+
+instance HasColorProp (Label ms) where
+    getColor = color
+    setColor c l = l { color = c }

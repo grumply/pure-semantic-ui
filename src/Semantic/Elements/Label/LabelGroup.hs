@@ -1,7 +1,7 @@
 module Semantic.Elements.Label.LabelGroup where
 
 import GHC.Generics as G
-import Pure.View as View
+import Pure.View as View hiding (color)
 
 import Semantic.Utils
 
@@ -10,6 +10,7 @@ import Semantic.Properties.Attributes
 import Semantic.Properties.Children
 import Semantic.Properties.Circular
 import Semantic.Properties.Classes
+import Semantic.Properties.Color
 
 data LabelGroup ms = LabelGroup_ 
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -69,3 +70,7 @@ instance HasCircularProp (LabelGroup ms) where
 instance HasClassesProp (LabelGroup ms) where
     getClasses = classes
     setClasses cs lg = lg { classes = cs }
+
+instance HasColorProp (LabelGroup ms) where
+    getColor = color
+    setColor c lg = lg { color = c }

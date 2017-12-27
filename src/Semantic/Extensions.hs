@@ -19,48 +19,6 @@ import Semantic.Utils
 
 import Debug.Trace
 
-pattern Color col c <- (getColor -> Just (col,c)) where
-    Color col c = setColor col c
-
-pattern Red = "red"
-pattern Orange = "orange"
-pattern Yellow = "yellow"
-pattern Olive = "olive"
-pattern Green = "green"
-pattern Teal = "teal"
-pattern Blue = "blue"
-pattern Violet = "violet"
-pattern Purple = "purple"
-pattern Pink = "pink"
-pattern Brown = "brown"
-pattern Grey = "grey"
-pattern Gray = "grey"
-pattern Black = "black"
-
-{-# INLINE getColor #-}
-getColor c =
-    case c of
-        View Button_      {..} -> color # Just (color,c)
-        View ButtonGroup_ {..} -> color # Just (color,c)
-        View Header_      {..} -> color # Just (color,c)
-        View Icon_        {..} -> color # Just (color,c)
-        View Label_       {..} -> color # Just (color,c)
-        View LabelGroup_  {..} -> color # Just (color,c)
-        View ListIcon_    {..} -> color # Just (color,c)
-        _                      -> Nothing
-
-{-# INLINE setColor #-}
-setColor col c =
-    case c of
-        View Button_      {..} -> View Button_      { color = col, .. }
-        View ButtonGroup_ {..} -> View ButtonGroup_ { color = col, .. }
-        View Header_      {..} -> View Header_      { color = col, .. }
-        View Icon_        {..} -> View Icon_        { color = col, .. }
-        View Label_       {..} -> View Label_       { color = col, .. }
-        View LabelGroup_  {..} -> View LabelGroup_  { color = col, .. }
-        View ListIcon_    {..} -> View ListIcon_    { color = col, .. }
-        _                      -> c
-
 pattern Corner cor c <- (getCorner -> (Just cor,c)) where
     Corner cor c = setCorner cor c
 

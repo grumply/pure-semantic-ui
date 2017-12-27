@@ -1,7 +1,7 @@
 module Semantic.Elements.Button (module Semantic.Elements.Button, module Export) where
 
 import GHC.Generics as G
-import Pure.View hiding (active,onClick,Button,Label)
+import Pure.View hiding (active,color,onClick,Button,Label)
 import qualified Pure.View as HTML
 
 import Semantic.Utils
@@ -22,6 +22,7 @@ import Semantic.Properties.Basic
 import Semantic.Properties.Children
 import Semantic.Properties.Circular
 import Semantic.Properties.Classes
+import Semantic.Properties.Color
 import Semantic.Properties.OnClick
 
 data Button ms = Button_
@@ -187,6 +188,10 @@ instance HasCircularProp (Button ms) where
 instance HasClassesProp (Button ms) where
     getClasses = classes
     setClasses cs b = b { classes = cs }
+
+instance HasColorProp (Button ms) where
+    getColor = color
+    setColor c b = b { color = c }
 
 instance HasOnClickProp (Button ms) where
     type OnClickProp (Button ms) = Ef ms IO ()

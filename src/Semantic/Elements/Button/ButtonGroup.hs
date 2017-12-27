@@ -1,7 +1,7 @@
 module Semantic.Elements.Button.ButtonGroup where
 
 import GHC.Generics as G
-import Pure.View hiding (Button,Label)
+import Pure.View hiding (color,Button,Label)
 import qualified Pure.View as HTML
 
 import Semantic.Utils
@@ -14,6 +14,7 @@ import Semantic.Properties.Attributes
 import Semantic.Properties.Basic
 import Semantic.Properties.Children
 import Semantic.Properties.Classes
+import Semantic.Properties.Color
 
 data ButtonGroup ms = ButtonGroup_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -106,3 +107,7 @@ instance HasChildrenProp (ButtonGroup ms) where
 instance HasClassesProp (ButtonGroup ms) where
     getClasses = classes
     setClasses cs bg = bg { classes = cs }
+
+instance HasColorProp (ButtonGroup ms) where
+    getColor = color
+    setColor c bg = bg { color = c }
