@@ -18,6 +18,7 @@ import Semantic.Properties.Classes as Export
 import Semantic.Properties.Clearing as Export
 import Semantic.Properties.Close as Export
 import Semantic.Properties.Color as Export
+import Semantic.Properties.Completed as Export
 import Semantic.Properties.Corner as Export
 import Semantic.Properties.Compact as Export
 import Semantic.Properties.Disabled as Export
@@ -88,6 +89,9 @@ infixl 1 !%
 
 infixl 1 %!
 (%!) c as cs = Attributes (as (Children cs c))
+
+infixl 7 |>
+(|>) x f = f x
 
 pattern ToLeft = "left"
 pattern ToRight = "right"
