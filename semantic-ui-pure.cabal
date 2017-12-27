@@ -82,6 +82,7 @@ executable semantic-ui-pure
     Semantic.Extensions.Attributes
     Semantic.Extensions.Avatar
     Semantic.Extensions.Basic
+    Semantic.Extensions.Block
     Semantic.Extensions.Children
     Semantic.Extensions.Classes
     Semantic.Extensions.Name
@@ -165,6 +166,7 @@ library
     Semantic.Extensions.Attributes
     Semantic.Extensions.Avatar
     Semantic.Extensions.Basic
+    Semantic.Extensions.Block
     Semantic.Extensions.Children
     Semantic.Extensions.Classes
     Semantic.Extensions.Name

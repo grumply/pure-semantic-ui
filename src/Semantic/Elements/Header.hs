@@ -1,7 +1,7 @@
 module Semantic.Elements.Header (module Semantic.Elements.Header, module Export) where
 
 import GHC.Generics as G
-import Pure.View hiding (Header)
+import Pure.View hiding (block,Header)
 import qualified Pure.View as HTML
 
 import Semantic.Utils
@@ -15,6 +15,7 @@ import Semantic.Elements.Header.HeaderSubheader as Export
 import Semantic.Extensions.As
 import Semantic.Extensions.Attached
 import Semantic.Extensions.Attributes
+import Semantic.Extensions.Block
 import Semantic.Extensions.Children
 import Semantic.Extensions.Classes
 
@@ -84,6 +85,10 @@ instance HasAttributes (Header ms) where
     type Attribute (Header ms) = Feature ms
     getAttributes = attributes 
     setAttributes cs h = h { attributes = cs }
+
+instance HasBlock (Header ms) where
+    getBlock = block
+    setBlock b h = h { block = b }
 
 instance HasChildren (Header ms) where
     type Child (Header ms) = View ms

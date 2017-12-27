@@ -19,21 +19,6 @@ import Semantic.Utils
 
 import Debug.Trace
 
-pattern Block c <- (getBlock -> (True,c)) where
-    Block c = setBlock c
-
-{-# INLINE getBlock #-}
-getBlock c =
-    case c of
-        View Header_ {..} -> (block,c)
-        _                 -> (False,c)
-
-{-# INLINE setBlock #-}
-setBlock c =
-    case c of
-        View Header_ {..} -> View Header_ { block = True, .. }
-        _                 -> c
-
 pattern Bordered c <- (getBordered -> (True,c)) where
     Bordered c = setBordered c
 
