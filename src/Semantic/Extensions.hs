@@ -19,31 +19,6 @@ import Semantic.Utils
 
 import Debug.Trace
 
-pattern Floated f c <- (getFloated -> Just (f,c)) where
-    Floated f c = setFloated f c
-
-{-# INLINE getFloated #-}
-getFloated c =
-    case c of
-        View Button_      {..} -> floated # Just (floated,c)
-        View ButtonGroup_ {..} -> floated # Just (floated,c)
-        View Header_      {..} -> floated # Just (floated,c)
-        View Image_       {..} -> floated # Just (floated,c)
-        View List_        {..} -> floated # Just (floated,c)
-        View ListContent_ {..} -> floated # Just (floated,c)
-        _                      -> Nothing
-
-{-# INLINE setFloated #-}
-setFloated f c =
-    case c of
-        View Button_      {..} -> View Button_      { floated = f, .. }
-        View ButtonGroup_ {..} -> View ButtonGroup_ { floated = f, .. }
-        View Header_      {..} -> View Header_      { floated = f, .. }
-        View Image_       {..} -> View Image_       { floated = f, .. }
-        View List_        {..} -> View List_        { floated = f, .. }
-        View ListContent_ {..} -> View ListContent_ { floated = f, .. }
-        _                      -> c
-
 -- pattern ToLeft = "left"
 -- pattern ToRight = "right"
 

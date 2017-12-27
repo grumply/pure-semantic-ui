@@ -16,6 +16,7 @@ import Semantic.Properties.Children
 import Semantic.Properties.Circular
 import Semantic.Properties.Classes
 import Semantic.Properties.Disabled
+import Semantic.Properties.Floated
 
 data Image ms = Image_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -111,3 +112,7 @@ instance HasClassesProp (Image ms) where
 instance HasDisabledProp (Image ms) where
     getDisabled = disabled
     setDisabled d i = i { disabled = d }
+
+instance HasFloatedProp (Image ms) where
+    getFloated = floated
+    setFloated f i = i { floated = f }

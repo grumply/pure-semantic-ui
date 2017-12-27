@@ -16,6 +16,7 @@ import Semantic.Properties.Children
 import Semantic.Properties.Classes
 import Semantic.Properties.Color
 import Semantic.Properties.Compact
+import Semantic.Properties.Floated
 
 data ButtonGroup ms = ButtonGroup_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -116,3 +117,7 @@ instance HasColorProp (ButtonGroup ms) where
 instance HasCompactProp (ButtonGroup ms) where
     getCompact = compact
     setCompact c bg = bg { compact = c }
+
+instance HasFloatedProp (ButtonGroup ms) where
+    getFloated = floated
+    setFloated f bg = bg { floated = f }

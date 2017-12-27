@@ -21,6 +21,7 @@ import Semantic.Properties.Celled
 import Semantic.Properties.Children
 import Semantic.Properties.Classes
 import Semantic.Properties.Divided
+import Semantic.Properties.Floated
 import Semantic.Properties.OnClick
 
 data List ms = List_
@@ -121,3 +122,7 @@ instance HasOnClickProp (List ms) where
     type OnClickProp (List ms) = ListItem ms -> Ef ms IO ()
     getOnClick = onItemClick
     setOnClick oc l = l { onItemClick = oc }
+
+instance HasFloatedProp (List ms) where
+    getFloated = floated
+    setFloated f l = l { floated = f }

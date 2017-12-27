@@ -9,6 +9,7 @@ import Semantic.Properties.As
 import Semantic.Properties.Attributes
 import Semantic.Properties.Children
 import Semantic.Properties.Classes
+import Semantic.Properties.Floated
 
 data ListContent ms = ListContent_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -59,3 +60,7 @@ instance HasChildrenProp (ListContent ms) where
 instance HasClassesProp (ListContent ms) where
     getClasses = classes
     setClasses cs lc = lc { classes = cs }
+
+instance HasFloatedProp (ListContent ms) where
+    getFloated = floated
+    setFloated f lc = lc { floated = f }

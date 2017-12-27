@@ -27,6 +27,7 @@ import Semantic.Properties.Empty as Export
 import Semantic.Properties.Error as Export
 import Semantic.Properties.Fitted as Export
 import Semantic.Properties.Flipped as Export
+import Semantic.Properties.Floated as Export
 import Semantic.Properties.Name as Export
 import Semantic.Properties.OnChange as Export
 import Semantic.Properties.OnClick as Export

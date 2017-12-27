@@ -21,6 +21,7 @@ import Semantic.Properties.Classes
 import Semantic.Properties.Color
 import Semantic.Properties.Disabled
 import Semantic.Properties.Dividing
+import Semantic.Properties.Floated
 
 data Header ms = Header_
     { as :: [Feature ms] -> [View ms] -> View ms 
@@ -113,3 +114,7 @@ instance HasDisabledProp (Header ms) where
 instance HasDividingProp (Header ms) where
     getDividing = dividing
     setDividing d h = h { dividing = d }
+
+instance HasFloatedProp (Header ms) where
+    getFloated = floated
+    setFloated f h = h { floated = f }
