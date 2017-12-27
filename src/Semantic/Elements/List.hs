@@ -13,6 +13,7 @@ import Semantic.Elements.List.ListIcon as Export
 import Semantic.Elements.List.ListItem as Export
 import Semantic.Elements.List.ListList as Export
 
+import Semantic.Extensions.Animated
 import Semantic.Extensions.As
 import Semantic.Extensions.Attributes
 import Semantic.Extensions.Children
@@ -75,6 +76,11 @@ instance VC ms => Pure List ms where
                 : attributes
                 )
                 children'
+
+instance HasAnimated (List ms) where
+    type Anim (List ms) = Bool
+    getAnimated = animated
+    setAnimated anim l = l { animated = anim }
 
 instance HasAs (List ms) where
     type Constructor (List ms) = [Feature ms] -> [View ms] -> View ms

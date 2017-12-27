@@ -14,6 +14,7 @@ import Semantic.Elements.Button.ButtonGroup as Export
 import Semantic.Elements.Button.ButtonOr as Export
 
 import Semantic.Extensions.Active
+import Semantic.Extensions.Animated
 import Semantic.Extensions.As
 import Semantic.Extensions.Attributes
 import Semantic.Extensions.Children
@@ -141,6 +142,11 @@ instance Typeable ms => Pure Button ms where
                       : attributes
                       )
                       children 
+
+instance HasAnimated (Button ms) where
+    type Anim (Button ms) = Maybe Txt
+    getAnimated b = animated b
+    setAnimated anim b = b { animated = anim }
 
 instance HasActive (Button ms) where
     getActive = active

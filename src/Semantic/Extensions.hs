@@ -25,23 +25,6 @@ import Debug.Trace
 -- infixl 1 %!
 -- (%!) c as cs = Attributes (as (Children cs c))
 
-pattern Animated a c <- (getAnimated -> Just (a,c)) where
-    Animated a c = setAnimated a c
-
-{-# INLINE getAnimated #-}
-getAnimated c =
-    case c of
-        View Button_ {..} -> animated # Just (animated,c)
-        View List_   {..} -> animated # Just (Just "",c)
-        _                 -> Nothing
-
-{-# INLINE setAnimated #-}
-setAnimated a c =
-    case c of
-        View Button_ {..} -> View Button_ { animated = a, .. }
-        View List_   {..} -> View List_   { animated = True, .. }
-        _                 -> c
-
 pattern Attached a c <- (getAttached -> (Just a,c)) where
     Attached a c = setAttached a c
 
