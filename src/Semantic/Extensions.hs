@@ -22,21 +22,6 @@ import Debug.Trace
 -- pattern ToLeft = "left"
 -- pattern ToRight = "right"
 
-pattern Ordered c <- (getOrdered -> (True,c)) where
-    Ordered c = setOrdered c
-
-{-# INLINE getOrdered #-}
-getOrdered c =
-    case c of
-        View List_ {..} -> (ordered,c)
-        _               -> (False,c)
-
-{-# INLINE setOrdered #-}
-setOrdered c =
-    case c of
-        View List_ {..} -> View List_ { ordered = True, .. }
-        _               -> c
-
 pattern Pointing t c <- (getPointing -> Just (t,c)) where
     Pointing t c = setPointing t c
 

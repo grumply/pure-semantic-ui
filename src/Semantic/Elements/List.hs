@@ -26,6 +26,7 @@ import Semantic.Properties.Horizontal
 import Semantic.Properties.Inverted
 import Semantic.Properties.Link
 import Semantic.Properties.OnClick
+import Semantic.Properties.Ordered
 
 data List ms = List_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -141,3 +142,7 @@ instance HasInvertedProp (List ms) where
 instance HasLinkProp (List ms) where
     getLink = link
     setLink lnk l = l { link = lnk }
+
+instance HasOrderedProp (List ms) where
+    getOrdered = ordered
+    setOrdered o l = l { ordered = o }
