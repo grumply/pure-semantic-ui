@@ -16,6 +16,7 @@ import Semantic.Elements.Button.ButtonOr as Export
 import Semantic.Extensions.Active
 import Semantic.Extensions.Animated
 import Semantic.Extensions.As
+import Semantic.Extensions.Attached
 import Semantic.Extensions.Attributes
 import Semantic.Extensions.Children
 import Semantic.Extensions.Classes
@@ -156,6 +157,11 @@ instance HasAs (Button ms) where
     type Constructor (Button ms) = [Feature ms] -> [View ms] -> View ms
     getAs = as
     setAs f b = b { as = f }
+
+instance HasAttached (Button ms) where
+    type Attach (Button ms) = Maybe Txt
+    getAttached = attached
+    setAttached attach b = b { attached = attach }
 
 instance HasAttributes (Button ms) where
     type Attribute (Button ms) = Feature ms

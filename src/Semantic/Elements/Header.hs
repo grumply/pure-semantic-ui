@@ -13,6 +13,7 @@ import Semantic.Elements.Header.HeaderContent as Export
 import Semantic.Elements.Header.HeaderSubheader as Export
 
 import Semantic.Extensions.As
+import Semantic.Extensions.Attached
 import Semantic.Extensions.Attributes
 import Semantic.Extensions.Children
 import Semantic.Extensions.Classes
@@ -73,6 +74,11 @@ instance HasAs (Header ms) where
     type Constructor (Header ms) = [Feature ms] -> [View ms] -> View ms
     getAs = as
     setAs f h = h { as = f }
+
+instance HasAttached (Header ms) where
+    type Attach (Header ms) = Maybe Txt
+    getAttached = attached
+    setAttached attach h = h { attached = attach }
 
 instance HasAttributes (Header ms) where
     type Attribute (Header ms) = Feature ms

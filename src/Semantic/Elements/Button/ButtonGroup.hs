@@ -9,6 +9,7 @@ import Semantic.Utils
 import Semantic.Elements.Icon
 
 import Semantic.Extensions.As
+import Semantic.Extensions.Attached
 import Semantic.Extensions.Attributes
 import Semantic.Extensions.Children
 import Semantic.Extensions.Classes
@@ -81,6 +82,11 @@ instance HasAs (ButtonGroup ms) where
     type Constructor (ButtonGroup ms) = [Feature ms] -> [View ms] -> View ms
     getAs = as
     setAs f bg = bg { as = f }
+
+instance HasAttached (ButtonGroup ms) where
+    type Attach (ButtonGroup ms) = Maybe Txt
+    getAttached = attached
+    setAttached attach bg = bg { attached = attach }
 
 instance HasAttributes (ButtonGroup ms) where
     type Attribute (ButtonGroup ms) = Feature ms

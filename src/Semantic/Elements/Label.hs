@@ -12,6 +12,7 @@ import Semantic.Elements.Image
 
 import Semantic.Extensions.Active
 import Semantic.Extensions.As
+import Semantic.Extensions.Attached
 import Semantic.Extensions.Attributes
 import Semantic.Extensions.Children
 import Semantic.Extensions.Classes
@@ -92,6 +93,11 @@ instance HasAs (Label ms) where
     type Constructor (Label ms) = [Feature ms] -> [View ms] -> View ms
     getAs = as
     setAs f l = l { as = f }
+
+instance HasAttached (Label ms) where
+    type Attach (Label ms) = Txt
+    getAttached = attached
+    setAttached attach l = l { attached = attach }
 
 instance HasAttributes (Label ms) where
     type Attribute (Label ms) = Feature ms

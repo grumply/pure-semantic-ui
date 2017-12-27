@@ -15,3 +15,8 @@ import Semantic.Extensions.Avatar as Export
 import Semantic.Extensions.Children as Export
 import Semantic.Extensions.Classes as Export
 import Semantic.Extensions.Name as Export
+
+pattern ToLeft = "left"
+pattern ToRight = "right"
+pattern ToTop = "top"
+pattern ToBottom = "bottom"
