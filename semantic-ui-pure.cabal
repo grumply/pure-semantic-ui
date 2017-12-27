@@ -104,6 +104,7 @@ executable semantic-ui-pure
     Semantic.Properties.Fitted
     Semantic.Properties.Flipped
     Semantic.Properties.Floated
+    Semantic.Properties.Floating
     Semantic.Properties.Name
     Semantic.Properties.OnChange
     Semantic.Properties.OnClick
@@ -209,6 +210,7 @@ library
     Semantic.Properties.Fitted
     Semantic.Properties.Flipped
     Semantic.Properties.Floated
+    Semantic.Properties.Floating
     Semantic.Properties.Name
     Semantic.Properties.OnChange
     Semantic.Properties.OnClick

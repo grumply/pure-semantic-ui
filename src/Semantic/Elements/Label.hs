@@ -22,6 +22,7 @@ import Semantic.Properties.Classes
 import Semantic.Properties.Color
 import Semantic.Properties.Corner
 import Semantic.Properties.Empty
+import Semantic.Properties.Floating
 import Semantic.Properties.OnClick
 
 data Label ms = Label_
@@ -145,3 +146,7 @@ instance HasCornerProp (Label ms) where
 instance HasEmptyProp (Label ms) where
     getEmpty = empty
     setEmpty e l = l { empty = e }
+
+instance HasFloatingProp (Label ms) where
+    getFloating = floating
+    setFloating f l = l { floating = f }

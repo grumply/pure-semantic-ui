@@ -22,21 +22,6 @@ import Debug.Trace
 -- pattern ToLeft = "left"
 -- pattern ToRight = "right"
 
-pattern Floating c <- (getFloating -> (True,c)) where
-    Floating c = setFloating c
-
-{-# INLINE getFloating #-}
-getFloating c =
-    case c of
-        View Label_ {..} -> (floating,c)
-        _                -> (False,c)
-
-{-# INLINE setFloating #-}
-setFloating c =
-    case c of
-        View Label_ {..} -> View Label_ { floating = True, .. }
-        _                -> c
-
 pattern Fluid c <- (getFluid -> (True,c)) where
     Fluid c = setFluid c
 
