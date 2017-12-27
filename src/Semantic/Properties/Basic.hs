@@ -1,11 +1,11 @@
-module Semantic.Extensions.Basic where
+module Semantic.Properties.Basic where
 
-import Semantic.Extensions.Utils
+import Semantic.Properties.Utils
 
-class HasBasic a where
+class HasBasicProp a where
     getBasic :: a -> Bool
     setBasic :: Bool -> a -> a
 
-pattern Basic :: HasBasic a => a -> a
+pattern Basic :: HasBasicProp a => a -> a
 pattern Basic a <- (getBasic &&& id -> (True,a)) where
     Basic a = setBasic True a

@@ -1,22 +1,22 @@
-module Semantic.Extensions.Attributes where
+module Semantic.Properties.Attributes where
 
 import Pure.View
 
-import Semantic.Extensions.Utils
+import Semantic.Properties.Utils
 
-class HasAttributes a where
+class HasAttributesProp a where
     type Attribute a
     getAttributes :: a -> [Attribute a]
     setAttributes :: [Attribute a] -> a -> a
 
-pattern Attributes :: HasAttributes a => [Attribute a] -> a -> a
+pattern Attributes :: HasAttributesProp a => [Attribute a] -> a -> a
 pattern Attributes cs a <- (getAttributes &&& id -> (cs,a)) where
     Attributes cs a = setAttributes cs a
 
 infixl 2 %
 (%) c as = Attributes as c
        
-instance HasAttributes (View ms) where
+instance HasAttributesProp (View ms) where
     type Attribute (View ms) = Feature ms
     getAttributes v =
         case v of

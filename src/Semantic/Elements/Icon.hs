@@ -7,11 +7,11 @@ import Semantic.Utils
 
 import Semantic.Elements.Icon.IconGroup as Export
 
-import Semantic.Extensions.As
-import Semantic.Extensions.Attributes
-import Semantic.Extensions.Bordered
-import Semantic.Extensions.Classes
-import Semantic.Extensions.Name
+import Semantic.Properties.As
+import Semantic.Properties.Attributes
+import Semantic.Properties.Bordered
+import Semantic.Properties.Classes
+import Semantic.Properties.Name
 
 data Icon ms = Icon_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -66,24 +66,24 @@ instance Typeable ms => Pure Icon ms where
                 )
                 []
 
-instance HasAs (Icon ms) where
-    type Constructor (Icon ms) = [Feature ms] -> [View ms] -> View ms
+instance HasAsProp (Icon ms) where
+    type AsProp (Icon ms) = [Feature ms] -> [View ms] -> View ms
     getAs = as
     setAs f i = i { as = f }
 
-instance HasAttributes (Icon ms) where
+instance HasAttributesProp (Icon ms) where
     type Attribute (Icon ms) = Feature ms
     getAttributes = attributes 
     setAttributes cs i = i { attributes = cs }
 
-instance HasBordered (Icon ms) where
+instance HasBorderedProp (Icon ms) where
     getBordered = bordered
     setBordered b i = i { bordered = b }
 
-instance HasName (Icon ms) where
+instance HasNameProp (Icon ms) where
     getName = name
     setName n i = i { name = n }
 
-instance HasClasses (Icon ms) where
+instance HasClassesProp (Icon ms) where
     getClasses = classes
     setClasses cs i = i { classes = cs }

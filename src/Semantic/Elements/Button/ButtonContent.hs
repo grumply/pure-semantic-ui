@@ -6,10 +6,10 @@ import qualified Pure.View as HTML
 
 import Semantic.Utils
 
-import Semantic.Extensions.As
-import Semantic.Extensions.Attributes
-import Semantic.Extensions.Children
-import Semantic.Extensions.Classes
+import Semantic.Properties.As
+import Semantic.Properties.Attributes
+import Semantic.Properties.Children
+import Semantic.Properties.Classes
 
 data ButtonContent ms = ButtonContent_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -43,21 +43,21 @@ instance Typeable ms => Pure ButtonContent ms where
                 ) 
                 children
 
-instance HasAs (ButtonContent ms) where
-    type Constructor (ButtonContent ms) = [Feature ms] -> [View ms] -> View ms
+instance HasAsProp (ButtonContent ms) where
+    type AsProp (ButtonContent ms) = [Feature ms] -> [View ms] -> View ms
     getAs = as
     setAs f bc = bc { as = f }
 
-instance HasAttributes (ButtonContent ms) where
+instance HasAttributesProp (ButtonContent ms) where
     type Attribute (ButtonContent ms) = Feature ms
     getAttributes = attributes 
     setAttributes cs bc = bc { attributes = cs }
 
-instance HasChildren (ButtonContent ms) where
+instance HasChildrenProp (ButtonContent ms) where
     type Child (ButtonContent ms) = View ms
     getChildren = children
     setChildren cs bc = bc { children = cs }
 
-instance HasClasses (ButtonContent ms) where
+instance HasClassesProp (ButtonContent ms) where
     getClasses = classes
     setClasses cs bc = bc { classes = cs }

@@ -5,10 +5,10 @@ import Pure.View
 
 import Semantic.Utils
 
-import Semantic.Extensions.As
-import Semantic.Extensions.Attributes
-import Semantic.Extensions.Children
-import Semantic.Extensions.Classes
+import Semantic.Properties.As
+import Semantic.Properties.Attributes
+import Semantic.Properties.Children
+import Semantic.Properties.Classes
 
 data ListDescription ms = ListDescription_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -27,21 +27,21 @@ instance Typeable ms => Pure ListDescription ms where
     render ListDescription_ {..} =
         as ( ClassList (classes ++ [ "description" ]) : attributes ) children
 
-instance HasAs (ListDescription ms) where
-    type Constructor (ListDescription ms) = [Feature ms] -> [View ms] -> View ms
+instance HasAsProp (ListDescription ms) where
+    type AsProp (ListDescription ms) = [Feature ms] -> [View ms] -> View ms
     getAs = as
     setAs f ld = ld { as = f }
 
-instance HasAttributes (ListDescription ms) where
+instance HasAttributesProp (ListDescription ms) where
     type Attribute (ListDescription ms) = Feature ms
     getAttributes = attributes 
     setAttributes cs ld = ld { attributes = cs }
 
-instance HasChildren (ListDescription ms) where
+instance HasChildrenProp (ListDescription ms) where
     type Child (ListDescription ms) = View ms
     getChildren = children
     setChildren cs ld = ld { children = cs }
 
-instance HasClasses (ListDescription ms) where
+instance HasClassesProp (ListDescription ms) where
     getClasses = classes
     setClasses cs ld = ld { classes = cs }

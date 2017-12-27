@@ -1,12 +1,12 @@
-module Semantic.Extensions.Active where
+module Semantic.Properties.Active where
 
-import Semantic.Extensions.Utils
+import Semantic.Properties.Utils
 
-class HasActive a where
+class HasActiveProp a where
     getActive :: a -> Bool
     setActive :: Bool -> a -> a
 
-pattern Active :: HasActive a => a -> a
+pattern Active :: HasActiveProp a => a -> a
 pattern Active a <- (getActive &&& id -> (True,a)) where
     Active a = setActive True a
         

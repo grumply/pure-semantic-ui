@@ -6,10 +6,10 @@ import qualified Pure.View as HTML
 
 import Semantic.Utils
 
-import Semantic.Extensions.As
-import Semantic.Extensions.Attributes
-import Semantic.Extensions.Children
-import Semantic.Extensions.Classes
+import Semantic.Properties.As
+import Semantic.Properties.Attributes
+import Semantic.Properties.Children
+import Semantic.Properties.Classes
 
 data ButtonOr ms = ButtonOr_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -33,16 +33,16 @@ instance Typeable ms => Pure ButtonOr ms where
             )
             []
 
-instance HasAs (ButtonOr ms) where
-    type Constructor (ButtonOr ms) = [Feature ms] -> [View ms] -> View ms
+instance HasAsProp (ButtonOr ms) where
+    type AsProp (ButtonOr ms) = [Feature ms] -> [View ms] -> View ms
     getAs = as
     setAs f bo = bo { as = f }
 
-instance HasAttributes (ButtonOr ms) where
+instance HasAttributesProp (ButtonOr ms) where
     type Attribute (ButtonOr ms) = Feature ms
     getAttributes = attributes 
     setAttributes cs bo = bo { attributes = cs }
 
-instance HasClasses (ButtonOr ms) where
+instance HasClassesProp (ButtonOr ms) where
     getClasses = classes
     setClasses cs bo = bo { classes = cs }

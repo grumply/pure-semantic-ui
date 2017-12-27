@@ -5,10 +5,10 @@ import Pure.View as View
 
 import Semantic.Utils
 
-import Semantic.Extensions.As
-import Semantic.Extensions.Attributes
-import Semantic.Extensions.Children
-import Semantic.Extensions.Classes
+import Semantic.Properties.As
+import Semantic.Properties.Attributes
+import Semantic.Properties.Children
+import Semantic.Properties.Classes
 
 data LabelGroup ms = LabelGroup_ 
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -46,21 +46,21 @@ instance Typeable ms => Pure LabelGroup ms where
                 )
                 children
 
-instance HasAs (LabelGroup ms) where
-    type Constructor (LabelGroup ms) = [Feature ms] -> [View ms] -> View ms
+instance HasAsProp (LabelGroup ms) where
+    type AsProp (LabelGroup ms) = [Feature ms] -> [View ms] -> View ms
     getAs = as
     setAs f lg = lg { as = f }
 
-instance HasAttributes (LabelGroup ms) where
+instance HasAttributesProp (LabelGroup ms) where
     type Attribute (LabelGroup ms) = Feature ms
     getAttributes = attributes 
     setAttributes cs lg = lg { attributes = cs }
 
-instance HasChildren (LabelGroup ms) where
+instance HasChildrenProp (LabelGroup ms) where
     type Child (LabelGroup ms) = View ms
     getChildren = children
     setChildren cs lg = lg { children = cs } 
 
-instance HasClasses (LabelGroup ms) where
+instance HasClassesProp (LabelGroup ms) where
     getClasses = classes
     setClasses cs lg = lg { classes = cs }

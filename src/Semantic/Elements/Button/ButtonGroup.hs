@@ -8,12 +8,12 @@ import Semantic.Utils
 
 import Semantic.Elements.Icon
 
-import Semantic.Extensions.As
-import Semantic.Extensions.Attached
-import Semantic.Extensions.Attributes
-import Semantic.Extensions.Basic
-import Semantic.Extensions.Children
-import Semantic.Extensions.Classes
+import Semantic.Properties.As
+import Semantic.Properties.Attached
+import Semantic.Properties.Attributes
+import Semantic.Properties.Basic
+import Semantic.Properties.Children
+import Semantic.Properties.Classes
 
 data ButtonGroup ms = ButtonGroup_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -79,30 +79,30 @@ instance Typeable ms => Pure ButtonGroup ms where
                 )
                 children
 
-instance HasAs (ButtonGroup ms) where
-    type Constructor (ButtonGroup ms) = [Feature ms] -> [View ms] -> View ms
+instance HasAsProp (ButtonGroup ms) where
+    type AsProp (ButtonGroup ms) = [Feature ms] -> [View ms] -> View ms
     getAs = as
     setAs f bg = bg { as = f }
 
-instance HasAttached (ButtonGroup ms) where
-    type Attach (ButtonGroup ms) = Maybe Txt
+instance HasAttachedProp (ButtonGroup ms) where
+    type AttachedProp (ButtonGroup ms) = Maybe Txt
     getAttached = attached
     setAttached attach bg = bg { attached = attach }
 
-instance HasAttributes (ButtonGroup ms) where
+instance HasAttributesProp (ButtonGroup ms) where
     type Attribute (ButtonGroup ms) = Feature ms
     getAttributes = attributes 
     setAttributes cs bg = bg { attributes = cs }
 
-instance HasBasic (ButtonGroup ms) where
+instance HasBasicProp (ButtonGroup ms) where
     getBasic = basic
     setBasic b bg = bg { basic = b }
 
-instance HasChildren (ButtonGroup ms) where
+instance HasChildrenProp (ButtonGroup ms) where
     type Child (ButtonGroup ms) = View ms
     getChildren = children
     setChildren cs bg = bg { children = cs }
 
-instance HasClasses (ButtonGroup ms) where
+instance HasClassesProp (ButtonGroup ms) where
     getClasses = classes
     setClasses cs bg = bg { classes = cs }

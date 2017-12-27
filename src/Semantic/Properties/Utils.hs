@@ -1,4 +1,4 @@
-module Semantic.Extensions.Utils (module Export) where
+module Semantic.Properties.Utils (module Export) where
 
 import Control.Arrow as Export ((&&&)) 
 import Pure.Data as Export

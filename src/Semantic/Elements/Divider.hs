@@ -5,10 +5,10 @@ import Pure.View as View
 
 import Semantic.Utils
 
-import Semantic.Extensions.As
-import Semantic.Extensions.Attributes
-import Semantic.Extensions.Children
-import Semantic.Extensions.Classes
+import Semantic.Properties.As
+import Semantic.Properties.Attributes
+import Semantic.Properties.Children
+import Semantic.Properties.Classes
 
 data Divider ms = Divider_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -49,21 +49,21 @@ instance Typeable ms => Pure Divider ms where
                 )
                 children
 
-instance HasAs (Divider ms) where
-    type Constructor (Divider ms) = [Feature ms] -> [View ms] -> View ms
+instance HasAsProp (Divider ms) where
+    type AsProp (Divider ms) = [Feature ms] -> [View ms] -> View ms
     getAs = as
     setAs f d = d { as = f }
 
-instance HasAttributes (Divider ms) where
+instance HasAttributesProp (Divider ms) where
     type Attribute (Divider ms) = Feature ms
     getAttributes = attributes 
     setAttributes cs d = d { attributes = cs }
 
-instance HasChildren (Divider ms) where
+instance HasChildrenProp (Divider ms) where
     type Child (Divider ms) = View ms
     getChildren = children
     setChildren cs d = d { children = cs }
 
-instance HasClasses (Divider ms) where
+instance HasClassesProp (Divider ms) where
     getClasses = classes
     setClasses cs d = d { classes = cs }

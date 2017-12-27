@@ -13,14 +13,14 @@ import Semantic.Elements.Button.ButtonContent as Export
 import Semantic.Elements.Button.ButtonGroup as Export
 import Semantic.Elements.Button.ButtonOr as Export
 
-import Semantic.Extensions.Active
-import Semantic.Extensions.Animated
-import Semantic.Extensions.As
-import Semantic.Extensions.Attached
-import Semantic.Extensions.Attributes
-import Semantic.Extensions.Basic
-import Semantic.Extensions.Children
-import Semantic.Extensions.Classes
+import Semantic.Properties.Active
+import Semantic.Properties.Animated
+import Semantic.Properties.As
+import Semantic.Properties.Attached
+import Semantic.Properties.Attributes
+import Semantic.Properties.Basic
+import Semantic.Properties.Children
+import Semantic.Properties.Classes
 
 data Button ms = Button_
   { as :: [Feature ms] -> [View ms] -> View ms
@@ -145,39 +145,39 @@ instance Typeable ms => Pure Button ms where
                       )
                       children 
 
-instance HasAnimated (Button ms) where
-    type Anim (Button ms) = Maybe Txt
+instance HasAnimatedProp (Button ms) where
+    type AnimatedProp (Button ms) = Maybe Txt
     getAnimated b = animated b
     setAnimated anim b = b { animated = anim }
 
-instance HasActive (Button ms) where
+instance HasActiveProp (Button ms) where
     getActive = active
     setActive a b = b { active = a }
 
-instance HasAs (Button ms) where
-    type Constructor (Button ms) = [Feature ms] -> [View ms] -> View ms
+instance HasAsProp (Button ms) where
+    type AsProp (Button ms) = [Feature ms] -> [View ms] -> View ms
     getAs = as
     setAs f b = b { as = f }
 
-instance HasAttached (Button ms) where
-    type Attach (Button ms) = Maybe Txt
+instance HasAttachedProp (Button ms) where
+    type AttachedProp (Button ms) = Maybe Txt
     getAttached = attached
     setAttached attach b = b { attached = attach }
 
-instance HasAttributes (Button ms) where
+instance HasAttributesProp (Button ms) where
     type Attribute (Button ms) = Feature ms
     getAttributes = attributes 
     setAttributes cs b = b { attributes = cs }
 
-instance HasBasic (Button ms) where
+instance HasBasicProp (Button ms) where
     getBasic = basic
     setBasic bsc b = b { basic = bsc }
 
-instance HasChildren (Button ms) where
+instance HasChildrenProp (Button ms) where
     type Child (Button ms) = View ms
     getChildren = children
     setChildren cs b = b { children = cs }
 
-instance HasClasses (Button ms) where
+instance HasClassesProp (Button ms) where
     getClasses = classes
     setClasses cs b = b { classes = cs }

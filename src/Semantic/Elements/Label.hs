@@ -10,13 +10,13 @@ import Semantic.Elements.Label.LabelGroup as Export
 
 import Semantic.Elements.Image
 
-import Semantic.Extensions.Active
-import Semantic.Extensions.As
-import Semantic.Extensions.Attached
-import Semantic.Extensions.Attributes
-import Semantic.Extensions.Basic
-import Semantic.Extensions.Children
-import Semantic.Extensions.Classes
+import Semantic.Properties.Active
+import Semantic.Properties.As
+import Semantic.Properties.Attached
+import Semantic.Properties.Attributes
+import Semantic.Properties.Basic
+import Semantic.Properties.Children
+import Semantic.Properties.Classes
 
 data Label ms = Label_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -86,34 +86,34 @@ instance Typeable ms => Pure Label ms where
                 )
                 children
 
-instance HasActive (Label ms) where
+instance HasActiveProp (Label ms) where
     getActive = active
     setActive a l = l { active = a }
             
-instance HasAs (Label ms) where
-    type Constructor (Label ms) = [Feature ms] -> [View ms] -> View ms
+instance HasAsProp (Label ms) where
+    type AsProp (Label ms) = [Feature ms] -> [View ms] -> View ms
     getAs = as
     setAs f l = l { as = f }
 
-instance HasAttached (Label ms) where
-    type Attach (Label ms) = Txt
+instance HasAttachedProp (Label ms) where
+    type AttachedProp (Label ms) = Txt
     getAttached = attached
     setAttached attach l = l { attached = attach }
 
-instance HasAttributes (Label ms) where
+instance HasAttributesProp (Label ms) where
     type Attribute (Label ms) = Feature ms
     getAttributes = attributes 
     setAttributes cs l = l { attributes = cs }
 
-instance HasBasic (Label ms) where
+instance HasBasicProp (Label ms) where
     getBasic = basic
     setBasic b l = l { basic = b }
 
-instance HasChildren (Label ms) where
+instance HasChildrenProp (Label ms) where
     type Child (Label ms) = View ms
     getChildren = children
     setChildren cs l = l { children = cs }
 
-instance HasClasses (Label ms) where
+instance HasClassesProp (Label ms) where
     getClasses = classes
     setClasses cs l = l { classes = cs }

@@ -76,17 +76,18 @@ executable semantic-ui-pure
     Semantic.Elements.Rail
     Semantic.Elements.Reveal
     Semantic.Extensions
-    Semantic.Extensions.Animated
-    Semantic.Extensions.Active
-    Semantic.Extensions.As
-    Semantic.Extensions.Attributes
-    Semantic.Extensions.Avatar
-    Semantic.Extensions.Basic
-    Semantic.Extensions.Block
-    Semantic.Extensions.Bordered
-    Semantic.Extensions.Children
-    Semantic.Extensions.Classes
-    Semantic.Extensions.Name
+    Semantic.Properties
+    Semantic.Properties.Animated
+    Semantic.Properties.Active
+    Semantic.Properties.As
+    Semantic.Properties.Attributes
+    Semantic.Properties.Avatar
+    Semantic.Properties.Basic
+    Semantic.Properties.Block
+    Semantic.Properties.Bordered
+    Semantic.Properties.Children
+    Semantic.Properties.Classes
+    Semantic.Properties.Name
     Semantic.Utils
 
   if impl(ghcjs)
@@ -161,17 +162,18 @@ library
     Semantic.Elements.Rail
     Semantic.Elements.Reveal
     Semantic.Extensions
-    Semantic.Extensions.Animated
-    Semantic.Extensions.Active
-    Semantic.Extensions.As
-    Semantic.Extensions.Attributes
-    Semantic.Extensions.Avatar
-    Semantic.Extensions.Basic
-    Semantic.Extensions.Block
-    Semantic.Extensions.Bordered
-    Semantic.Extensions.Children
-    Semantic.Extensions.Classes
-    Semantic.Extensions.Name
+    Semantic.Properties
+    Semantic.Properties.Animated
+    Semantic.Properties.Active
+    Semantic.Properties.As
+    Semantic.Properties.Attributes
+    Semantic.Properties.Avatar
+    Semantic.Properties.Basic
+    Semantic.Properties.Block
+    Semantic.Properties.Bordered
+    Semantic.Properties.Children
+    Semantic.Properties.Classes
+    Semantic.Properties.Name
     Semantic.Utils
 
   if impl(ghcjs)

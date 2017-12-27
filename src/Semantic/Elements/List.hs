@@ -13,11 +13,11 @@ import Semantic.Elements.List.ListIcon as Export
 import Semantic.Elements.List.ListItem as Export
 import Semantic.Elements.List.ListList as Export
 
-import Semantic.Extensions.Animated
-import Semantic.Extensions.As
-import Semantic.Extensions.Attributes
-import Semantic.Extensions.Children
-import Semantic.Extensions.Classes
+import Semantic.Properties.Animated
+import Semantic.Properties.As
+import Semantic.Properties.Attributes
+import Semantic.Properties.Children
+import Semantic.Properties.Classes
 
 data List ms = List_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -77,26 +77,26 @@ instance VC ms => Pure List ms where
                 )
                 children'
 
-instance HasAnimated (List ms) where
-    type Anim (List ms) = Bool
+instance HasAnimatedProp (List ms) where
+    type AnimatedProp (List ms) = Bool
     getAnimated = animated
     setAnimated anim l = l { animated = anim }
 
-instance HasAs (List ms) where
-    type Constructor (List ms) = [Feature ms] -> [View ms] -> View ms
+instance HasAsProp (List ms) where
+    type AsProp (List ms) = [Feature ms] -> [View ms] -> View ms
     getAs = as
     setAs f l = l { as = f }
 
-instance HasAttributes (List ms) where
+instance HasAttributesProp (List ms) where
     type Attribute (List ms) = Feature ms
     getAttributes = attributes 
     setAttributes cs l = l { attributes = cs }
 
-instance HasChildren (List ms) where
+instance HasChildrenProp (List ms) where
     type Child (List ms) = View ms
     getChildren = children
     setChildren cs l = l { children = cs }
 
-instance HasClasses (List ms) where
+instance HasClassesProp (List ms) where
     getClasses = classes
     setClasses cs l = l { classes = cs }

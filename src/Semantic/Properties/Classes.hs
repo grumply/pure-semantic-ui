@@ -1,18 +1,18 @@
-module Semantic.Extensions.Classes where
+module Semantic.Properties.Classes where
 
 import Pure.View
 
-import Semantic.Extensions.Utils
+import Semantic.Properties.Utils
 
-class HasClasses a where
+class HasClassesProp a where
     getClasses :: a -> [Txt]
     setClasses :: [Txt] -> a -> a
 
-pattern Classes :: HasClasses a => [Txt] -> a -> a
+pattern Classes :: HasClassesProp a => [Txt] -> a -> a
 pattern Classes cs a <- (getClasses &&& id -> (cs,a)) where
     Classes cs a = setClasses cs a
        
-instance HasClasses (View ms) where
+instance HasClassesProp (View ms) where
     getClasses v =
         case v of
             HTMLView _ _ fs _    -> fromMaybe [] . getLast . foldMap getClasses' $ fs

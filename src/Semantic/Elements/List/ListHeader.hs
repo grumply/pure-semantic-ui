@@ -5,10 +5,10 @@ import Pure.View
 
 import Semantic.Utils
 
-import Semantic.Extensions.As
-import Semantic.Extensions.Attributes
-import Semantic.Extensions.Children
-import Semantic.Extensions.Classes
+import Semantic.Properties.As
+import Semantic.Properties.Attributes
+import Semantic.Properties.Children
+import Semantic.Properties.Classes
 
 data ListHeader ms = ListHeader_ 
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -27,21 +27,21 @@ instance Typeable ms => Pure ListHeader ms where
     render ListHeader_ {..} =
         as ( ClassList ( "header" : classes ) : attributes ) children
 
-instance HasAs (ListHeader ms) where
-    type Constructor (ListHeader ms) = [Feature ms] -> [View ms] -> View ms
+instance HasAsProp (ListHeader ms) where
+    type AsProp (ListHeader ms) = [Feature ms] -> [View ms] -> View ms
     getAs = as
     setAs f lh = lh { as = f }
 
-instance HasAttributes (ListHeader ms) where
+instance HasAttributesProp (ListHeader ms) where
     type Attribute (ListHeader ms) = Feature ms
     getAttributes = attributes 
     setAttributes cs lh = lh { attributes = cs }
 
-instance HasChildren (ListHeader ms) where
+instance HasChildrenProp (ListHeader ms) where
     type Child (ListHeader ms) = View ms
     getChildren = children
     setChildren cs lh = lh { children = cs }
 
-instance HasClasses (ListHeader ms) where
+instance HasClassesProp (ListHeader ms) where
     getClasses = classes
     setClasses cs lh = lh { classes = cs }

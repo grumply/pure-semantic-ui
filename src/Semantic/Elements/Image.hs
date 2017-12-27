@@ -7,12 +7,12 @@ import Semantic.Utils
 
 import Semantic.Elements.Image.ImageGroup as Export
 
-import Semantic.Extensions.As
-import Semantic.Extensions.Attributes
-import Semantic.Extensions.Avatar
-import Semantic.Extensions.Bordered
-import Semantic.Extensions.Children
-import Semantic.Extensions.Classes
+import Semantic.Properties.As
+import Semantic.Properties.Attributes
+import Semantic.Properties.Avatar
+import Semantic.Properties.Bordered
+import Semantic.Properties.Children
+import Semantic.Properties.Classes
 
 data Image ms = Image_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -70,29 +70,29 @@ instance Typeable ms => Pure Image ms where
                 )
                 children
 
-instance HasAvatar (Image ms) where
+instance HasAvatarProp (Image ms) where
     getAvatar = avatar
     setAvatar a i = i { avatar = a }
 
-instance HasAs (Image ms) where
-    type Constructor (Image ms) = [Feature ms] -> [View ms] -> View ms
+instance HasAsProp (Image ms) where
+    type AsProp (Image ms) = [Feature ms] -> [View ms] -> View ms
     getAs = as
     setAs f i = i { as = f }
 
-instance HasAttributes (Image ms) where
+instance HasAttributesProp (Image ms) where
     type Attribute (Image ms) = Feature ms
     getAttributes = attributes 
     setAttributes cs i = i { attributes = cs }
 
-instance HasBordered (Image ms) where
+instance HasBorderedProp (Image ms) where
     getBordered = bordered
     setBordered b i = i { bordered = b }
 
-instance HasChildren (Image ms) where
+instance HasChildrenProp (Image ms) where
     type Child (Image ms) = View ms
     getChildren = children
     setChildren cs i = i { children = cs }
 
-instance HasClasses (Image ms) where
+instance HasClassesProp (Image ms) where
     getClasses = classes
     setClasses cs i = i { classes = cs }

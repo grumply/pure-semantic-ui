@@ -5,10 +5,10 @@ import Pure.View
 
 import Semantic.Utils
 
-import Semantic.Extensions.As
-import Semantic.Extensions.Attributes
-import Semantic.Extensions.Children
-import Semantic.Extensions.Classes
+import Semantic.Properties.As
+import Semantic.Properties.Attributes
+import Semantic.Properties.Children
+import Semantic.Properties.Classes
 
 data HeaderSubheader ms = HeaderSubheader_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -31,21 +31,21 @@ instance Typeable ms => Pure HeaderSubheader ms where
             )
             children
 
-instance HasAs (HeaderSubheader ms) where
-    type Constructor (HeaderSubheader ms) = [Feature ms] -> [View ms] -> View ms
+instance HasAsProp (HeaderSubheader ms) where
+    type AsProp (HeaderSubheader ms) = [Feature ms] -> [View ms] -> View ms
     getAs = as
     setAs f hs = hs { as = f }
 
-instance HasAttributes (HeaderSubheader ms) where
+instance HasAttributesProp (HeaderSubheader ms) where
     type Attribute (HeaderSubheader ms) = Feature ms
     getAttributes = attributes 
     setAttributes cs hs = hs { attributes = cs }
 
-instance HasChildren (HeaderSubheader ms) where
+instance HasChildrenProp (HeaderSubheader ms) where
     type Child (HeaderSubheader ms) = View ms
     getChildren = children
     setChildren cs hs = hs { children = cs }
 
-instance HasClasses (HeaderSubheader ms) where
+instance HasClassesProp (HeaderSubheader ms) where
     getClasses = classes
     setClasses cs hs = hs { classes = cs }

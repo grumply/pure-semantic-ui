@@ -5,11 +5,11 @@ import Pure.View hiding (active)
 
 import Semantic.Utils
 
-import Semantic.Extensions.Active
-import Semantic.Extensions.As
-import Semantic.Extensions.Attributes
-import Semantic.Extensions.Children
-import Semantic.Extensions.Classes
+import Semantic.Properties.Active
+import Semantic.Properties.As
+import Semantic.Properties.Attributes
+import Semantic.Properties.Children
+import Semantic.Properties.Classes
 
 data ListItem ms = ListItem_ 
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -53,25 +53,25 @@ instance Typeable ms => Pure ListItem ms where
                 )
                 children
     
-instance HasActive (ListItem ms) where
+instance HasActiveProp (ListItem ms) where
     getActive = active
     setActive a li = li { active = a }
 
-instance HasAs (ListItem ms) where
-    type Constructor (ListItem ms) = [Feature ms] -> [View ms] -> View ms
+instance HasAsProp (ListItem ms) where
+    type AsProp (ListItem ms) = [Feature ms] -> [View ms] -> View ms
     getAs = as
     setAs f li = li { as = f }
 
-instance HasAttributes (ListItem ms) where
+instance HasAttributesProp (ListItem ms) where
     type Attribute (ListItem ms) = Feature ms
     getAttributes = attributes 
     setAttributes cs li = li { attributes = cs }
 
-instance HasChildren (ListItem ms) where
+instance HasChildrenProp (ListItem ms) where
     type Child (ListItem ms) = View ms
     getChildren = children
     setChildren cs li = li { children = cs }
 
-instance HasClasses (ListItem ms) where
+instance HasClassesProp (ListItem ms) where
     getClasses = classes
     setClasses cs li = li { classes = cs }

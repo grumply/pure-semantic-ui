@@ -1,20 +1,20 @@
-module Semantic.Extensions.As where
+module Semantic.Properties.As where
 
 import Pure.View
 
-import Semantic.Extensions.Utils
+import Semantic.Properties.Utils
     
-class HasAs a where
-    type Constructor a
-    getAs :: a -> Constructor a
-    setAs :: Constructor a -> a -> a
+class HasAsProp a where
+    type AsProp a
+    getAs :: a -> AsProp a
+    setAs :: AsProp a -> a -> a
 
-pattern As :: HasAs a => Constructor a -> a -> a
+pattern As :: HasAsProp a => AsProp a -> a -> a
 pattern As as a <- (getAs &&& id -> (as,a)) where
     As as a = setAs as a
        
-instance HasAs (View ms) where
-    type Constructor (View ms) = [Feature ms] -> [View ms] -> View ms
+instance HasAsProp (View ms) where
+    type AsProp (View ms) = [Feature ms] -> [View ms] -> View ms
 
     -- Note: For Managed, Component, Text, Null, and Raw views, this 
     -- method just extracts a reinjector that ignores its arguments.

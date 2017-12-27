@@ -5,11 +5,11 @@ import Pure.View hiding (name,verticalAlign)
 
 import Semantic.Utils
 
-import Semantic.Extensions.As
-import Semantic.Extensions.Attributes
-import Semantic.Extensions.Bordered
-import Semantic.Extensions.Classes
-import Semantic.Extensions.Name
+import Semantic.Properties.As
+import Semantic.Properties.Attributes
+import Semantic.Properties.Bordered
+import Semantic.Properties.Classes
+import Semantic.Properties.Name
 
 data ListIcon ms = ListIcon_ 
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -66,24 +66,24 @@ instance Typeable ms => Pure ListIcon ms where
                 )
                 []
 
-instance HasAs (ListIcon ms) where
-    type Constructor (ListIcon ms) = [Feature ms] -> [View ms] -> View ms
+instance HasAsProp (ListIcon ms) where
+    type AsProp (ListIcon ms) = [Feature ms] -> [View ms] -> View ms
     getAs = as
     setAs f li = li { as = f }
 
-instance HasAttributes (ListIcon ms) where
+instance HasAttributesProp (ListIcon ms) where
     type Attribute (ListIcon ms) = Feature ms
     getAttributes = attributes 
     setAttributes cs li = li { attributes = cs }
 
-instance HasBordered (ListIcon ms) where
+instance HasBorderedProp (ListIcon ms) where
     getBordered = bordered
     setBordered b li = li { bordered = b }
 
-instance HasName (ListIcon ms) where
+instance HasNameProp (ListIcon ms) where
     getName = name
     setName n li = li { name = n }
 
-instance HasClasses (ListIcon ms) where
+instance HasClassesProp (ListIcon ms) where
     getClasses = classes
     setClasses cs li = li { classes = cs }

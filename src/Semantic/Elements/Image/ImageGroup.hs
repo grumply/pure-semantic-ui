@@ -5,10 +5,10 @@ import Pure.View as View
 
 import Semantic.Utils
 
-import Semantic.Extensions.As
-import Semantic.Extensions.Attributes
-import Semantic.Extensions.Children
-import Semantic.Extensions.Classes
+import Semantic.Properties.As
+import Semantic.Properties.Attributes
+import Semantic.Properties.Children
+import Semantic.Properties.Classes
 
 data ImageGroup ms = ImageGroup_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -35,21 +35,21 @@ instance Typeable ms => Pure ImageGroup ms where
         in 
             as (ClassList cs : attributes) children
 
-instance HasAs (ImageGroup ms) where
-    type Constructor (ImageGroup ms) = [Feature ms] -> [View ms] -> View ms
+instance HasAsProp (ImageGroup ms) where
+    type AsProp (ImageGroup ms) = [Feature ms] -> [View ms] -> View ms
     getAs = as
     setAs f ig = ig { as = f }
 
-instance HasAttributes (ImageGroup ms) where
+instance HasAttributesProp (ImageGroup ms) where
     type Attribute (ImageGroup ms) = Feature ms
     getAttributes = attributes 
     setAttributes cs ig = ig { attributes = cs }
 
-instance HasChildren (ImageGroup ms) where
+instance HasChildrenProp (ImageGroup ms) where
     type Child (ImageGroup ms) = View ms
     getChildren = children
     setChildren cs ig = ig { children = cs }
 
-instance HasClasses (ImageGroup ms) where
+instance HasClassesProp (ImageGroup ms) where
     getClasses = classes
     setClasses cs ig = ig { classes = cs }

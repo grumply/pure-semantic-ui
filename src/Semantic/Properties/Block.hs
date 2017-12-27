@@ -1,11 +1,11 @@
-module Semantic.Extensions.Block where
+module Semantic.Properties.Block where
 
-import Semantic.Extensions.Utils
+import Semantic.Properties.Utils
 
-class HasBlock a where
+class HasBlockProp a where
     getBlock :: a -> Bool
     setBlock :: Bool -> a -> a
 
-pattern Block :: HasBlock a => a -> a
+pattern Block :: HasBlockProp a => a -> a
 pattern Block a <- (getBlock &&& id -> (True,a)) where
     Block a = setBlock True a

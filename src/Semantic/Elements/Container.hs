@@ -5,10 +5,10 @@ import Pure.View
 
 import Semantic.Utils
 
-import Semantic.Extensions.As
-import Semantic.Extensions.Attributes
-import Semantic.Extensions.Children
-import Semantic.Extensions.Classes
+import Semantic.Properties.As
+import Semantic.Properties.Attributes
+import Semantic.Properties.Children
+import Semantic.Properties.Classes
 
 data Container ms = Container_
   { as :: [Feature ms] -> [View ms] -> View ms
@@ -53,21 +53,21 @@ instance Typeable ms => Pure Container ms where
               )
         in as (ClassList cs : attributes) children
 
-instance HasAs (Container ms) where
-    type Constructor (Container ms) = [Feature ms] -> [View ms] -> View ms
+instance HasAsProp (Container ms) where
+    type AsProp (Container ms) = [Feature ms] -> [View ms] -> View ms
     getAs = as
     setAs f c = c { as = f }
 
-instance HasAttributes (Container ms) where
+instance HasAttributesProp (Container ms) where
     type Attribute (Container ms) = Feature ms
     getAttributes = attributes 
     setAttributes cs c = c { attributes = cs }
 
-instance HasChildren (Container ms) where
+instance HasChildrenProp (Container ms) where
     type Child (Container ms) = View ms
     getChildren = children
     setChildren cs c = c { children = cs }
 
-instance HasClasses (Container ms) where
+instance HasClassesProp (Container ms) where
     getClasses = classes
     setClasses cs c = c { classes = cs }

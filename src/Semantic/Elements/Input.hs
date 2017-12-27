@@ -11,10 +11,10 @@ import Semantic.Elements.Button
 import Semantic.Elements.Icon
 import Semantic.Elements.Label
 
-import Semantic.Extensions.As
-import Semantic.Extensions.Attributes
-import Semantic.Extensions.Children
-import Semantic.Extensions.Classes
+import Semantic.Properties.As
+import Semantic.Properties.Attributes
+import Semantic.Properties.Children
+import Semantic.Properties.Classes
 
 data Input ms = Input_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -114,21 +114,21 @@ instance Typeable ms => Pure Input ms where
                 )
                 ( map addInputProps children )
 
-instance HasAs (Input ms) where
-    type Constructor (Input ms) = [Feature ms] -> [View ms] -> View ms
+instance HasAsProp (Input ms) where
+    type AsProp (Input ms) = [Feature ms] -> [View ms] -> View ms
     getAs = as
     setAs f i = i { as = f }
 
-instance HasAttributes (Input ms) where
+instance HasAttributesProp (Input ms) where
     type Attribute (Input ms) = Feature ms
     getAttributes = attributes 
     setAttributes cs i = i { attributes = cs }
 
-instance HasChildren (Input ms) where
+instance HasChildrenProp (Input ms) where
     type Child (Input ms) = View ms
     getChildren = children
     setChildren cs i = i { children = cs }
 
-instance HasClasses (Input ms) where
+instance HasClassesProp (Input ms) where
     getClasses = classes
     setClasses cs i = i { classes = cs }

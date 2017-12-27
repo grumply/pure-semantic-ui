@@ -1,11 +1,11 @@
-module Semantic.Extensions.Avatar where
+module Semantic.Properties.Avatar where
 
-import Semantic.Extensions.Utils
+import Semantic.Properties.Utils
 
-class HasAvatar a where
+class HasAvatarProp a where
     getAvatar :: a -> Bool
     setAvatar :: Bool -> a -> a
 
-pattern Avatar :: HasAvatar a => a -> a
+pattern Avatar :: HasAvatarProp a => a -> a
 pattern Avatar c <- (getAvatar &&& id -> (True,c)) where
     Avatar c = setAvatar True c

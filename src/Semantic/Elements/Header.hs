@@ -12,12 +12,12 @@ import Semantic.Elements.Image
 import Semantic.Elements.Header.HeaderContent as Export
 import Semantic.Elements.Header.HeaderSubheader as Export
 
-import Semantic.Extensions.As
-import Semantic.Extensions.Attached
-import Semantic.Extensions.Attributes
-import Semantic.Extensions.Block
-import Semantic.Extensions.Children
-import Semantic.Extensions.Classes
+import Semantic.Properties.As
+import Semantic.Properties.Attached
+import Semantic.Properties.Attributes
+import Semantic.Properties.Block
+import Semantic.Properties.Children
+import Semantic.Properties.Classes
 
 data Header ms = Header_
     { as :: [Feature ms] -> [View ms] -> View ms 
@@ -71,30 +71,30 @@ instance Typeable ms => Pure Header ms where
                )
                children
 
-instance HasAs (Header ms) where
-    type Constructor (Header ms) = [Feature ms] -> [View ms] -> View ms
+instance HasAsProp (Header ms) where
+    type AsProp (Header ms) = [Feature ms] -> [View ms] -> View ms
     getAs = as
     setAs f h = h { as = f }
 
-instance HasAttached (Header ms) where
-    type Attach (Header ms) = Maybe Txt
+instance HasAttachedProp (Header ms) where
+    type AttachedProp (Header ms) = Maybe Txt
     getAttached = attached
     setAttached attach h = h { attached = attach }
 
-instance HasAttributes (Header ms) where
+instance HasAttributesProp (Header ms) where
     type Attribute (Header ms) = Feature ms
     getAttributes = attributes 
     setAttributes cs h = h { attributes = cs }
 
-instance HasBlock (Header ms) where
+instance HasBlockProp (Header ms) where
     getBlock = block
     setBlock b h = h { block = b }
 
-instance HasChildren (Header ms) where
+instance HasChildrenProp (Header ms) where
     type Child (Header ms) = View ms
     getChildren = children
     setChildren cs h = h { children = cs }
 
-instance HasClasses (Header ms) where
+instance HasClassesProp (Header ms) where
     getClasses = classes
     setClasses cs h = h { classes = cs }
