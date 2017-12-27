@@ -75,7 +75,6 @@ executable semantic-ui-pure
     Semantic.Elements.Loader
     Semantic.Elements.Rail
     Semantic.Elements.Reveal
-    Semantic.Extensions
     Semantic.Properties
     Semantic.Properties.Animated
     Semantic.Properties.Active
@@ -225,7 +224,6 @@ library
     Semantic.Elements.Loader
     Semantic.Elements.Rail
     Semantic.Elements.Reveal
-    Semantic.Extensions
     Semantic.Properties
     Semantic.Properties.Animated
     Semantic.Properties.Active
