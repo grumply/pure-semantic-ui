@@ -12,6 +12,7 @@ import Semantic.Properties.Children
 import Semantic.Properties.Classes
 import Semantic.Properties.Close
 import Semantic.Properties.Dividing
+import Semantic.Properties.Internal
 
 data Rail ms = Rail_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -84,3 +85,7 @@ instance HasCloseProp (Rail ms) where
 instance HasDividingProp (Rail ms) where
     getDividing = dividing
     setDividing d r = r { dividing = d }
+
+instance HasInternalProp (Rail ms) where
+    getInternal = internal
+    setInternal i r = r { internal = i }

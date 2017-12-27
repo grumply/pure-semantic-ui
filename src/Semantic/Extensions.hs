@@ -22,21 +22,6 @@ import Debug.Trace
 -- pattern ToLeft = "left"
 -- pattern ToRight = "right"
 
-pattern Internal c <- (getInternal -> (True,c)) where
-    Internal c = setInternal c
-
-{-# INLINE getInternal #-}
-getInternal c =
-    case c of
-        View Rail_ {..} -> (internal,c)
-        _               -> (False,c)
-
-{-# INLINE setInternal #-}
-setInternal c =
-    case c of
-        View Rail_ {..} -> View Rail_ { internal = True, .. }
-        _               -> c
-
 pattern Inverted c <- (getInverted -> (True,c)) where
     Inverted c = setInverted c
 
