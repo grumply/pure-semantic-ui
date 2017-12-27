@@ -14,6 +14,7 @@ import Semantic.Properties.Color
 import Semantic.Properties.Corner
 import Semantic.Properties.Disabled
 import Semantic.Properties.Fitted
+import Semantic.Properties.Flipped
 import Semantic.Properties.Name
 
 data ListIcon ms = ListIcon_ 
@@ -113,3 +114,7 @@ instance HasDisabledProp (ListIcon ms) where
 instance HasFittedProp (ListIcon ms) where
     getFitted = fitted
     setFitted f li = li { fitted = f }
+
+instance HasFlippedProp (ListIcon ms) where
+    getFlipped = flipped
+    setFlipped f li = li { flipped = f }

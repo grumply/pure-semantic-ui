@@ -19,23 +19,6 @@ import Semantic.Utils
 
 import Debug.Trace
 
-pattern Flipped f c <- (getFlipped -> Just (f,c)) where
-    Flipped f c = setFlipped f c
-
-{-# INLINE getFlipped #-}
-getFlipped c =
-    case c of
-        View Icon_     {..} -> flipped # Just (flipped,c)
-        View ListIcon_ {..} -> flipped # Just (flipped,c)
-        _               -> Nothing
-
-{-# INLINE setFlipped #-}
-setFlipped f c =
-    case c of
-        View Icon_     {..} -> View Icon_     { flipped = f, .. }
-        View ListIcon_ {..} -> View ListIcon_ { flipped = f, .. }
-        _               -> c
-
 pattern Floated f c <- (getFloated -> Just (f,c)) where
     Floated f c = setFloated f c
 
