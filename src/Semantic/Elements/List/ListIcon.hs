@@ -5,6 +5,7 @@ import Pure.View hiding (name,verticalAlign)
 
 import Semantic.Utils
 
+import Semantic.Extensions.As
 import Semantic.Extensions.Attributes
 import Semantic.Extensions.Classes
 import Semantic.Extensions.Name
@@ -63,6 +64,11 @@ instance Typeable ms => Pure ListIcon ms where
                 : attributes
                 )
                 []
+
+instance HasAs (ListIcon ms) where
+    type Constructor (ListIcon ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs f li = li { as = f }
 
 instance HasAttributes (ListIcon ms) where
     type Attribute (ListIcon ms) = Feature ms

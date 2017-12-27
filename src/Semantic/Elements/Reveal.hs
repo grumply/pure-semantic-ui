@@ -5,6 +5,7 @@ import Pure.View
 
 import Semantic.Utils
 
+import Semantic.Extensions.As
 import Semantic.Extensions.Attributes
 import Semantic.Extensions.Children
 import Semantic.Extensions.Classes
@@ -44,6 +45,11 @@ instance Typeable ms => Pure Reveal ms where
                 : attributes
                 )
                 children
+
+instance HasAs (Reveal ms) where
+    type Constructor (Reveal ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs f r = r { as = f }
 
 instance HasAttributes (Reveal ms) where
     type Attribute (Reveal ms) = Feature ms

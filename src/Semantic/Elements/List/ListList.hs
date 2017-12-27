@@ -5,6 +5,7 @@ import Pure.View
 
 import Semantic.Utils
 
+import Semantic.Extensions.As
 import Semantic.Extensions.Attributes
 import Semantic.Extensions.Children
 import Semantic.Extensions.Classes
@@ -37,6 +38,11 @@ instance Typeable ms => Pure ListList ms where
                 : attributes
                 )
                 children
+
+instance HasAs (ListList ms) where
+    type Constructor (ListList ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs f ll = ll { as = f }
 
 instance HasAttributes (ListList ms) where
     type Attribute (ListList ms) = Feature ms

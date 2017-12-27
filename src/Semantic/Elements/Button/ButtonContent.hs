@@ -6,6 +6,7 @@ import qualified Pure.View as HTML
 
 import Semantic.Utils
 
+import Semantic.Extensions.As
 import Semantic.Extensions.Attributes
 import Semantic.Extensions.Children
 import Semantic.Extensions.Classes
@@ -41,6 +42,11 @@ instance Typeable ms => Pure ButtonContent ms where
                 : attributes
                 ) 
                 children
+
+instance HasAs (ButtonContent ms) where
+    type Constructor (ButtonContent ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs f bc = bc { as = f }
 
 instance HasAttributes (ButtonContent ms) where
     type Attribute (ButtonContent ms) = Feature ms

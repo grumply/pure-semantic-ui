@@ -7,6 +7,7 @@ import Semantic.Utils
 
 import Semantic.Elements.Image.ImageGroup as Export
 
+import Semantic.Extensions.As
 import Semantic.Extensions.Attributes
 import Semantic.Extensions.Children
 import Semantic.Extensions.Classes
@@ -66,6 +67,11 @@ instance Typeable ms => Pure Image ms where
                 : attributes
                 )
                 children
+
+instance HasAs (Image ms) where
+    type Constructor (Image ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs f i = i { as = f }
 
 instance HasAttributes (Image ms) where
     type Attribute (Image ms) = Feature ms

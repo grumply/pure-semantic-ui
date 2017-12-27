@@ -5,6 +5,7 @@ import Pure.View hiding (verticalAlign)
 
 import Semantic.Utils
 
+import Semantic.Extensions.As
 import Semantic.Extensions.Attributes
 import Semantic.Extensions.Children
 import Semantic.Extensions.Classes
@@ -50,6 +51,11 @@ instance Typeable ms => Pure Loader ms where
                 )
                 children
 
+instance HasAs (Loader ms) where
+    type Constructor (Loader ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs f l = l { as = f }
+
 instance HasAttributes (Loader ms) where
     type Attribute (Loader ms) = Feature ms
     getAttributes = attributes 
@@ -59,8 +65,6 @@ instance HasChildren (Loader ms) where
     type Child (Loader ms) = View ms
     getChildren = children
     setChildren cs l = l { children = cs }
-
-
 
 instance HasClasses (Loader ms) where
     getClasses = classes

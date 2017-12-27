@@ -5,6 +5,7 @@ import Pure.View as View
 
 import Semantic.Utils
 
+import Semantic.Extensions.As
 import Semantic.Extensions.Attributes
 import Semantic.Extensions.Children
 import Semantic.Extensions.Classes
@@ -44,6 +45,11 @@ instance Typeable ms => Pure LabelGroup ms where
                 : attributes
                 )
                 children
+
+instance HasAs (LabelGroup ms) where
+    type Constructor (LabelGroup ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs f lg = lg { as = f }
 
 instance HasAttributes (LabelGroup ms) where
     type Attribute (LabelGroup ms) = Feature ms

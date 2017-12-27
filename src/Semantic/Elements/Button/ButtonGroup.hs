@@ -8,6 +8,7 @@ import Semantic.Utils
 
 import Semantic.Elements.Icon
 
+import Semantic.Extensions.As
 import Semantic.Extensions.Attributes
 import Semantic.Extensions.Children
 import Semantic.Extensions.Classes
@@ -75,6 +76,11 @@ instance Typeable ms => Pure ButtonGroup ms where
                 : attributes
                 )
                 children
+
+instance HasAs (ButtonGroup ms) where
+    type Constructor (ButtonGroup ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs f bg = bg { as = f }
 
 instance HasAttributes (ButtonGroup ms) where
     type Attribute (ButtonGroup ms) = Feature ms

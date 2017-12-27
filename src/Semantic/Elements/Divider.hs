@@ -5,6 +5,7 @@ import Pure.View as View
 
 import Semantic.Utils
 
+import Semantic.Extensions.As
 import Semantic.Extensions.Attributes
 import Semantic.Extensions.Children
 import Semantic.Extensions.Classes
@@ -47,6 +48,11 @@ instance Typeable ms => Pure Divider ms where
                 : attributes
                 )
                 children
+
+instance HasAs (Divider ms) where
+    type Constructor (Divider ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs f d = d { as = f }
 
 instance HasAttributes (Divider ms) where
     type Attribute (Divider ms) = Feature ms

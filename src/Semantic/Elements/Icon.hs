@@ -7,6 +7,7 @@ import Semantic.Utils
 
 import Semantic.Elements.Icon.IconGroup as Export
 
+import Semantic.Extensions.As
 import Semantic.Extensions.Attributes
 import Semantic.Extensions.Classes
 import Semantic.Extensions.Name
@@ -63,6 +64,11 @@ instance Typeable ms => Pure Icon ms where
                 : attributes
                 )
                 []
+
+instance HasAs (Icon ms) where
+    type Constructor (Icon ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs f i = i { as = f }
 
 instance HasAttributes (Icon ms) where
     type Attribute (Icon ms) = Feature ms

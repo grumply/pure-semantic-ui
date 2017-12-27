@@ -7,6 +7,7 @@ import Semantic.Utils as Export
 
 import Pure.View as Export hiding (name,Label,Button,(!),(%),Name,Size,Big,Small,Color,Disabled,Link,Empty,Hidden,one,two,Width,Scale,Widths,Text,Section,Input,Type,Error,Header,Sub,Value,focused)
 
+import Semantic.Extensions.As as Export
 import Semantic.Extensions.Attributes as Export
 import Semantic.Extensions.Children as Export
 import Semantic.Extensions.Classes as Export

@@ -5,6 +5,7 @@ import Pure.View as View
 
 import Semantic.Utils
 
+import Semantic.Extensions.As
 import Semantic.Extensions.Attributes
 import Semantic.Extensions.Children
 import Semantic.Extensions.Classes
@@ -32,6 +33,11 @@ instance Typeable ms => Pure IconGroup ms where
                 : classes
                 )
         in as (ClassList cs : attributes) children
+
+instance HasAs (IconGroup ms) where
+    type Constructor (IconGroup ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs f ig = ig { as = f }
 
 instance HasAttributes (IconGroup ms) where
     type Attribute (IconGroup ms) = Feature ms

@@ -11,6 +11,7 @@ import Semantic.Elements.Button
 import Semantic.Elements.Icon
 import Semantic.Elements.Label
 
+import Semantic.Extensions.As
 import Semantic.Extensions.Attributes
 import Semantic.Extensions.Children
 import Semantic.Extensions.Classes
@@ -112,6 +113,11 @@ instance Typeable ms => Pure Input ms where
                 : otherAttrs
                 )
                 ( map addInputProps children )
+
+instance HasAs (Input ms) where
+    type Constructor (Input ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs f i = i { as = f }
 
 instance HasAttributes (Input ms) where
     type Attribute (Input ms) = Feature ms
