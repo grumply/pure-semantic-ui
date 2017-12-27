@@ -22,21 +22,6 @@ import Debug.Trace
 -- pattern ToLeft = "left"
 -- pattern ToRight = "right"
 
-pattern LabelPosition p c <- (getLabelPosition -> Just (p,c)) where
-    LabelPosition p c = setLabelPosition p c
-
-{-# INLINE getLabelPosition #-}
-getLabelPosition c =
-    case c of
-        View Button_ {..} -> labelPosition # Just (labelPosition,c)
-        _                 -> Nothing
-
-{-# INLINE setLabelPosition #-}
-setLabelPosition p c =
-    case c of
-        View Button_ {..} -> View Button_ { labelPosition = p, .. }
-        _                 -> c
-
 pattern Link c <- (getLink -> (True,c)) where
     Link c = setLink c
 
