@@ -14,6 +14,7 @@ import Semantic.Elements.Header.HeaderSubheader as Export
 
 import Semantic.Extensions.Attributes
 import Semantic.Extensions.Children
+import Semantic.Extensions.Classes
 
 data Header ms = Header_
     { as :: [Feature ms] -> [View ms] -> View ms 
@@ -76,3 +77,7 @@ instance HasChildren (Header ms) where
     type Child (Header ms) = View ms
     getChildren = children
     setChildren cs h = h { children = cs }
+
+instance HasClasses (Header ms) where
+    getClasses = classes
+    setClasses cs h = h { classes = cs }

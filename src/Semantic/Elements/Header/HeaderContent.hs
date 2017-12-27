@@ -7,6 +7,7 @@ import Semantic.Utils
 
 import Semantic.Extensions.Attributes
 import Semantic.Extensions.Children
+import Semantic.Extensions.Classes
 
 data HeaderContent ms = HeaderContent_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -38,3 +39,7 @@ instance HasChildren (HeaderContent ms) where
     type Child (HeaderContent ms) = View ms
     getChildren = children
     setChildren cs hc = hc { children = cs }
+
+instance HasClasses (HeaderContent ms) where
+    getClasses = classes
+    setClasses cs hc = hc { classes = cs }

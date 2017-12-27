@@ -9,4 +9,5 @@ import Pure.View as Export hiding (name,Label,Button,(!),(%),Name,Size,Big,Small
 
 import Semantic.Extensions.Attributes as Export
 import Semantic.Extensions.Children as Export
+import Semantic.Extensions.Classes as Export
 import Semantic.Extensions.Name as Export

@@ -15,6 +15,7 @@ import Semantic.Elements.List.ListList as Export
 
 import Semantic.Extensions.Attributes
 import Semantic.Extensions.Children
+import Semantic.Extensions.Classes
 
 data List ms = List_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -83,4 +84,7 @@ instance HasChildren (List ms) where
     type Child (List ms) = View ms
     getChildren = children
     setChildren cs l = l { children = cs }
-        
+
+instance HasClasses (List ms) where
+    getClasses = classes
+    setClasses cs l = l { classes = cs }

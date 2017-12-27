@@ -9,6 +9,7 @@ import Semantic.Elements.Image.ImageGroup as Export
 
 import Semantic.Extensions.Attributes
 import Semantic.Extensions.Children
+import Semantic.Extensions.Classes
 
 data Image ms = Image_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -75,3 +76,7 @@ instance HasChildren (Image ms) where
     type Child (Image ms) = View ms
     getChildren = children
     setChildren cs i = i { children = cs }
+
+instance HasClasses (Image ms) where
+    getClasses = classes
+    setClasses cs i = i { classes = cs }

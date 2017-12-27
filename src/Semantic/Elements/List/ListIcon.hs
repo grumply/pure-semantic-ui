@@ -6,6 +6,7 @@ import Pure.View hiding (name,verticalAlign)
 import Semantic.Utils
 
 import Semantic.Extensions.Attributes
+import Semantic.Extensions.Classes
 import Semantic.Extensions.Name
 
 data ListIcon ms = ListIcon_ 
@@ -71,3 +72,7 @@ instance HasAttributes (ListIcon ms) where
 instance HasName (ListIcon ms) where
     getName = name
     setName n li = li { name = n }
+
+instance HasClasses (ListIcon ms) where
+    getClasses = classes
+    setClasses cs li = li { classes = cs }

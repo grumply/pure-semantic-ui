@@ -7,6 +7,7 @@ import Semantic.Utils
 
 import Semantic.Extensions.Attributes
 import Semantic.Extensions.Children
+import Semantic.Extensions.Classes
 
 data Rail ms = Rail_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -57,3 +58,7 @@ instance HasChildren (Rail ms) where
     type Child (Rail ms) = View ms
     getChildren = children
     setChildren cs r = r { children = cs }
+
+instance HasClasses (Rail ms) where
+    getClasses = classes
+    setClasses cs r = r { classes = cs }

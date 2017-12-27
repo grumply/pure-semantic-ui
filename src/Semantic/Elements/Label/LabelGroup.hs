@@ -7,6 +7,7 @@ import Semantic.Utils
 
 import Semantic.Extensions.Attributes
 import Semantic.Extensions.Children
+import Semantic.Extensions.Classes
 
 data LabelGroup ms = LabelGroup_ 
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -53,3 +54,7 @@ instance HasChildren (LabelGroup ms) where
     type Child (LabelGroup ms) = View ms
     getChildren = children
     setChildren cs lg = lg { children = cs } 
+
+instance HasClasses (LabelGroup ms) where
+    getClasses = classes
+    setClasses cs lg = lg { classes = cs }

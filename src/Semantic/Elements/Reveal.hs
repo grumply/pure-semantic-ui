@@ -7,6 +7,7 @@ import Semantic.Utils
 
 import Semantic.Extensions.Attributes
 import Semantic.Extensions.Children
+import Semantic.Extensions.Classes
 
 data Reveal ms = Reveal_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -53,3 +54,7 @@ instance HasChildren (Reveal ms) where
     type Child (Reveal ms) = View ms
     getChildren = children
     setChildren cs r = r { children = cs }
+
+instance HasClasses (Reveal ms) where
+    getClasses = classes
+    setClasses cs r = r { classes = cs }

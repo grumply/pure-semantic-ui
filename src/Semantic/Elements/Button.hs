@@ -15,6 +15,7 @@ import Semantic.Elements.Button.ButtonOr as Export
 
 import Semantic.Extensions.Attributes
 import Semantic.Extensions.Children
+import Semantic.Extensions.Classes
 
 data Button ms = Button_
   { as :: [Feature ms] -> [View ms] -> View ms
@@ -148,3 +149,7 @@ instance HasChildren (Button ms) where
     type Child (Button ms) = View ms
     getChildren = children
     setChildren cs b = b { children = cs }
+
+instance HasClasses (Button ms) where
+    getClasses = classes
+    setClasses cs b = b { classes = cs }

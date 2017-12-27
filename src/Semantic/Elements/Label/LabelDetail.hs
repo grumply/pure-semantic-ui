@@ -7,6 +7,7 @@ import Semantic.Utils
 
 import Semantic.Extensions.Attributes
 import Semantic.Extensions.Children
+import Semantic.Extensions.Classes
 
 data LabelDetail ms = LabelDetail_ 
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -38,3 +39,7 @@ instance HasChildren (LabelDetail ms) where
     type Child (LabelDetail ms) = View ms
     getChildren = children
     setChildren cs ld = ld { children = cs }
+
+instance HasClasses (LabelDetail ms) where
+    getClasses = classes
+    setClasses cs ld = ld { classes = cs }

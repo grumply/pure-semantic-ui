@@ -8,6 +8,7 @@ import Semantic.Utils
 import Semantic.Elements.Icon.IconGroup as Export
 
 import Semantic.Extensions.Attributes
+import Semantic.Extensions.Classes
 import Semantic.Extensions.Name
 
 data Icon ms = Icon_
@@ -71,3 +72,7 @@ instance HasAttributes (Icon ms) where
 instance HasName (Icon ms) where
     getName = name
     setName n i = i { name = n }
+
+instance HasClasses (Icon ms) where
+    getClasses = classes
+    setClasses cs i = i { classes = cs }

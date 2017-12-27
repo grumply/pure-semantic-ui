@@ -7,6 +7,7 @@ import Semantic.Utils
 
 import Semantic.Extensions.Attributes
 import Semantic.Extensions.Children
+import Semantic.Extensions.Classes
 
 data Divider ms = Divider_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -56,3 +57,7 @@ instance HasChildren (Divider ms) where
     type Child (Divider ms) = View ms
     getChildren = children
     setChildren cs d = d { children = cs }
+
+instance HasClasses (Divider ms) where
+    getClasses = classes
+    setClasses cs d = d { classes = cs }

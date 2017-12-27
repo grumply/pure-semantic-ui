@@ -7,6 +7,7 @@ import Semantic.Utils
 
 import Semantic.Extensions.Attributes
 import Semantic.Extensions.Children
+import Semantic.Extensions.Classes
 
 data IconGroup ms = IconGroup_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -41,3 +42,7 @@ instance HasChildren (IconGroup ms) where
     type Child (IconGroup ms) = View ms
     getChildren = children
     setChildren cs ig = ig { children = cs }
+
+instance HasClasses (IconGroup ms) where
+    getClasses = classes
+    setClasses cs ig = ig { classes = cs }

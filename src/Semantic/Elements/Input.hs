@@ -13,6 +13,7 @@ import Semantic.Elements.Label
 
 import Semantic.Extensions.Attributes
 import Semantic.Extensions.Children
+import Semantic.Extensions.Classes
 
 data Input ms = Input_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -121,3 +122,7 @@ instance HasChildren (Input ms) where
     type Child (Input ms) = View ms
     getChildren = children
     setChildren cs i = i { children = cs }
+
+instance HasClasses (Input ms) where
+    getClasses = classes
+    setClasses cs i = i { classes = cs }

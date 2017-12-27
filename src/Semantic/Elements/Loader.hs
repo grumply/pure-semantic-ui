@@ -7,6 +7,7 @@ import Semantic.Utils
 
 import Semantic.Extensions.Attributes
 import Semantic.Extensions.Children
+import Semantic.Extensions.Classes
 
 data Loader ms = Loader_ 
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -60,3 +61,7 @@ instance HasChildren (Loader ms) where
     setChildren cs l = l { children = cs }
 
 
+
+instance HasClasses (Loader ms) where
+    getClasses = classes
+    setClasses cs l = l { classes = cs }

@@ -7,6 +7,7 @@ import Semantic.Utils
 
 import Semantic.Extensions.Attributes
 import Semantic.Extensions.Children
+import Semantic.Extensions.Classes
 
 data Container ms = Container_
   { as :: [Feature ms] -> [View ms] -> View ms
@@ -45,3 +46,7 @@ instance HasChildren (Container ms) where
     type Child (Container ms) = View ms
     getChildren = children
     setChildren cs c = c { children = cs }
+
+instance HasClasses (Container ms) where
+    getClasses = classes
+    setClasses cs c = c { classes = cs }

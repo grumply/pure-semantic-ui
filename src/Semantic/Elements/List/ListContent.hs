@@ -7,6 +7,7 @@ import Semantic.Utils
 
 import Semantic.Extensions.Attributes
 import Semantic.Extensions.Children
+import Semantic.Extensions.Classes
 
 data ListContent ms = ListContent_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -48,3 +49,7 @@ instance HasChildren (ListContent ms) where
     type Child (ListContent ms) = View ms
     getChildren = children
     setChildren cs lc = lc { children = cs }
+
+instance HasClasses (ListContent ms) where
+    getClasses = classes
+    setClasses cs lc = lc { classes = cs }
