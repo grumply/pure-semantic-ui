@@ -19,23 +19,6 @@ import Semantic.Utils
 
 import Debug.Trace
 
-pattern Compact c <- (getCompact -> (True,c)) where
-    Compact c = setCompact c
-
-{-# INLINE getCompact #-}
-getCompact c =
-    case c of
-        View Button_      {..} -> (compact,c)
-        View ButtonGroup_ {..} -> (compact,c)
-        _                      -> (False,c)
-
-{-# INLINE setCompact #-}
-setCompact c =
-    case c of
-        View Button_      {..} -> View Button_      { compact = True, .. }
-        View ButtonGroup_ {..} -> View ButtonGroup_ { compact = True, .. }
-        _                      -> c
-
 pattern Disabled c <- (getDisabled -> (True,c)) where
     Disabled c = setDisabled c
 

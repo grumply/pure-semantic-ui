@@ -23,6 +23,7 @@ import Semantic.Properties.Children
 import Semantic.Properties.Circular
 import Semantic.Properties.Classes
 import Semantic.Properties.Color
+import Semantic.Properties.Compact
 import Semantic.Properties.OnClick
 
 data Button ms = Button_
@@ -192,6 +193,10 @@ instance HasClassesProp (Button ms) where
 instance HasColorProp (Button ms) where
     getColor = color
     setColor c b = b { color = c }
+
+instance HasCompactProp (Button ms) where
+    getCompact = compact
+    setCompact c b = b { compact = c }
 
 instance HasOnClickProp (Button ms) where
     type OnClickProp (Button ms) = Ef ms IO ()
