@@ -15,8 +15,6 @@ import Semantic.Elements.List
 import Semantic.Elements.Loader
 import Semantic.Elements.Rail
 
-import Semantic.Utils
-
 import Debug.Trace
 
 -- pattern Visibility v c <- (getVisibility -> Just (v,c)) where
@@ -37,21 +35,6 @@ pattern Widescreen = "widescreen"
 -- setVisibility c =
 --     case c of
 --         _ -> c
-
-pattern Widths w c <- (getWidths -> Just (w,c)) where
-    Widths w c = setWidths w c
-
-{-# INLINE getWidths #-}
-getWidths c =
-    case c of
-        View ButtonGroup_ {..} -> Just (widths,c)
-        _                      -> Nothing
-
-{-# INLINE setWidths #-}
-setWidths w c =
-    case c of
-        View ButtonGroup_ {..} -> View ButtonGroup_ { widths = w, .. }
-        _                      -> c
 
 pattern Wrapped c <- (getWrapped -> (True,c)) where
     Wrapped c = setWrapped c

@@ -150,6 +150,7 @@ executable semantic-ui-pure
     Semantic.Properties.Vertical
     Semantic.Properties.VerticalAlign
     Semantic.Properties.Visible
+    Semantic.Properties.Widths
     Semantic.Utils
 
   if impl(ghcjs)
@@ -298,6 +299,7 @@ library
     Semantic.Properties.Vertical
     Semantic.Properties.VerticalAlign
     Semantic.Properties.Visible
+    Semantic.Properties.Widths
     Semantic.Utils
 
   if impl(ghcjs)
