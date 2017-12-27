@@ -22,23 +22,6 @@ import Debug.Trace
 -- pattern ToLeft = "left"
 -- pattern ToRight = "right"
 
-pattern Positive c <- (getPositive -> (True,c)) where
-    Positive c = setPositive c
-
-{-# INLINE getPositive #-}
-getPositive c =
-    case c of
-        View Button_      {..} -> (positive,c)
-        View ButtonGroup_ {..} -> (positive,c)
-        _                      -> (False,c)
-
-{-# INLINE setPositive #-}
-setPositive c =
-    case c of
-        View Button_      {..} -> View Button_      { positive = True, .. }
-        View ButtonGroup_ {..} -> View ButtonGroup_ { positive = True, .. }
-        _                      -> c
-
 pattern Primary c <- (getPrimary -> (True,c)) where
     Primary c = setPrimary c
 

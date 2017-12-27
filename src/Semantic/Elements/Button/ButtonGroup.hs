@@ -21,6 +21,7 @@ import Semantic.Properties.Fluid
 import Semantic.Properties.Inverted
 import Semantic.Properties.Labeled
 import Semantic.Properties.Negative
+import Semantic.Properties.Positive
 
 data ButtonGroup ms = ButtonGroup_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -141,3 +142,7 @@ instance HasLabeledProp (ButtonGroup ms) where
 instance HasNegativeProp (ButtonGroup ms) where
     getNegative = negative
     setNegative n bg = bg { negative = n }
+
+instance HasPositiveProp (ButtonGroup ms) where
+    getPositive = positive
+    setPositive p bg = bg { positive = p }
