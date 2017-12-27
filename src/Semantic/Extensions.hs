@@ -19,21 +19,6 @@ import Semantic.Utils
 
 import Debug.Trace
 
-pattern Celled c <- (getCelled -> (True,c)) where
-    Celled c = setCelled c
-
-{-# INLINE getCelled #-}
-getCelled c =
-    case c of
-        View List_ {..} -> (celled,c)
-        _               -> (False,c)
-
-{-# INLINE setCelled #-}
-setCelled c =
-    case c of
-        View List_ {..} -> View List_ { celled = True, .. }
-        _               -> c
-
 pattern Centered c <- (getCentered -> (True,c)) where
     Centered c = setCentered c
 
