@@ -88,12 +88,13 @@ executable semantic-ui-pure
     Semantic.Properties.Bulleted
     Semantic.Properties.Celled
     Semantic.Properties.Centered
-    Semantic.Properties.OnChange
     Semantic.Properties.Children
     Semantic.Properties.Circular
     Semantic.Properties.Classes
     Semantic.Properties.Clearing
     Semantic.Properties.Name
+    Semantic.Properties.OnChange
+    Semantic.Properties.OnClick
     Semantic.Utils
 
   if impl(ghcjs)
@@ -180,12 +181,13 @@ library
     Semantic.Properties.Bulleted
     Semantic.Properties.Celled
     Semantic.Properties.Centered
-    Semantic.Properties.OnChange
     Semantic.Properties.Children
     Semantic.Properties.Circular
     Semantic.Properties.Classes
     Semantic.Properties.Clearing
     Semantic.Properties.Name
+    Semantic.Properties.OnChange
+    Semantic.Properties.OnClick
     Semantic.Utils
 
   if impl(ghcjs)

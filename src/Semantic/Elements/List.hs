@@ -20,6 +20,7 @@ import Semantic.Properties.Bulleted
 import Semantic.Properties.Celled
 import Semantic.Properties.Children
 import Semantic.Properties.Classes
+import Semantic.Properties.OnClick
 
 data List ms = List_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -34,7 +35,7 @@ data List ms = List_
     , horizontal :: Bool
     , inverted :: Bool
     , link :: Bool
-    , itemClick :: ListItem ms -> Ef ms IO ()
+    , onItemClick :: ListItem ms -> Ef ms IO ()
     , ordered :: Bool
     , relaxed :: Maybe Txt
     , selection :: Bool
@@ -52,7 +53,7 @@ instance VC ms => Pure List ms where
     render List_ {..} =
         let
             children' =
-                mapPures (\li@(ListItem_ {}) -> li { click = click li >> itemClick li }) children
+                mapPures (\li@(ListItem_ {}) -> li { onClick = onClick li >> onItemClick li }) children
 
             cs =
                 ( "ui"
@@ -110,3 +111,8 @@ instance HasChildrenProp (List ms) where
 instance HasClassesProp (List ms) where
     getClasses = classes
     setClasses cs l = l { classes = cs }
+
+instance HasOnClickProp (List ms) where
+    type OnClickProp (List ms) = ListItem ms -> Ef ms IO ()
+    getOnClick = onItemClick
+    setOnClick oc l = l { onItemClick = oc }

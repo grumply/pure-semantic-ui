@@ -1,7 +1,8 @@
 module Semantic.Elements.Label (module Semantic.Elements.Label, module Export) where
 
 import GHC.Generics as G
-import Pure.View as View hiding (active)
+import Pure.View as View hiding (active,onClick)
+import qualified Pure.View as HTML
 
 import Semantic.Utils
 
@@ -18,6 +19,7 @@ import Semantic.Properties.Basic
 import Semantic.Properties.Children
 import Semantic.Properties.Circular
 import Semantic.Properties.Classes
+import Semantic.Properties.OnClick
 
 data Label ms = Label_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -33,7 +35,7 @@ data Label ms = Label_
     , empty :: Bool
     , floating :: Bool
     , horizontal :: Bool
-    , click :: Ef ms IO ()
+    , onClick :: Ef ms IO ()
     , pointing :: Maybe Txt
     , ribbon :: Maybe Txt
     , size :: Txt
@@ -82,7 +84,7 @@ instance Typeable ms => Pure Label ms where
         in
             as 
                 ( ClassList cs
-                : click # onClick click
+                : onClick # HTML.onClick onClick
                 : attributes
                 )
                 children
@@ -122,3 +124,8 @@ instance HasCircularProp (Label ms) where
 instance HasClassesProp (Label ms) where
     getClasses = classes
     setClasses cs l = l { classes = cs }
+
+instance HasOnClickProp (Label ms) where
+    type OnClickProp (Label ms) = Ef ms IO ()
+    getOnClick = onClick
+    setOnClick oc l = l { onClick = oc }

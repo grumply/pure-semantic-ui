@@ -19,25 +19,6 @@ import Semantic.Utils
 
 import Debug.Trace
 
-pattern Click h c <- (getClick -> Just (h,c)) where
-    Click h c = setClick h c
-
-{-# INLINE getClick #-}
-getClick c =
-    case c of
-        View Button_   {..} -> click # Just (click,c)
-        View Label_    {..} -> click # Just (click,c)
-        View ListItem_ {..} -> click # Just (click,c)
-        _                   -> Nothing
-
-{-# INLINE setClick #-}
-setClick h c =
-    case c of
-        View Button_   {..} -> View Button_   { click = h, .. }
-        View Label_    {..} -> View Label_    { click = h, .. }
-        View ListItem_ {..} -> View ListItem_ { click = h, .. }
-        _                   -> c
-
 pattern Close t c <- (getClose -> (Just t,c)) where
     Close t c = setClose t c
 
@@ -472,21 +453,6 @@ setInverted c =
         View ListIcon_    {..} -> View ListIcon_    { inverted = True, .. }
         View Loader_      {..} -> View Loader_      { inverted = True, .. }
         _                      -> c
-
-pattern ItemClick f c <- (getItemClick -> Just (f,c)) where
-    ItemClick f c = setItemClick f c
-
-{-# INLINE getItemClick #-}
-getItemClick c =
-    case c of
-        View List_ {..} -> Just (itemClick,c)
-        _               -> Nothing
-
-{-# INLINE setItemClick #-}
-setItemClick f c =
-    case c of
-        View List_ {..} -> View List_ { itemClick = f, .. }
-        _               -> c
 
 pattern Labeled c <- (getLabeled -> (True,c)) where
     Labeled c = setLabeled c

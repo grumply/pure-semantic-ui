@@ -1,7 +1,7 @@
 module Semantic.Elements.Button (module Semantic.Elements.Button, module Export) where
 
 import GHC.Generics as G
-import Pure.View hiding (active,Button,Label)
+import Pure.View hiding (active,onClick,Button,Label)
 import qualified Pure.View as HTML
 
 import Semantic.Utils
@@ -22,6 +22,7 @@ import Semantic.Properties.Basic
 import Semantic.Properties.Children
 import Semantic.Properties.Circular
 import Semantic.Properties.Classes
+import Semantic.Properties.OnClick
 
 data Button ms = Button_
   { as :: [Feature ms] -> [View ms] -> View ms
@@ -42,7 +43,7 @@ data Button ms = Button_
   , labelPosition :: Txt
   , loading :: Bool
   , negative :: Bool
-  , click :: Ef ms IO ()
+  , onClick :: Ef ms IO ()
   , positive :: Bool
   , primary :: Bool
   , secondary :: Bool 
@@ -124,7 +125,7 @@ instance Typeable ms => Pure Button ms where
                 label 
                   ? as 
                       ( ClassList containerClasses
-                      : click # (On "click" def { preventDef = True } (\_ -> return $ Just click))
+                      : onClick # (On "click" def { preventDef = True } (\_ -> return $ Just onClick))
                       : attributes
                       )
                       [ (labelPosition == "left") # label
@@ -139,7 +140,7 @@ instance Typeable ms => Pure Button ms where
                   $ as
                       ( ClassList cs
                       : (disabled && isButton) # Disabled True
-                      : onClick click
+                      : onClick # (On "click" def (\_ -> return $ Just onClick))
                       : Role "button"
                       : index
                       : attributes
@@ -186,3 +187,8 @@ instance HasCircularProp (Button ms) where
 instance HasClassesProp (Button ms) where
     getClasses = classes
     setClasses cs b = b { classes = cs }
+
+instance HasOnClickProp (Button ms) where
+    type OnClickProp (Button ms) = Ef ms IO ()
+    getOnClick = onClick
+    setOnClick f b = b { onClick = f }

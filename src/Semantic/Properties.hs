@@ -12,12 +12,13 @@ import Semantic.Properties.Bordered as Export
 import Semantic.Properties.Bulleted as Export
 import Semantic.Properties.Celled as Export
 import Semantic.Properties.Centered as Export
-import Semantic.Properties.OnChange as Export
 import Semantic.Properties.Children as Export
 import Semantic.Properties.Circular as Export
 import Semantic.Properties.Classes as Export
 import Semantic.Properties.Clearing as Export
 import Semantic.Properties.Name as Export
+import Semantic.Properties.OnChange as Export
+import Semantic.Properties.OnClick as Export
 
 infixl 1 !%
 (!%) c cs as = Children (cs (Attributes as c))
