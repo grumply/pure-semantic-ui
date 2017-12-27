@@ -2,7 +2,7 @@
 module Semantic.Elements.Input where
 
 import GHC.Generics as G
-import Pure.View as View hiding (disabled,Disabled,Button,Label,Input)
+import Pure.View as View hiding (disabled,focused,Disabled,Button,Label,Input)
 import qualified Pure.View as HTML
 
 import Semantic.Utils
@@ -19,6 +19,7 @@ import Semantic.Properties.Disabled
 import Semantic.Properties.Error
 import Semantic.Properties.Fluid
 import Semantic.Properties.Focus
+import Semantic.Properties.Focused
 import Semantic.Properties.OnChange
 
 import Prelude hiding (error)
@@ -160,3 +161,7 @@ instance HasFluidProp (Input ms) where
 instance HasFocusProp (Input ms) where
     getFocus = focus
     setFocus f i = i { focus = f }
+
+instance HasFocusedProp (Input ms) where
+    getFocused = focused
+    setFocused f i = i { focused = f }
