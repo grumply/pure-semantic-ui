@@ -16,6 +16,7 @@ import Semantic.Elements.List.ListList as Export
 import Semantic.Properties.Animated
 import Semantic.Properties.As
 import Semantic.Properties.Attributes
+import Semantic.Properties.Bulleted
 import Semantic.Properties.Children
 import Semantic.Properties.Classes
 
@@ -91,6 +92,10 @@ instance HasAttributesProp (List ms) where
     type Attribute (List ms) = Feature ms
     getAttributes = attributes 
     setAttributes cs l = l { attributes = cs }
+
+instance HasBulletedProp (List ms) where
+    getBulleted = bulleted
+    setBulleted b l = l { bulleted = b }
 
 instance HasChildrenProp (List ms) where
     type Child (List ms) = View ms
