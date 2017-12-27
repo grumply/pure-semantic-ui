@@ -25,34 +25,6 @@ import Debug.Trace
 -- infixl 1 %!
 -- (%!) c as cs = Attributes (as (Children cs c))
 
-pattern Attached a c <- (getAttached -> (Just a,c)) where
-    Attached a c = setAttached a c
-
-pattern ToLeft = "left"
-pattern ToRight = "right"
-pattern ToTop = "top"
-pattern ToBottom = "bottom"
-
-{-# INLINE getAttached #-}
-getAttached c =
-    case c of
-        View Button_      {..} -> (attached,c)
-        View ButtonGroup_ {..} -> (attached,c)
-        View Header_      {..} -> (attached,c)
-        View Label_       {..} -> attached ? (Just attached,c) $ (Nothing,c)
-        View Rail_        {..} -> attached ? (Just "",c) $ (Nothing,c)
-        _                      -> (Nothing,c)
-
-{-# INLINE setAttached #-}
-setAttached a c =
-    case c of
-        View Button_      {..} -> View Button_      { attached = Just a, .. }
-        View ButtonGroup_ {..} -> View ButtonGroup_ { attached = Just a, .. }
-        View Header_      {..} -> View Header_      { attached = Just a, .. }
-        View Label_       {..} -> View Label_       { attached = a, .. }
-        View Rail_        {..} -> View Rail_        { attached = True, ..}
-        _                      -> c
-
 -- assuming default of false for all basic-capable components
 pattern Basic c <- (getBasic -> (True,c)) where
     Basic c = setBasic c
