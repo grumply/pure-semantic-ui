@@ -22,21 +22,6 @@ import Debug.Trace
 -- pattern ToLeft = "left"
 -- pattern ToRight = "right"
 
-pattern Indeterminate c <- (getIndeterminate -> (True,c)) where
-    Indeterminate c = setIndeterminate c
-
-{-# INLINE getIndeterminate #-}
-getIndeterminate c =
-    case c of
-        View Loader_ {..} -> (indeterminate,c)
-        _                 -> (False,c)
-
-{-# INLINE setIndeterminate #-}
-setIndeterminate c =
-    case c of
-        View Loader_ {..} -> View Loader_ { indeterminate = True, .. }
-        _                 -> c
-
 pattern Internal c <- (getInternal -> (True,c)) where
     Internal c = setInternal c
 

@@ -110,6 +110,7 @@ executable semantic-ui-pure
     Semantic.Properties.Focused
     Semantic.Properties.Hidden
     Semantic.Properties.Horizontal
+    Semantic.Properties.Indeterminate
     Semantic.Properties.Inline
     Semantic.Properties.Name
     Semantic.Properties.OnChange
@@ -222,6 +223,7 @@ library
     Semantic.Properties.Focused
     Semantic.Properties.Hidden
     Semantic.Properties.Horizontal
+    Semantic.Properties.Indeterminate
     Semantic.Properties.Inline
     Semantic.Properties.Name
     Semantic.Properties.OnChange

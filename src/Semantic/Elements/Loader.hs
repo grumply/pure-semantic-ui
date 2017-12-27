@@ -11,6 +11,7 @@ import Semantic.Properties.Attributes
 import Semantic.Properties.Children
 import Semantic.Properties.Classes
 import Semantic.Properties.Disabled
+import Semantic.Properties.Indeterminate
 import Semantic.Properties.Inline
 
 data Loader ms = Loader_ 
@@ -85,3 +86,7 @@ instance HasInlineProp (Loader ms) where
     type InlineProp (Loader ms) = Maybe Txt
     getInline = inline
     setInline i l = l { inline = i }
+
+instance HasIndeterminateProp (Loader ms) where
+    getIndeterminate = indeterminate
+    setIndeterminate i l = l { indeterminate = i }
