@@ -22,21 +22,6 @@ import Debug.Trace
 -- pattern ToLeft = "left"
 -- pattern ToRight = "right"
 
-pattern Relaxed r c <- (getRelaxed -> (Just r,c)) where
-    Relaxed r c = setRelaxed r c
-
-{-# INLINE getRelaxed #-}
-getRelaxed c =
-    case c of
-        View List_ {..} -> (relaxed,c)
-        _               -> (Nothing,c)
-
-{-# INLINE setRelaxed #-}
-setRelaxed r c =
-    case c of
-        View List_ {..} -> View List_ { relaxed = Just r, .. }
-        _               -> c
-
 pattern Ribbon r c <- (getRibbon -> (Just r,c)) where
     Ribbon r c = setRibbon r c
 
