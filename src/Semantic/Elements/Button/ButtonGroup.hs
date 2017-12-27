@@ -18,6 +18,7 @@ import Semantic.Properties.Color
 import Semantic.Properties.Compact
 import Semantic.Properties.Floated
 import Semantic.Properties.Fluid
+import Semantic.Properties.Inverted
 
 data ButtonGroup ms = ButtonGroup_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -126,3 +127,7 @@ instance HasFloatedProp (ButtonGroup ms) where
 instance HasFluidProp (ButtonGroup ms) where
     getFluid = fluid
     setFluid f bg = bg { fluid = f }
+
+instance HasInvertedProp (ButtonGroup ms) where
+    getInverted = inverted
+    setInverted i bg = bg { inverted = i }

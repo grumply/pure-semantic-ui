@@ -17,6 +17,7 @@ import Semantic.Properties.Corner
 import Semantic.Properties.Disabled
 import Semantic.Properties.Fitted
 import Semantic.Properties.Flipped
+import Semantic.Properties.Inverted
 import Semantic.Properties.Name
 
 data Icon ms = Icon_
@@ -118,3 +119,7 @@ instance HasFittedProp (Icon ms) where
 instance HasFlippedProp (Icon ms) where
     getFlipped = flipped
     setFlipped f i = i { flipped = f }
+
+instance HasInvertedProp (Icon ms) where
+    getInverted = inverted
+    setInverted inv i = i { inverted = inv }

@@ -22,37 +22,6 @@ import Debug.Trace
 -- pattern ToLeft = "left"
 -- pattern ToRight = "right"
 
-pattern Inverted c <- (getInverted -> (True,c)) where
-    Inverted c = setInverted c
-
-{-# INLINE getInverted #-}
-getInverted c =
-    case c of
-        View Button_      {..} -> (inverted,c)
-        View ButtonGroup_ {..} -> (inverted,c)
-        View Divider_     {..} -> (inverted,c)
-        View Header_      {..} -> (inverted,c)
-        View Icon_        {..} -> (inverted,c)
-        View Input_       {..} -> (inverted,c)
-        View List_        {..} -> (inverted,c)
-        View ListIcon_    {..} -> (inverted,c)
-        View Loader_      {..} -> (inverted,c)
-        _                      -> (False,c)
-
-{-# INLINE setInverted #-}
-setInverted c =
-    case c of
-        View Button_      {..} -> View Button_      { inverted = True, .. }
-        View ButtonGroup_ {..} -> View ButtonGroup_ { inverted = True, .. }
-        View Divider_     {..} -> View Divider_     { inverted = True, .. }
-        View Header_      {..} -> View Header_      { inverted = True, .. }
-        View Icon_        {..} -> View Icon_        { inverted = True, .. }
-        View Input_       {..} -> View Input_       { inverted = True, .. }
-        View List_        {..} -> View List_        { inverted = True, .. }
-        View ListIcon_    {..} -> View ListIcon_    { inverted = True, .. }
-        View Loader_      {..} -> View Loader_      { inverted = True, .. }
-        _                      -> c
-
 pattern Labeled c <- (getLabeled -> (True,c)) where
     Labeled c = setLabeled c
 

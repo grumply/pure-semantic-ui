@@ -20,6 +20,7 @@ import Semantic.Properties.Error
 import Semantic.Properties.Fluid
 import Semantic.Properties.Focus
 import Semantic.Properties.Focused
+import Semantic.Properties.Inverted
 import Semantic.Properties.OnChange
 
 import Prelude hiding (error)
@@ -165,3 +166,7 @@ instance HasFocusProp (Input ms) where
 instance HasFocusedProp (Input ms) where
     getFocused = focused
     setFocused f i = i { focused = f }
+
+instance HasInvertedProp (Input ms) where
+    getInverted = inverted
+    setInverted inv i = i { inverted = inv }

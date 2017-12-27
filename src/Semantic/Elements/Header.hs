@@ -22,6 +22,7 @@ import Semantic.Properties.Color
 import Semantic.Properties.Disabled
 import Semantic.Properties.Dividing
 import Semantic.Properties.Floated
+import Semantic.Properties.Inverted
 
 data Header ms = Header_
     { as :: [Feature ms] -> [View ms] -> View ms 
@@ -118,3 +119,7 @@ instance HasDividingProp (Header ms) where
 instance HasFloatedProp (Header ms) where
     getFloated = floated
     setFloated f h = h { floated = f }
+
+instance HasInvertedProp (Header ms) where
+    getInverted = inverted
+    setInverted i h = h { inverted = i }

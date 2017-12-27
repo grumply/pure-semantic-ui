@@ -113,6 +113,7 @@ executable semantic-ui-pure
     Semantic.Properties.Indeterminate
     Semantic.Properties.Inline
     Semantic.Properties.Internal
+    Semantic.Properties.Inverted
     Semantic.Properties.Name
     Semantic.Properties.OnChange
     Semantic.Properties.OnClick
@@ -227,6 +228,7 @@ library
     Semantic.Properties.Indeterminate
     Semantic.Properties.Inline
     Semantic.Properties.Internal
+    Semantic.Properties.Inverted
     Semantic.Properties.Name
     Semantic.Properties.OnChange
     Semantic.Properties.OnClick

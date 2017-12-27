@@ -28,6 +28,7 @@ import Semantic.Properties.Disabled
 import Semantic.Properties.Floated
 import Semantic.Properties.Fluid
 import Semantic.Properties.Focus
+import Semantic.Properties.Inverted
 import Semantic.Properties.OnClick
 
 data Button ms = Button_
@@ -222,3 +223,7 @@ instance HasOnClickProp (Button ms) where
     type OnClickProp (Button ms) = Ef ms IO ()
     getOnClick = onClick
     setOnClick f b = b { onClick = f }
+
+instance HasInvertedProp (Button ms) where
+    getInverted = inverted
+    setInverted i b = b { inverted = i }
