@@ -131,6 +131,7 @@ executable semantic-ui-pure
     Semantic.Properties.Relaxed
     Semantic.Properties.Ribbon
     Semantic.Properties.Rotated
+    Semantic.Properties.Rounded
     Semantic.Utils
 
   if impl(ghcjs)
@@ -260,6 +261,7 @@ library
     Semantic.Properties.Relaxed
     Semantic.Properties.Ribbon
     Semantic.Properties.Rotated
+    Semantic.Properties.Rounded
     Semantic.Utils
 
   if impl(ghcjs)

@@ -22,21 +22,6 @@ import Debug.Trace
 -- pattern ToLeft = "left"
 -- pattern ToRight = "right"
 
-pattern Rounded c <- (getRounded -> (True,c)) where
-    Rounded c = setRounded c
-
-{-# INLINE getRounded #-}
-getRounded c =
-    case c of
-        View Image_ {..} -> (rounded,c)
-        _                -> (False,c)
-
-{-# INLINE setRounded #-}
-setRounded c =
-    case c of
-        View Image_ {..} -> View Image_ { rounded = True, .. }
-        _                -> c
-
 pattern Secondary c <- (getSecondary -> (True,c)) where
     Secondary c = setSecondary c
 
