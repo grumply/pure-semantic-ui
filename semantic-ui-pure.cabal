@@ -141,6 +141,7 @@ executable semantic-ui-pure
     Semantic.Properties.TabIndex
     Semantic.Properties.Tag
     Semantic.Properties.TextAlign
+    Semantic.Properties.Toggle
     Semantic.Utils
 
   if impl(ghcjs)
@@ -280,6 +281,7 @@ library
     Semantic.Properties.TabIndex
     Semantic.Properties.Tag
     Semantic.Properties.TextAlign
+    Semantic.Properties.Toggle
     Semantic.Utils
 
   if impl(ghcjs)

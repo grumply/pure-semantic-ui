@@ -22,23 +22,6 @@ import Debug.Trace
 -- pattern ToLeft = "left"
 -- pattern ToRight = "right"
 
-pattern Toggle c <- (getToggle -> (True,c)) where
-    Toggle c = setToggle c
-
-{-# INLINE getToggle #-}
-getToggle c =
-    case c of
-        View Button_      {..} -> (toggle,c)
-        View ButtonGroup_ {..} -> (toggle,c)
-        _                      -> (False,c)
-
-{-# INLINE setToggle #-}
-setToggle c =
-    case c of
-        View Button_      {..} -> View Button_      { toggle = True, .. }
-        View ButtonGroup_ {..} -> View ButtonGroup_ { toggle = True, .. }
-        _                      -> c
-
 -- pattern Transition t c <- (getTransition -> Just (t,c)) where
 --     Transition t c = setTransition t c
 

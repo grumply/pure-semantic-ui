@@ -25,6 +25,7 @@ import Semantic.Properties.Positive
 import Semantic.Properties.Primary
 import Semantic.Properties.Secondary
 import Semantic.Properties.Size
+import Semantic.Properties.Toggle
 
 data ButtonGroup ms = ButtonGroup_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -161,3 +162,7 @@ instance HasSecondaryProp (ButtonGroup ms) where
 instance HasSizeProp (ButtonGroup ms) where
     getSize = size
     setSize s bg = bg { size = s }
+
+instance HasToggleProp (ButtonGroup ms) where
+    getToggle = toggle
+    setToggle t bg = bg { toggle = t }

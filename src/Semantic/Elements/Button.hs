@@ -38,6 +38,7 @@ import Semantic.Properties.Primary
 import Semantic.Properties.Secondary
 import Semantic.Properties.Size
 import Semantic.Properties.TabIndex
+import Semantic.Properties.Toggle
 
 data Button ms = Button_
   { as :: [Feature ms] -> [View ms] -> View ms
@@ -267,3 +268,7 @@ instance HasSizeProp (Button ms) where
 instance HasTabIndexProp (Button ms) where
     getTabIndex = tabIndex
     setTabIndex ti b = b { tabIndex = ti }
+
+instance HasToggleProp (Button ms) where
+    getToggle = toggle
+    setToggle t b = b { toggle = t }
