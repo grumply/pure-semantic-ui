@@ -19,21 +19,6 @@ import Semantic.Utils
 
 import Debug.Trace
 
-pattern UI c <- (getUI -> (True,c)) where
-    UI c = setUI c
-
-{-# INLINE getUI #-}
-getUI c =
-    case c of
-        View Image_ {..} -> (ui,c)
-        _                -> (False,c)
-
-{-# INLINE setUI #-}
-setUI c =
-    case c of
-        View Image_ {..} -> View Image_ { ui = True, .. }
-        _                -> c
-
 pattern Value v c <- (getValue -> Just (v,c)) where
     Value c = setValue c
 

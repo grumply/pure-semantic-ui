@@ -23,6 +23,7 @@ import Semantic.Properties.Inline
 import Semantic.Properties.Rounded
 import Semantic.Properties.Size
 import Semantic.Properties.Spaced
+import Semantic.Properties.UI
 
 data Image ms = Image_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -147,3 +148,7 @@ instance HasSizeProp (Image ms) where
 instance HasSpacedProp (Image ms) where
     getSpaced = spaced
     setSpaced s i = i { spaced = s }
+
+instance HasUIProp (Image ms) where
+    getUI = ui
+    setUI x i = i { ui = x }
