@@ -1,7 +1,7 @@
 module Semantic.Elements.Button (module Semantic.Elements.Button, module Export) where
 
 import GHC.Generics as G
-import Pure.View hiding (Button,Label)
+import Pure.View hiding (active,Button,Label)
 import qualified Pure.View as HTML
 
 import Semantic.Utils
@@ -13,6 +13,7 @@ import Semantic.Elements.Button.ButtonContent as Export
 import Semantic.Elements.Button.ButtonGroup as Export
 import Semantic.Elements.Button.ButtonOr as Export
 
+import Semantic.Extensions.Active
 import Semantic.Extensions.As
 import Semantic.Extensions.Attributes
 import Semantic.Extensions.Children
@@ -140,6 +141,10 @@ instance Typeable ms => Pure Button ms where
                       : attributes
                       )
                       children 
+
+instance HasActive (Button ms) where
+    getActive = active
+    setActive a b = b { active = a }
 
 instance HasAs (Button ms) where
     type Constructor (Button ms) = [Feature ms] -> [View ms] -> View ms
