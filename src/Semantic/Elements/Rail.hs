@@ -1,7 +1,7 @@
 module Semantic.Elements.Rail where
 
 import GHC.Generics as G
-import Pure.View hiding (verticalAlign)
+import Pure.View hiding (position,verticalAlign)
 
 import Semantic.Utils
 
@@ -13,6 +13,7 @@ import Semantic.Properties.Classes
 import Semantic.Properties.Close
 import Semantic.Properties.Dividing
 import Semantic.Properties.Internal
+import Semantic.Properties.Position
 
 data Rail ms = Rail_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -89,3 +90,7 @@ instance HasDividingProp (Rail ms) where
 instance HasInternalProp (Rail ms) where
     getInternal = internal
     setInternal i r = r { internal = i }
+
+instance HasPositionProp (Rail ms) where
+    getPosition = position
+    setPosition p r = r { position = p }

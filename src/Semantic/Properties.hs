@@ -49,6 +49,7 @@ import Semantic.Properties.OnChange as Export
 import Semantic.Properties.OnClick as Export
 import Semantic.Properties.Ordered as Export
 import Semantic.Properties.Pointing as Export
+import Semantic.Properties.Position as Export
 
 infixl 1 !%
 (!%) c cs as = Children (cs (Attributes as c))

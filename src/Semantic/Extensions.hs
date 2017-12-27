@@ -22,21 +22,6 @@ import Debug.Trace
 -- pattern ToLeft = "left"
 -- pattern ToRight = "right"
 
-pattern Position p c <- (getPosition -> Just (p,c)) where
-    Position p c = setPosition p c
-
-{-# INLINE getPosition #-}
-getPosition c =
-    case c of
-        View Rail_ {..} -> Just (position,c)
-        _               -> Nothing
-
-{-# INLINE setPosition #-}
-setPosition p c =
-    case c of
-        View Rail_ {..} -> View Rail_ { position = p, .. }
-        _               -> c
-
 pattern Positive c <- (getPositive -> (True,c)) where
     Positive c = setPositive c
 
