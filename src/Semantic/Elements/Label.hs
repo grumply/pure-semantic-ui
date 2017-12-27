@@ -20,6 +20,7 @@ import Semantic.Properties.Children
 import Semantic.Properties.Circular
 import Semantic.Properties.Classes
 import Semantic.Properties.Color
+import Semantic.Properties.Corner
 import Semantic.Properties.OnClick
 
 data Label ms = Label_
@@ -134,3 +135,8 @@ instance HasOnClickProp (Label ms) where
 instance HasColorProp (Label ms) where
     getColor = color
     setColor c l = l { color = c }
+
+instance HasCornerProp (Label ms) where
+    type CornerProp (Label ms) = Maybe Txt
+    getCorner = corner
+    setCorner c l = l { corner = c }

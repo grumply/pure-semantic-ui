@@ -13,6 +13,7 @@ import Semantic.Properties.Bordered
 import Semantic.Properties.Circular
 import Semantic.Properties.Classes
 import Semantic.Properties.Color
+import Semantic.Properties.Corner
 import Semantic.Properties.Name
 
 data Icon ms = Icon_
@@ -97,3 +98,8 @@ instance HasClassesProp (Icon ms) where
 instance HasColorProp (Icon ms) where
     getColor = color
     setColor c i = i { color = c }
+
+instance HasCornerProp (Icon ms) where
+    type CornerProp (Icon ms) = Bool
+    getCorner = corner
+    setCorner c i = i { corner = c }

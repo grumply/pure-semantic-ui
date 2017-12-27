@@ -11,6 +11,7 @@ import Semantic.Properties.Bordered
 import Semantic.Properties.Circular
 import Semantic.Properties.Classes
 import Semantic.Properties.Color
+import Semantic.Properties.Corner
 import Semantic.Properties.Name
 
 data ListIcon ms = ListIcon_ 
@@ -97,3 +98,8 @@ instance HasClassesProp (ListIcon ms) where
 instance HasColorProp (ListIcon ms) where
     getColor = color
     setColor c li = li { color = c }
+
+instance HasCornerProp (ListIcon ms) where
+    type CornerProp (ListIcon ms) = Bool
+    getCorner = corner
+    setCorner c li = li { corner = c }

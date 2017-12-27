@@ -19,25 +19,6 @@ import Semantic.Utils
 
 import Debug.Trace
 
-pattern Corner cor c <- (getCorner -> (Just cor,c)) where
-    Corner cor c = setCorner cor c
-
-{-# INLINE getCorner #-}
-getCorner c =
-    case c of
-        View Icon_     {..} -> corner ? (Just "",c) $ (Nothing,c)
-        View Label_    {..} -> (corner,c)
-        View ListIcon_ {..} -> corner ? (Just "",c) $ (Nothing,c)
-        _                -> (Nothing,c)
-
-{-# INLINE setCorner #-}
-setCorner cor c =
-    case c of
-        View Icon_     {..} -> View Icon_     { corner = True, .. }
-        View Label_    {..} -> View Label_    { corner = Just cor, .. }
-        View ListIcon_ {..} -> View ListIcon_ { corner = True, .. }
-        _                   -> c
-
 pattern Compact c <- (getCompact -> (True,c)) where
     Compact c = setCompact c
 
