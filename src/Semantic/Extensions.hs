@@ -19,21 +19,6 @@ import Semantic.Utils
 
 import Debug.Trace
 
-pattern Clearing c <- (getClearing -> (True,c)) where
-    Clearing c = setClearing c
-
-{-# INLINE getClearing #-}
-getClearing c =
-    case c of
-        View Divider_ {..} -> (clearing,c)
-        _                  -> (False,c)
-
-{-# INLINE setClearing #-}
-setClearing c =
-    case c of
-        View Divider_ {..} -> View Divider_ { clearing = True, .. }
-        _                  -> c
-
 pattern Click h c <- (getClick -> Just (h,c)) where
     Click h c = setClick h c
 

@@ -92,6 +92,7 @@ executable semantic-ui-pure
     Semantic.Properties.Children
     Semantic.Properties.Circular
     Semantic.Properties.Classes
+    Semantic.Properties.Clearing
     Semantic.Properties.Name
     Semantic.Utils
 
@@ -183,6 +184,7 @@ library
     Semantic.Properties.Children
     Semantic.Properties.Circular
     Semantic.Properties.Classes
+    Semantic.Properties.Clearing
     Semantic.Properties.Name
     Semantic.Utils
 
