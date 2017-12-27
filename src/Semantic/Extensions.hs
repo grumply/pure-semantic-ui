@@ -22,21 +22,6 @@ import Debug.Trace
 -- pattern ToLeft = "left"
 -- pattern ToRight = "right"
 
-pattern Spaced s c <- (getSpaced -> (Just s,c)) where
-    Spaced s c = setSpaced s c
-
-{-# INLINE getSpaced #-}
-getSpaced c =
-    case c of
-        View Image_ {..} -> (spaced,c)
-        _                -> (Nothing,c)
-
-{-# INLINE setSpaced #-}
-setSpaced s c =
-    case c of
-        View Image_ {..} -> View Image_ { spaced = Just s, .. }
-        _                -> c
-
 pattern Sub c <- (getSub -> (True,c)) where
     Sub c = setSub c
 
