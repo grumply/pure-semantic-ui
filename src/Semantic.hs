@@ -11,6 +11,7 @@ import Semantic.Extensions.Active as Export
 import Semantic.Extensions.Animated as Export
 import Semantic.Extensions.As as Export
 import Semantic.Extensions.Attributes as Export
+import Semantic.Extensions.Avatar as Export
 import Semantic.Extensions.Children as Export
 import Semantic.Extensions.Classes as Export
 import Semantic.Extensions.Name as Export

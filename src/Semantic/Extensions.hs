@@ -53,21 +53,6 @@ setAttached a c =
         View Rail_        {..} -> View Rail_        { attached = True, ..}
         _                      -> c
 
-pattern Avatar c <- (getAvatar -> (True,c)) where
-    Avatar c = setAvatar c
-
-{-# INLINE getAvatar #-}
-getAvatar c =
-    case c of
-        View Image_ {..} -> (avatar,c)
-        _                -> (False,c)
-
-{-# INLINE setAvatar #-} 
-setAvatar c =
-    case c of
-        View Image_ {..} -> View Image_ { avatar = True, .. }
-        _                -> c
-
 -- assuming default of false for all basic-capable components
 pattern Basic c <- (getBasic -> (True,c)) where
     Basic c = setBasic c
