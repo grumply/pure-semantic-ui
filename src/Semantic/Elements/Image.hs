@@ -25,6 +25,7 @@ import Semantic.Properties.Size
 import Semantic.Properties.Spaced
 import Semantic.Properties.UI
 import Semantic.Properties.VerticalAlign
+import Semantic.Properties.Wrapped
 
 data Image ms = Image_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -157,3 +158,7 @@ instance HasUIProp (Image ms) where
 instance HasVerticalAlignProp (Image ms) where
     getVerticalAlign = verticalAlign
     setVerticalAlign va i = i { verticalAlign = va }
+
+instance HasWrappedProp (Image ms) where
+    getWrapped = wrapped
+    setWrapped w i = i { wrapped = w }

@@ -75,6 +75,7 @@ import Semantic.Properties.Vertical as Export
 import Semantic.Properties.VerticalAlign as Export
 import Semantic.Properties.Visible as Export
 import Semantic.Properties.Widths as Export
+import Semantic.Properties.Wrapped as Export
 
 infixl 1 !%
 (!%) c cs as = Children (cs (Attributes as c))
