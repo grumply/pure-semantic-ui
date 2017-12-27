@@ -19,35 +19,6 @@ import Semantic.Utils
 
 import Debug.Trace
 
-pattern Disabled c <- (getDisabled -> (True,c)) where
-    Disabled c = setDisabled c
-
-{-# INLINE getDisabled #-}
-getDisabled c =
-    case c of
-        View Button_   {..} -> (disabled,c)
-        View Header_   {..} -> (disabled,c)
-        View Icon_     {..} -> (disabled,c)
-        View Image_    {..} -> (disabled,c)
-        View Input_    {..} -> (disabled,c)
-        View ListIcon_ {..} -> (disabled,c)
-        View ListItem_ {..} -> (disabled,c)
-        View Loader_   {..} -> (disabled,c)
-        _                   -> (False,c)
-
-{-# INLINE setDisabled #-}
-setDisabled c =
-    case c of
-        View Button_   {..} -> View Button_   { disabled = True, .. }
-        View Header_   {..} -> View Header_   { disabled = True, .. }
-        View Icon_     {..} -> View Icon_     { disabled = True, .. }
-        View Image_    {..} -> View Image_    { disabled = True, .. }
-        View Input_    {..} -> View Input_    { disabled = True, .. }
-        View ListIcon_ {..} -> View ListIcon_ { disabled = True, .. }
-        View ListItem_ {..} -> View ListItem_ { disabled = True, .. }
-        View Loader_   {..} -> View Loader_   { disabled = True, .. }
-        _                   -> c
-
 pattern Divided c <- (getDivided -> (True,c)) where
     Divided c = setDivided c
 

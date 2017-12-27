@@ -1,7 +1,7 @@
 module Semantic.Elements.List.ListIcon where
 
 import GHC.Generics as G
-import Pure.View hiding (color,name,verticalAlign)
+import Pure.View hiding (color,disabled,name,verticalAlign)
 
 import Semantic.Utils
 
@@ -12,6 +12,7 @@ import Semantic.Properties.Circular
 import Semantic.Properties.Classes
 import Semantic.Properties.Color
 import Semantic.Properties.Corner
+import Semantic.Properties.Disabled
 import Semantic.Properties.Name
 
 data ListIcon ms = ListIcon_ 
@@ -103,3 +104,7 @@ instance HasCornerProp (ListIcon ms) where
     type CornerProp (ListIcon ms) = Bool
     getCorner = corner
     setCorner c li = li { corner = c }
+
+instance HasDisabledProp (ListIcon ms) where
+    getDisabled = disabled
+    setDisabled d li = li { disabled = d }

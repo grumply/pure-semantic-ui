@@ -1,7 +1,7 @@
 module Semantic.Elements.Button (module Semantic.Elements.Button, module Export) where
 
 import GHC.Generics as G
-import Pure.View hiding (active,color,onClick,Button,Label)
+import Pure.View hiding (active,color,disabled,onClick,Button,Disabled,Label)
 import qualified Pure.View as HTML
 
 import Semantic.Utils
@@ -24,6 +24,7 @@ import Semantic.Properties.Circular
 import Semantic.Properties.Classes
 import Semantic.Properties.Color
 import Semantic.Properties.Compact
+import Semantic.Properties.Disabled
 import Semantic.Properties.OnClick
 
 data Button ms = Button_
@@ -133,7 +134,7 @@ instance Typeable ms => Pure Button ms where
                       [ (labelPosition == "left") # label
                       , HTML.Button 
                           [ ClassList buttonClasses
-                          , Disabled disabled
+                          , HTML.Disabled disabled
                           , index
                           ]
                           children'
@@ -141,7 +142,7 @@ instance Typeable ms => Pure Button ms where
                       ]
                   $ as
                       ( ClassList cs
-                      : (disabled && isButton) # Disabled True
+                      : (disabled && isButton) # HTML.Disabled True
                       : onClick # (On "click" def (\_ -> return $ Just onClick))
                       : Role "button"
                       : index
@@ -197,6 +198,10 @@ instance HasColorProp (Button ms) where
 instance HasCompactProp (Button ms) where
     getCompact = compact
     setCompact c b = b { compact = c }
+
+instance HasDisabledProp (Button ms) where
+    getDisabled = disabled
+    setDisabled d b = b { disabled = d }
 
 instance HasOnClickProp (Button ms) where
     type OnClickProp (Button ms) = Ef ms IO ()

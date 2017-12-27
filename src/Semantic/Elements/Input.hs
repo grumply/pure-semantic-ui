@@ -2,7 +2,7 @@
 module Semantic.Elements.Input where
 
 import GHC.Generics as G
-import Pure.View as View hiding (Button,Label,Input)
+import Pure.View as View hiding (disabled,Disabled,Button,Label,Input)
 import qualified Pure.View as HTML
 
 import Semantic.Utils
@@ -15,6 +15,7 @@ import Semantic.Properties.As
 import Semantic.Properties.Attributes
 import Semantic.Properties.Children
 import Semantic.Properties.Classes
+import Semantic.Properties.Disabled
 import Semantic.Properties.OnChange
 
 data Input ms = Input_
@@ -76,7 +77,7 @@ instance Typeable ms => Pure Input ms where
             addInputProps (HTML.Input fs cs) =
                 HTML.Input 
                     (( HostRef ((focused #) . _focus)
-                    : Disabled disabled 
+                    : HTML.Disabled disabled 
                     : Type _type 
                     : index 
                     : onInput onChange 
@@ -138,3 +139,7 @@ instance HasChildrenProp (Input ms) where
 instance HasClassesProp (Input ms) where
     getClasses = classes
     setClasses cs i = i { classes = cs }
+
+instance HasDisabledProp (Input ms) where
+    getDisabled = disabled
+    setDisabled d i = i { disabled = d }

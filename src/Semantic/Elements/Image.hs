@@ -1,7 +1,7 @@
 module Semantic.Elements.Image (module Semantic.Elements.Image, module Export) where
 
 import GHC.Generics as G
-import Pure.View as View
+import Pure.View as View hiding (disabled)
 
 import Semantic.Utils
 
@@ -15,6 +15,7 @@ import Semantic.Properties.Centered
 import Semantic.Properties.Children
 import Semantic.Properties.Circular
 import Semantic.Properties.Classes
+import Semantic.Properties.Disabled
 
 data Image ms = Image_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -106,3 +107,7 @@ instance HasCircularProp (Image ms) where
 instance HasClassesProp (Image ms) where
     getClasses = classes
     setClasses cs i = i { classes = cs }
+
+instance HasDisabledProp (Image ms) where
+    getDisabled = disabled
+    setDisabled d i = i { disabled = d }

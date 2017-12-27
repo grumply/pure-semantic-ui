@@ -1,7 +1,7 @@
 module Semantic.Elements.Loader where
 
 import GHC.Generics as G
-import Pure.View hiding (active,verticalAlign)
+import Pure.View hiding (active,disabled,verticalAlign)
 
 import Semantic.Utils
 
@@ -10,6 +10,7 @@ import Semantic.Properties.As
 import Semantic.Properties.Attributes
 import Semantic.Properties.Children
 import Semantic.Properties.Classes
+import Semantic.Properties.Disabled
 
 data Loader ms = Loader_ 
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -74,3 +75,7 @@ instance HasChildrenProp (Loader ms) where
 instance HasClassesProp (Loader ms) where
     getClasses = classes
     setClasses cs l = l { classes = cs }
+
+instance HasDisabledProp (Loader ms) where
+    getDisabled = disabled
+    setDisabled d l = l { disabled = d }

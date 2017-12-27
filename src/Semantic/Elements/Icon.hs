@@ -1,7 +1,7 @@
 module Semantic.Elements.Icon (module Semantic.Elements.Icon, module Export) where
 
 import GHC.Generics as G
-import Pure.View as View hiding (color,name)
+import Pure.View as View hiding (color,disabled,name)
 
 import Semantic.Utils
 
@@ -14,6 +14,7 @@ import Semantic.Properties.Circular
 import Semantic.Properties.Classes
 import Semantic.Properties.Color
 import Semantic.Properties.Corner
+import Semantic.Properties.Disabled
 import Semantic.Properties.Name
 
 data Icon ms = Icon_
@@ -103,3 +104,7 @@ instance HasCornerProp (Icon ms) where
     type CornerProp (Icon ms) = Bool
     getCorner = corner
     setCorner c i = i { corner = c }
+
+instance HasDisabledProp (Icon ms) where
+    getDisabled = disabled
+    setDisabled d i = i { disabled = d }

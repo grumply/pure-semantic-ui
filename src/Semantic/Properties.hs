@@ -20,6 +20,7 @@ import Semantic.Properties.Close as Export
 import Semantic.Properties.Color as Export
 import Semantic.Properties.Corner as Export
 import Semantic.Properties.Compact as Export
+import Semantic.Properties.Disabled as Export
 import Semantic.Properties.Name as Export
 import Semantic.Properties.OnChange as Export
 import Semantic.Properties.OnClick as Export
