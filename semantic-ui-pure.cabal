@@ -96,6 +96,7 @@ executable semantic-ui-pure
     Semantic.Properties.Clearing
     Semantic.Properties.Close
     Semantic.Properties.Color
+    Semantic.Properties.Completed
     Semantic.Properties.Corner
     Semantic.Properties.Compact
     Semantic.Properties.Disabled
@@ -134,6 +135,7 @@ executable semantic-ui-pure
     Semantic.Properties.Positive
     Semantic.Properties.Primary
     Semantic.Properties.Raised
+    Semantic.Properties.Ref
     Semantic.Properties.Relaxed
     Semantic.Properties.Ribbon
     Semantic.Properties.Rotated
@@ -254,6 +256,7 @@ library
     Semantic.Properties.Clearing
     Semantic.Properties.Close
     Semantic.Properties.Color
+    Semantic.Properties.Completed
     Semantic.Properties.Corner
     Semantic.Properties.Compact
     Semantic.Properties.Disabled
@@ -292,6 +295,7 @@ library
     Semantic.Properties.Positive
     Semantic.Properties.Primary
     Semantic.Properties.Raised
+    Semantic.Properties.Ref
     Semantic.Properties.Relaxed
     Semantic.Properties.Ribbon
     Semantic.Properties.Rotated

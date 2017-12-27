@@ -57,6 +57,7 @@ import Semantic.Properties.Position as Export
 import Semantic.Properties.Positive as Export
 import Semantic.Properties.Primary as Export
 import Semantic.Properties.Raised as Export
+import Semantic.Properties.Ref as Export
 import Semantic.Properties.Relaxed as Export
 import Semantic.Properties.Ribbon as Export
 import Semantic.Properties.Rotated as Export
