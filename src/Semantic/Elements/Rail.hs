@@ -10,6 +10,7 @@ import Semantic.Properties.Attached
 import Semantic.Properties.Attributes
 import Semantic.Properties.Children
 import Semantic.Properties.Classes
+import Semantic.Properties.Close
 
 data Rail ms = Rail_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -74,3 +75,7 @@ instance HasChildrenProp (Rail ms) where
 instance HasClassesProp (Rail ms) where
     getClasses = classes
     setClasses cs r = r { classes = cs }
+
+instance HasCloseProp (Rail ms) where
+    getClose = close
+    setClose c r = r { close = c }

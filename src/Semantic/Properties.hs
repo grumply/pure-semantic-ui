@@ -16,6 +16,7 @@ import Semantic.Properties.Children as Export
 import Semantic.Properties.Circular as Export
 import Semantic.Properties.Classes as Export
 import Semantic.Properties.Clearing as Export
+import Semantic.Properties.Close as Export
 import Semantic.Properties.Name as Export
 import Semantic.Properties.OnChange as Export
 import Semantic.Properties.OnClick as Export

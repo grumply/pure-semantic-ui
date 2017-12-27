@@ -19,21 +19,6 @@ import Semantic.Utils
 
 import Debug.Trace
 
-pattern Close t c <- (getClose -> (Just t,c)) where
-    Close t c = setClose t c
-
-{-# INLINE getClose #-}
-getClose c =
-    case c of
-        View Rail_ {..} -> (close,c)
-        _               -> (Nothing,c)
-
-{-# INLINE setClose #-}
-setClose t c =
-    case c of
-        View Rail_ {..} -> View Rail_ { close = Just t, .. }
-        _               -> c
-
 pattern Color col c <- (getColor -> Just (col,c)) where
     Color col c = setColor col c
 
