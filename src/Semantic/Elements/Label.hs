@@ -26,6 +26,7 @@ import Semantic.Properties.Floating
 import Semantic.Properties.Horizontal
 import Semantic.Properties.OnClick
 import Semantic.Properties.Pointing
+import Semantic.Properties.Ribbon
 
 data Label ms = Label_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -160,3 +161,7 @@ instance HasHorizontalProp (Label ms) where
 instance HasPointingProp (Label ms) where
     getPointing = pointing
     setPointing p l = l { pointing = p }
+
+instance HasRibbonProp (Label ms) where
+    getRibbon = ribbon
+    setRibbon r l = l { ribbon = r }

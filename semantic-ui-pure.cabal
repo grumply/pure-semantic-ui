@@ -129,6 +129,7 @@ executable semantic-ui-pure
     Semantic.Properties.Positive
     Semantic.Properties.Primary
     Semantic.Properties.Relaxed
+    Semantic.Properties.Ribbon
     Semantic.Utils
 
   if impl(ghcjs)
@@ -256,6 +257,7 @@ library
     Semantic.Properties.Positive
     Semantic.Properties.Primary
     Semantic.Properties.Relaxed
+    Semantic.Properties.Ribbon
     Semantic.Utils
 
   if impl(ghcjs)

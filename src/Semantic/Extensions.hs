@@ -22,21 +22,6 @@ import Debug.Trace
 -- pattern ToLeft = "left"
 -- pattern ToRight = "right"
 
-pattern Ribbon r c <- (getRibbon -> (Just r,c)) where
-    Ribbon r c = setRibbon r c
-
-{-# INLINE getRibbon #-}
-getRibbon c =
-    case c of
-        View Label_ {..} -> (ribbon,c)
-        _                -> (Nothing,c)
-
-{-# INLINE setRibbon #-}
-setRibbon r c =
-    case c of
-        View Label_ {..} -> View Label_ { ribbon = Just r, .. }
-        _                -> c
-
 pattern Rotated r c <- (getRotated -> Just (r,c)) where
     Rotated r c = setRotated r c
 
