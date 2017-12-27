@@ -22,21 +22,6 @@ import Debug.Trace
 -- pattern ToLeft = "left"
 -- pattern ToRight = "right"
 
-pattern Selection c <- (getSelection -> (True,c)) where
-    Selection c = setSelection c
-
-{-# INLINE getSelection #-}
-getSelection c =
-    case c of
-        View List_ {..} -> (selection,c)
-        _               -> (False,c)
-
-{-# INLINE setSelection #-}
-setSelection c =
-    case c of
-        View List_ {..} -> View List_ { selection = True, .. }
-        _               -> c
-
 pattern Size s c <- (getSize -> Just (s,c)) where
     Size s c = setSize s c
 

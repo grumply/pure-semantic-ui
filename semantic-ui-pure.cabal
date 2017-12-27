@@ -134,6 +134,7 @@ executable semantic-ui-pure
     Semantic.Properties.Rounded
     Semantic.Properties.Secondary
     Semantic.Properties.Section
+    Semantic.Properties.Selection
     Semantic.Utils
 
   if impl(ghcjs)
@@ -266,6 +267,7 @@ library
     Semantic.Properties.Rounded
     Semantic.Properties.Secondary
     Semantic.Properties.Section
+    Semantic.Properties.Selection
     Semantic.Utils
 
   if impl(ghcjs)

@@ -58,6 +58,7 @@ import Semantic.Properties.Rotated as Export
 import Semantic.Properties.Rounded as Export
 import Semantic.Properties.Secondary as Export
 import Semantic.Properties.Section as Export
+import Semantic.Properties.Selection as Export
 
 infixl 1 !%
 (!%) c cs as = Children (cs (Attributes as c))

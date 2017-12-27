@@ -28,6 +28,7 @@ import Semantic.Properties.Link
 import Semantic.Properties.OnClick
 import Semantic.Properties.Ordered
 import Semantic.Properties.Relaxed
+import Semantic.Properties.Selection
 
 data List ms = List_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -151,3 +152,7 @@ instance HasOrderedProp (List ms) where
 instance HasRelaxedProp (List ms) where
     getRelaxed = relaxed
     setRelaxed r l = l { relaxed = r }
+
+instance HasSelectionProp (List ms) where
+    getSelection = selection
+    setSelection s l = l { selection = s }
