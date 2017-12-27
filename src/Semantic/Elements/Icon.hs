@@ -9,6 +9,7 @@ import Semantic.Elements.Icon.IconGroup as Export
 
 import Semantic.Extensions.As
 import Semantic.Extensions.Attributes
+import Semantic.Extensions.Bordered
 import Semantic.Extensions.Classes
 import Semantic.Extensions.Name
 
@@ -74,6 +75,10 @@ instance HasAttributes (Icon ms) where
     type Attribute (Icon ms) = Feature ms
     getAttributes = attributes 
     setAttributes cs i = i { attributes = cs }
+
+instance HasBordered (Icon ms) where
+    getBordered = bordered
+    setBordered b i = i { bordered = b }
 
 instance HasName (Icon ms) where
     getName = name

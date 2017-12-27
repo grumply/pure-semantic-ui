@@ -19,25 +19,6 @@ import Semantic.Utils
 
 import Debug.Trace
 
-pattern Bordered c <- (getBordered -> (True,c)) where
-    Bordered c = setBordered c
-
-{-# INLINE getBordered #-}
-getBordered c =
-    case c of
-        View Icon_     {..} -> (bordered,c)
-        View Image_    {..} -> (bordered,c)
-        View ListIcon_ {..} -> (bordered,c)
-        _                    -> (False,c)
-
-{-# INLINE setBordered #-}
-setBordered c =
-    case c of
-        View Icon_     {..} -> View Icon_      { bordered = True, .. }
-        View Image_    {..} -> View Image_     { bordered = True, .. }
-        View ListIcon_ {..} -> View ListIcon_  { bordered = True, .. }
-        c                   -> c
-
 pattern Bulleted c <- (getBulleted -> (True,c)) where
     Bulleted c = setBulleted c
 

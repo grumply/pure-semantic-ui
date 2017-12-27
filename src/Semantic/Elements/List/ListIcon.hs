@@ -7,6 +7,7 @@ import Semantic.Utils
 
 import Semantic.Extensions.As
 import Semantic.Extensions.Attributes
+import Semantic.Extensions.Bordered
 import Semantic.Extensions.Classes
 import Semantic.Extensions.Name
 
@@ -74,6 +75,10 @@ instance HasAttributes (ListIcon ms) where
     type Attribute (ListIcon ms) = Feature ms
     getAttributes = attributes 
     setAttributes cs li = li { attributes = cs }
+
+instance HasBordered (ListIcon ms) where
+    getBordered = bordered
+    setBordered b li = li { bordered = b }
 
 instance HasName (ListIcon ms) where
     getName = name

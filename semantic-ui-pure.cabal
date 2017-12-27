@@ -167,6 +167,7 @@ library
     Semantic.Extensions.Avatar
     Semantic.Extensions.Basic
     Semantic.Extensions.Block
+    Semantic.Extensions.Bordered
     Semantic.Extensions.Children
     Semantic.Extensions.Classes
     Semantic.Extensions.Name

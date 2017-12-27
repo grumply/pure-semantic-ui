@@ -10,6 +10,7 @@ import Semantic.Elements.Image.ImageGroup as Export
 import Semantic.Extensions.As
 import Semantic.Extensions.Attributes
 import Semantic.Extensions.Avatar
+import Semantic.Extensions.Bordered
 import Semantic.Extensions.Children
 import Semantic.Extensions.Classes
 
@@ -82,6 +83,10 @@ instance HasAttributes (Image ms) where
     type Attribute (Image ms) = Feature ms
     getAttributes = attributes 
     setAttributes cs i = i { attributes = cs }
+
+instance HasBordered (Image ms) where
+    getBordered = bordered
+    setBordered b i = i { bordered = b }
 
 instance HasChildren (Image ms) where
     type Child (Image ms) = View ms
