@@ -19,21 +19,6 @@ import Semantic.Utils
 
 import Debug.Trace
 
-pattern Type t c <- (getType -> Just (t,c)) where
-    Type t c = setType t c
-
-{-# INLINE getType #-}
-getType c =
-    case c of
-        View Input_ {..} -> Just (_type,c)
-        _                -> Nothing
-
-{-# INLINE setType #-}
-setType t c =
-    case c of
-        View Input_ {..} -> View Input_ { _type = t, .. }
-        _                -> c
-
 pattern UI c <- (getUI -> (True,c)) where
     UI c = setUI c
 

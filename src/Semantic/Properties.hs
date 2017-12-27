@@ -68,6 +68,7 @@ import Semantic.Properties.TextAlign as Export
 import Semantic.Properties.Toggle as Export
 import Semantic.Properties.Transition as Export
 import Semantic.Properties.Transparent as Export
+import Semantic.Properties.Type as Export
 
 infixl 1 !%
 (!%) c cs as = Children (cs (Attributes as c))
