@@ -18,6 +18,7 @@ import Semantic.Properties.Disabled
 import Semantic.Properties.Fitted
 import Semantic.Properties.Flipped
 import Semantic.Properties.Inverted
+import Semantic.Properties.Link
 import Semantic.Properties.Name
 
 data Icon ms = Icon_
@@ -123,3 +124,7 @@ instance HasFlippedProp (Icon ms) where
 instance HasInvertedProp (Icon ms) where
     getInverted = inverted
     setInverted inv i = i { inverted = inv }
+
+instance HasLinkProp (Icon ms) where
+    getLink = link
+    setLink l i = i { link = l }

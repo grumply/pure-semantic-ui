@@ -24,6 +24,7 @@ import Semantic.Properties.Divided
 import Semantic.Properties.Floated
 import Semantic.Properties.Horizontal
 import Semantic.Properties.Inverted
+import Semantic.Properties.Link
 import Semantic.Properties.OnClick
 
 data List ms = List_
@@ -136,3 +137,7 @@ instance HasHorizontalProp (List ms) where
 instance HasInvertedProp (List ms) where
     getInverted = inverted
     setInverted i l = l { inverted = i }
+
+instance HasLinkProp (List ms) where
+    getLink = link
+    setLink lnk l = l { link = lnk }

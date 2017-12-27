@@ -22,25 +22,6 @@ import Debug.Trace
 -- pattern ToLeft = "left"
 -- pattern ToRight = "right"
 
-pattern Link c <- (getLink -> (True,c)) where
-    Link c = setLink c
-
-{-# INLINE getLink #-}
-getLink c =
-    case c of
-        View Icon_     {..} -> (link,c)
-        View List_     {..} -> (link,c)
-        View ListIcon_ {..} -> (link,c)
-        _                   -> (False,c)
-
-{-# INLINE setLink #-}
-setLink c =
-    case c of
-        View Icon_     {..} -> View Icon_     { link = True, .. }
-        View List_     {..} -> View List_     { link = True, .. }
-        View ListIcon_ {..} -> View ListIcon_ { link = True, .. }
-        _                   -> c
-
 pattern Loading c <- (getLoading -> (True,c)) where
     Loading c = setLoading c
 
