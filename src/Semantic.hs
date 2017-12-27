@@ -1,4 +1,4 @@
-module Semantic (module Export) where
+module Semantic (module Semantic, module Export) where
 
 import Data.Function as Export
 import Semantic.Elements as Export
@@ -15,6 +15,12 @@ import Semantic.Extensions.Avatar as Export
 import Semantic.Extensions.Children as Export
 import Semantic.Extensions.Classes as Export
 import Semantic.Extensions.Name as Export
+
+infixl 1 !%
+(!%) c cs as = Children (cs (Attributes as c))
+
+infixl 1 %!
+(%!) c as cs = Attributes (as (Children cs c))
 
 pattern ToLeft = "left"
 pattern ToRight = "right"
