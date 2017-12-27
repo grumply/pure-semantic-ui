@@ -20,6 +20,7 @@ import Semantic.Properties.Children
 import Semantic.Properties.Classes
 import Semantic.Properties.Color
 import Semantic.Properties.Disabled
+import Semantic.Properties.Dividing
 
 data Header ms = Header_
     { as :: [Feature ms] -> [View ms] -> View ms 
@@ -108,3 +109,7 @@ instance HasColorProp (Header ms) where
 instance HasDisabledProp (Header ms) where
     getDisabled = disabled
     setDisabled d h = h { disabled = d }
+
+instance HasDividingProp (Header ms) where
+    getDividing = dividing
+    setDividing d h = h { dividing = d }

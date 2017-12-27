@@ -19,23 +19,6 @@ import Semantic.Utils
 
 import Debug.Trace
 
-pattern Dividing c <- (getDividing -> (True,c)) where
-    Dividing c = setDividing c
-
-{-# INLINE getDividing #-}
-getDividing c =
-    case c of
-        View Header_ {..} -> (dividing,c)
-        View Rail_   {..} -> (dividing,c)
-        _                 -> (False,c)
-
-{-# INLINE setDividing #-}
-setDividing c =
-    case c of
-        View Header_ {..} -> View Header_ { dividing = True, .. }
-        View Rail_   {..} -> View Rail_   { dividing = True, .. }
-        _                 -> c
-
 pattern Empty c <- (getEmpty -> (True,c)) where
     Empty c = setEmpty c
 
