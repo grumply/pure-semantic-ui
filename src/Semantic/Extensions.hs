@@ -19,21 +19,6 @@ import Semantic.Utils
 
 import Debug.Trace
 
-pattern Centered c <- (getCentered -> (True,c)) where
-    Centered c = setCentered c
-
-{-# INLINE getCentered #-}
-getCentered c =
-    case c of
-        View Image_ {..} -> (centered,c)
-        _                -> (False,c)
-
-{-# INLINE setCentered #-}
-setCentered c =
-    case c of
-        View Image_ {..} -> View Image_ { centered = True, .. }
-        _                -> c
-
 pattern Change f c <- (getChange -> Just (f,c)) where
     Change f c = setChange f c
 

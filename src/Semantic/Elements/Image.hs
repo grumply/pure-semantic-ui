@@ -11,6 +11,7 @@ import Semantic.Properties.As
 import Semantic.Properties.Attributes
 import Semantic.Properties.Avatar
 import Semantic.Properties.Bordered
+import Semantic.Properties.Centered
 import Semantic.Properties.Children
 import Semantic.Properties.Classes
 
@@ -87,6 +88,10 @@ instance HasAttributesProp (Image ms) where
 instance HasBorderedProp (Image ms) where
     getBordered = bordered
     setBordered b i = i { bordered = b }
+
+instance HasCenteredProp (Image ms) where
+    getCentered = centered
+    setCentered c i = i { centered = c }
 
 instance HasChildrenProp (Image ms) where
     type Child (Image ms) = View ms

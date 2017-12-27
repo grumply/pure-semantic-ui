@@ -11,6 +11,7 @@ import Semantic.Properties.Block as Export
 import Semantic.Properties.Bordered as Export
 import Semantic.Properties.Bulleted as Export
 import Semantic.Properties.Celled as Export
+import Semantic.Properties.Centered as Export
 import Semantic.Properties.Children as Export
 import Semantic.Properties.Classes as Export
 import Semantic.Properties.Name as Export
