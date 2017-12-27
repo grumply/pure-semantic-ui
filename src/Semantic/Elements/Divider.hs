@@ -10,6 +10,7 @@ import Semantic.Properties.Attributes
 import Semantic.Properties.Children
 import Semantic.Properties.Classes
 import Semantic.Properties.Clearing
+import Semantic.Properties.Fitted
 
 data Divider ms = Divider_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -72,3 +73,7 @@ instance HasClassesProp (Divider ms) where
 instance HasClearingProp (Divider ms) where
     getClearing = clearing
     setClearing c d = d { clearing = c }
+
+instance HasFittedProp (Divider ms) where
+    getFitted = fitted
+    setFitted f d = d { fitted = f }

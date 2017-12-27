@@ -25,6 +25,7 @@ import Semantic.Properties.Divided as Export
 import Semantic.Properties.Dividing as Export
 import Semantic.Properties.Empty as Export
 import Semantic.Properties.Error as Export
+import Semantic.Properties.Fitted as Export
 import Semantic.Properties.Name as Export
 import Semantic.Properties.OnChange as Export
 import Semantic.Properties.OnClick as Export

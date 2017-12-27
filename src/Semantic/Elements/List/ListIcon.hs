@@ -13,6 +13,7 @@ import Semantic.Properties.Classes
 import Semantic.Properties.Color
 import Semantic.Properties.Corner
 import Semantic.Properties.Disabled
+import Semantic.Properties.Fitted
 import Semantic.Properties.Name
 
 data ListIcon ms = ListIcon_ 
@@ -108,3 +109,7 @@ instance HasCornerProp (ListIcon ms) where
 instance HasDisabledProp (ListIcon ms) where
     getDisabled = disabled
     setDisabled d li = li { disabled = d }
+
+instance HasFittedProp (ListIcon ms) where
+    getFitted = fitted
+    setFitted f li = li { fitted = f }

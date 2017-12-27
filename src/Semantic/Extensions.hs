@@ -19,25 +19,6 @@ import Semantic.Utils
 
 import Debug.Trace
 
-pattern Fitted c <- (getFitted -> (True,c)) where
-    Fitted c = setFitted c
-
-{-# INLINE getFitted #-}
-getFitted c =
-    case c of
-        View Icon_     {..} -> (fitted,c)
-        View Divider_  {..} -> (fitted,c)
-        View ListIcon_ {..} -> (fitted,c)
-        _                   -> (False,c)
-
-{-# INLINE setFitted #-}
-setFitted c =
-    case c of
-        View Icon_     {..} -> View Icon_     { fitted = True, .. }
-        View Divider_  {..} -> View Divider_  { fitted = True, .. }
-        View ListIcon_ {..} -> View ListIcon_ { fitted = True, .. }
-        _                  -> c
-
 pattern Flipped f c <- (getFlipped -> Just (f,c)) where
     Flipped f c = setFlipped f c
 
