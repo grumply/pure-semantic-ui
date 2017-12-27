@@ -13,7 +13,7 @@ pattern Children :: HasChildrenProp a => [Child a] -> a -> a
 pattern Children cs a <- (getChildren &&& id -> (cs,a)) where
     Children cs a = setChildren cs a
 
-infixl 1 !
+infixl 9 !
 (!) c cs = Children cs c
        
 instance HasChildrenProp (View ms) where

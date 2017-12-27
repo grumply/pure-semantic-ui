@@ -13,7 +13,7 @@ pattern Attributes :: HasAttributesProp a => [Attribute a] -> a -> a
 pattern Attributes cs a <- (getAttributes &&& id -> (cs,a)) where
     Attributes cs a = setAttributes cs a
 
-infixl 2 %
+infixl 8 %
 (%) c as = Attributes as c
        
 instance HasAttributesProp (View ms) where

@@ -1,14 +1,17 @@
 module Semantic.Elements.Reveal where
 
 import GHC.Generics as G
-import Pure.View
+import Pure.View hiding (disabled)
 
 import Semantic.Utils
 
+import Semantic.Properties.Animated
 import Semantic.Properties.As
 import Semantic.Properties.Attributes
 import Semantic.Properties.Children
 import Semantic.Properties.Classes
+import Semantic.Properties.Disabled
+import Semantic.Properties.Instant
 
 data Reveal ms = Reveal_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -46,6 +49,11 @@ instance Typeable ms => Pure Reveal ms where
                 )
                 children
 
+instance HasAnimatedProp (Reveal ms) where
+    type AnimatedProp (Reveal ms) = Txt
+    getAnimated = animated
+    setAnimated a r = r { animated = a }
+
 instance HasAsProp (Reveal ms) where
     type AsProp (Reveal ms) = [Feature ms] -> [View ms] -> View ms
     getAs = as
@@ -64,3 +72,11 @@ instance HasChildrenProp (Reveal ms) where
 instance HasClassesProp (Reveal ms) where
     getClasses = classes
     setClasses cs r = r { classes = cs }
+
+instance HasDisabledProp (Reveal ms) where
+    getDisabled = disabled
+    setDisabled d r = r { disabled = d }
+
+instance HasInstantProp (Reveal ms) where
+    getInstant = instant
+    setInstant i r = r { instant = i }

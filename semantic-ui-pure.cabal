@@ -111,6 +111,7 @@ executable semantic-ui-pure
     Semantic.Properties.Horizontal
     Semantic.Properties.Indeterminate
     Semantic.Properties.Inline
+    Semantic.Properties.Instant
     Semantic.Properties.Internal
     Semantic.Properties.Inverted
     Semantic.Properties.Labeled
@@ -260,6 +261,7 @@ library
     Semantic.Properties.Horizontal
     Semantic.Properties.Indeterminate
     Semantic.Properties.Inline
+    Semantic.Properties.Instant
     Semantic.Properties.Internal
     Semantic.Properties.Inverted
     Semantic.Properties.Labeled
