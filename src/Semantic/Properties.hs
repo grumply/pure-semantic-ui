@@ -33,6 +33,7 @@ import Semantic.Properties.Fluid as Export
 import Semantic.Properties.Focus as Export
 import Semantic.Properties.Focused as Export
 import Semantic.Properties.Hidden as Export
+import Semantic.Properties.Horizontal as Export
 import Semantic.Properties.Inline as Export
 import Semantic.Properties.Name as Export
 import Semantic.Properties.OnChange as Export

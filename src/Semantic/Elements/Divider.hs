@@ -1,7 +1,7 @@
 module Semantic.Elements.Divider where
 
 import GHC.Generics as G
-import Pure.View as View hiding (hidden)
+import Pure.View as View hiding (hidden,horizontal)
 
 import Semantic.Utils
 
@@ -12,6 +12,7 @@ import Semantic.Properties.Classes
 import Semantic.Properties.Clearing
 import Semantic.Properties.Fitted
 import Semantic.Properties.Hidden
+import Semantic.Properties.Horizontal
 
 data Divider ms = Divider_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -82,3 +83,7 @@ instance HasFittedProp (Divider ms) where
 instance HasHiddenProp (Divider ms) where
     getHidden = hidden
     setHidden h d = d { hidden = h }
+
+instance HasHorizontalProp (Divider ms) where
+    getHorizontal = horizontal
+    setHorizontal h d = d { horizontal = h }

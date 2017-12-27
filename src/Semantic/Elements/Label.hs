@@ -1,7 +1,7 @@
 module Semantic.Elements.Label (module Semantic.Elements.Label, module Export) where
 
 import GHC.Generics as G
-import Pure.View as View hiding (active,color,empty,onClick)
+import Pure.View as View hiding (active,color,empty,horizontal,onClick)
 import qualified Pure.View as HTML
 
 import Semantic.Utils
@@ -23,6 +23,7 @@ import Semantic.Properties.Color
 import Semantic.Properties.Corner
 import Semantic.Properties.Empty
 import Semantic.Properties.Floating
+import Semantic.Properties.Horizontal
 import Semantic.Properties.OnClick
 
 data Label ms = Label_
@@ -150,3 +151,7 @@ instance HasEmptyProp (Label ms) where
 instance HasFloatingProp (Label ms) where
     getFloating = floating
     setFloating f l = l { floating = f }
+
+instance HasHorizontalProp (Label ms) where
+    getHorizontal = horizontal
+    setHorizontal h l = l { horizontal = h }

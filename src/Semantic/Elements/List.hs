@@ -2,7 +2,7 @@
 module Semantic.Elements.List (module Semantic.Elements.List, module Export) where
 
 import GHC.Generics as G
-import Pure.View hiding (onClick)
+import Pure.View hiding (horizontal,onClick)
 
 import Semantic.Utils
 
@@ -22,6 +22,7 @@ import Semantic.Properties.Children
 import Semantic.Properties.Classes
 import Semantic.Properties.Divided
 import Semantic.Properties.Floated
+import Semantic.Properties.Horizontal
 import Semantic.Properties.OnClick
 
 data List ms = List_
@@ -126,3 +127,7 @@ instance HasOnClickProp (List ms) where
 instance HasFloatedProp (List ms) where
     getFloated = floated
     setFloated f l = l { floated = f }
+
+instance HasHorizontalProp (List ms) where
+    getHorizontal = horizontal
+    setHorizontal h l = l { horizontal = h }

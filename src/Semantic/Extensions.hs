@@ -22,25 +22,6 @@ import Debug.Trace
 -- pattern ToLeft = "left"
 -- pattern ToRight = "right"
 
-pattern Horizontal c <- (getHorizontal -> (True,c)) where
-    Horizontal c = setHorizontal c
-
-{-# INLINE getHorizontal #-}
-getHorizontal c = 
-    case c of
-        View Divider_ {..} -> (horizontal,c)
-        View Label_   {..} -> (horizontal,c)
-        View List_    {..} -> (horizontal,c)
-        _                  -> (False,c)
-
-{-# INLINE setHorizontal #-}
-setHorizontal c =
-    case c of
-        View Divider_ {..} -> View Divider_ { horizontal = True, .. }
-        View Label_   {..} -> View Label_   { horizontal = True, .. }
-        View List_    {..} -> View List_    { horizontal = True, .. }
-        _                  -> c
-
 pattern Indeterminate c <- (getIndeterminate -> (True,c)) where
     Indeterminate c = setIndeterminate c
 
