@@ -1,12 +1,15 @@
-module Semantic.Elements.Segment where
+module Semantic.Elements.Segment (module Semantic.Elements.Segment, module Export) where
 
 import GHC.Generics as G
 import Pure.View hiding (color,disabled,textAlign,vertical)
 
 import Semantic.Utils
 
+import Semantic.Elements.Segment.SegmentGroup as Export
+
 import Semantic.Properties.As
 import Semantic.Properties.Attached
+import Semantic.Properties.Attributes
 import Semantic.Properties.Basic
 import Semantic.Properties.Children
 import Semantic.Properties.Circular
@@ -100,6 +103,11 @@ instance HasAttachedProp (Segment ms) where
     type AttachedProp (Segment ms) = Txt
     getAttached = attached
     setAttached a s = s { attached = a }
+
+instance HasAttributesProp (Segment ms) where
+    type Attribute (Segment ms) = Feature ms
+    getAttributes = attributes
+    setAttributes as s = s { attributes = as }
 
 instance HasBasicProp (Segment ms) where
     getBasic = basic

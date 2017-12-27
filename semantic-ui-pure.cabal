@@ -76,6 +76,7 @@ executable semantic-ui-pure
     Semantic.Elements.Rail
     Semantic.Elements.Reveal
     Semantic.Elements.Segment
+    Semantic.Elements.Segment.SegmentGroup
     Semantic.Properties
     Semantic.Properties.Animated
     Semantic.Properties.Active
@@ -232,6 +233,7 @@ library
     Semantic.Elements.Rail
     Semantic.Elements.Reveal
     Semantic.Elements.Segment
+    Semantic.Elements.Segment.SegmentGroup
     Semantic.Properties
     Semantic.Properties.Animated
     Semantic.Properties.Active
