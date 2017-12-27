@@ -54,6 +54,7 @@ import Semantic.Properties.Positive as Export
 import Semantic.Properties.Primary as Export
 import Semantic.Properties.Relaxed as Export
 import Semantic.Properties.Ribbon as Export
+import Semantic.Properties.Rotated as Export
 
 infixl 1 !%
 (!%) c cs as = Children (cs (Attributes as c))

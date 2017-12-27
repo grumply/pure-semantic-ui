@@ -22,23 +22,6 @@ import Debug.Trace
 -- pattern ToLeft = "left"
 -- pattern ToRight = "right"
 
-pattern Rotated r c <- (getRotated -> Just (r,c)) where
-    Rotated r c = setRotated r c
-
-{-# INLINE getRotated #-}
-getRotated c =
-    case c of
-        View Icon_     {..} -> rotated # Just (rotated,c)
-        View ListIcon_ {..} -> rotated # Just (rotated,c)
-        _                   -> Nothing
-
-{-# INLINE setRotated #-}
-setRotated r c =
-    case c of
-        View Icon_     {..} -> View Icon_     { rotated = r, .. }
-        View ListIcon_ {..} -> View ListIcon_ { rotated = r, .. }
-        _                   -> c
-
 pattern Rounded c <- (getRounded -> (True,c)) where
     Rounded c = setRounded c
 
