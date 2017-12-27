@@ -118,6 +118,7 @@ executable semantic-ui-pure
     Semantic.Properties.LabelPosition
     Semantic.Properties.Link
     Semantic.Properties.Loading
+    Semantic.Properties.Localize
     Semantic.Properties.Name
     Semantic.Properties.OnChange
     Semantic.Properties.OnClick
@@ -237,6 +238,7 @@ library
     Semantic.Properties.LabelPosition
     Semantic.Properties.Link
     Semantic.Properties.Loading
+    Semantic.Properties.Localize
     Semantic.Properties.Name
     Semantic.Properties.OnChange
     Semantic.Properties.OnClick

@@ -22,21 +22,6 @@ import Debug.Trace
 -- pattern ToLeft = "left"
 -- pattern ToRight = "right"
 
-pattern Localize t c <- (getLocalize -> Just (t,c)) where
-    Localize t c = setLocalize t c
-
-{-# INLINE getLocalize #-}
-getLocalize c =
-    case c of
-        View ButtonOr_ {..} -> Just (localize,c)
-        _                   -> Nothing
-
-{-# INLINE setLocalize #-}
-setLocalize l c =
-    case c of
-        View ButtonOr_ {..} -> View ButtonOr_ { localize = l, .. }
-        _                   -> c
-
 pattern Negative c <- (getNegative -> (True,c)) where
     Negative c = setNegative c
 

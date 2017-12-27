@@ -10,6 +10,7 @@ import Semantic.Properties.As
 import Semantic.Properties.Attributes
 import Semantic.Properties.Children
 import Semantic.Properties.Classes
+import Semantic.Properties.Localize
 
 data ButtonOr ms = ButtonOr_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -46,3 +47,7 @@ instance HasAttributesProp (ButtonOr ms) where
 instance HasClassesProp (ButtonOr ms) where
     getClasses = classes
     setClasses cs bo = bo { classes = cs }
+
+instance HasLocalizeProp (ButtonOr ms) where
+    getLocalize = localize
+    setLocalize l bo = bo { localize = l }
