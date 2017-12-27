@@ -1,7 +1,7 @@
 module Semantic.Elements.List.ListItem where
 
 import GHC.Generics as G
-import Pure.View hiding (active,disabled,onClick)
+import Pure.View hiding (active,disabled,onClick,Value)
 import qualified Pure.View as HTML
 
 import Semantic.Utils
@@ -13,6 +13,7 @@ import Semantic.Properties.Children
 import Semantic.Properties.Classes
 import Semantic.Properties.Disabled
 import Semantic.Properties.OnClick
+import Semantic.Properties.Value
 
 data ListItem ms = ListItem_ 
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -45,7 +46,7 @@ instance Typeable ms => Pure ListItem ms where
                 : classes
                 )
 
-            valueProp = li ? Value value $ Prop "data-value" value
+            valueProp = li ? HTML.Value value $ Prop "data-value" value
         in
             as
                 ( HTML.onClick onClick
@@ -87,3 +88,7 @@ instance HasOnClickProp (ListItem ms) where
 instance HasDisabledProp (ListItem ms) where
     getDisabled = disabled
     setDisabled d li = li { disabled = d }
+
+instance HasValueProp (ListItem ms) where
+    getValue = value
+    setValue v li = li { value = v }

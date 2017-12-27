@@ -70,6 +70,7 @@ import Semantic.Properties.Transition as Export
 import Semantic.Properties.Transparent as Export
 import Semantic.Properties.Type as Export
 import Semantic.Properties.UI as Export
+import Semantic.Properties.Value as Export
 
 infixl 1 !%
 (!%) c cs as = Children (cs (Attributes as c))

@@ -19,21 +19,6 @@ import Semantic.Utils
 
 import Debug.Trace
 
-pattern Value v c <- (getValue -> Just (v,c)) where
-    Value c = setValue c
-
-{-# INLINE getValue #-}
-getValue c =
-    case c of
-        View ListItem_ {..} -> value # Just (value,c)
-        _                   -> Nothing
-
-{-# INLINE setValue #-}
-setValue v c =
-    case c of
-        View ListItem_ {..} -> View ListItem_ { value = v, .. }
-        _                   -> c
-
 pattern Vertical c <- (getVertical -> (True,c)) where
     Vertical c = setVertical c
 
