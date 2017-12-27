@@ -15,6 +15,7 @@ import Semantic.Properties.As
 import Semantic.Properties.Attributes
 import Semantic.Properties.Children
 import Semantic.Properties.Classes
+import Semantic.Properties.OnChange
 
 data Input ms = Input_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -123,6 +124,11 @@ instance HasAttributesProp (Input ms) where
     type Attribute (Input ms) = Feature ms
     getAttributes = attributes 
     setAttributes cs i = i { attributes = cs }
+
+instance HasOnChangeProp (Input ms) where
+    type OnChangeProp (Input ms) = Txt -> Ef ms IO ()
+    getOnChange = onChange
+    setOnChange oc i = i { onChange = oc }
 
 instance HasChildrenProp (Input ms) where
     type Child (Input ms) = View ms

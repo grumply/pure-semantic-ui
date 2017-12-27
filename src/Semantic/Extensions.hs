@@ -19,21 +19,6 @@ import Semantic.Utils
 
 import Debug.Trace
 
-pattern Change f c <- (getChange -> Just (f,c)) where
-    Change f c = setChange f c
-
-{-# INLINE getChange #-}
-getChange c =
-    case c of
-        View Input_ {..} -> Just (onChange,c)
-        _                -> Nothing
-
-{-# INLINE setChange #-}
-setChange f c =
-    case c of
-        View Input_ {..} -> View Input_ { onChange = f, .. }
-        _                -> c
-
 pattern Clearing c <- (getClearing -> (True,c)) where
     Clearing c = setClearing c
 
