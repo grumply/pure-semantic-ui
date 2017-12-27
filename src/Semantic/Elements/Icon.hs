@@ -22,6 +22,7 @@ import Semantic.Properties.Link
 import Semantic.Properties.Loading
 import Semantic.Properties.Name
 import Semantic.Properties.Rotated
+import Semantic.Properties.Size
 
 data Icon ms = Icon_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -138,3 +139,7 @@ instance HasLoadingProp (Icon ms) where
 instance HasRotatedProp (Icon ms) where
     getRotated = rotated
     setRotated r i = i { rotated = r }
+
+instance HasSizeProp (Icon ms) where
+    getSize = size
+    setSize s i = i { size = s }

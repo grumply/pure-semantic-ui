@@ -9,6 +9,7 @@ import Semantic.Properties.As
 import Semantic.Properties.Attributes
 import Semantic.Properties.Children
 import Semantic.Properties.Classes
+import Semantic.Properties.Size
 
 data IconGroup ms = IconGroup_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -52,3 +53,7 @@ instance HasChildrenProp (IconGroup ms) where
 instance HasClassesProp (IconGroup ms) where
     getClasses = classes
     setClasses cs ig = ig { classes = cs }
+
+instance HasSizeProp (IconGroup ms) where
+    getSize = size
+    setSize s ig = ig { size = s }

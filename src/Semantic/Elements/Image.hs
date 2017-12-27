@@ -21,6 +21,7 @@ import Semantic.Properties.Fluid
 import Semantic.Properties.Hidden
 import Semantic.Properties.Inline
 import Semantic.Properties.Rounded
+import Semantic.Properties.Size
 
 data Image ms = Image_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -137,3 +138,7 @@ instance HasHiddenProp (Image ms) where
 instance HasRoundedProp (Image ms) where
     getRounded = rounded
     setRounded r i = i { rounded = r }
+
+instance HasSizeProp (Image ms) where
+    getSize = size
+    setSize s i = i { size = s }

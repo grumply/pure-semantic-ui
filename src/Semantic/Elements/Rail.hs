@@ -14,6 +14,7 @@ import Semantic.Properties.Close
 import Semantic.Properties.Dividing
 import Semantic.Properties.Internal
 import Semantic.Properties.Position
+import Semantic.Properties.Size
 
 data Rail ms = Rail_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -94,3 +95,7 @@ instance HasInternalProp (Rail ms) where
 instance HasPositionProp (Rail ms) where
     getPosition = position
     setPosition p r = r { position = p }
+
+instance HasSizeProp (Rail ms) where
+    getSize = size
+    setSize s r = r { size = s }

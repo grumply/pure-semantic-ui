@@ -29,6 +29,7 @@ import Semantic.Properties.OnClick
 import Semantic.Properties.Ordered
 import Semantic.Properties.Relaxed
 import Semantic.Properties.Selection
+import Semantic.Properties.Size
 
 data List ms = List_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -156,3 +157,7 @@ instance HasRelaxedProp (List ms) where
 instance HasSelectionProp (List ms) where
     getSelection = selection
     setSelection s l = l { selection = s }
+
+instance HasSizeProp (List ms) where
+    getSize = size
+    setSize s l = l { size = s }

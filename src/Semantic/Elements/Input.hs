@@ -23,6 +23,7 @@ import Semantic.Properties.Focused
 import Semantic.Properties.Inverted
 import Semantic.Properties.Loading
 import Semantic.Properties.OnChange
+import Semantic.Properties.Size
 
 import Prelude hiding (error)
 
@@ -175,3 +176,7 @@ instance HasInvertedProp (Input ms) where
 instance HasLoadingProp (Input ms) where
     getLoading = loading
     setLoading l i = i { loading = l }
+
+instance HasSizeProp (Input ms) where
+    getSize = size
+    setSize s i = i { size = s }

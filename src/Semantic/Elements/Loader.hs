@@ -14,6 +14,7 @@ import Semantic.Properties.Disabled
 import Semantic.Properties.Indeterminate
 import Semantic.Properties.Inline
 import Semantic.Properties.Inverted
+import Semantic.Properties.Size
 
 data Loader ms = Loader_ 
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -95,3 +96,7 @@ instance HasIndeterminateProp (Loader ms) where
 instance HasInvertedProp (Loader ms) where
     getInverted = inverted
     setInverted i l = l { inverted = i }
+
+instance HasSizeProp (Loader ms) where
+    getSize = size
+    setSize s l = l { size = s }

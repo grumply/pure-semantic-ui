@@ -36,6 +36,7 @@ import Semantic.Properties.OnClick
 import Semantic.Properties.Positive
 import Semantic.Properties.Primary
 import Semantic.Properties.Secondary
+import Semantic.Properties.Size
 
 data Button ms = Button_
   { as :: [Feature ms] -> [View ms] -> View ms
@@ -257,3 +258,7 @@ instance HasPrimaryProp (Button ms) where
 instance HasSecondaryProp (Button ms) where
     getSecondary = secondary
     setSecondary s b = b { secondary = s }
+
+instance HasSizeProp (Button ms) where
+    getSize = size
+    setSize s b = b { size = s }
