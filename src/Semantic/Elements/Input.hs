@@ -17,6 +17,7 @@ import Semantic.Properties.Children
 import Semantic.Properties.Classes
 import Semantic.Properties.Disabled
 import Semantic.Properties.Error
+import Semantic.Properties.Fluid
 import Semantic.Properties.OnChange
 
 import Prelude hiding (error)
@@ -150,3 +151,7 @@ instance HasDisabledProp (Input ms) where
 instance HasErrorProp (Input ms) where
     getError = error
     setError e i = i { error = e }
+
+instance HasFluidProp (Input ms) where
+    getFluid = fluid
+    setFluid f i = i { fluid = f }

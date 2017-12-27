@@ -9,6 +9,7 @@ import Semantic.Properties.As
 import Semantic.Properties.Attributes
 import Semantic.Properties.Children
 import Semantic.Properties.Classes
+import Semantic.Properties.Fluid
 
 data Container ms = Container_
   { as :: [Feature ms] -> [View ms] -> View ms
@@ -71,3 +72,7 @@ instance HasChildrenProp (Container ms) where
 instance HasClassesProp (Container ms) where
     getClasses = classes
     setClasses cs c = c { classes = cs }
+
+instance HasFluidProp (Container ms) where
+    getFluid = fluid
+    setFluid f c = c { fluid = f }

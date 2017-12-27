@@ -22,29 +22,6 @@ import Debug.Trace
 -- pattern ToLeft = "left"
 -- pattern ToRight = "right"
 
-pattern Fluid c <- (getFluid -> (True,c)) where
-    Fluid c = setFluid c
-
-{-# INLINE getFluid #-}
-getFluid c =
-    case c of
-        View Button_      {..} -> (fluid,c)
-        View ButtonGroup_ {..} -> (fluid,c)
-        View Container_   {..} -> (fluid,c)
-        View Image_       {..} -> (fluid,c)
-        View Input_       {..} -> (fluid,c)
-        _                      -> (False,c)
-
-{-# INLINE setFluid #-}
-setFluid c =
-    case c of
-        View Button_      {..} -> View Button_      { fluid = True, .. }
-        View ButtonGroup_ {..} -> View ButtonGroup_ { fluid = True, .. }
-        View Container_   {..} -> View Container_   { fluid = True, .. }
-        View Image_       {..} -> View Image_       { fluid = True, .. }
-        View Input_       {..} -> View Input_       { fluid = True, .. }
-        _                      -> c
-
 pattern Focus c <- (getFocus -> (True,c)) where
     Focus c = setFocus c
 
