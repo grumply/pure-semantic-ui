@@ -18,6 +18,7 @@ import Semantic.Extensions.Animated
 import Semantic.Extensions.As
 import Semantic.Extensions.Attached
 import Semantic.Extensions.Attributes
+import Semantic.Extensions.Basic
 import Semantic.Extensions.Children
 import Semantic.Extensions.Classes
 
@@ -167,6 +168,10 @@ instance HasAttributes (Button ms) where
     type Attribute (Button ms) = Feature ms
     getAttributes = attributes 
     setAttributes cs b = b { attributes = cs }
+
+instance HasBasic (Button ms) where
+    getBasic = basic
+    setBasic bsc b = b { basic = bsc }
 
 instance HasChildren (Button ms) where
     type Child (Button ms) = View ms

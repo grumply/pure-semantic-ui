@@ -11,6 +11,7 @@ import Semantic.Elements.Icon
 import Semantic.Extensions.As
 import Semantic.Extensions.Attached
 import Semantic.Extensions.Attributes
+import Semantic.Extensions.Basic
 import Semantic.Extensions.Children
 import Semantic.Extensions.Classes
 
@@ -92,6 +93,10 @@ instance HasAttributes (ButtonGroup ms) where
     type Attribute (ButtonGroup ms) = Feature ms
     getAttributes = attributes 
     setAttributes cs bg = bg { attributes = cs }
+
+instance HasBasic (ButtonGroup ms) where
+    getBasic = basic
+    setBasic b bg = bg { basic = b }
 
 instance HasChildren (ButtonGroup ms) where
     type Child (ButtonGroup ms) = View ms

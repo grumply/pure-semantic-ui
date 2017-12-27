@@ -14,6 +14,7 @@ import Semantic.Extensions.Active
 import Semantic.Extensions.As
 import Semantic.Extensions.Attached
 import Semantic.Extensions.Attributes
+import Semantic.Extensions.Basic
 import Semantic.Extensions.Children
 import Semantic.Extensions.Classes
 
@@ -103,6 +104,10 @@ instance HasAttributes (Label ms) where
     type Attribute (Label ms) = Feature ms
     getAttributes = attributes 
     setAttributes cs l = l { attributes = cs }
+
+instance HasBasic (Label ms) where
+    getBasic = basic
+    setBasic b l = l { basic = b }
 
 instance HasChildren (Label ms) where
     type Child (Label ms) = View ms

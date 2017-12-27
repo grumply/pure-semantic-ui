@@ -25,26 +25,6 @@ import Debug.Trace
 -- infixl 1 %!
 -- (%!) c as cs = Attributes (as (Children cs c))
 
--- assuming default of false for all basic-capable components
-pattern Basic c <- (getBasic -> (True,c)) where
-    Basic c = setBasic c
-
-{-# INLINE getBasic #-}
-getBasic c = 
-    case c of
-        View Button_      {..} -> (basic,c)
-        View ButtonGroup_ {..} -> (basic,c)
-        View Label_       {..} -> (basic,c)
-        _                      -> (False,c)
-
-{-# INLINE setBasic #-}
-setBasic c =
-    case c of
-        View Button_      {..} -> View Button_      { basic = True, .. }
-        View ButtonGroup_ {..} -> View ButtonGroup_ { basic = True, .. }
-        View Label_       {..} -> View Label_       { basic = True, .. }
-        _                      -> c
-
 pattern Block c <- (getBlock -> (True,c)) where
     Block c = setBlock c
 
