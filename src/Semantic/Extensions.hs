@@ -19,22 +19,6 @@ import Semantic.Utils
 
 import Debug.Trace
 
-
-pattern Visible c <- (getVisible -> (True,c)) where
-    Visible c = setVisible c
-
-{-# INLINE getVisible #-}
-getVisible c =
-    case c of
-        View ButtonContent_ {..} -> (visible,c)
-        _                        -> (False,c)
-
-{-# INLINE setVisible #-}
-setVisible c =
-    case c of
-        View ButtonContent_ {..} -> View ButtonContent_ { visible = True, .. }
-        _                        -> c
-
 -- pattern Visibility v c <- (getVisibility -> Just (v,c)) where
 --     Visibility v c = setVisibility v c
 

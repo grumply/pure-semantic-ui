@@ -1,7 +1,7 @@
 module Semantic.Elements.Button.ButtonContent where
 
 import GHC.Generics as G
-import Pure.View hiding (hidden,Button,Label)
+import Pure.View hiding (hidden,visible,Button,Label)
 import qualified Pure.View as HTML
 
 import Semantic.Utils
@@ -11,6 +11,7 @@ import Semantic.Properties.Attributes
 import Semantic.Properties.Children
 import Semantic.Properties.Classes
 import Semantic.Properties.Hidden
+import Semantic.Properties.Visible
 
 data ButtonContent ms = ButtonContent_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -66,3 +67,7 @@ instance HasClassesProp (ButtonContent ms) where
 instance HasHiddenProp (ButtonContent ms) where
     getHidden = hidden
     setHidden h bc = bc { hidden = h }
+
+instance HasVisibleProp (ButtonContent ms) where
+    getVisible = visible
+    setVisible v bc = bc { visible = v }
