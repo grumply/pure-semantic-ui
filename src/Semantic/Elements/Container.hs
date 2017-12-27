@@ -26,6 +26,21 @@ instance Default (Container ms) where
 pattern Container :: Typeable ms => Container ms -> View ms
 pattern Container c = View c
 
+pattern TextContainer c <- (getTextContainer -> (True,c)) where
+    TextContainer c = setTextContainer c
+
+{-# INLINE getTextContainer #-}
+getTextContainer c =
+    case c of
+        View Container_ {..} -> (text,c)
+        _                    -> (False,c)
+
+{-# INLINE setTextContainer #-}
+setTextContainer c =
+    case c of
+        View Container_ {..} -> View Container_ { text = True, .. }
+        _                    -> c
+
 instance Typeable ms => Pure Container ms where
     render Container_ {..} =
         let cs = 

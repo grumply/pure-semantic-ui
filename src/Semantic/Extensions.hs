@@ -1350,19 +1350,3 @@ setWrapped c =
 
 ----------------------------------
 
-pattern TextContainer c <- (getTextContainer -> (True,c)) where
-    TextContainer c = setTextContainer c
-
-{-# INLINE getTextContainer #-}
-getTextContainer c =
-    case c of
-        View Container_ {..} -> (text,c)
-        _                    -> (False,c)
-
-{-# INLINE setTextContainer #-}
-setTextContainer c =
-    case c of
-        View Container_ {..} -> View Container_ { text = True, .. }
-        _                    -> c
-
-
