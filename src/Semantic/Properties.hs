@@ -63,6 +63,7 @@ import Semantic.Properties.Size as Export
 import Semantic.Properties.Spaced as Export
 import Semantic.Properties.Sub as Export
 import Semantic.Properties.TabIndex as Export
+import Semantic.Properties.Tag as Export
 
 infixl 1 !%
 (!%) c cs as = Children (cs (Attributes as c))

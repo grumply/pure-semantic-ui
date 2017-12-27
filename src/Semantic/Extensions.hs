@@ -22,23 +22,6 @@ import Debug.Trace
 -- pattern ToLeft = "left"
 -- pattern ToRight = "right"
 
-pattern Tag c <- (getTag -> (True,c)) where
-    Tag c = setTag c
-
-{-# INLINE getTag #-}
-getTag c =
-    case c of
-        View Label_ {..} -> (tag,c)
-        View LabelGroup_ {..} -> (tag,c)
-        _                -> (False,c)
-
-{-# INLINE setTag #-}
-setTag c =
-    case c of
-        View Label_ {..} -> View Label_ { tag = True, .. }
-        View LabelGroup_ {..} -> View LabelGroup_ { tag = True, .. }
-        _                -> c
-
 pattern TextAlign ta c <- (getTextAlign -> Just (ta,c)) where
     TextAlign ta c = setTextAlign ta c
 

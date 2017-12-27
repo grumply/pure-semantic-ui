@@ -139,6 +139,7 @@ executable semantic-ui-pure
     Semantic.Properties.Spaced
     Semantic.Properties.Sub
     Semantic.Properties.TabIndex
+    Semantic.Properties.Tag
     Semantic.Utils
 
   if impl(ghcjs)
@@ -276,6 +277,7 @@ library
     Semantic.Properties.Spaced
     Semantic.Properties.Sub
     Semantic.Properties.TabIndex
+    Semantic.Properties.Tag
     Semantic.Utils
 
   if impl(ghcjs)

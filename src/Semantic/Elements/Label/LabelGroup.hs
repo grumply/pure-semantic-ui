@@ -12,6 +12,7 @@ import Semantic.Properties.Circular
 import Semantic.Properties.Classes
 import Semantic.Properties.Color
 import Semantic.Properties.Size
+import Semantic.Properties.Tag
 
 data LabelGroup ms = LabelGroup_ 
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -79,3 +80,7 @@ instance HasColorProp (LabelGroup ms) where
 instance HasSizeProp (LabelGroup ms) where
     getSize = size
     setSize s lg = lg { size = s }
+
+instance HasTagProp (LabelGroup ms) where
+    getTag = tag
+    setTag t lg = lg { tag = t }

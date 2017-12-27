@@ -28,6 +28,7 @@ import Semantic.Properties.OnClick
 import Semantic.Properties.Pointing
 import Semantic.Properties.Ribbon
 import Semantic.Properties.Size
+import Semantic.Properties.Tag
 
 data Label ms = Label_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -170,3 +171,7 @@ instance HasRibbonProp (Label ms) where
 instance HasSizeProp (Label ms) where
     getSize = size
     setSize s l = l { size = s }
+
+instance HasTagProp (Label ms) where
+    getTag = tag
+    setTag t l = l { tag = t }
