@@ -44,6 +44,7 @@ import Semantic.Properties.Link as Export
 import Semantic.Properties.Loading as Export
 import Semantic.Properties.Localize as Export
 import Semantic.Properties.Name as Export
+import Semantic.Properties.Negative as Export
 import Semantic.Properties.OnChange as Export
 import Semantic.Properties.OnClick as Export
 

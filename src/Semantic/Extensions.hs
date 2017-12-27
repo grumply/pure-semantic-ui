@@ -22,23 +22,6 @@ import Debug.Trace
 -- pattern ToLeft = "left"
 -- pattern ToRight = "right"
 
-pattern Negative c <- (getNegative -> (True,c)) where
-    Negative c = setNegative c
-
-{-# INLINE getNegative #-}
-getNegative c =
-    case c of
-        View Button_      {..} -> (negative,c)
-        View ButtonGroup_ {..} -> (negative,c)
-        _                      -> (False,c)
-
-{-# INLINE setNegative #-}
-setNegative c =
-    case c of
-        View Button_      {..} -> View Button_      { negative = True, .. }
-        View ButtonGroup_ {..} -> View ButtonGroup_ { negative = True, .. }
-        _                      -> c
-
 pattern Ordered c <- (getOrdered -> (True,c)) where
     Ordered c = setOrdered c
 

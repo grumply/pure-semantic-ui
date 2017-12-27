@@ -31,6 +31,7 @@ import Semantic.Properties.Focus
 import Semantic.Properties.Inverted
 import Semantic.Properties.LabelPosition
 import Semantic.Properties.Loading
+import Semantic.Properties.Negative
 import Semantic.Properties.OnClick
 
 data Button ms = Button_
@@ -237,3 +238,7 @@ instance HasLabelPositionProp (Button ms) where
 instance HasLoadingProp (Button ms) where
     getLoading = loading
     setLoading l b = b { loading = l }
+
+instance HasNegativeProp (Button ms) where
+    getNegative = negative
+    setNegative n b = b { negative = n }
