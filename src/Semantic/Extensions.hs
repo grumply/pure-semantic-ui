@@ -22,21 +22,6 @@ import Debug.Trace
 -- pattern ToLeft = "left"
 -- pattern ToRight = "right"
 
-pattern Sub c <- (getSub -> (True,c)) where
-    Sub c = setSub c
-
-{-# INLINE getSub #-}
-getSub c =
-    case c of
-        View Header_ {..} -> (sub,c)
-        _                 -> (False,c)
-
-{-# INLINE setSub #-}
-setSub c =
-    case c of
-        View Header_ {..} -> View Header_ { sub = True, .. }
-        _                 -> c
-
 pattern TabIndex n c <- (getTabIndex -> Just (n,c)) where
   TabIndex n c = setTabIndex n c
 

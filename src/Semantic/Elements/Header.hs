@@ -24,6 +24,7 @@ import Semantic.Properties.Dividing
 import Semantic.Properties.Floated
 import Semantic.Properties.Inverted
 import Semantic.Properties.Size
+import Semantic.Properties.Sub
 
 data Header ms = Header_
     { as :: [Feature ms] -> [View ms] -> View ms 
@@ -128,3 +129,7 @@ instance HasInvertedProp (Header ms) where
 instance HasSizeProp (Header ms) where
     getSize = size
     setSize s h = h { size = s }
+
+instance HasSubProp (Header ms) where
+    getSub = sub
+    setSub s h = h { sub = s }

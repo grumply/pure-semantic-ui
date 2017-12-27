@@ -61,6 +61,7 @@ import Semantic.Properties.Section as Export
 import Semantic.Properties.Selection as Export
 import Semantic.Properties.Size as Export
 import Semantic.Properties.Spaced as Export
+import Semantic.Properties.Sub as Export
 
 infixl 1 !%
 (!%) c cs as = Children (cs (Attributes as c))
