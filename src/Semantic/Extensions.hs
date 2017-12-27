@@ -22,21 +22,6 @@ import Debug.Trace
 -- pattern ToLeft = "left"
 -- pattern ToRight = "right"
 
-pattern Pointing t c <- (getPointing -> Just (t,c)) where
-    Pointing t c = setPointing t c
-
-{-# INLINE getPointing #-}
-getPointing c =
-    case c of
-        View Label_ {..} -> may (\p -> Just (p,c)) pointing
-        _                -> Nothing
-
-{-# INLINE setPointing #-}
-setPointing t c =
-    case c of
-        View Label_ {..} -> View Label_ { pointing = Just t, .. }
-        _                -> c
-
 pattern Position p c <- (getPosition -> Just (p,c)) where
     Position p c = setPosition p c
 

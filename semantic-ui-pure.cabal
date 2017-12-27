@@ -124,6 +124,7 @@ executable semantic-ui-pure
     Semantic.Properties.OnChange
     Semantic.Properties.OnClick
     Semantic.Properties.Ordered
+    Semantic.Properties.Pointing
     Semantic.Utils
 
   if impl(ghcjs)
@@ -246,6 +247,7 @@ library
     Semantic.Properties.OnChange
     Semantic.Properties.OnClick
     Semantic.Properties.Ordered
+    Semantic.Properties.Pointing
     Semantic.Utils
 
   if impl(ghcjs)
