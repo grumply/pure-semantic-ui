@@ -19,21 +19,6 @@ import Semantic.Utils
 
 import Debug.Trace
 
-pattern Transparent c <- (getTransparent -> (True,c)) where
-    Transparent c = setTransparent c
-
-{-# INLINE getTransparent #-}
-getTransparent c =
-    case c of
-        View Input_ {..} -> (transparent,c)
-        _                -> (False,c)
-
-{-# INLINE setTransparent #-}
-setTransparent c =
-    case c of
-        View Input_ {..} -> View Input_ { transparent = True, .. }
-        _                -> c
-
 pattern Type t c <- (getType -> Just (t,c)) where
     Type t c = setType t c
 

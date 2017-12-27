@@ -2,7 +2,7 @@
 module Semantic.Elements.Input where
 
 import GHC.Generics as G
-import Pure.View as View hiding (disabled,focused,Disabled,Button,Label,Input)
+import Pure.View as View hiding (disabled,focused,transparent,Disabled,Button,Label,Input)
 import qualified Pure.View as HTML
 
 import Semantic.Utils
@@ -25,6 +25,7 @@ import Semantic.Properties.Loading
 import Semantic.Properties.OnChange
 import Semantic.Properties.Size
 import Semantic.Properties.TabIndex
+import Semantic.Properties.Transparent
 
 import Prelude hiding (error)
 
@@ -185,3 +186,7 @@ instance HasSizeProp (Input ms) where
 instance HasTabIndexProp (Input ms) where
     getTabIndex = tabIndex
     setTabIndex ti i = i { tabIndex = ti }
+
+instance HasTransparentProp (Input ms) where
+    getTransparent = transparent
+    setTransparent t i = i { transparent = t }

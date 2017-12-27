@@ -143,6 +143,7 @@ executable semantic-ui-pure
     Semantic.Properties.TextAlign
     Semantic.Properties.Toggle
     Semantic.Properties.Transition
+    Semantic.Properties.Transparent
     Semantic.Utils
 
   if impl(ghcjs)
@@ -284,6 +285,7 @@ library
     Semantic.Properties.TextAlign
     Semantic.Properties.Toggle
     Semantic.Properties.Transition
+    Semantic.Properties.Transparent
     Semantic.Utils
 
   if impl(ghcjs)
