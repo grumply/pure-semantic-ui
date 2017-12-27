@@ -19,21 +19,6 @@ import Semantic.Utils
 
 import Debug.Trace
 
-pattern Bulleted c <- (getBulleted -> (True,c)) where
-    Bulleted c = setBulleted c
-
-{-# INLINE getBulleted #-}
-getBulleted c =
-    case c of
-        View List_ {..} -> (bulleted,c)
-        _               -> (False,c)
-
-{-# INLINE setBulleted #-}
-setBulleted c =
-    case c of
-        View List_ {..} -> View List_ { bulleted = True, .. }
-        _               -> c
-
 pattern Celled c <- (getCelled -> (True,c)) where
     Celled c = setCelled c
 
