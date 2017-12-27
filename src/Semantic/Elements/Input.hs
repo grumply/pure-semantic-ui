@@ -21,6 +21,7 @@ import Semantic.Properties.Fluid
 import Semantic.Properties.Focus
 import Semantic.Properties.Focused
 import Semantic.Properties.Inverted
+import Semantic.Properties.Loading
 import Semantic.Properties.OnChange
 
 import Prelude hiding (error)
@@ -170,3 +171,7 @@ instance HasFocusedProp (Input ms) where
 instance HasInvertedProp (Input ms) where
     getInverted = inverted
     setInverted inv i = i { inverted = inv }
+
+instance HasLoadingProp (Input ms) where
+    getLoading = loading
+    setLoading l i = i { loading = l }

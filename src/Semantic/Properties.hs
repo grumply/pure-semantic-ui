@@ -41,6 +41,7 @@ import Semantic.Properties.Inverted as Export
 import Semantic.Properties.Labeled as Export
 import Semantic.Properties.LabelPosition as Export
 import Semantic.Properties.Link as Export
+import Semantic.Properties.Loading as Export
 import Semantic.Properties.Name as Export
 import Semantic.Properties.OnChange as Export
 import Semantic.Properties.OnClick as Export

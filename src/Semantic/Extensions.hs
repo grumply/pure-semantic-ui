@@ -22,27 +22,6 @@ import Debug.Trace
 -- pattern ToLeft = "left"
 -- pattern ToRight = "right"
 
-pattern Loading c <- (getLoading -> (True,c)) where
-    Loading c = setLoading c
-
-{-# INLINE getLoading #-}
-getLoading c =
-    case c of
-        View Button_   {..} -> (loading,c)
-        View Icon_     {..} -> (loading,c)
-        View Input_    {..} -> (loading,c)
-        View ListIcon_ {..} -> (loading,c)
-        _                   -> (False,c)
-
-{-# INLINE setLoading #-}
-setLoading c =
-    case c of
-        View Button_   {..} -> View Button_   { loading = True, .. }
-        View Icon_     {..} -> View Icon_     { loading = True, .. }
-        View Input_    {..} -> View Input_    { loading = True, .. }
-        View ListIcon_ {..} -> View ListIcon_ { loading = True, .. }
-        _                 -> c
-
 pattern Localize t c <- (getLocalize -> Just (t,c)) where
     Localize t c = setLocalize t c
 

@@ -30,6 +30,7 @@ import Semantic.Properties.Fluid
 import Semantic.Properties.Focus
 import Semantic.Properties.Inverted
 import Semantic.Properties.LabelPosition
+import Semantic.Properties.Loading
 import Semantic.Properties.OnClick
 
 data Button ms = Button_
@@ -232,3 +233,7 @@ instance HasInvertedProp (Button ms) where
 instance HasLabelPositionProp (Button ms) where
     getLabelPosition = labelPosition
     setLabelPosition lp b = b { labelPosition = lp }
+
+instance HasLoadingProp (Button ms) where
+    getLoading = loading
+    setLoading l b = b { loading = l }
