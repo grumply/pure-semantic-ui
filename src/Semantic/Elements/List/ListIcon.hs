@@ -8,6 +8,7 @@ import Semantic.Utils
 import Semantic.Properties.As
 import Semantic.Properties.Attributes
 import Semantic.Properties.Bordered
+import Semantic.Properties.Circular
 import Semantic.Properties.Classes
 import Semantic.Properties.Name
 
@@ -79,6 +80,10 @@ instance HasAttributesProp (ListIcon ms) where
 instance HasBorderedProp (ListIcon ms) where
     getBordered = bordered
     setBordered b li = li { bordered = b }
+
+instance HasCircularProp (ListIcon ms) where
+    getCircular = circular
+    setCircular c li = li { circular = c }
 
 instance HasNameProp (ListIcon ms) where
     getName = name

@@ -20,6 +20,7 @@ import Semantic.Properties.Attached
 import Semantic.Properties.Attributes
 import Semantic.Properties.Basic
 import Semantic.Properties.Children
+import Semantic.Properties.Circular
 import Semantic.Properties.Classes
 
 data Button ms = Button_
@@ -177,6 +178,10 @@ instance HasChildrenProp (Button ms) where
     type Child (Button ms) = View ms
     getChildren = children
     setChildren cs b = b { children = cs }
+
+instance HasCircularProp (Button ms) where
+    getCircular = circular
+    setCircular c b = b { circular = c }
 
 instance HasClassesProp (Button ms) where
     getClasses = classes

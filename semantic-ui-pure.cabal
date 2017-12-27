@@ -89,6 +89,7 @@ executable semantic-ui-pure
     Semantic.Properties.Celled
     Semantic.Properties.Centered
     Semantic.Properties.Children
+    Semantic.Properties.Circular
     Semantic.Properties.Classes
     Semantic.Properties.Name
     Semantic.Utils
@@ -178,6 +179,7 @@ library
     Semantic.Properties.Celled
     Semantic.Properties.Centered
     Semantic.Properties.Children
+    Semantic.Properties.Circular
     Semantic.Properties.Classes
     Semantic.Properties.Name
     Semantic.Utils

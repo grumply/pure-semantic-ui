@@ -10,6 +10,7 @@ import Semantic.Elements.Icon.IconGroup as Export
 import Semantic.Properties.As
 import Semantic.Properties.Attributes
 import Semantic.Properties.Bordered
+import Semantic.Properties.Circular
 import Semantic.Properties.Classes
 import Semantic.Properties.Name
 
@@ -79,6 +80,10 @@ instance HasAttributesProp (Icon ms) where
 instance HasBorderedProp (Icon ms) where
     getBordered = bordered
     setBordered b i = i { bordered = b }
+
+instance HasCircularProp (Icon ms) where
+    getCircular = circular
+    setCircular c i = i { circular = c }
 
 instance HasNameProp (Icon ms) where
     getName = name

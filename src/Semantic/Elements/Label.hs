@@ -16,6 +16,7 @@ import Semantic.Properties.Attached
 import Semantic.Properties.Attributes
 import Semantic.Properties.Basic
 import Semantic.Properties.Children
+import Semantic.Properties.Circular
 import Semantic.Properties.Classes
 
 data Label ms = Label_
@@ -113,6 +114,10 @@ instance HasChildrenProp (Label ms) where
     type Child (Label ms) = View ms
     getChildren = children
     setChildren cs l = l { children = cs }
+
+instance HasCircularProp (Label ms) where
+    getCircular = circular
+    setCircular c l = l { circular = c }
 
 instance HasClassesProp (Label ms) where
     getClasses = classes

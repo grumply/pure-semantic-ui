@@ -8,6 +8,7 @@ import Semantic.Utils
 import Semantic.Properties.As
 import Semantic.Properties.Attributes
 import Semantic.Properties.Children
+import Semantic.Properties.Circular
 import Semantic.Properties.Classes
 
 data LabelGroup ms = LabelGroup_ 
@@ -60,6 +61,10 @@ instance HasChildrenProp (LabelGroup ms) where
     type Child (LabelGroup ms) = View ms
     getChildren = children
     setChildren cs lg = lg { children = cs } 
+
+instance HasCircularProp (LabelGroup ms) where
+    getCircular = circular
+    setCircular c lg = lg { circular = c }
 
 instance HasClassesProp (LabelGroup ms) where
     getClasses = classes

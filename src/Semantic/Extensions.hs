@@ -34,31 +34,6 @@ setChange f c =
         View Input_ {..} -> View Input_ { onChange = f, .. }
         _                -> c
 
-pattern Circular c <- (getCircular -> (True,c)) where
-    Circular c = setCircular c
-
-{-# INLINE getCircular #-}
-getCircular c =
-    case c of
-        View Button_     {..} -> (circular,c)
-        View Icon_       {..} -> (circular,c)
-        View Image_      {..} -> (circular,c)
-        View Label_      {..} -> (circular,c)
-        View LabelGroup_ {..} -> (circular,c)
-        View ListIcon_   {..} -> (circular,c)
-        _                 -> (False,c)
-
-{-# INLINE setCircular #-}
-setCircular c =
-    case c of
-        View Button_     {..} -> View Button_     { circular = True, .. }
-        View Icon_       {..} -> View Icon_       { circular = True, .. }
-        View Image_      {..} -> View Image_      { circular = True, .. }
-        View Label_      {..} -> View Label_      { circular = True, .. }
-        View LabelGroup_ {..} -> View LabelGroup_ { circular = True, .. }
-        View ListIcon_   {..} -> View ListIcon_   { circular = True, .. }
-        _                     -> c
-
 pattern Clearing c <- (getClearing -> (True,c)) where
     Clearing c = setClearing c
 

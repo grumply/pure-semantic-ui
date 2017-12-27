@@ -13,6 +13,7 @@ import Semantic.Properties.Avatar
 import Semantic.Properties.Bordered
 import Semantic.Properties.Centered
 import Semantic.Properties.Children
+import Semantic.Properties.Circular
 import Semantic.Properties.Classes
 
 data Image ms = Image_
@@ -97,6 +98,10 @@ instance HasChildrenProp (Image ms) where
     type Child (Image ms) = View ms
     getChildren = children
     setChildren cs i = i { children = cs }
+
+instance HasCircularProp (Image ms) where
+    getCircular = circular
+    setCircular c i = i { circular = c }
 
 instance HasClassesProp (Image ms) where
     getClasses = classes
