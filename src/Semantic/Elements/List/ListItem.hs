@@ -1,10 +1,11 @@
 module Semantic.Elements.List.ListItem where
 
 import GHC.Generics as G
-import Pure.View
+import Pure.View hiding (active)
 
 import Semantic.Utils
 
+import Semantic.Extensions.Active
 import Semantic.Extensions.As
 import Semantic.Extensions.Attributes
 import Semantic.Extensions.Children
@@ -51,6 +52,10 @@ instance Typeable ms => Pure ListItem ms where
                 : attributes
                 )
                 children
+    
+instance HasActive (ListItem ms) where
+    getActive = active
+    setActive a li = li { active = a }
 
 instance HasAs (ListItem ms) where
     type Constructor (ListItem ms) = [Feature ms] -> [View ms] -> View ms

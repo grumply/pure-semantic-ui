@@ -1,10 +1,11 @@
 module Semantic.Elements.Loader where
 
 import GHC.Generics as G
-import Pure.View hiding (verticalAlign)
+import Pure.View hiding (active,verticalAlign)
 
 import Semantic.Utils
 
+import Semantic.Extensions.Active
 import Semantic.Extensions.As
 import Semantic.Extensions.Attributes
 import Semantic.Extensions.Children
@@ -50,6 +51,10 @@ instance Typeable ms => Pure Loader ms where
                 : attributes
                 )
                 children
+
+instance HasActive (Loader ms) where
+    getActive = active
+    setActive a l = l { active = a }
 
 instance HasAs (Loader ms) where
     type Constructor (Loader ms) = [Feature ms] -> [View ms] -> View ms

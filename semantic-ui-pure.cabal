@@ -76,6 +76,7 @@ executable semantic-ui-pure
     Semantic.Elements.Rail
     Semantic.Elements.Reveal
     Semantic.Extensions
+    Semantic.Extensions.Active
     Semantic.Extensions.As
     Semantic.Extensions.Attributes
     Semantic.Extensions.Children
@@ -155,6 +156,7 @@ library
     Semantic.Elements.Rail
     Semantic.Elements.Reveal
     Semantic.Extensions
+    Semantic.Extensions.Active
     Semantic.Extensions.As
     Semantic.Extensions.Attributes
     Semantic.Extensions.Children

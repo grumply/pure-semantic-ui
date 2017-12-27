@@ -25,27 +25,6 @@ import Debug.Trace
 -- infixl 1 %!
 -- (%!) c as cs = Attributes (as (Children cs c))
 
-pattern Active c <- (getActive -> (True,c)) where
-    Active c = setActive c
-
-{-# INLINE getActive #-}
-getActive c = 
-    case c of
-        View Button_   {..} -> (active,c)
-        View Label_    {..} -> (active,c)
-        View ListItem_ {..} -> (active,c)
-        View Loader_   {..} -> (active,c)
-        _                   -> (False,c)
-
-{-# INLINE setActive #-}
-setActive c =
-    case c of
-        View Button_   {..} -> View Button_   { active = True, .. }
-        View Label_    {..} -> View Label_    { active = True, .. }
-        View ListItem_ {..} -> View ListItem_ { active = True, .. }
-        View Loader_   {..} -> View Loader_   { active = True, .. }
-        _                   -> c
-
 pattern Animated a c <- (getAnimated -> Just (a,c)) where
     Animated a c = setAnimated a c
 

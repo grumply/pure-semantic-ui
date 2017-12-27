@@ -1,7 +1,7 @@
 module Semantic.Elements.Label (module Semantic.Elements.Label, module Export) where
 
 import GHC.Generics as G
-import Pure.View as View
+import Pure.View as View hiding (active)
 
 import Semantic.Utils
 
@@ -10,6 +10,7 @@ import Semantic.Elements.Label.LabelGroup as Export
 
 import Semantic.Elements.Image
 
+import Semantic.Extensions.Active
 import Semantic.Extensions.As
 import Semantic.Extensions.Attributes
 import Semantic.Extensions.Children
@@ -83,6 +84,10 @@ instance Typeable ms => Pure Label ms where
                 )
                 children
 
+instance HasActive (Label ms) where
+    getActive = active
+    setActive a l = l { active = a }
+            
 instance HasAs (Label ms) where
     type Constructor (Label ms) = [Feature ms] -> [View ms] -> View ms
     getAs = as
