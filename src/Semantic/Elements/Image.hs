@@ -1,7 +1,7 @@
 module Semantic.Elements.Image (module Semantic.Elements.Image, module Export) where
 
 import GHC.Generics as G
-import Pure.View as View hiding (disabled,inline)
+import Pure.View as View hiding (disabled,hidden,inline)
 
 import Semantic.Utils
 
@@ -18,6 +18,7 @@ import Semantic.Properties.Classes
 import Semantic.Properties.Disabled
 import Semantic.Properties.Floated
 import Semantic.Properties.Fluid
+import Semantic.Properties.Hidden
 import Semantic.Properties.Inline
 
 data Image ms = Image_
@@ -127,3 +128,7 @@ instance HasInlineProp (Image ms) where
     type InlineProp (Image ms) = Bool
     getInline = inline
     setInline inl i = i { inline = inl }
+
+instance HasHiddenProp (Image ms) where
+    getHidden = hidden
+    setHidden h i = i { hidden = h }

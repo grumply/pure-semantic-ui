@@ -22,25 +22,6 @@ import Debug.Trace
 -- pattern ToLeft = "left"
 -- pattern ToRight = "right"
 
-pattern Hidden c <- (getHidden -> (True,c)) where
-    Hidden c = setHidden c
-
-{-# INLINE getHidden #-}
-getHidden c =
-    case c of
-        View Divider_       {..} -> (hidden,c)
-        View Image_         {..} -> (hidden,c)
-        View ButtonContent_ {..} -> (hidden,c)
-        _                        -> (False,c)
-
-{-# INLINE setHidden #-}
-setHidden c =
-    case c of
-        View Divider_       {..} -> View Divider_       { hidden = True, .. }
-        View Image_         {..} -> View Image_         { hidden = True, .. }
-        View ButtonContent_ {..} -> View ButtonContent_ { hidden = True, .. }
-        _                        -> c
-
 pattern Horizontal c <- (getHorizontal -> (True,c)) where
     Horizontal c = setHorizontal c
 
