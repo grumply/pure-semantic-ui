@@ -14,6 +14,7 @@ import Semantic.Properties.Fitted
 import Semantic.Properties.Hidden
 import Semantic.Properties.Horizontal
 import Semantic.Properties.Inverted
+import Semantic.Properties.Section
 
 data Divider ms = Divider_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -92,3 +93,7 @@ instance HasHorizontalProp (Divider ms) where
 instance HasInvertedProp (Divider ms) where
     getInverted = inverted
     setInverted i d = d { inverted = i }
+
+instance HasSectionProp (Divider ms) where
+    getSection = section
+    setSection s d = d { section = s }

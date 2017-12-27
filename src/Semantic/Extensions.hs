@@ -22,21 +22,6 @@ import Debug.Trace
 -- pattern ToLeft = "left"
 -- pattern ToRight = "right"
 
-pattern Section c <- (getSection -> (True,c)) where
-    Section c = setSection c
-
-{-# INLINE getSection #-}
-getSection c =
-    case c of
-        View Divider_ {..} -> (section,c)
-        _                  -> (False,c)
-
-{-# INLINE setSection #-}
-setSection c =
-    case c of
-        View Divider_ {..} -> View Divider_ { section = True, .. }
-        _                  -> c
-
 pattern Selection c <- (getSelection -> (True,c)) where
     Selection c = setSelection c
 
