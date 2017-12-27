@@ -34,6 +34,7 @@ import Semantic.Properties.Loading
 import Semantic.Properties.Negative
 import Semantic.Properties.OnClick
 import Semantic.Properties.Positive
+import Semantic.Properties.Primary
 
 data Button ms = Button_
   { as :: [Feature ms] -> [View ms] -> View ms
@@ -247,3 +248,7 @@ instance HasNegativeProp (Button ms) where
 instance HasPositiveProp (Button ms) where
     getPositive = positive
     setPositive p b = b { positive = p }
+
+instance HasPrimaryProp (Button ms) where
+    getPrimary = primary
+    setPrimary p b = b { primary = p }

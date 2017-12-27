@@ -127,6 +127,7 @@ executable semantic-ui-pure
     Semantic.Properties.Pointing
     Semantic.Properties.Position
     Semantic.Properties.Positive
+    Semantic.Properties.Primary
     Semantic.Utils
 
   if impl(ghcjs)
@@ -252,6 +253,7 @@ library
     Semantic.Properties.Pointing
     Semantic.Properties.Position
     Semantic.Properties.Positive
+    Semantic.Properties.Primary
     Semantic.Utils
 
   if impl(ghcjs)

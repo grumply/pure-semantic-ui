@@ -22,23 +22,6 @@ import Debug.Trace
 -- pattern ToLeft = "left"
 -- pattern ToRight = "right"
 
-pattern Primary c <- (getPrimary -> (True,c)) where
-    Primary c = setPrimary c
-
-{-# INLINE getPrimary #-}
-getPrimary c =
-    case c of
-        View Button_      {..} -> (primary,c)
-        View ButtonGroup_ {..} -> (primary,c)
-        _                      -> (False,c)
-
-{-# INLINE setPrimary #-}
-setPrimary c =
-    case c of
-        View Button_      {..} -> View Button_      { primary = True, .. }
-        View ButtonGroup_ {..} -> View ButtonGroup_ { primary = True, .. }
-        _                      -> c
-
 pattern Relaxed r c <- (getRelaxed -> (Just r,c)) where
     Relaxed r c = setRelaxed r c
 
