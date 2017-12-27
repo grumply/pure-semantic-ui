@@ -60,6 +60,9 @@ data Segment ms = Segment_
 instance Default (Segment ms) where
     def = (G.to gdef) { as = Div }
 
+pattern Segment :: Typeable ms => Segment ms -> View ms
+pattern Segment s = View s
+
 instance Typeable ms => Pure Segment ms where
     render Segment_ {..} =
         let
@@ -80,7 +83,7 @@ instance Typeable ms => Pure Segment ms where
                 : stacked # "stacked"
                 : tertiary # "tertiary"
                 : vertical # "vertical"
-                : attached # attached <>> "attached"
+                : attached # (attached <>> "attached")
                 : may (<>> "padded") padded
                 : textAlign
                 : floated # ("floated" <<>> floated)

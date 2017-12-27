@@ -32,6 +32,9 @@ data SegmentGroup ms = SegmentGroup_
 instance Default (SegmentGroup ms) where
     def = (G.to gdef) { as = Div }
 
+pattern SegmentGroup :: Typeable ms => SegmentGroup ms -> View ms
+pattern SegmentGroup sg = View sg
+
 instance Typeable ms => Pure SegmentGroup ms where
     render SegmentGroup_ {..} =
         let
