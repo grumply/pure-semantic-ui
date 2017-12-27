@@ -1,7 +1,7 @@
 module Semantic.Elements.Divider where
 
 import GHC.Generics as G
-import Pure.View as View hiding (hidden,horizontal)
+import Pure.View as View hiding (hidden,horizontal,vertical)
 
 import Semantic.Utils
 
@@ -15,6 +15,7 @@ import Semantic.Properties.Hidden
 import Semantic.Properties.Horizontal
 import Semantic.Properties.Inverted
 import Semantic.Properties.Section
+import Semantic.Properties.Vertical
 
 data Divider ms = Divider_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -97,3 +98,7 @@ instance HasInvertedProp (Divider ms) where
 instance HasSectionProp (Divider ms) where
     getSection = section
     setSection s d = d { section = s }
+
+instance HasVerticalProp (Divider ms) where
+    getVertical = vertical
+    setVertical v d = d { vertical = v }

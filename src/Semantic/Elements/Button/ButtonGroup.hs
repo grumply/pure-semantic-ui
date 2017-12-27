@@ -1,7 +1,7 @@
 module Semantic.Elements.Button.ButtonGroup where
 
 import GHC.Generics as G
-import Pure.View hiding (color,Button,Label)
+import Pure.View hiding (color,vertical,Button,Label)
 import qualified Pure.View as HTML
 
 import Semantic.Utils
@@ -26,6 +26,7 @@ import Semantic.Properties.Primary
 import Semantic.Properties.Secondary
 import Semantic.Properties.Size
 import Semantic.Properties.Toggle
+import Semantic.Properties.Vertical
 
 data ButtonGroup ms = ButtonGroup_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -166,3 +167,7 @@ instance HasSizeProp (ButtonGroup ms) where
 instance HasToggleProp (ButtonGroup ms) where
     getToggle = toggle
     setToggle t bg = bg { toggle = t }
+
+instance HasVerticalProp (ButtonGroup ms) where
+    getVertical = vertical
+    setVertical v bg = bg { vertical = v }

@@ -19,23 +19,6 @@ import Semantic.Utils
 
 import Debug.Trace
 
-pattern Vertical c <- (getVertical -> (True,c)) where
-    Vertical c = setVertical c
-
-{-# INLINE getVertical #-}
-getVertical c =
-    case c of
-        View ButtonGroup_ {..} -> (vertical,c)
-        View Divider_     {..} -> (vertical,c)
-        _                      -> (False,c)
-
-{-# INLINE setVertical #-}
-setVertical c =
-    case c of
-        View ButtonGroup_ {..} -> View ButtonGroup_ { vertical = True, .. }
-        View Divider_     {..} -> View Divider_     { vertical = True, .. }
-        _                      -> c
-
 pattern VerticalAlign va c <- (getVerticalAlign -> Just (va,c)) where
     VerticalAlign va c = setVerticalAlign va c
 

@@ -147,6 +147,7 @@ executable semantic-ui-pure
     Semantic.Properties.Type
     Semantic.Properties.UI
     Semantic.Properties.Value
+    Semantic.Properties.Vertical
     Semantic.Utils
 
   if impl(ghcjs)
@@ -292,6 +293,7 @@ library
     Semantic.Properties.Type
     Semantic.Properties.UI
     Semantic.Properties.Value
+    Semantic.Properties.Vertical
     Semantic.Utils
 
   if impl(ghcjs)
