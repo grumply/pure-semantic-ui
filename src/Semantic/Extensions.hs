@@ -22,23 +22,6 @@ import Debug.Trace
 -- pattern ToLeft = "left"
 -- pattern ToRight = "right"
 
-pattern Focus c <- (getFocus -> (True,c)) where
-    Focus c = setFocus c
-
-{-# INLINE getFocus #-}
-getFocus c =
-    case c of
-        View Button_ {..} -> (focus,c)
-        View Input_  {..} -> (focus,c)
-        _                 -> (False,c)
-
-{-# INLINE setFocus #-}
-setFocus c =
-    case c of
-        View Button_ {..} -> View Button_ { focus = True, .. }
-        View Input_  {..} -> View Input_  { focus = True, .. }
-        _                 -> c
-
 pattern Focused c <- (getFocused -> (True,c)) where
     Focused c = setFocused c
 

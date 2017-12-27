@@ -18,6 +18,7 @@ import Semantic.Properties.Classes
 import Semantic.Properties.Disabled
 import Semantic.Properties.Error
 import Semantic.Properties.Fluid
+import Semantic.Properties.Focus
 import Semantic.Properties.OnChange
 
 import Prelude hiding (error)
@@ -155,3 +156,7 @@ instance HasErrorProp (Input ms) where
 instance HasFluidProp (Input ms) where
     getFluid = fluid
     setFluid f i = i { fluid = f }
+
+instance HasFocusProp (Input ms) where
+    getFocus = focus
+    setFocus f i = i { focus = f }

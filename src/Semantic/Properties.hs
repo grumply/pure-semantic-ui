@@ -30,6 +30,7 @@ import Semantic.Properties.Flipped as Export
 import Semantic.Properties.Floated as Export
 import Semantic.Properties.Floating as Export
 import Semantic.Properties.Fluid as Export
+import Semantic.Properties.Focus as Export
 import Semantic.Properties.Name as Export
 import Semantic.Properties.OnChange as Export
 import Semantic.Properties.OnClick as Export

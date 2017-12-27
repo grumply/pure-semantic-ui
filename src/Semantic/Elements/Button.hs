@@ -27,6 +27,7 @@ import Semantic.Properties.Compact
 import Semantic.Properties.Disabled
 import Semantic.Properties.Floated
 import Semantic.Properties.Fluid
+import Semantic.Properties.Focus
 import Semantic.Properties.OnClick
 
 data Button ms = Button_
@@ -212,6 +213,10 @@ instance HasFloatedProp (Button ms) where
 instance HasFluidProp (Button ms) where
     getFluid = fluid
     setFluid f b = b { fluid = f }
+
+instance HasFocusProp (Button ms) where
+    getFocus = focus
+    setFocus f b = b { focus = f }
 
 instance HasOnClickProp (Button ms) where
     type OnClickProp (Button ms) = Ef ms IO ()
