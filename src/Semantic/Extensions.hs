@@ -22,23 +22,6 @@ import Debug.Trace
 -- pattern ToLeft = "left"
 -- pattern ToRight = "right"
 
-pattern Secondary c <- (getSecondary -> (True,c)) where
-    Secondary c = setSecondary c
-
-{-# INLINE getSecondary #-}
-getSecondary c =
-    case c of
-        View Button_      {..} -> (secondary,c)
-        View ButtonGroup_ {..} -> (secondary,c)
-        _                      -> (False,c)
-
-{-# INLINE setSecondary #-}
-setSecondary c =
-    case c of
-        View Button_      {..} -> View Button_      { secondary = True, .. }
-        View ButtonGroup_ {..} -> View ButtonGroup_ { secondary = True, .. }
-        _                 -> c
-
 pattern Section c <- (getSection -> (True,c)) where
     Section c = setSection c
 

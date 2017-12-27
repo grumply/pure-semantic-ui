@@ -23,6 +23,7 @@ import Semantic.Properties.Labeled
 import Semantic.Properties.Negative
 import Semantic.Properties.Positive
 import Semantic.Properties.Primary
+import Semantic.Properties.Secondary
 
 data ButtonGroup ms = ButtonGroup_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -151,3 +152,7 @@ instance HasPositiveProp (ButtonGroup ms) where
 instance HasPrimaryProp (ButtonGroup ms) where
     getPrimary = primary
     setPrimary p bg = bg { primary = p }
+
+instance HasSecondaryProp (ButtonGroup ms) where
+    getSecondary = secondary
+    setSecondary s bg = bg { secondary = s }
