@@ -66,6 +66,7 @@ import Semantic.Properties.TabIndex as Export
 import Semantic.Properties.Tag as Export
 import Semantic.Properties.TextAlign as Export
 import Semantic.Properties.Toggle as Export
+import Semantic.Properties.Transition as Export
 
 infixl 1 !%
 (!%) c cs as = Children (cs (Attributes as c))
