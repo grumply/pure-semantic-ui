@@ -1,7 +1,7 @@
 module Semantic.Elements.List.ListContent where
 
 import GHC.Generics as G
-import Pure.View
+import Pure.View hiding (verticalAlign)
 
 import Semantic.Utils
 
@@ -10,6 +10,7 @@ import Semantic.Properties.Attributes
 import Semantic.Properties.Children
 import Semantic.Properties.Classes
 import Semantic.Properties.Floated
+import Semantic.Properties.VerticalAlign
 
 data ListContent ms = ListContent_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -64,3 +65,7 @@ instance HasClassesProp (ListContent ms) where
 instance HasFloatedProp (ListContent ms) where
     getFloated = floated
     setFloated f lc = lc { floated = f }
+
+instance HasVerticalAlignProp (ListContent ms) where
+    getVerticalAlign = verticalAlign
+    setVerticalAlign va lc = lc { verticalAlign = va }

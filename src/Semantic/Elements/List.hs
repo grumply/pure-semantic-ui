@@ -2,7 +2,7 @@
 module Semantic.Elements.List (module Semantic.Elements.List, module Export) where
 
 import GHC.Generics as G
-import Pure.View hiding (horizontal,onClick)
+import Pure.View hiding (horizontal,onClick,verticalAlign)
 
 import Semantic.Utils
 
@@ -30,6 +30,7 @@ import Semantic.Properties.Ordered
 import Semantic.Properties.Relaxed
 import Semantic.Properties.Selection
 import Semantic.Properties.Size
+import Semantic.Properties.VerticalAlign
 
 data List ms = List_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -161,3 +162,7 @@ instance HasSelectionProp (List ms) where
 instance HasSizeProp (List ms) where
     getSize = size
     setSize s l = l { size = s }
+
+instance HasVerticalAlignProp (List ms) where
+    getVerticalAlign = verticalAlign
+    setVerticalAlign va l = l { verticalAlign = va }

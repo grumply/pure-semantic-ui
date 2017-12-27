@@ -19,30 +19,6 @@ import Semantic.Utils
 
 import Debug.Trace
 
-pattern VerticalAlign va c <- (getVerticalAlign -> Just (va,c)) where
-    VerticalAlign va c = setVerticalAlign va c
-
-pattern Middle = "middle"
--- pattern Bottom = "bottom"
--- pattern Top = "top"
-
-{-# INLINE getVerticalAlign #-}
-getVerticalAlign c =
-    case c of
-        View Image_       {..} -> Just (verticalAlign,c)
-        View List_        {..} -> Just (verticalAlign,c)
-        View ListContent_ {..} -> Just (verticalAlign,c)
-        View ListIcon_    {..} -> Just (verticalAlign,c)
-        _                      -> Nothing
-
-{-# INLINE setVerticalAlign #-}
-setVerticalAlign va c =
-    case c of
-        View Image_        {..} -> View Image_        { verticalAlign = va, .. }
-        View List_         {..} -> View List_         { verticalAlign = va, .. }
-        View ListContent_  {..} -> View ListContent_  { verticalAlign = va, .. }
-        View ListIcon_     {..} -> View ListIcon_     { verticalAlign = va, .. }
-        _                       -> c
 
 pattern Visible c <- (getVisible -> (True,c)) where
     Visible c = setVisible c

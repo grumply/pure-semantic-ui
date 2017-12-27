@@ -1,7 +1,7 @@
 module Semantic.Elements.Image (module Semantic.Elements.Image, module Export) where
 
 import GHC.Generics as G
-import Pure.View as View hiding (disabled,hidden,inline)
+import Pure.View as View hiding (disabled,hidden,inline,verticalAlign)
 
 import Semantic.Utils
 
@@ -24,6 +24,7 @@ import Semantic.Properties.Rounded
 import Semantic.Properties.Size
 import Semantic.Properties.Spaced
 import Semantic.Properties.UI
+import Semantic.Properties.VerticalAlign
 
 data Image ms = Image_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -152,3 +153,7 @@ instance HasSpacedProp (Image ms) where
 instance HasUIProp (Image ms) where
     getUI = ui
     setUI x i = i { ui = x }
+
+instance HasVerticalAlignProp (Image ms) where
+    getVerticalAlign = verticalAlign
+    setVerticalAlign va i = i { verticalAlign = va }
