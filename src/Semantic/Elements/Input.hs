@@ -24,6 +24,7 @@ import Semantic.Properties.Inverted
 import Semantic.Properties.Loading
 import Semantic.Properties.OnChange
 import Semantic.Properties.Size
+import Semantic.Properties.TabIndex
 
 import Prelude hiding (error)
 
@@ -180,3 +181,7 @@ instance HasLoadingProp (Input ms) where
 instance HasSizeProp (Input ms) where
     getSize = size
     setSize s i = i { size = s }
+
+instance HasTabIndexProp (Input ms) where
+    getTabIndex = tabIndex
+    setTabIndex ti i = i { tabIndex = ti }

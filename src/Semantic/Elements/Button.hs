@@ -37,6 +37,7 @@ import Semantic.Properties.Positive
 import Semantic.Properties.Primary
 import Semantic.Properties.Secondary
 import Semantic.Properties.Size
+import Semantic.Properties.TabIndex
 
 data Button ms = Button_
   { as :: [Feature ms] -> [View ms] -> View ms
@@ -262,3 +263,7 @@ instance HasSecondaryProp (Button ms) where
 instance HasSizeProp (Button ms) where
     getSize = size
     setSize s b = b { size = s }
+
+instance HasTabIndexProp (Button ms) where
+    getTabIndex = tabIndex
+    setTabIndex ti b = b { tabIndex = ti }

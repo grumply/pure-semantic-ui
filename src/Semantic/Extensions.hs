@@ -22,23 +22,6 @@ import Debug.Trace
 -- pattern ToLeft = "left"
 -- pattern ToRight = "right"
 
-pattern TabIndex n c <- (getTabIndex -> Just (n,c)) where
-  TabIndex n c = setTabIndex n c
-
-{-# INLINE getTabIndex #-}
-getTabIndex c =
-    case c of
-        View Button_ {..} -> Just (tabIndex,c)
-        View Input_  {..} -> Just (tabIndex,c)
-        _                 -> Nothing
-
-{-# INLINE setTabIndex #-}
-setTabIndex n c =
-    case c of
-        View Button_ {..} -> View Button_ { tabIndex = n, .. }
-        View Input_  {..} -> View Input_  { tabIndex = n, .. }
-        _                 -> c
-
 pattern Tag c <- (getTag -> (True,c)) where
     Tag c = setTag c
 
