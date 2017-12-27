@@ -19,21 +19,6 @@ import Semantic.Utils
 
 import Debug.Trace
 
-pattern Empty c <- (getEmpty -> (True,c)) where
-    Empty c = setEmpty c
-
-{-# INLINE getEmpty #-}
-getEmpty c =
-    case c of
-        View Label_ {..} -> (empty,c)
-        _                -> (False,c)
-
-{-# INLINE setEmpty #-}
-setEmpty c =
-    case c of
-        View Label_ {..} -> View Label_ { empty = True, .. }
-        _                -> c
-
 pattern Error c <- (getError -> (True,c)) where
     Error c = setError c
 

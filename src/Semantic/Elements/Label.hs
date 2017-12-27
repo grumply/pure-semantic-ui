@@ -1,7 +1,7 @@
 module Semantic.Elements.Label (module Semantic.Elements.Label, module Export) where
 
 import GHC.Generics as G
-import Pure.View as View hiding (active,color,onClick)
+import Pure.View as View hiding (active,color,empty,onClick)
 import qualified Pure.View as HTML
 
 import Semantic.Utils
@@ -21,6 +21,7 @@ import Semantic.Properties.Circular
 import Semantic.Properties.Classes
 import Semantic.Properties.Color
 import Semantic.Properties.Corner
+import Semantic.Properties.Empty
 import Semantic.Properties.OnClick
 
 data Label ms = Label_
@@ -140,3 +141,7 @@ instance HasCornerProp (Label ms) where
     type CornerProp (Label ms) = Maybe Txt
     getCorner = corner
     setCorner c l = l { corner = c }
+
+instance HasEmptyProp (Label ms) where
+    getEmpty = empty
+    setEmpty e l = l { empty = e }
