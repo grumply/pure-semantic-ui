@@ -38,6 +38,7 @@ import Semantic.Properties.Indeterminate as Export
 import Semantic.Properties.Inline as Export
 import Semantic.Properties.Internal as Export
 import Semantic.Properties.Inverted as Export
+import Semantic.Properties.Labeled as Export
 import Semantic.Properties.Name as Export
 import Semantic.Properties.OnChange as Export
 import Semantic.Properties.OnClick as Export
