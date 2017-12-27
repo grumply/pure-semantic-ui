@@ -16,7 +16,10 @@ import Semantic.Properties.Attributes
 import Semantic.Properties.Children
 import Semantic.Properties.Classes
 import Semantic.Properties.Disabled
+import Semantic.Properties.Error
 import Semantic.Properties.OnChange
+
+import Prelude hiding (error)
 
 data Input ms = Input_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -143,3 +146,7 @@ instance HasClassesProp (Input ms) where
 instance HasDisabledProp (Input ms) where
     getDisabled = disabled
     setDisabled d i = i { disabled = d }
+
+instance HasErrorProp (Input ms) where
+    getError = error
+    setError e i = i { error = e }

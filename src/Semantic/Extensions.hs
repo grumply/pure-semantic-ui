@@ -19,21 +19,6 @@ import Semantic.Utils
 
 import Debug.Trace
 
-pattern Error c <- (getError -> (True,c)) where
-    Error c = setError c
-
-{-# INLINE getError #-}
-getError c =
-    case c of
-        View Input_ {..} -> (error,c)
-        _                -> (False,c)
-
-{-# INLINE setError #-}
-setError c =
-    case c of
-        View Input_ {..} -> View Input_ { error = True, .. }
-        _                -> c
-
 pattern Fitted c <- (getFitted -> (True,c)) where
     Fitted c = setFitted c
 

@@ -100,6 +100,7 @@ executable semantic-ui-pure
     Semantic.Properties.Divided
     Semantic.Properties.Dividing
     Semantic.Properties.Empty
+    Semantic.Properties.Error
     Semantic.Properties.Name
     Semantic.Properties.OnChange
     Semantic.Properties.OnClick
@@ -201,6 +202,7 @@ library
     Semantic.Properties.Divided
     Semantic.Properties.Dividing
     Semantic.Properties.Empty
+    Semantic.Properties.Error
     Semantic.Properties.Name
     Semantic.Properties.OnChange
     Semantic.Properties.OnClick
