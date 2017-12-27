@@ -75,23 +75,6 @@ setIndeterminate c =
         View Loader_ {..} -> View Loader_ { indeterminate = True, .. }
         _                 -> c
 
-pattern Inline i c <- (getInline -> (Just i,c)) where
-    Inline i c = setInline i c
-
-{-# INLINE getInline #-}
-getInline c =
-    case c of
-        View Image_  {..} -> inline # (Just "",c)
-        View Loader_ {..} -> (inline,c)
-        _                 -> (Nothing,c)
-
-{-# INLINE setInline #-}
-setInline i c =
-    case c of
-        View Image_  {..} -> View Image_  { inline = True, .. }
-        View Loader_ {..} -> View Loader_ { inline = Just i, ..  }
-        _                 -> c
-
 pattern Internal c <- (getInternal -> (True,c)) where
     Internal c = setInternal c
 

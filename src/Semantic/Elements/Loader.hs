@@ -1,7 +1,7 @@
 module Semantic.Elements.Loader where
 
 import GHC.Generics as G
-import Pure.View hiding (active,disabled,verticalAlign)
+import Pure.View hiding (active,disabled,inline,verticalAlign)
 
 import Semantic.Utils
 
@@ -11,6 +11,7 @@ import Semantic.Properties.Attributes
 import Semantic.Properties.Children
 import Semantic.Properties.Classes
 import Semantic.Properties.Disabled
+import Semantic.Properties.Inline
 
 data Loader ms = Loader_ 
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -79,3 +80,8 @@ instance HasClassesProp (Loader ms) where
 instance HasDisabledProp (Loader ms) where
     getDisabled = disabled
     setDisabled d l = l { disabled = d }
+
+instance HasInlineProp (Loader ms) where
+    type InlineProp (Loader ms) = Maybe Txt
+    getInline = inline
+    setInline i l = l { inline = i }
