@@ -75,6 +75,7 @@ executable semantic-ui-pure
     Semantic.Elements.Loader
     Semantic.Elements.Rail
     Semantic.Elements.Reveal
+    Semantic.Elements.Segment
     Semantic.Properties
     Semantic.Properties.Animated
     Semantic.Properties.Active
@@ -124,10 +125,13 @@ executable semantic-ui-pure
     Semantic.Properties.OnChange
     Semantic.Properties.OnClick
     Semantic.Properties.Ordered
+    Semantic.Properties.Padded
+    Semantic.Properties.Piled
     Semantic.Properties.Pointing
     Semantic.Properties.Position
     Semantic.Properties.Positive
     Semantic.Properties.Primary
+    Semantic.Properties.Raised
     Semantic.Properties.Relaxed
     Semantic.Properties.Ribbon
     Semantic.Properties.Rotated
@@ -137,9 +141,11 @@ executable semantic-ui-pure
     Semantic.Properties.Selection
     Semantic.Properties.Size
     Semantic.Properties.Spaced
+    Semantic.Properties.Stacked
     Semantic.Properties.Sub
     Semantic.Properties.TabIndex
     Semantic.Properties.Tag
+    Semantic.Properties.Tertiary
     Semantic.Properties.TextAlign
     Semantic.Properties.Toggle
     Semantic.Properties.Transition
@@ -225,6 +231,7 @@ library
     Semantic.Elements.Loader
     Semantic.Elements.Rail
     Semantic.Elements.Reveal
+    Semantic.Elements.Segment
     Semantic.Properties
     Semantic.Properties.Animated
     Semantic.Properties.Active
@@ -274,10 +281,13 @@ library
     Semantic.Properties.OnChange
     Semantic.Properties.OnClick
     Semantic.Properties.Ordered
+    Semantic.Properties.Padded
+    Semantic.Properties.Piled
     Semantic.Properties.Pointing
     Semantic.Properties.Position
     Semantic.Properties.Positive
     Semantic.Properties.Primary
+    Semantic.Properties.Raised
     Semantic.Properties.Relaxed
     Semantic.Properties.Ribbon
     Semantic.Properties.Rotated
@@ -287,9 +297,11 @@ library
     Semantic.Properties.Selection
     Semantic.Properties.Size
     Semantic.Properties.Spaced
+    Semantic.Properties.Stacked
     Semantic.Properties.Sub
     Semantic.Properties.TabIndex
     Semantic.Properties.Tag
+    Semantic.Properties.Tertiary
     Semantic.Properties.TextAlign
     Semantic.Properties.Toggle
     Semantic.Properties.Transition

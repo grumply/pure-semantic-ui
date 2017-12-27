@@ -49,10 +49,13 @@ import Semantic.Properties.Negative as Export
 import Semantic.Properties.OnChange as Export
 import Semantic.Properties.OnClick as Export
 import Semantic.Properties.Ordered as Export
+import Semantic.Properties.Padded as Export
+import Semantic.Properties.Piled as Export
 import Semantic.Properties.Pointing as Export
 import Semantic.Properties.Position as Export
 import Semantic.Properties.Positive as Export
 import Semantic.Properties.Primary as Export
+import Semantic.Properties.Raised as Export
 import Semantic.Properties.Relaxed as Export
 import Semantic.Properties.Ribbon as Export
 import Semantic.Properties.Rotated as Export
@@ -62,9 +65,11 @@ import Semantic.Properties.Section as Export
 import Semantic.Properties.Selection as Export
 import Semantic.Properties.Size as Export
 import Semantic.Properties.Spaced as Export
+import Semantic.Properties.Stacked as Export
 import Semantic.Properties.Sub as Export
 import Semantic.Properties.TabIndex as Export
 import Semantic.Properties.Tag as Export
+import Semantic.Properties.Tertiary as Export
 import Semantic.Properties.TextAlign as Export
 import Semantic.Properties.Toggle as Export
 import Semantic.Properties.Transition as Export
