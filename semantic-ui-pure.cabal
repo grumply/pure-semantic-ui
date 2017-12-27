@@ -97,6 +97,7 @@ executable semantic-ui-pure
     Semantic.Properties.Corner
     Semantic.Properties.Compact
     Semantic.Properties.Disabled
+    Semantic.Properties.Divided
     Semantic.Properties.Name
     Semantic.Properties.OnChange
     Semantic.Properties.OnClick
@@ -195,6 +196,7 @@ library
     Semantic.Properties.Corner
     Semantic.Properties.Compact
     Semantic.Properties.Disabled
+    Semantic.Properties.Divided
     Semantic.Properties.Name
     Semantic.Properties.OnChange
     Semantic.Properties.OnClick

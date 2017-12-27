@@ -20,6 +20,7 @@ import Semantic.Properties.Bulleted
 import Semantic.Properties.Celled
 import Semantic.Properties.Children
 import Semantic.Properties.Classes
+import Semantic.Properties.Divided
 import Semantic.Properties.OnClick
 
 data List ms = List_
@@ -111,6 +112,10 @@ instance HasChildrenProp (List ms) where
 instance HasClassesProp (List ms) where
     getClasses = classes
     setClasses cs l = l { classes = cs }
+
+instance HasDividedProp (List ms) where
+    getDivided = divided
+    setDivided d l = l { divided = d }
 
 instance HasOnClickProp (List ms) where
     type OnClickProp (List ms) = ListItem ms -> Ef ms IO ()

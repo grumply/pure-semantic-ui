@@ -19,22 +19,6 @@ import Semantic.Utils
 
 import Debug.Trace
 
-pattern Divided c <- (getDivided -> (True,c)) where
-    Divided c = setDivided c
-
-{-# INLINE getDivided #-}
-getDivided c =
-    case c of
-        View List_ {..} -> (divided,c)
-        _               -> (False,c)
-
-{-# INLINE setDivided #-}
-setDivided c =
-    case c of
-        View List_ {..} -> View List_ { divided = True, .. }
-        _               -> c
-
-
 pattern Dividing c <- (getDividing -> (True,c)) where
     Dividing c = setDividing c
 
