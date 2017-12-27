@@ -1,7 +1,7 @@
 module Semantic.Elements.Header (module Semantic.Elements.Header, module Export) where
 
 import GHC.Generics as G
-import Pure.View hiding (block,color,disabled,Header)
+import Pure.View hiding (block,color,disabled,textAlign,Header)
 import qualified Pure.View as HTML
 
 import Semantic.Utils
@@ -25,6 +25,7 @@ import Semantic.Properties.Floated
 import Semantic.Properties.Inverted
 import Semantic.Properties.Size
 import Semantic.Properties.Sub
+import Semantic.Properties.TextAlign
 
 data Header ms = Header_
     { as :: [Feature ms] -> [View ms] -> View ms 
@@ -133,3 +134,7 @@ instance HasSizeProp (Header ms) where
 instance HasSubProp (Header ms) where
     getSub = sub
     setSub s h = h { sub = s }
+
+instance HasTextAlignProp (Header ms) where
+    getTextAlign = textAlign
+    setTextAlign ta h = h { textAlign = ta }

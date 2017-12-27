@@ -22,29 +22,6 @@ import Debug.Trace
 -- pattern ToLeft = "left"
 -- pattern ToRight = "right"
 
-pattern TextAlign ta c <- (getTextAlign -> Just (ta,c)) where
-    TextAlign ta c = setTextAlign ta c
-
-pattern Unaligned c = TextAlign "" c
-pattern LeftAligned c = TextAlign "left aligned" c
-pattern RightAligned c = TextAlign "right aligned" c
-pattern CenterAligned c = TextAlign "center aligned" c
-pattern Justified c = TextAlign "justified" c
-
-{-# INLINE getTextAlign #-}
-getTextAlign c =
-    case c of
-        View Container_ {..} -> Just (textAlign,c)
-        View Header_    {..} -> Just (textAlign,c)
-        _                    -> Nothing
-
-{-# INLINE setTextAlign #-}
-setTextAlign ta c =
-    case c of
-        View Container_ {..} -> View Container_ { textAlign = ta, .. }
-        View Header_    {..} -> View Header_    { textAlign = ta, .. }
-        _                    -> c
-
 pattern Toggle c <- (getToggle -> (True,c)) where
     Toggle c = setToggle c
 

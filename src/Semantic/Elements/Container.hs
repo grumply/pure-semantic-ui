@@ -1,7 +1,7 @@
 module Semantic.Elements.Container where
 
 import GHC.Generics as G
-import Pure.View
+import Pure.View hiding (textAlign)
 
 import Semantic.Utils
 
@@ -10,6 +10,7 @@ import Semantic.Properties.Attributes
 import Semantic.Properties.Children
 import Semantic.Properties.Classes
 import Semantic.Properties.Fluid
+import Semantic.Properties.TextAlign
 
 data Container ms = Container_
   { as :: [Feature ms] -> [View ms] -> View ms
@@ -76,3 +77,7 @@ instance HasClassesProp (Container ms) where
 instance HasFluidProp (Container ms) where
     getFluid = fluid
     setFluid f c = c { fluid = f }
+
+instance HasTextAlignProp (Container ms) where
+    getTextAlign = textAlign
+    setTextAlign ta c = c { textAlign = ta }
