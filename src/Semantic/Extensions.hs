@@ -19,12 +19,6 @@ import Semantic.Utils
 
 import Debug.Trace
 
--- infixl 1 !%
--- (!%) c cs as = Children (cs (Attributes as c))
-
--- infixl 1 %!
--- (%!) c as cs = Attributes (as (Children cs c))
-
 pattern Block c <- (getBlock -> (True,c)) where
     Block c = setBlock c
 
