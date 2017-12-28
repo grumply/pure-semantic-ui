@@ -78,6 +78,7 @@ executable semantic-ui-pure
     Semantic.Elements.Segment
     Semantic.Elements.Segment.SegmentGroup
     Semantic.Elements.Step
+    Semantic.Elements.Step.StepContent
     Semantic.Properties
     Semantic.Properties.Animated
     Semantic.Properties.Active
@@ -238,6 +239,7 @@ library
     Semantic.Elements.Segment
     Semantic.Elements.Segment.SegmentGroup
     Semantic.Elements.Step
+    Semantic.Elements.Step.StepContent
     Semantic.Properties
     Semantic.Properties.Animated
     Semantic.Properties.Active

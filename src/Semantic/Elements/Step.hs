@@ -1,4 +1,4 @@
-module Semantic.Elements.Step where
+module Semantic.Elements.Step (module Semantic.Elements.Step, module Export) where
 
 import GHC.Generics as G
 import Pure.View hiding (active,completed,disabled,onClick)
@@ -16,6 +16,8 @@ import Semantic.Properties.Ref
 import Semantic.Properties.Link
 import Semantic.Properties.OnClick
 import Semantic.Properties.Ordered
+
+import Semantic.Elements.Step.StepContent as Export
 
 data Step ms = Step_
     { as :: [Feature ms] -> [View ms] -> View ms
