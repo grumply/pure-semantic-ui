@@ -89,8 +89,9 @@ executable semantic-ui-pure
     Semantic.Elements.Step.StepGroup
     Semantic.Elements.Step.StepTitle
     Semantic.Properties
-    Semantic.Properties.Animated
+    Semantic.Properties.Action
     Semantic.Properties.Active
+    Semantic.Properties.Animated
     Semantic.Properties.As
     Semantic.Properties.Attributes
     Semantic.Properties.Avatar
@@ -137,6 +138,7 @@ executable semantic-ui-pure
     Semantic.Properties.Negative
     Semantic.Properties.OnChange
     Semantic.Properties.OnClick
+    Semantic.Properties.OnSubmit
     Semantic.Properties.Ordered
     Semantic.Properties.Padded
     Semantic.Properties.Piled
@@ -147,6 +149,7 @@ executable semantic-ui-pure
     Semantic.Properties.Raised
     Semantic.Properties.Ref
     Semantic.Properties.Relaxed
+    Semantic.Properties.Reply
     Semantic.Properties.Ribbon
     Semantic.Properties.Rotated
     Semantic.Properties.Rounded
@@ -158,6 +161,7 @@ executable semantic-ui-pure
     Semantic.Properties.Stackable
     Semantic.Properties.Stacked
     Semantic.Properties.Sub
+    Semantic.Properties.Success
     Semantic.Properties.TabIndex
     Semantic.Properties.Tag
     Semantic.Properties.Tertiary
@@ -261,8 +265,9 @@ library
     Semantic.Elements.Step.StepGroup
     Semantic.Elements.Step.StepTitle
     Semantic.Properties
-    Semantic.Properties.Animated
+    Semantic.Properties.Action
     Semantic.Properties.Active
+    Semantic.Properties.Animated
     Semantic.Properties.As
     Semantic.Properties.Attributes
     Semantic.Properties.Avatar
@@ -309,6 +314,7 @@ library
     Semantic.Properties.Negative
     Semantic.Properties.OnChange
     Semantic.Properties.OnClick
+    Semantic.Properties.OnSubmit
     Semantic.Properties.Ordered
     Semantic.Properties.Padded
     Semantic.Properties.Piled
@@ -319,6 +325,7 @@ library
     Semantic.Properties.Raised
     Semantic.Properties.Ref
     Semantic.Properties.Relaxed
+    Semantic.Properties.Reply
     Semantic.Properties.Ribbon
     Semantic.Properties.Rotated
     Semantic.Properties.Rounded
@@ -330,6 +337,7 @@ library
     Semantic.Properties.Stackable
     Semantic.Properties.Stacked
     Semantic.Properties.Sub
+    Semantic.Properties.Success
     Semantic.Properties.TabIndex
     Semantic.Properties.Tag
     Semantic.Properties.Tertiary
