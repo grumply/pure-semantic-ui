@@ -6,6 +6,6 @@ class HasHiddenProp a where
     getHidden :: a -> Bool
     setHidden :: Bool -> a -> a
 
-pattern Hidden :: HasHiddenProp a => a -> a
-pattern Hidden a <- (getHidden &&& id -> (True,a)) where
-    Hidden a = setHidden True a
+pattern Hidden :: HasHiddenProp a => Bool -> a -> a
+pattern Hidden b a <- (getHidden &&& id -> (b,a)) where
+    Hidden b a = setHidden b a
