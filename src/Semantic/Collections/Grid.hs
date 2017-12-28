@@ -25,6 +25,7 @@ import Semantic.Properties.TextAlign
 import Semantic.Properties.VerticalAlign
 
 import Semantic.Collections.Grid.GridColumn as Export
+import Semantic.Collections.Grid.GridRow as Export
 
 data Grid ms = Grid_
     { as :: [Feature ms] -> [View ms] -> View ms
