@@ -62,6 +62,7 @@ import Semantic.Properties.Raised as Export
 import Semantic.Properties.Ref as Export
 import Semantic.Properties.Relaxed as Export
 import Semantic.Properties.Reply as Export
+import Semantic.Properties.Required as Export
 import Semantic.Properties.Ribbon as Export
 import Semantic.Properties.Rotated as Export
 import Semantic.Properties.Rounded as Export

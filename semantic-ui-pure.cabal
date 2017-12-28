@@ -151,6 +151,7 @@ executable semantic-ui-pure
     Semantic.Properties.Ref
     Semantic.Properties.Relaxed
     Semantic.Properties.Reply
+    Semantic.Properties.Required
     Semantic.Properties.Ribbon
     Semantic.Properties.Rotated
     Semantic.Properties.Rounded
@@ -328,6 +329,7 @@ library
     Semantic.Properties.Ref
     Semantic.Properties.Relaxed
     Semantic.Properties.Reply
+    Semantic.Properties.Required
     Semantic.Properties.Ribbon
     Semantic.Properties.Rotated
     Semantic.Properties.Rounded
