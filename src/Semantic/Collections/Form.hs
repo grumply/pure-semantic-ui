@@ -24,6 +24,7 @@ import Semantic.Properties.Warning
 import Semantic.Properties.Widths
 
 import Semantic.Collections.Form.FormField as Export
+import Semantic.Collections.Form.FormGroup as Export
 
 data Form ms = Form_
     { as :: [Feature ms] -> [View ms] -> View ms
