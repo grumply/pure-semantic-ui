@@ -54,7 +54,13 @@ import Semantic.Properties.Name as Export
 import Semantic.Properties.Negative as Export
 import Semantic.Properties.OnChange as Export
 import Semantic.Properties.OnClick as Export
+import Semantic.Properties.OnComputer as Export
+import Semantic.Properties.OnLargeScreen as Export
+import Semantic.Properties.Only as Export
+import Semantic.Properties.OnMobile as Export
 import Semantic.Properties.OnSubmit as Export
+import Semantic.Properties.OnTablet as Export
+import Semantic.Properties.OnWidescreen as Export
 import Semantic.Properties.Ordered as Export
 import Semantic.Properties.Padded as Export
 import Semantic.Properties.Piled as Export
@@ -95,6 +101,8 @@ import Semantic.Properties.Value as Export
 import Semantic.Properties.Vertical as Export
 import Semantic.Properties.VerticalAlign as Export
 import Semantic.Properties.Visible as Export
+import Semantic.Properties.Warning as Export
+import Semantic.Properties.Width as Export
 import Semantic.Properties.Widths as Export
 import Semantic.Properties.Wrapped as Export
 

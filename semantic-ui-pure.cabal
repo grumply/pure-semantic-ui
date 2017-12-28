@@ -146,7 +146,13 @@ executable semantic-ui-pure
     Semantic.Properties.Negative
     Semantic.Properties.OnChange
     Semantic.Properties.OnClick
+    Semantic.Properties.OnComputer
+    Semantic.Properties.OnLargeScreen
+    Semantic.Properties.Only
+    Semantic.Properties.OnMobile
     Semantic.Properties.OnSubmit
+    Semantic.Properties.OnTablet
+    Semantic.Properties.OnWidescreen
     Semantic.Properties.Ordered
     Semantic.Properties.Padded
     Semantic.Properties.Piled
@@ -187,6 +193,8 @@ executable semantic-ui-pure
     Semantic.Properties.Vertical
     Semantic.Properties.VerticalAlign
     Semantic.Properties.Visible
+    Semantic.Properties.Warning
+    Semantic.Properties.Width
     Semantic.Properties.Widths
     Semantic.Properties.Wrapped
     Semantic.Utils
@@ -333,7 +341,13 @@ library
     Semantic.Properties.Negative
     Semantic.Properties.OnChange
     Semantic.Properties.OnClick
+    Semantic.Properties.OnComputer
+    Semantic.Properties.OnLargeScreen
+    Semantic.Properties.Only
+    Semantic.Properties.OnMobile
     Semantic.Properties.OnSubmit
+    Semantic.Properties.OnTablet
+    Semantic.Properties.OnWidescreen
     Semantic.Properties.Ordered
     Semantic.Properties.Padded
     Semantic.Properties.Piled
@@ -374,6 +388,8 @@ library
     Semantic.Properties.Vertical
     Semantic.Properties.VerticalAlign
     Semantic.Properties.Visible
+    Semantic.Properties.Warning
+    Semantic.Properties.Width
     Semantic.Properties.Widths
     Semantic.Properties.Wrapped
     Semantic.Utils
