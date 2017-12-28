@@ -1,9 +1,11 @@
-module Semantic.Collections.Breadcrumb where
+module Semantic.Collections.Breadcrumb (module Semantic.Collections.Breadcrumb, module Export) where
 
 import GHC.Generics as G
 import Pure.View hiding (name)
 
 import Semantic.Utils
+
+import Semantic.Collections.Breadcrumb.BreadcrumbDivider as Export
 
 data Breadcrumb ms = Breadcrumb_
     { as :: [Feature ms] -> [View ms] -> View ms
