@@ -34,6 +34,7 @@ import Semantic.Properties.Floating as Export
 import Semantic.Properties.Fluid as Export
 import Semantic.Properties.Focus as Export
 import Semantic.Properties.Focused as Export
+import Semantic.Properties.Grouped as Export
 import Semantic.Properties.Hidden as Export
 import Semantic.Properties.Horizontal as Export
 import Semantic.Properties.Indeterminate as Export

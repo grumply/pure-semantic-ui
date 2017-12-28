@@ -124,6 +124,7 @@ executable semantic-ui-pure
     Semantic.Properties.Fluid
     Semantic.Properties.Focus
     Semantic.Properties.Focused
+    Semantic.Properties.Grouped
     Semantic.Properties.Hidden
     Semantic.Properties.Horizontal
     Semantic.Properties.Indeterminate
@@ -303,6 +304,7 @@ library
     Semantic.Properties.Fluid
     Semantic.Properties.Focus
     Semantic.Properties.Focused
+    Semantic.Properties.Grouped
     Semantic.Properties.Hidden
     Semantic.Properties.Horizontal
     Semantic.Properties.Indeterminate
