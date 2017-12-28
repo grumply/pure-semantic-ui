@@ -19,12 +19,14 @@ import Semantic.Properties.Classes as Export
 import Semantic.Properties.Clearing as Export
 import Semantic.Properties.Close as Export
 import Semantic.Properties.Color as Export
+import Semantic.Properties.Columns as Export
 import Semantic.Properties.Completed as Export
 import Semantic.Properties.Corner as Export
 import Semantic.Properties.Compact as Export
 import Semantic.Properties.Disabled as Export
 import Semantic.Properties.Divided as Export
 import Semantic.Properties.Dividing as Export
+import Semantic.Properties.Doubling as Export
 import Semantic.Properties.Empty as Export
 import Semantic.Properties.Error as Export
 import Semantic.Properties.Fitted as Export
@@ -42,6 +44,7 @@ import Semantic.Properties.Inline as Export
 import Semantic.Properties.Instant as Export
 import Semantic.Properties.Internal as Export
 import Semantic.Properties.Inverted as Export
+import Semantic.Properties.IsContainer as Export
 import Semantic.Properties.Labeled as Export
 import Semantic.Properties.LabelPosition as Export
 import Semantic.Properties.Link as Export
@@ -64,6 +67,7 @@ import Semantic.Properties.Ref as Export
 import Semantic.Properties.Relaxed as Export
 import Semantic.Properties.Reply as Export
 import Semantic.Properties.Required as Export
+import Semantic.Properties.Reversed as Export
 import Semantic.Properties.Ribbon as Export
 import Semantic.Properties.Rotated as Export
 import Semantic.Properties.Rounded as Export
@@ -74,6 +78,7 @@ import Semantic.Properties.Size as Export
 import Semantic.Properties.Spaced as Export
 import Semantic.Properties.Stackable as Export
 import Semantic.Properties.Stacked as Export
+import Semantic.Properties.Stretched as Export
 import Semantic.Properties.Sub as Export
 import Semantic.Properties.Success as Export
 import Semantic.Properties.TabIndex as Export

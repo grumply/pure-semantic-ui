@@ -3,9 +3,11 @@ module Semantic.Properties.Celled where
 import Semantic.Properties.Utils
 
 class HasCelledProp a where
-    getCelled :: a -> Bool
-    setCelled :: Bool -> a -> a
+    type CelledProp a :: *
+    type CelledProp a = Bool
+    getCelled :: a -> CelledProp a
+    setCelled :: CelledProp a -> a -> a
 
-pattern Celled :: HasCelledProp a => a -> a
-pattern Celled a <- (getCelled &&& id -> (True,a)) where
-    Celled a = setCelled True a
+pattern Celled :: HasCelledProp a => CelledProp a -> a -> a
+pattern Celled c a <- (getCelled &&& id -> (c,a)) where
+    Celled c a = setCelled c a

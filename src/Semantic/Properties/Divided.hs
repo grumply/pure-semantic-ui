@@ -3,9 +3,11 @@ module Semantic.Properties.Divided where
 import Semantic.Properties.Utils
 
 class HasDividedProp a where
-    getDivided :: a -> Bool
-    setDivided :: Bool -> a -> a
+    type DividedProp a :: *
+    type DividedProp a = Bool
+    getDivided :: a -> DividedProp a
+    setDivided :: DividedProp a -> a -> a
 
-pattern Divided :: HasDividedProp a => a -> a
-pattern Divided a <- (getDivided &&& id -> (True,a)) where
-    Divided a = setDivided True a
+pattern Divided :: HasDividedProp a => DividedProp a -> a -> a
+pattern Divided d a <- (getDivided &&& id -> (d,a)) where
+    Divided d a = setDivided d a
