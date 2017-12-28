@@ -67,6 +67,7 @@ import Semantic.Properties.Section as Export
 import Semantic.Properties.Selection as Export
 import Semantic.Properties.Size as Export
 import Semantic.Properties.Spaced as Export
+import Semantic.Properties.Stackable as Export
 import Semantic.Properties.Stacked as Export
 import Semantic.Properties.Sub as Export
 import Semantic.Properties.TabIndex as Export
@@ -78,6 +79,7 @@ import Semantic.Properties.Transition as Export
 import Semantic.Properties.Transparent as Export
 import Semantic.Properties.Type as Export
 import Semantic.Properties.UI as Export
+import Semantic.Properties.Unstackable as Export
 import Semantic.Properties.Value as Export
 import Semantic.Properties.Vertical as Export
 import Semantic.Properties.VerticalAlign as Export

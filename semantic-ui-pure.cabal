@@ -149,6 +149,7 @@ executable semantic-ui-pure
     Semantic.Properties.Selection
     Semantic.Properties.Size
     Semantic.Properties.Spaced
+    Semantic.Properties.Stackable
     Semantic.Properties.Stacked
     Semantic.Properties.Sub
     Semantic.Properties.TabIndex
@@ -159,6 +160,7 @@ executable semantic-ui-pure
     Semantic.Properties.Transition
     Semantic.Properties.Transparent
     Semantic.Properties.Type
+    Semantic.Properties.Unstackable
     Semantic.Properties.UI
     Semantic.Properties.Value
     Semantic.Properties.Vertical
@@ -313,6 +315,7 @@ library
     Semantic.Properties.Selection
     Semantic.Properties.Size
     Semantic.Properties.Spaced
+    Semantic.Properties.Stackable
     Semantic.Properties.Stacked
     Semantic.Properties.Sub
     Semantic.Properties.TabIndex
@@ -324,6 +327,7 @@ library
     Semantic.Properties.Transparent
     Semantic.Properties.Type
     Semantic.Properties.UI
+    Semantic.Properties.Unstackable
     Semantic.Properties.Value
     Semantic.Properties.Vertical
     Semantic.Properties.VerticalAlign

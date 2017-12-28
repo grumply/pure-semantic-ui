@@ -1,9 +1,22 @@
 module Semantic.Elements.Step.StepGroup where
 
 import GHC.Generics as G
-import Pure.View
+import Pure.View hiding (vertical,widths)
 
 import Semantic.Utils
+
+import Semantic.Properties.As
+import Semantic.Properties.Attributes
+import Semantic.Properties.Children
+import Semantic.Properties.Classes
+import Semantic.Properties.Attached
+import Semantic.Properties.Fluid
+import Semantic.Properties.Ordered
+import Semantic.Properties.Size
+import Semantic.Properties.Stackable
+import Semantic.Properties.Unstackable
+import Semantic.Properties.Vertical
+import Semantic.Properties.Widths
 
 data StepGroup ms = StepGroup_ 
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -48,3 +61,55 @@ instance Typeable ms => Pure StepGroup ms where
                 : attributes
                 )
                 children
+
+instance HasAsProp (StepGroup ms) where
+    type AsProp (StepGroup ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs a sg = sg { as = a }
+
+instance HasAttributesProp (StepGroup ms) where
+    type Attribute (StepGroup ms) = Feature ms
+    getAttributes = attributes
+    setAttributes as sg = sg { attributes = as }
+
+instance HasChildrenProp (StepGroup ms) where
+    type Child (StepGroup ms) = View ms
+    getChildren = children
+    setChildren cs sg = sg { children = cs }
+
+instance HasClassesProp (StepGroup ms) where
+    getClasses = classes
+    setClasses cs sg = sg { classes = cs }
+
+instance HasAttachedProp (StepGroup ms) where
+    type AttachedProp (StepGroup ms) = Maybe Txt
+    getAttached = attached
+    setAttached a sg = sg { attached = a }
+
+instance HasFluidProp (StepGroup ms) where
+    getFluid = fluid
+    setFluid f sg = sg { fluid = f }
+
+instance HasOrderedProp (StepGroup ms) where
+    getOrdered = ordered
+    setOrdered o sg = sg { ordered = o }
+
+instance HasSizeProp (StepGroup ms) where
+    getSize = size
+    setSize s sg = sg { size = s }
+
+instance HasStackableProp (StepGroup ms) where
+    getStackable = stackable
+    setStackable s sg = sg { stackable = s }
+
+instance HasUnstackableProp (StepGroup ms) where
+    getUnstackable = unstackable
+    setUnstackable u sg = sg { unstackable = u }
+
+instance HasVerticalProp (StepGroup ms) where
+    getVertical = vertical
+    setVertical v sg = sg { vertical = v }
+
+instance HasWidthsProp (StepGroup ms) where
+    getWidths = widths
+    setWidths w sg = sg { widths = w }
