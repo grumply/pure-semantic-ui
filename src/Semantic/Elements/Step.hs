@@ -20,6 +20,7 @@ import Semantic.Properties.Ordered
 import Semantic.Elements.Step.StepContent as Export
 import Semantic.Elements.Step.StepDescription as Export
 import Semantic.Elements.Step.StepGroup as Export
+import Semantic.Elements.Step.StepTitle as Export
 
 data Step ms = Step_
     { as :: [Feature ms] -> [View ms] -> View ms
