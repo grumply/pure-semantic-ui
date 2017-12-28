@@ -6,6 +6,7 @@ import Pure.View hiding (name)
 import Semantic.Utils
 
 import Semantic.Collections.Breadcrumb.BreadcrumbDivider as Export
+import Semantic.Collections.Breadcrumb.BreadcrumbSection as Export
 
 data Breadcrumb ms = Breadcrumb_
     { as :: [Feature ms] -> [View ms] -> View ms
