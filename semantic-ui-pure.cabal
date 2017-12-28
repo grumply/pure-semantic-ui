@@ -55,6 +55,7 @@ executable semantic-ui-pure
     Semantic.Elements.Button.ButtonOr
     Semantic.Elements.Container
     Semantic.Elements.Divider
+    Semantic.Elements.Flag
     Semantic.Elements.Header
     Semantic.Elements.Header.HeaderContent
     Semantic.Elements.Header.HeaderSubheader
@@ -221,6 +222,7 @@ library
     Semantic.Elements.Button.ButtonOr
     Semantic.Elements.Container
     Semantic.Elements.Divider
+    Semantic.Elements.Flag
     Semantic.Elements.Header
     Semantic.Elements.Header.HeaderContent
     Semantic.Elements.Header.HeaderSubheader
