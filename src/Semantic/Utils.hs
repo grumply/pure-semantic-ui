@@ -3,6 +3,8 @@ module Semantic.Utils (module Semantic.Utils, module Export) where
 import Pure.Data
 import Pure.View hiding (one,two,Width)
 
+import qualified Pure.Data.Txt as Txt
+
 import Data.Function as Export
 
 useKeyOrValueAndKey val key =
@@ -10,6 +12,17 @@ useKeyOrValueAndKey val key =
     Just "" -> key
     Just v  -> v <<>> key
     _       -> nil
+
+multiProp val key
+    | isNil val = nil
+    | otherwise =
+          Txt.unwords
+        . map (\w -> Txt.replace "-" " " w <<>> key)
+        . Txt.words
+        . Txt.replace " vertically" "-vertically"
+        . Txt.replace "lare screen" "large-screen"
+        . Txt.unwords
+        $ val
 
 widthProp :: Width -> Txt -> Bool -> Txt
 widthProp val widthClass canEqual =

@@ -55,6 +55,7 @@ executable semantic-ui-pure
     Semantic.Collections.Form
     Semantic.Collections.Form.FormField
     Semantic.Collections.Form.FormGroup
+    Semantic.Collections.Grid
     Semantic.Elements
     Semantic.Elements.Button
     Semantic.Elements.Button.ButtonContent
@@ -235,6 +236,7 @@ library
     Semantic.Collections.Form
     Semantic.Collections.Form.FormField
     Semantic.Collections.Form.FormGroup
+    Semantic.Collections.Grid
     Semantic.Elements
     Semantic.Elements.Button
     Semantic.Elements.Button.ButtonContent
