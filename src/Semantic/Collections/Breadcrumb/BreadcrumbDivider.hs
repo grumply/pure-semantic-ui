@@ -35,7 +35,7 @@ instance Typeable ms => Pure BreadcrumbDivider ms where
                 ( ClassList cs
                 : attributes
                 )
-                children
+                (children ? children $ "/")
 
 instance HasAsProp (BreadcrumbDivider ms) where
     type AsProp (BreadcrumbDivider ms) = [Feature ms] -> [View ms] -> View ms
