@@ -1,9 +1,14 @@
 module Semantic.Elements.Flag where
 
 import GHC.Generics as G
-import Pure.View
+import Pure.View hiding (name)
 
 import Semantic.Utils
+
+import Semantic.Properties.As
+import Semantic.Properties.Attributes
+import Semantic.Properties.Classes
+import Semantic.Properties.Name
 
 data Flag ms = Flag_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -32,3 +37,21 @@ instance Typeable ms => Pure Flag ms where
                 : attributes
                 )
                 []
+
+instance HasAsProp (Flag ms) where
+    type AsProp (Flag ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs a f = f { as = a }
+
+instance HasAttributesProp (Flag ms) where
+    type Attribute (Flag ms) = Feature ms
+    getAttributes = attributes
+    setAttributes as f = f { attributes = as }
+
+instance HasClassesProp (Flag ms) where
+    getClasses = classes
+    setClasses cs f = f { classes = cs }
+
+instance HasNameProp (Flag ms) where
+    getName = name
+    setName n f = f { name = n }
