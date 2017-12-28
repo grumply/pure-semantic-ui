@@ -1,4 +1,4 @@
-module Semantic.Collections.Form where
+module Semantic.Collections.Form (module Semantic.Collections.Form, module Export) where
 
 import GHC.Generics as G
 import Pure.View hiding (name,onSubmit,widths,Form)
@@ -22,6 +22,8 @@ import Semantic.Properties.Success
 import Semantic.Properties.Unstackable
 import Semantic.Properties.Warning
 import Semantic.Properties.Widths
+
+import Semantic.Collections.Form.FormField as Export
 
 data Form ms = Form_
     { as :: [Feature ms] -> [View ms] -> View ms

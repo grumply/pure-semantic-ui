@@ -53,6 +53,7 @@ executable semantic-ui-pure
     Semantic.Collections.Breadcrumb.BreadcrumbDivider
     Semantic.Collections.Breadcrumb.BreadcrumbSection
     Semantic.Collections.Form
+    Semantic.Collections.Form.FormField
     Semantic.Elements
     Semantic.Elements.Button
     Semantic.Elements.Button.ButtonContent
@@ -229,6 +230,7 @@ library
     Semantic.Collections.Breadcrumb.BreadcrumbDivider
     Semantic.Collections.Breadcrumb.BreadcrumbSection
     Semantic.Collections.Form
+    Semantic.Collections.Form.FormField
     Semantic.Elements
     Semantic.Elements.Button
     Semantic.Elements.Button.ButtonContent
