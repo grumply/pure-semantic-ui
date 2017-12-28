@@ -48,6 +48,8 @@ executable semantic-ui-pure
 
   other-modules:
     Semantic
+    Semantic.Collections
+    Semantic.Collections.Breadcrumb
     Semantic.Elements
     Semantic.Elements.Button
     Semantic.Elements.Button.ButtonContent
@@ -215,6 +217,8 @@ library
 
   exposed-modules:
     Semantic
+    Semantic.Collections
+    Semantic.Collections.Breadcrumb
     Semantic.Elements
     Semantic.Elements.Button
     Semantic.Elements.Button.ButtonContent
