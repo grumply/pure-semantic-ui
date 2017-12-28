@@ -1,4 +1,4 @@
-module Semantic.Collections.Grid where
+module Semantic.Collections.Grid (module Semantic.Collections.Grid, module Export) where
 
 import GHC.Generics as G
 import Pure.View hiding (name,textAlign,verticalAlign)
@@ -23,6 +23,8 @@ import Semantic.Properties.Stackable
 import Semantic.Properties.Stretched
 import Semantic.Properties.TextAlign
 import Semantic.Properties.VerticalAlign
+
+import Semantic.Collections.Grid.GridColumn as Export
 
 data Grid ms = Grid_
     { as :: [Feature ms] -> [View ms] -> View ms
