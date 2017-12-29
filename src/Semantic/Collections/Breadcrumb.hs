@@ -97,6 +97,6 @@ breadcrumbs activateLast divider = (def !)
       crumb (bc,l)  = def ! bc & (l ? Ref (Lref l) $ id)
 
       crumbs []     = nil
-      crumbs [x]    = [ BreadcrumbSection $ (activateLast ? Active $ id) (crumb x) ]
+      crumbs [x]    = [ BreadcrumbSection $ Active activateLast (crumb x) ]
       crumbs (x:xs) = BreadcrumbSection (crumb x) : crumbs xs
 
