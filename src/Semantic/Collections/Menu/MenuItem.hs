@@ -1,7 +1,7 @@
 module Semantic.Collections.Menu.MenuItem where
 
 import GHC.Generics as G
-import Pure.View hiding (active,color,disabled,name,onClick,position)
+import Pure.View hiding (active,color,disabled,onClick,position)
 
 import Semantic.Utils
 
@@ -18,7 +18,6 @@ import Semantic.Properties.Fitted
 import Semantic.Properties.Index
 import Semantic.Properties.IsHeader
 import Semantic.Properties.Link
-import Semantic.Properties.Name
 import Semantic.Properties.OnClick
 import Semantic.Properties.Position
 
@@ -34,7 +33,6 @@ data MenuItem ms = MenuItem_
     , header :: Bool
     , index :: Int
     , link :: Bool
-    , name :: Txt
     , onClick :: Ef ms IO ()
     , position :: Txt
     } deriving (Generic)
@@ -64,6 +62,7 @@ instance Typeable ms => Pure MenuItem ms where
                 : header # "header"
                 : link # "link"
                 : fitted # "fitted"
+                : "item"
                 : classes
                 )
 
@@ -122,10 +121,6 @@ instance HasIndexProp (MenuItem ms) where
 instance HasLinkProp (MenuItem ms) where
     getLink = link
     setLink l mi = mi { link = l }
-
-instance HasNameProp (MenuItem ms) where
-    getName = name
-    setName n mi = mi { name = n }
 
 instance HasOnClickProp (MenuItem ms) where
     type OnClickProp (MenuItem ms) = Ef ms IO ()

@@ -10,12 +10,10 @@ import Semantic.Properties.As
 import Semantic.Properties.Attributes
 import Semantic.Properties.Children
 import Semantic.Properties.Classes
-import Semantic.Properties.ActiveIndex
 import Semantic.Properties.Attached
 import Semantic.Properties.Borderless
 import Semantic.Properties.Color
 import Semantic.Properties.Compact
-import Semantic.Properties.DefaultActiveIndex
 import Semantic.Properties.Fixed
 import Semantic.Properties.Floated
 import Semantic.Properties.Fluid
@@ -41,12 +39,10 @@ data Menu ms = Menu_
     , attributes :: [Feature ms]
     , children :: [View ms]
     , classes :: [Txt]
-    , activeIndex :: Maybe Int
     , attached :: Maybe Txt
     , borderless :: Bool
     , color :: Txt
     , compact :: Bool
-    , defaultActiveIndex :: Maybe Int
     , fixed :: Txt
     , floated :: Maybe Txt
     , fluid :: Bool
@@ -73,15 +69,8 @@ pattern Menu m = View m
 instance VC ms => Pure Menu ms where
     render Menu_ {..} =
         let 
-            i = maybe defaultActiveIndex Just activeIndex
-
-            children' = flip map children $ \c ->
-                case c of
-                    MenuItem mi -> MenuItem mi 
-                        { onClick = onClick mi >> onItemClick mi
-                        , active  = i == Just (index mi)
-                        }
-                    _ -> c
+            children' = 
+                mapPures (\mi@(MenuItem_ {}) -> mi { onClick = onClick mi >> onItemClick mi }) children
             
             cs =
                 ( "ui"
@@ -132,10 +121,6 @@ instance HasClassesProp (Menu ms) where
     getClasses = classes
     setClasses cs m = m { classes = cs }
 
-instance HasActiveIndexProp (Menu ms) where
-    getActiveIndex = activeIndex
-    setActiveIndex ai m = m { activeIndex = ai }
-
 instance HasAttachedProp (Menu ms) where
     type AttachedProp (Menu ms) = Maybe Txt
     getAttached = attached
@@ -152,10 +137,6 @@ instance HasColorProp (Menu ms) where
 instance HasCompactProp (Menu ms) where
     getCompact = compact
     setCompact c m = m { compact = c }
-
-instance HasDefaultActiveIndexProp (Menu ms) where
-    getDefaultActiveIndex = defaultActiveIndex
-    setDefaultActiveIndex dai m = m { defaultActiveIndex = dai }
 
 instance HasFixedProp (Menu ms) where
     getFixed = fixed

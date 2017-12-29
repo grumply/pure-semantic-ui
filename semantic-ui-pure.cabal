@@ -100,7 +100,6 @@ executable semantic-ui-pure
     Semantic.Properties
     Semantic.Properties.Action
     Semantic.Properties.Active
-    Semantic.Properties.ActiveIndex
     Semantic.Properties.Animated
     Semantic.Properties.As
     Semantic.Properties.Attributes
@@ -121,7 +120,6 @@ executable semantic-ui-pure
     Semantic.Properties.Columns
     Semantic.Properties.Completed
     Semantic.Properties.Corner
-    Semantic.Properties.DefaultActiveIndex
     Semantic.Properties.Compact
     Semantic.Properties.Disabled
     Semantic.Properties.Divided
@@ -310,7 +308,6 @@ library
     Semantic.Properties
     Semantic.Properties.Action
     Semantic.Properties.Active
-    Semantic.Properties.ActiveIndex
     Semantic.Properties.Animated
     Semantic.Properties.As
     Semantic.Properties.Attributes
@@ -331,7 +328,6 @@ library
     Semantic.Properties.Columns
     Semantic.Properties.Completed
     Semantic.Properties.Corner
-    Semantic.Properties.DefaultActiveIndex
     Semantic.Properties.Compact
     Semantic.Properties.Disabled
     Semantic.Properties.Divided

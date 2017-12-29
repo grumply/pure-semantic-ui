@@ -2,7 +2,6 @@ module Semantic.Properties (module Semantic.Properties, module Export) where
 
 import Semantic.Properties.Action as Export
 import Semantic.Properties.Active as Export
-import Semantic.Properties.ActiveIndex as Export
 import Semantic.Properties.Animated as Export
 import Semantic.Properties.As as Export
 import Semantic.Properties.Attached as Export
@@ -25,7 +24,6 @@ import Semantic.Properties.Columns as Export
 import Semantic.Properties.Compact as Export
 import Semantic.Properties.Completed as Export
 import Semantic.Properties.Corner as Export
-import Semantic.Properties.DefaultActiveIndex as Export
 import Semantic.Properties.Disabled as Export
 import Semantic.Properties.Divided as Export
 import Semantic.Properties.Dividing as Export
@@ -121,9 +119,6 @@ infixl 1 !%
 
 infixl 1 %!
 (%!) c as cs = Attributes (as (Children cs c))
-
-infixl 7 |>
-(|>) x f = f x
 
 pattern ToLeft = "left"
 pattern ToRight = "right"
