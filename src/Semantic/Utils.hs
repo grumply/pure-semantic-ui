@@ -25,13 +25,17 @@ multiProp val key
         $ val
 
 widthProp :: Width -> Txt -> Bool -> Txt
-widthProp val widthClass canEqual =
-  if canEqual && val == equal
-    then "equal width"
-    else toTxt val <>> widthClass
+widthProp val widthClass canEqual
+    | isNil val = ""
+    | canEqual && val == equal = "equal width"
+    | otherwise = toTxt val <>> widthClass
 
 newtype Width = Width Txt deriving (Eq)
-instance Default Width where def = one
+instance Default Width where def = Width ""
+instance Cond Width where 
+    nil = Width ""
+    isNil (Width "") = True
+    isNil _          = False
 instance ToTxt Width where toTxt (Width w) = w
 
 equal = Width "equal"
