@@ -62,6 +62,7 @@ executable semantic-ui-pure
     Semantic.Collections.Menu.MenuHeader
     Semantic.Collections.Menu.MenuItem
     Semantic.Collections.Menu.MenuMenu
+    Semantic.Collections.Message
     Semantic.Elements
     Semantic.Elements.Button
     Semantic.Elements.Button.ButtonContent
@@ -270,6 +271,7 @@ library
     Semantic.Collections.Menu.MenuHeader
     Semantic.Collections.Menu.MenuItem
     Semantic.Collections.Menu.MenuMenu
+    Semantic.Collections.Message
     Semantic.Elements
     Semantic.Elements.Button
     Semantic.Elements.Button.ButtonContent
