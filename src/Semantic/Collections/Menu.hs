@@ -34,6 +34,7 @@ import Semantic.Properties.Widths
 
 import Semantic.Collections.Menu.MenuHeader as Export
 import Semantic.Collections.Menu.MenuItem as Export
+import Semantic.Collections.Menu.MenuMenu as Export
 
 data Menu ms = Menu_
     { as :: [Feature ms] -> [View ms] -> View ms
