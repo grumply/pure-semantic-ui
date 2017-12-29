@@ -27,7 +27,7 @@ instance Typeable ms => Pure MessageList ms where
     render MessageList_ {..} =
         let
             cs =
-                ( "content"
+                ( "list"
                 : classes
                 )
         in
