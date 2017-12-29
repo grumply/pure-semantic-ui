@@ -22,7 +22,7 @@ instance Default (TableHeader ms) where
     def = (G.to gdef) { as = Thead }
 
 pattern TableHeader :: Typeable ms => TableHeader ms -> View ms
-pattern TableHeader tf = View tf 
+pattern TableHeader th = View th
 
 instance Typeable ms => Pure TableHeader ms where
     render TableHeader_ {..} =
@@ -41,20 +41,20 @@ instance Typeable ms => Pure TableHeader ms where
 instance HasAsProp (TableHeader ms) where
     type AsProp (TableHeader ms) = [Feature ms] -> [View ms] -> View ms
     getAs = as
-    setAs a tf = tf { as = a }
+    setAs a th = th { as = a }
 
 instance HasAttributesProp (TableHeader ms) where
     type Attribute (TableHeader ms) = Feature ms
     getAttributes = attributes
-    setAttributes as tf = tf { attributes = as }
+    setAttributes as th = th { attributes = as }
 
 instance HasChildrenProp (TableHeader ms) where
     type Child (TableHeader ms) = View ms
     getChildren = children
-    setChildren cs tf = tf { children = cs }
+    setChildren cs th = th { children = cs }
 
 instance HasClassesProp (TableHeader ms) where
     getClasses = classes
-    setClasses cs tf = tf { classes = cs }
+    setClasses cs th = th { classes = cs }
 
     
