@@ -98,6 +98,7 @@ executable semantic-ui-pure
     Semantic.Properties
     Semantic.Properties.Action
     Semantic.Properties.Active
+    Semantic.Properties.ActiveIndex
     Semantic.Properties.Animated
     Semantic.Properties.As
     Semantic.Properties.Attributes
@@ -105,6 +106,7 @@ executable semantic-ui-pure
     Semantic.Properties.Basic
     Semantic.Properties.Block
     Semantic.Properties.Bordered
+    Semantic.Properties.Borderless
     Semantic.Properties.Bulleted
     Semantic.Properties.Celled
     Semantic.Properties.Centered
@@ -117,6 +119,7 @@ executable semantic-ui-pure
     Semantic.Properties.Columns
     Semantic.Properties.Completed
     Semantic.Properties.Corner
+    Semantic.Properties.DefaultActiveIndex
     Semantic.Properties.Compact
     Semantic.Properties.Disabled
     Semantic.Properties.Divided
@@ -125,6 +128,7 @@ executable semantic-ui-pure
     Semantic.Properties.Empty
     Semantic.Properties.Error
     Semantic.Properties.Fitted
+    Semantic.Properties.Fixed
     Semantic.Properties.Flipped
     Semantic.Properties.Floated
     Semantic.Properties.Floating
@@ -142,6 +146,8 @@ executable semantic-ui-pure
     Semantic.Properties.Inverted
     Semantic.Properties.IsContainer
     Semantic.Properties.IsHeader
+    Semantic.Properties.IsIcon
+    Semantic.Properties.IsText
     Semantic.Properties.Labeled
     Semantic.Properties.LabelPosition
     Semantic.Properties.Link
@@ -160,6 +166,7 @@ executable semantic-ui-pure
     Semantic.Properties.OnWidescreen
     Semantic.Properties.Ordered
     Semantic.Properties.Padded
+    Semantic.Properties.Pagination
     Semantic.Properties.Piled
     Semantic.Properties.Pointing
     Semantic.Properties.Position
@@ -185,6 +192,7 @@ executable semantic-ui-pure
     Semantic.Properties.Sub
     Semantic.Properties.Success
     Semantic.Properties.TabIndex
+    Semantic.Properties.Tabular
     Semantic.Properties.Tag
     Semantic.Properties.Tertiary
     Semantic.Properties.TextAlign
@@ -298,6 +306,7 @@ library
     Semantic.Properties
     Semantic.Properties.Action
     Semantic.Properties.Active
+    Semantic.Properties.ActiveIndex
     Semantic.Properties.Animated
     Semantic.Properties.As
     Semantic.Properties.Attributes
@@ -305,6 +314,7 @@ library
     Semantic.Properties.Basic
     Semantic.Properties.Block
     Semantic.Properties.Bordered
+    Semantic.Properties.Borderless
     Semantic.Properties.Bulleted
     Semantic.Properties.Celled
     Semantic.Properties.Centered
@@ -317,6 +327,7 @@ library
     Semantic.Properties.Columns
     Semantic.Properties.Completed
     Semantic.Properties.Corner
+    Semantic.Properties.DefaultActiveIndex
     Semantic.Properties.Compact
     Semantic.Properties.Disabled
     Semantic.Properties.Divided
@@ -325,6 +336,7 @@ library
     Semantic.Properties.Empty
     Semantic.Properties.Error
     Semantic.Properties.Fitted
+    Semantic.Properties.Fixed
     Semantic.Properties.Flipped
     Semantic.Properties.Floated
     Semantic.Properties.Floating
@@ -342,6 +354,8 @@ library
     Semantic.Properties.Inverted
     Semantic.Properties.IsContainer
     Semantic.Properties.IsHeader
+    Semantic.Properties.IsIcon
+    Semantic.Properties.IsText
     Semantic.Properties.Labeled
     Semantic.Properties.LabelPosition
     Semantic.Properties.Link
@@ -360,6 +374,7 @@ library
     Semantic.Properties.OnWidescreen
     Semantic.Properties.Ordered
     Semantic.Properties.Padded
+    Semantic.Properties.Pagination
     Semantic.Properties.Piled
     Semantic.Properties.Pointing
     Semantic.Properties.Position
@@ -385,6 +400,7 @@ library
     Semantic.Properties.Sub
     Semantic.Properties.Success
     Semantic.Properties.TabIndex
+    Semantic.Properties.Tabular
     Semantic.Properties.Tag
     Semantic.Properties.Tertiary
     Semantic.Properties.TextAlign

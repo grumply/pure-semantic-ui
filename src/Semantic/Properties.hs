@@ -2,6 +2,7 @@ module Semantic.Properties (module Semantic.Properties, module Export) where
 
 import Semantic.Properties.Action as Export
 import Semantic.Properties.Active as Export
+import Semantic.Properties.ActiveIndex as Export
 import Semantic.Properties.Animated as Export
 import Semantic.Properties.As as Export
 import Semantic.Properties.Attached as Export
@@ -10,6 +11,7 @@ import Semantic.Properties.Avatar as Export
 import Semantic.Properties.Basic as Export
 import Semantic.Properties.Block as Export
 import Semantic.Properties.Bordered as Export
+import Semantic.Properties.Borderless as Export
 import Semantic.Properties.Bulleted as Export
 import Semantic.Properties.Celled as Export
 import Semantic.Properties.Centered as Export
@@ -20,9 +22,10 @@ import Semantic.Properties.Clearing as Export
 import Semantic.Properties.Close as Export
 import Semantic.Properties.Color as Export
 import Semantic.Properties.Columns as Export
+import Semantic.Properties.Compact as Export
 import Semantic.Properties.Completed as Export
 import Semantic.Properties.Corner as Export
-import Semantic.Properties.Compact as Export
+import Semantic.Properties.DefaultActiveIndex as Export
 import Semantic.Properties.Disabled as Export
 import Semantic.Properties.Divided as Export
 import Semantic.Properties.Dividing as Export
@@ -30,6 +33,7 @@ import Semantic.Properties.Doubling as Export
 import Semantic.Properties.Empty as Export
 import Semantic.Properties.Error as Export
 import Semantic.Properties.Fitted as Export
+import Semantic.Properties.Fixed as Export
 import Semantic.Properties.Flipped as Export
 import Semantic.Properties.Floated as Export
 import Semantic.Properties.Floating as Export
@@ -47,6 +51,8 @@ import Semantic.Properties.Internal as Export
 import Semantic.Properties.Inverted as Export
 import Semantic.Properties.IsContainer as Export
 import Semantic.Properties.IsHeader as Export
+import Semantic.Properties.IsIcon as Export
+import Semantic.Properties.IsText as Export
 import Semantic.Properties.Labeled as Export
 import Semantic.Properties.LabelPosition as Export
 import Semantic.Properties.Link as Export
@@ -65,6 +71,7 @@ import Semantic.Properties.OnTablet as Export
 import Semantic.Properties.OnWidescreen as Export
 import Semantic.Properties.Ordered as Export
 import Semantic.Properties.Padded as Export
+import Semantic.Properties.Pagination as Export
 import Semantic.Properties.Piled as Export
 import Semantic.Properties.Pointing as Export
 import Semantic.Properties.Position as Export
@@ -90,6 +97,7 @@ import Semantic.Properties.Stretched as Export
 import Semantic.Properties.Sub as Export
 import Semantic.Properties.Success as Export
 import Semantic.Properties.TabIndex as Export
+import Semantic.Properties.Tabular as Export
 import Semantic.Properties.Tag as Export
 import Semantic.Properties.Tertiary as Export
 import Semantic.Properties.TextAlign as Export
