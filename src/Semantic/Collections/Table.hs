@@ -1,4 +1,4 @@
-module Semantic.Collections.Table where
+module Semantic.Collections.Table (module Semantic.Collections.Table, module Export) where
 
 import GHC.Generics as G
 import Pure.View hiding (color,fixed,textAlign,verticalAlign,Table)
@@ -31,6 +31,8 @@ import Semantic.Properties.Structured
 import Semantic.Properties.TextAlign
 import Semantic.Properties.Unstackable
 import Semantic.Properties.VerticalAlign
+
+import Semantic.Collections.Table.TableBody as Export
 
 data Table ms = Table_
     { as :: [Feature ms] -> [View ms] -> View ms
