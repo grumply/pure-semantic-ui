@@ -30,6 +30,7 @@ import Semantic.Properties.Warning
 import Prelude hiding (error)
 
 import Semantic.Collections.Message.MessageContent as Export
+import Semantic.Collections.Message.MessageHeader as Export
 
 data Message ms = Message_
     { as :: [Feature ms] -> [View ms] -> View ms
