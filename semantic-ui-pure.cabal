@@ -59,6 +59,7 @@ executable semantic-ui-pure
     Semantic.Collections.Grid.GridColumn
     Semantic.Collections.Grid.GridRow
     Semantic.Collections.Menu
+    Semantic.Collections.Menu.MenuHeader
     Semantic.Collections.Menu.MenuItem
     Semantic.Elements
     Semantic.Elements.Button
@@ -267,6 +268,7 @@ library
     Semantic.Collections.Grid.GridColumn
     Semantic.Collections.Grid.GridRow
     Semantic.Collections.Menu
+    Semantic.Collections.Menu.MenuHeader
     Semantic.Collections.Menu.MenuItem
     Semantic.Elements
     Semantic.Elements.Button

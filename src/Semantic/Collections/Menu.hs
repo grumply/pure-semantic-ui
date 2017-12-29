@@ -1,12 +1,10 @@
 {-# LANGUAGE UndecidableInstances #-}
-module Semantic.Collections.Menu where
+module Semantic.Collections.Menu (module Semantic.Collections.Menu, module Export) where
 
 import GHC.Generics as G
 import Pure.View hiding (active,color,fixed,onClick,text,vertical,widths)
 
 import Semantic.Utils
-
-import Semantic.Collections.Menu.MenuItem
 
 import Semantic.Properties.As
 import Semantic.Properties.Attributes
@@ -33,6 +31,9 @@ import Semantic.Properties.Stackable
 import Semantic.Properties.Tabular
 import Semantic.Properties.Vertical
 import Semantic.Properties.Widths
+
+import Semantic.Collections.Menu.MenuHeader as Export
+import Semantic.Collections.Menu.MenuItem as Export
 
 data Menu ms = Menu_
     { as :: [Feature ms] -> [View ms] -> View ms
