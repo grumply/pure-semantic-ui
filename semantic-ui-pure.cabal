@@ -141,6 +141,7 @@ executable semantic-ui-pure
     Semantic.Properties.Horizontal
     Semantic.Properties.Indeterminate
     Semantic.Properties.Index
+    Semantic.Properties.Info
     Semantic.Properties.Inline
     Semantic.Properties.Instant
     Semantic.Properties.Internal
@@ -159,6 +160,7 @@ executable semantic-ui-pure
     Semantic.Properties.OnChange
     Semantic.Properties.OnClick
     Semantic.Properties.OnComputer
+    Semantic.Properties.OnDismiss
     Semantic.Properties.OnLargeScreen
     Semantic.Properties.Only
     Semantic.Properties.OnMobile
@@ -350,6 +352,7 @@ library
     Semantic.Properties.Horizontal
     Semantic.Properties.Indeterminate
     Semantic.Properties.Index
+    Semantic.Properties.Info
     Semantic.Properties.Inline
     Semantic.Properties.Instant
     Semantic.Properties.Internal
@@ -368,6 +371,7 @@ library
     Semantic.Properties.OnChange
     Semantic.Properties.OnClick
     Semantic.Properties.OnComputer
+    Semantic.Properties.OnDismiss
     Semantic.Properties.OnLargeScreen
     Semantic.Properties.Only
     Semantic.Properties.OnMobile

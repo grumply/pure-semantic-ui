@@ -43,6 +43,7 @@ import Semantic.Properties.Hidden as Export
 import Semantic.Properties.Horizontal as Export
 import Semantic.Properties.Indeterminate as Export
 import Semantic.Properties.Index as Export
+import Semantic.Properties.Info as Export
 import Semantic.Properties.Inline as Export
 import Semantic.Properties.Instant as Export
 import Semantic.Properties.Internal as Export
@@ -61,6 +62,7 @@ import Semantic.Properties.Negative as Export
 import Semantic.Properties.OnChange as Export
 import Semantic.Properties.OnClick as Export
 import Semantic.Properties.OnComputer as Export
+import Semantic.Properties.OnDismiss as Export
 import Semantic.Properties.OnLargeScreen as Export
 import Semantic.Properties.Only as Export
 import Semantic.Properties.OnMobile as Export
