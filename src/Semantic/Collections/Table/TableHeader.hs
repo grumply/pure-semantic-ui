@@ -5,6 +5,11 @@ import Pure.View
 
 import Semantic.Utils
 
+import Semantic.Properties.As
+import Semantic.Properties.Attributes
+import Semantic.Properties.Children
+import Semantic.Properties.Classes
+
 data TableHeader ms = TableHeader_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]
@@ -32,3 +37,24 @@ instance Typeable ms => Pure TableHeader ms where
                 : attributes
                 )
                 children
+
+instance HasAsProp (TableHeader ms) where
+    type AsProp (TableHeader ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs a tf = tf { as = a }
+
+instance HasAttributesProp (TableHeader ms) where
+    type Attribute (TableHeader ms) = Feature ms
+    getAttributes = attributes
+    setAttributes as tf = tf { attributes = as }
+
+instance HasChildrenProp (TableHeader ms) where
+    type Child (TableHeader ms) = View ms
+    getChildren = children
+    setChildren cs tf = tf { children = cs }
+
+instance HasClassesProp (TableHeader ms) where
+    getClasses = classes
+    setClasses cs tf = tf { classes = cs }
+
+    
