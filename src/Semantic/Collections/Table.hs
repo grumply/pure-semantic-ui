@@ -34,6 +34,7 @@ import Semantic.Properties.VerticalAlign
 
 import Semantic.Collections.Table.TableBody as Export
 import Semantic.Collections.Table.TableFooter as Export
+import Semantic.Collections.Table.TableHeader as Export
 
 data Table ms = Table_
     { as :: [Feature ms] -> [View ms] -> View ms
