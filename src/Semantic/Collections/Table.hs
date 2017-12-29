@@ -33,6 +33,7 @@ import Semantic.Properties.Unstackable
 import Semantic.Properties.VerticalAlign
 
 import Semantic.Collections.Table.TableBody as Export
+import Semantic.Collections.Table.TableFooter as Export
 
 data Table ms = Table_
     { as :: [Feature ms] -> [View ms] -> View ms
