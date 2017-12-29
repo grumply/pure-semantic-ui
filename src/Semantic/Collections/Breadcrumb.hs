@@ -1,7 +1,7 @@
 module Semantic.Collections.Breadcrumb (module Semantic.Collections.Breadcrumb, module Export) where
 
 import GHC.Generics as G
-import Pure.View hiding (name)
+import Pure.View hiding ((!),Ref,name)
 
 import Semantic.Utils
 
@@ -13,6 +13,11 @@ import Semantic.Properties.Attributes
 import Semantic.Properties.Children
 import Semantic.Properties.Classes
 import Semantic.Properties.Size
+
+import qualified Data.List as List
+import Data.Function ((&))
+import Semantic.Properties.Active
+import Semantic.Properties.Ref
 
 data Breadcrumb ms = Breadcrumb_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -66,3 +71,32 @@ instance HasClassesProp (Breadcrumb ms) where
 instance HasSizeProp (Breadcrumb ms) where
     getSize = size
     setSize sz bc = bc { size = sz }
+
+-- | Shorthand for producing a breadcrumb trail from a list of crumbs and links.
+--
+-- > breadcrumbs nil [("Home","/store"),("Sweets","/store/sweets")]
+-- 
+-- Produces: 
+--
+--   (def :: Breadcrumb ms) & Children 
+--       [ BreadcrumbSection $ def 
+--            |> Lref "/store" 
+--            |> Children [ "Store" ]
+--       , BreadcrumbDivider def
+--       , BreadcrumbSection $ def 
+--            |> Lref "/sweets" 
+--            |> Children [ "Sweets" ]
+--       ]
+--
+breadcrumbs :: Typeable ms => Bool -> [View ms] -> [([View ms],Txt)] -> Breadcrumb ms
+breadcrumbs activateLast divider = (def !) 
+    . List.intersperse (BreadcrumbDivider $ def ! divider) 
+    . crumbs
+  where
+      crumb :: Typeable ms => ([View ms],Txt) -> BreadcrumbSection ms
+      crumb (bc,l)  = def ! bc & (l ? Ref (Lref l) $ id)
+
+      crumbs []     = nil
+      crumbs [x]    = [ BreadcrumbSection $ (activateLast ? Active $ id) (crumb x) ]
+      crumbs (x:xs) = BreadcrumbSection (crumb x) : crumbs xs
+
