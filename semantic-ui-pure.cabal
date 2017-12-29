@@ -65,6 +65,7 @@ executable semantic-ui-pure
     Semantic.Collections.Message
     Semantic.Collections.Message.MessageContent
     Semantic.Collections.Message.MessageHeader
+    Semantic.Collections.Message.MessageItem
     Semantic.Elements
     Semantic.Elements.Button
     Semantic.Elements.Button.ButtonContent
@@ -278,6 +279,7 @@ library
     Semantic.Collections.Message
     Semantic.Collections.Message.MessageContent
     Semantic.Collections.Message.MessageHeader
+    Semantic.Collections.Message.MessageItem
     Semantic.Elements
     Semantic.Elements.Button
     Semantic.Elements.Button.ButtonContent
