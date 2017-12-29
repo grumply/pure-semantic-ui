@@ -40,11 +40,13 @@ import Semantic.Properties.Grouped as Export
 import Semantic.Properties.Hidden as Export
 import Semantic.Properties.Horizontal as Export
 import Semantic.Properties.Indeterminate as Export
+import Semantic.Properties.Index as Export
 import Semantic.Properties.Inline as Export
 import Semantic.Properties.Instant as Export
 import Semantic.Properties.Internal as Export
 import Semantic.Properties.Inverted as Export
 import Semantic.Properties.IsContainer as Export
+import Semantic.Properties.IsHeader as Export
 import Semantic.Properties.Labeled as Export
 import Semantic.Properties.LabelPosition as Export
 import Semantic.Properties.Link as Export
