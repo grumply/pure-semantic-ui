@@ -18,7 +18,7 @@ data MessageItem ms = MessageItem_
     } deriving (Generic)
 
 instance Default (MessageItem ms) where
-    def = (G.to gdef) { as = Div }
+    def = (G.to gdef) { as = Li }
 
 pattern MessageItem :: Typeable ms => MessageItem ms -> View ms
 pattern MessageItem mi = View mi
