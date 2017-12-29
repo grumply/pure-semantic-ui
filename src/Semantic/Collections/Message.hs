@@ -1,4 +1,4 @@
-module Semantic.Collections.Message where
+module Semantic.Collections.Message (module Semantic.Collections.Message, module Export) where
 
 import GHC.Generics as G
 import Pure.View hiding (color,hidden,visible,Name)
@@ -28,6 +28,8 @@ import Semantic.Properties.Visible
 import Semantic.Properties.Warning
 
 import Prelude hiding (error)
+
+import Semantic.Collections.Message.MessageContent as Export
 
 data Message ms = Message_
     { as :: [Feature ms] -> [View ms] -> View ms
