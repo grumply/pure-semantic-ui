@@ -1,10 +1,36 @@
 module Semantic.Collections.Table where
 
 import GHC.Generics as G
-import Pure.View hiding (Table)
+import Pure.View hiding (color,fixed,textAlign,verticalAlign,Table)
 import qualified Pure.View as HTML
 
 import Semantic.Utils
+
+import Semantic.Properties.As
+import Semantic.Properties.Attributes
+import Semantic.Properties.Children
+import Semantic.Properties.Classes
+import Semantic.Properties.Attached
+import Semantic.Properties.Basic
+import Semantic.Properties.Celled
+import Semantic.Properties.Collapsing
+import Semantic.Properties.Color
+import Semantic.Properties.Columns
+import Semantic.Properties.Compact
+import Semantic.Properties.Definition
+import Semantic.Properties.Fixed
+import Semantic.Properties.Inverted
+import Semantic.Properties.Padded
+import Semantic.Properties.Selectable
+import Semantic.Properties.SingleLine
+import Semantic.Properties.Size
+import Semantic.Properties.Sortable
+import Semantic.Properties.Stackable
+import Semantic.Properties.Striped
+import Semantic.Properties.Structured
+import Semantic.Properties.TextAlign
+import Semantic.Properties.Unstackable
+import Semantic.Properties.VerticalAlign
 
 data Table ms = Table_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -75,3 +101,112 @@ instance Typeable ms => Pure Table ms where
                 : attributes
                 )
                 children
+
+instance HasAsProp (Table ms) where
+    type AsProp (Table ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs a t = t { as = a }
+
+instance HasAttributesProp (Table ms) where
+    type Attribute (Table ms) = Feature ms
+    getAttributes = attributes
+    setAttributes as t = t { attributes = as }
+
+instance HasChildrenProp (Table ms) where
+    type Child (Table ms) = View ms
+    getChildren = children
+    setChildren cs t = t { children = cs }
+
+instance HasClassesProp (Table ms) where
+    getClasses = classes
+    setClasses cs t = t { classes = cs }
+
+instance HasAttachedProp (Table ms) where
+    type AttachedProp (Table ms) = Maybe Txt
+    getAttached = attached
+    setAttached a t = t { attached = a }
+
+instance HasBasicProp (Table ms) where
+    type BasicProp (Table ms) = Maybe Txt
+    getBasic = basic
+    setBasic b t = t { basic = b }
+
+instance HasCelledProp (Table ms) where
+    getCelled = celled
+    setCelled c t = t { celled = c }
+
+instance HasCollapsingProp (Table ms) where
+    getCollapsing = collapsing
+    setCollapsing c t = t { collapsing = c }
+
+instance HasColorProp (Table ms) where
+    getColor = color
+    setColor c t = t { color = c }
+
+instance HasColumnsProp (Table ms) where
+    getColumns = columns
+    setColumns c t = t { columns = c }
+
+instance HasCompactProp (Table ms) where
+    type CompactProp (Table ms) = Maybe Txt
+    getCompact = compact
+    setCompact c t = t { compact = c }
+
+instance HasDefinitionProp (Table ms) where
+    getDefinition = definition
+    setDefinition d t = t { definition = d }
+
+instance HasFixedProp (Table ms) where
+    type FixedProp (Table ms) = Bool
+    getFixed = fixed
+    setFixed f t = t { fixed = f }
+
+instance HasInvertedProp (Table ms) where
+    getInverted = inverted
+    setInverted i t = t { inverted = i }
+
+instance HasPaddedProp (Table ms) where
+    getPadded = padded
+    setPadded p t = t { padded = p }
+
+instance HasSelectableProp (Table ms) where
+    getSelectable = selectable
+    setSelectable s t = t { selectable = s }
+
+instance HasSingleLineProp (Table ms) where
+    getSingleLine = singleLine
+    setSingleLine sl t = t { singleLine = sl }
+
+instance HasSizeProp (Table ms) where
+    getSize = size
+    setSize s t = t { size = s }
+
+instance HasSortableProp (Table ms) where
+    getSortable = sortable
+    setSortable s t = t { sortable = s }
+
+instance HasStackableProp (Table ms) where
+    type StackableProp (Table ms) = Bool
+    getStackable = stackable
+    setStackable s t = t { stackable = s }
+
+instance HasStripedProp (Table ms) where
+    getStriped = striped
+    setStriped s t = t { striped = s }
+
+instance HasStructuredProp (Table ms) where
+    getStructured = structured
+    setStructured s t = t { structured = s }
+
+instance HasTextAlignProp (Table ms) where
+    getTextAlign = textAlign
+    setTextAlign ta t = t { textAlign = ta }
+
+instance HasUnstackableProp (Table ms) where
+    getUnstackable = unstackable
+    setUnstackable u t = t { unstackable = u }
+
+instance HasVerticalAlignProp (Table ms) where
+    getVerticalAlign = verticalAlign
+    setVerticalAlign va t = t { verticalAlign = va }
+

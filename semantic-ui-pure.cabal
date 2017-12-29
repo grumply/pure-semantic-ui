@@ -122,10 +122,12 @@ executable semantic-ui-pure
     Semantic.Properties.Classes
     Semantic.Properties.Clearing
     Semantic.Properties.Close
+    Semantic.Properties.Collapsing
     Semantic.Properties.Color
     Semantic.Properties.Columns
     Semantic.Properties.Completed
     Semantic.Properties.Corner
+    Semantic.Properties.Definition
     Semantic.Properties.Compact
     Semantic.Properties.Disabled
     Semantic.Properties.Divided
@@ -191,12 +193,17 @@ executable semantic-ui-pure
     Semantic.Properties.Rounded
     Semantic.Properties.Secondary
     Semantic.Properties.Section
+    Semantic.Properties.Selectable
     Semantic.Properties.Selection
+    Semantic.Properties.SingleLine
     Semantic.Properties.Size
+    Semantic.Properties.Sortable
     Semantic.Properties.Spaced
     Semantic.Properties.Stackable
     Semantic.Properties.Stacked
     Semantic.Properties.Stretched
+    Semantic.Properties.Striped
+    Semantic.Properties.Structured
     Semantic.Properties.Sub
     Semantic.Properties.Success
     Semantic.Properties.TabIndex
@@ -338,10 +345,12 @@ library
     Semantic.Properties.Classes
     Semantic.Properties.Clearing
     Semantic.Properties.Close
+    Semantic.Properties.Collapsing
     Semantic.Properties.Color
     Semantic.Properties.Columns
     Semantic.Properties.Completed
     Semantic.Properties.Corner
+    Semantic.Properties.Definition
     Semantic.Properties.Compact
     Semantic.Properties.Disabled
     Semantic.Properties.Divided
@@ -407,12 +416,17 @@ library
     Semantic.Properties.Rounded
     Semantic.Properties.Secondary
     Semantic.Properties.Section
+    Semantic.Properties.Selectable
     Semantic.Properties.Selection
+    Semantic.Properties.SingleLine
     Semantic.Properties.Size
+    Semantic.Properties.Sortable
     Semantic.Properties.Spaced
     Semantic.Properties.Stackable
     Semantic.Properties.Stacked
     Semantic.Properties.Stretched
+    Semantic.Properties.Striped
+    Semantic.Properties.Structured
     Semantic.Properties.Sub
     Semantic.Properties.Success
     Semantic.Properties.TabIndex

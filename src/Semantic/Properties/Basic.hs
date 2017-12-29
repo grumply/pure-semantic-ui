@@ -3,9 +3,11 @@ module Semantic.Properties.Basic where
 import Semantic.Properties.Utils
 
 class HasBasicProp a where
-    getBasic :: a -> Bool
-    setBasic :: Bool -> a -> a
+    type BasicProp a :: *
+    type BasicProp a = Bool
+    getBasic :: a -> BasicProp a
+    setBasic :: BasicProp a -> a -> a
 
-pattern Basic :: HasBasicProp a => a -> a
-pattern Basic a <- (getBasic &&& id -> (True,a)) where
-    Basic a = setBasic True a
+pattern Basic :: HasBasicProp a => BasicProp a -> a -> a
+pattern Basic b a <- (getBasic &&& id -> (b,a)) where
+    Basic b a = setBasic b a
