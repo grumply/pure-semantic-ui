@@ -18,6 +18,7 @@ import Semantic.Properties.OnClick
 import Semantic.Properties.Raised
 
 import Semantic.Views.Card.CardContent as Export
+import Semantic.Views.Card.CardDescription as Export
 
 data Card ms = Card_
     { as :: [Feature ms] -> [View ms] -> View ms

@@ -239,6 +239,7 @@ executable semantic-ui-pure
     Semantic.Views.Advertisement
     Semantic.Views.Card
     Semantic.Views.Card.CardContent
+    Semantic.Views.Card.CardDescription
 
   if impl(ghcjs)
     ghc-options: -O2 -dedupe
@@ -475,6 +476,7 @@ library
     Semantic.Views.Advertisement
     Semantic.Views.Card
     Semantic.Views.Card.CardContent
+    Semantic.Views.Card.CardDescription
 
   if impl(ghcjs)
     ghc-options: -O2 -dedupe -fexpose-all-unfoldings
