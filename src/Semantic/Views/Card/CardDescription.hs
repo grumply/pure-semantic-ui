@@ -61,4 +61,4 @@ instance HasClassesProp (CardDescription ms) where
 
 instance HasTextAlignProp (CardDescription ms) where
     getTextAlign = textAlign
-    setTextAlign ta cc = cc { textAlign = ta }
+    setTextAlign ta cd = cd { textAlign = ta }
