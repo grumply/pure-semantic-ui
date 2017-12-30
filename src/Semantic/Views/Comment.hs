@@ -11,6 +11,7 @@ import Semantic.Properties.Children
 import Semantic.Properties.Classes
 import Semantic.Properties.Collapsed
 
+import Semantic.Views.Comment.CommentAction as Export
 data Comment ms = Comment_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]
