@@ -56,6 +56,7 @@ import Semantic.Properties.IsContainer as Export
 import Semantic.Properties.IsHeader as Export
 import Semantic.Properties.IsIcon as Export
 import Semantic.Properties.IsText as Export
+import Semantic.Properties.ItemsPerRow as Export
 import Semantic.Properties.Labeled as Export
 import Semantic.Properties.LabelPosition as Export
 import Semantic.Properties.Link as Export

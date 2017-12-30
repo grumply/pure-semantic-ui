@@ -165,6 +165,7 @@ executable semantic-ui-pure
     Semantic.Properties.IsHeader
     Semantic.Properties.IsIcon
     Semantic.Properties.IsText
+    Semantic.Properties.ItemsPerRow
     Semantic.Properties.Labeled
     Semantic.Properties.LabelPosition
     Semantic.Properties.Link
@@ -403,6 +404,7 @@ library
     Semantic.Properties.IsHeader
     Semantic.Properties.IsIcon
     Semantic.Properties.IsText
+    Semantic.Properties.ItemsPerRow
     Semantic.Properties.Labeled
     Semantic.Properties.LabelPosition
     Semantic.Properties.Link
