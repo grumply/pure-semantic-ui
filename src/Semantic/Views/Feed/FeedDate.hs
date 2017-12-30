@@ -5,6 +5,11 @@ import Pure.View
 
 import Semantic.Utils
 
+import Semantic.Properties.As
+import Semantic.Properties.Attributes
+import Semantic.Properties.Children
+import Semantic.Properties.Classes
+
 data FeedDate ms = FeedDate_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]
@@ -31,3 +36,22 @@ instance Typeable ms => Pure FeedDate ms where
                 : attributes
                 )
                 children
+
+instance HasAsProp (FeedDate ms) where
+    type AsProp (FeedDate ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs a fd = fd { as = a }
+
+instance HasAttributesProp (FeedDate ms) where
+    type Attribute (FeedDate ms) = Feature ms
+    getAttributes = attributes
+    setAttributes as fd = fd { attributes = as }
+
+instance HasChildrenProp (FeedDate ms) where
+    type Child (FeedDate ms) = View ms
+    getChildren = children
+    setChildren cs fd = fd { children = cs }
+
+instance HasClassesProp (FeedDate ms) where
+    getClasses = classes
+    setClasses cs fd = fd { classes = cs }
