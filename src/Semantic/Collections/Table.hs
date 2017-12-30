@@ -37,6 +37,7 @@ import Semantic.Collections.Table.TableCell as Export
 import Semantic.Collections.Table.TableFooter as Export
 import Semantic.Collections.Table.TableHeader as Export
 import Semantic.Collections.Table.TableHeaderCell as Export
+import Semantic.Collections.Table.TableRow as Export
 
 data Table ms = Table_
     { as :: [Feature ms] -> [View ms] -> View ms
