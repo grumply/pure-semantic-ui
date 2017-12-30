@@ -19,6 +19,8 @@ import Semantic.Views.Feed.FeedLabel as Export
 import Semantic.Views.Feed.FeedLike as Export
 import Semantic.Views.Feed.FeedMeta as Export
 import Semantic.Views.Feed.FeedSummary as Export
+import Semantic.Views.Feed.FeedUser as Export
+
 data Feed ms = Feed_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]

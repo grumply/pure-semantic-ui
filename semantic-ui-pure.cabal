@@ -266,6 +266,7 @@ executable semantic-ui-pure
     Semantic.Views.Feed.FeedLike
     Semantic.Views.Feed.FeedMeta
     Semantic.Views.Feed.FeedSummary
+    Semantic.Views.Feed.FeedUser
 
   if impl(ghcjs)
     ghc-options: -O2 -dedupe
@@ -529,6 +530,7 @@ library
     Semantic.Views.Feed.FeedLike
     Semantic.Views.Feed.FeedMeta
     Semantic.Views.Feed.FeedSummary
+    Semantic.Views.Feed.FeedUser
 
   if impl(ghcjs)
     ghc-options: -O2 -dedupe -fexpose-all-unfoldings
