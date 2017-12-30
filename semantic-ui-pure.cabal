@@ -172,6 +172,7 @@ executable semantic-ui-pure
     Semantic.Properties.Link
     Semantic.Properties.Loading
     Semantic.Properties.Localize
+    Semantic.Properties.Minimal
     Semantic.Properties.Name
     Semantic.Properties.Negative
     Semantic.Properties.OnChange
@@ -223,6 +224,7 @@ executable semantic-ui-pure
     Semantic.Properties.Tag
     Semantic.Properties.Tertiary
     Semantic.Properties.TextAlign
+    Semantic.Properties.Threaded
     Semantic.Properties.Toggle
     Semantic.Properties.Transition
     Semantic.Properties.Transparent
@@ -422,6 +424,7 @@ library
     Semantic.Properties.Link
     Semantic.Properties.Loading
     Semantic.Properties.Localize
+    Semantic.Properties.Minimal
     Semantic.Properties.Name
     Semantic.Properties.Negative
     Semantic.Properties.OnChange
@@ -473,6 +476,7 @@ library
     Semantic.Properties.Tag
     Semantic.Properties.Tertiary
     Semantic.Properties.TextAlign
+    Semantic.Properties.Threaded
     Semantic.Properties.Toggle
     Semantic.Properties.Transition
     Semantic.Properties.Transparent

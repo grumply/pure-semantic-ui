@@ -63,6 +63,7 @@ import Semantic.Properties.LabelPosition as Export
 import Semantic.Properties.Link as Export
 import Semantic.Properties.Loading as Export
 import Semantic.Properties.Localize as Export
+import Semantic.Properties.Minimal as Export
 import Semantic.Properties.Name as Export
 import Semantic.Properties.Negative as Export
 import Semantic.Properties.OnChange as Export
@@ -115,6 +116,7 @@ import Semantic.Properties.Tag as Export
 import Semantic.Properties.Tertiary as Export
 import Semantic.Properties.Test as Export
 import Semantic.Properties.TextAlign as Export
+import Semantic.Properties.Threaded as Export
 import Semantic.Properties.Toggle as Export
 import Semantic.Properties.Transition as Export
 import Semantic.Properties.Transparent as Export
