@@ -63,21 +63,21 @@ instance Typeable ms => Pure Card ms where
 instance HasAsProp (Card ms) where
     type AsProp (Card ms) = [Feature ms] -> [View ms] -> View ms
     getAs = as
-    setAs a ad = ad { as = a }
+    setAs a c = c { as = a }
 
 instance HasAttributesProp (Card ms) where
     type Attribute (Card ms) = Feature ms
     getAttributes = attributes
-    setAttributes as a = a { attributes = as }
+    setAttributes as c = c { attributes = as }
 
 instance HasChildrenProp (Card ms) where
     type Child (Card ms) = View ms
     getChildren = children
-    setChildren cs a = a { children = cs }
+    setChildren cs c = c { children = cs }
 
 instance HasClassesProp (Card ms) where
     getClasses = classes
-    setClasses cs a = a { classes = cs }
+    setClasses cs c = c { classes = cs }
 
 instance HasCenteredProp (Card ms) where
     getCentered = centered
