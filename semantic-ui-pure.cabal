@@ -71,6 +71,7 @@ executable semantic-ui-pure
     Semantic.Collections.Table.TableBody
     Semantic.Collections.Table.TableFooter
     Semantic.Collections.Table.TableHeader
+    Semantic.Collections.Table.TableHeaderCell
     Semantic.Elements
     Semantic.Elements.Button
     Semantic.Elements.Button.ButtonContent
@@ -299,6 +300,7 @@ library
     Semantic.Collections.Table.TableBody
     Semantic.Collections.Table.TableFooter
     Semantic.Collections.Table.TableHeader
+    Semantic.Collections.Table.TableHeaderCell
     Semantic.Elements
     Semantic.Elements.Button
     Semantic.Elements.Button.ButtonContent

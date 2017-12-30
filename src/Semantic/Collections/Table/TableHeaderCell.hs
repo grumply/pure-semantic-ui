@@ -18,7 +18,19 @@ data TableHeaderCell ms = TableHeaderCell_
     , attributes :: [Feature ms]
     , children :: [View ms]
     , classes :: [Txt]
+    , active :: Bool
+    , collapsing :: Bool
+    , disabled :: Bool
+    , error :: Bool
+    , negative :: Bool
+    , positive :: Bool
+    , selectable :: Bool
+    , singleLine :: Bool
     , sorted :: Txt
+    , textAlign :: Txt
+    , verticalAlign :: Txt
+    , warning :: Bool
+    , width :: Width
     } deriving (Generic)
 
 instance Default (TableHeaderCell ms) where
@@ -29,7 +41,29 @@ pattern TableHeaderCell thc = View thc
 
 instance Typeable ms => Pure TableHeaderCell ms where
     render TableHeaderCell_ {..} =
-        undefined
+        let
+            cs =
+                ( active # "active"
+                : collapsing # "collapsing"
+                : disabled # "disabled"
+                : error # "error"
+                : negative # "negative"
+                : positive # "positive"
+                : selectable # "selectable"
+                : singleLine # "single line"
+                : warning # "warning"
+                : textAlign
+                : verticalAlign
+                : widthProp width "wide" def
+                : sorted # (sorted <>> "sorted")
+                : classes
+                )
+        in
+            as
+                ( ClassList cs
+                : attributes
+                )
+                children
 
 instance HasAsProp (TableHeaderCell ms) where
     type AsProp (TableHeaderCell ms) = [Feature ms] -> [View ms] -> View ms
