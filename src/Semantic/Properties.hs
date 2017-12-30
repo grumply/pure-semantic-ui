@@ -19,6 +19,7 @@ import Semantic.Properties.Circular as Export
 import Semantic.Properties.Classes as Export
 import Semantic.Properties.Clearing as Export
 import Semantic.Properties.Close as Export
+import Semantic.Properties.Collapsed as Export
 import Semantic.Properties.Collapsing as Export
 import Semantic.Properties.Color as Export
 import Semantic.Properties.Columns as Export
@@ -100,6 +101,7 @@ import Semantic.Properties.Size as Export
 import Semantic.Properties.Sortable as Export
 import Semantic.Properties.Sorted as Export
 import Semantic.Properties.Spaced as Export
+import Semantic.Properties.Src as Export
 import Semantic.Properties.Stackable as Export
 import Semantic.Properties.Stacked as Export
 import Semantic.Properties.Stretched as Export

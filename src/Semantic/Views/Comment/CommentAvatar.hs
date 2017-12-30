@@ -6,6 +6,11 @@ import qualified Pure.View as HTML
 
 import Semantic.Utils
 
+import Semantic.Properties.As
+import Semantic.Properties.Attributes
+import Semantic.Properties.Classes
+import Semantic.Properties.Src
+
 data CommentAvatar ms = CommentAvatar_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]
@@ -32,3 +37,21 @@ instance Typeable ms => Pure CommentAvatar ms where
                 : attributes
                 )
                 [Img [ HTML.Src src ] []] 
+
+instance HasAsProp (CommentAvatar ms) where
+    type AsProp (CommentAvatar ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs a ca = ca { as = a }
+
+instance HasAttributesProp (CommentAvatar ms) where
+    type Attribute (CommentAvatar ms) = Feature ms
+    getAttributes = attributes
+    setAttributes as ca = ca { attributes = as }
+
+instance HasClassesProp (CommentAvatar ms) where
+    getClasses = classes
+    setClasses cs ca = ca { classes = cs }
+
+instance HasSrcProp (CommentAvatar ms) where
+    getSrc = src
+    setSrc s ca = ca { src = s }
