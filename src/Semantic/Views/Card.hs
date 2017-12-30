@@ -20,6 +20,7 @@ import Semantic.Properties.Raised
 import Semantic.Views.Card.CardContent as Export
 import Semantic.Views.Card.CardDescription as Export
 import Semantic.Views.Card.CardGroup as Export
+import Semantic.Views.Card.CardHeader as Export
 
 data Card ms = Card_
     { as :: [Feature ms] -> [View ms] -> View ms
