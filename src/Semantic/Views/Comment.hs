@@ -17,6 +17,7 @@ import Semantic.Views.Comment.CommentAuthor as Export
 import Semantic.Views.Comment.CommentAvatar as Export
 import Semantic.Views.Comment.CommentContent as Export
 import Semantic.Views.Comment.CommentGroup as Export
+import Semantic.Views.Comment.CommentMetadata as Export
 data Comment ms = Comment_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]
