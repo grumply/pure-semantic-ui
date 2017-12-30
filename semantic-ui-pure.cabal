@@ -69,6 +69,7 @@ executable semantic-ui-pure
     Semantic.Collections.Message.MessageList
     Semantic.Collections.Table
     Semantic.Collections.Table.TableBody
+    Semantic.Collections.Table.TableCell
     Semantic.Collections.Table.TableFooter
     Semantic.Collections.Table.TableHeader
     Semantic.Collections.Table.TableHeaderCell
@@ -298,6 +299,7 @@ library
     Semantic.Collections.Message.MessageList
     Semantic.Collections.Table
     Semantic.Collections.Table.TableBody
+    Semantic.Collections.Table.TableCell
     Semantic.Collections.Table.TableFooter
     Semantic.Collections.Table.TableHeader
     Semantic.Collections.Table.TableHeaderCell

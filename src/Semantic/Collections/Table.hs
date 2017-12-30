@@ -33,6 +33,7 @@ import Semantic.Properties.Unstackable
 import Semantic.Properties.VerticalAlign
 
 import Semantic.Collections.Table.TableBody as Export
+import Semantic.Collections.Table.TableCell as Export
 import Semantic.Collections.Table.TableFooter as Export
 import Semantic.Collections.Table.TableHeader as Export
 import Semantic.Collections.Table.TableHeaderCell as Export
