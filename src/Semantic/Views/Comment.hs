@@ -5,6 +5,12 @@ import Pure.View
 
 import Semantic.Utils
 
+import Semantic.Properties.As
+import Semantic.Properties.Attributes
+import Semantic.Properties.Children
+import Semantic.Properties.Classes
+import Semantic.Properties.Collapsed
+
 data Comment ms = Comment_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]
@@ -33,3 +39,27 @@ instance Typeable ms => Pure Comment ms where
                 : attributes
                 )
                 children
+
+instance HasAsProp (Comment ms) where
+    type AsProp (Comment ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs a c = c { as = a }
+
+instance HasAttributesProp (Comment ms) where
+    type Attribute (Comment ms) = Feature ms
+    getAttributes = attributes
+    setAttributes as c = c { attributes = as }
+
+instance HasChildrenProp (Comment ms) where
+    type Child (Comment ms) = View ms
+    getChildren = children
+    setChildren cs c = c { children = cs }
+
+instance HasClassesProp (Comment ms) where
+    getClasses = classes
+    setClasses cs c = c { classes = cs }
+
+instance HasCollapsedProp (Comment ms) where
+    getCollapsed = collapsed
+    setCollapsed c com = com { collapsed = c }
+   
