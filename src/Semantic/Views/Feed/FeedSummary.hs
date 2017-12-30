@@ -5,6 +5,11 @@ import Pure.View
 
 import Semantic.Utils
 
+import Semantic.Properties.As
+import Semantic.Properties.Attributes
+import Semantic.Properties.Children
+import Semantic.Properties.Classes
+
 data FeedSummary ms = FeedSummary_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]
@@ -31,3 +36,22 @@ instance Typeable ms => Pure FeedSummary ms where
                 : attributes
                 )
                 children
+
+instance HasAsProp (FeedSummary ms) where
+    type AsProp (FeedSummary ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs a fs = fs { as = a }
+
+instance HasAttributesProp (FeedSummary ms) where
+    type Attribute (FeedSummary ms) = Feature ms
+    getAttributes = attributes
+    setAttributes as fs = fs { attributes = as }
+
+instance HasChildrenProp (FeedSummary ms) where
+    type Child (FeedSummary ms) = View ms
+    getChildren = children
+    setChildren cs fs = fs { children = cs }
+
+instance HasClassesProp (FeedSummary ms) where
+    getClasses = classes
+    setClasses cs fs = fs { classes = cs }
