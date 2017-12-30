@@ -5,6 +5,11 @@ import Pure.View
 
 import Semantic.Utils
 
+import Semantic.Properties.As
+import Semantic.Properties.Attributes
+import Semantic.Properties.Children
+import Semantic.Properties.Classes
+
 data ItemDescription ms = ItemDescription_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]
@@ -31,3 +36,22 @@ instance Typeable ms => Pure ItemDescription ms where
                 : attributes
                 )
                 children
+
+instance HasAsProp (ItemDescription ms) where
+    type AsProp (ItemDescription ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs a id = id { as = a }
+
+instance HasAttributesProp (ItemDescription ms) where
+    type Attribute (ItemDescription ms) = Feature ms
+    getAttributes = attributes
+    setAttributes as id = id { attributes = as }
+
+instance HasChildrenProp (ItemDescription ms) where
+    type Child (ItemDescription ms) = View ms
+    getChildren = children
+    setChildren cs id = id { children = cs }
+
+instance HasClassesProp (ItemDescription ms) where
+    getClasses = classes
+    setClasses cs id = id { classes = cs }
