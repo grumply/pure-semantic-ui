@@ -16,6 +16,8 @@ import Semantic.Views.Item.ItemExtra as Export
 import Semantic.Views.Item.ItemGroup as Export
 import Semantic.Views.Item.ItemHeader as Export
 import Semantic.Views.Item.ItemImage as Export
+import Semantic.Views.Item.ItemMeta as Export
+
 data Item ms = Item_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]
