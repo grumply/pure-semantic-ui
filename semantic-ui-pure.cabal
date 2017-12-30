@@ -270,6 +270,7 @@ executable semantic-ui-pure
     Semantic.Views.Item
     Semantic.Views.Item.ItemContent
     Semantic.Views.Item.ItemDescription
+    Semantic.Views.Item.ItemExtra
 
   if impl(ghcjs)
     ghc-options: -O2 -dedupe
@@ -537,6 +538,7 @@ library
     Semantic.Views.Item
     Semantic.Views.Item.ItemContent
     Semantic.Views.Item.ItemDescription
+    Semantic.Views.Item.ItemExtra
 
   if impl(ghcjs)
     ghc-options: -O2 -dedupe -fexpose-all-unfoldings
