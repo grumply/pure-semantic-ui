@@ -278,6 +278,7 @@ executable semantic-ui-pure
     Semantic.Views.Statistic
     Semantic.Views.Statistic.StatisticGroup
     Semantic.Views.Statistic.StatisticLabel
+    Semantic.Views.Statistic.StatisticValue
 
   if impl(ghcjs)
     ghc-options: -O2 -dedupe
@@ -553,6 +554,7 @@ library
     Semantic.Views.Statistic
     Semantic.Views.Statistic.StatisticGroup
     Semantic.Views.Statistic.StatisticLabel
+    Semantic.Views.Statistic.StatisticValue
 
   if impl(ghcjs)
     ghc-options: -O2 -dedupe -fexpose-all-unfoldings
