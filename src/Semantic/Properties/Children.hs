@@ -4,6 +4,8 @@ import Pure.View
 
 import Semantic.Properties.Utils
 
+import Data.Function ((&))
+
 class HasChildrenProp a where
     type Child a
     getChildren :: a -> [Child a]
@@ -13,8 +15,8 @@ pattern Children :: HasChildrenProp a => [Child a] -> a -> a
 pattern Children cs a <- (getChildren &&& id -> (cs,a)) where
     Children cs a = setChildren cs a
 
-infixl 9 !
-(!) c cs = Children cs c
+infixl 1 !
+(!) c cs = c & Children cs
        
 instance HasChildrenProp (View ms) where
     type Child (View ms) = View ms

@@ -4,6 +4,8 @@ import Pure.View
 
 import Semantic.Properties.Utils
 
+import Data.Function ((&))
+
 class HasAttributesProp a where
     type Attribute a
     getAttributes :: a -> [Attribute a]
@@ -13,8 +15,8 @@ pattern Attributes :: HasAttributesProp a => [Attribute a] -> a -> a
 pattern Attributes cs a <- (getAttributes &&& id -> (cs,a)) where
     Attributes cs a = setAttributes cs a
 
-infixl 8 %
-(%) c as = Attributes as c
+infixl 1 %
+(%) c as = c & Attributes as
        
 instance HasAttributesProp (View ms) where
     type Attribute (View ms) = Feature ms

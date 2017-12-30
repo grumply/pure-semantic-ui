@@ -133,12 +133,6 @@ import Semantic.Properties.Width as Export
 import Semantic.Properties.Widths as Export
 import Semantic.Properties.Wrapped as Export
 
-infixl 1 !%
-(!%) c cs as = Children (cs (Attributes as c))
-
-infixl 1 %!
-(%!) c as cs = Attributes (as (Children cs c))
-
 pattern ToLeft = "left"
 pattern ToRight = "right"
 pattern ToTop = "top"
