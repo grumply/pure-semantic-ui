@@ -236,6 +236,7 @@ executable semantic-ui-pure
     Semantic.Utils
     Semantic.Views
     Semantic.Views.Advertisement
+    Semantic.Views.Card
 
   if impl(ghcjs)
     ghc-options: -O2 -dedupe
@@ -469,6 +470,7 @@ library
     Semantic.Utils
     Semantic.Views
     Semantic.Views.Advertisement
+    Semantic.Views.Card
 
   if impl(ghcjs)
     ghc-options: -O2 -dedupe -fexpose-all-unfoldings
