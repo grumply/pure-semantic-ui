@@ -5,6 +5,11 @@ import Pure.View
 
 import Semantic.Utils
 
+import Semantic.Properties.As
+import Semantic.Properties.Attributes
+import Semantic.Properties.Children
+import Semantic.Properties.Classes
+
 data ItemHeader ms = ItemHeader_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]
@@ -31,3 +36,22 @@ instance Typeable ms => Pure ItemHeader ms where
                 : attributes
                 )
                 children
+
+instance HasAsProp (ItemHeader ms) where
+    type AsProp (ItemHeader ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs a ih = ih { as = a }
+
+instance HasAttributesProp (ItemHeader ms) where
+    type Attribute (ItemHeader ms) = Feature ms
+    getAttributes = attributes
+    setAttributes as ih = ih { attributes = as }
+
+instance HasChildrenProp (ItemHeader ms) where
+    type Child (ItemHeader ms) = View ms
+    getChildren = children
+    setChildren cs ih = ih { children = cs }
+
+instance HasClassesProp (ItemHeader ms) where
+    getClasses = classes
+    setClasses cs ih = ih { classes = cs }
