@@ -13,6 +13,7 @@ import Semantic.Properties.Size
 
 import Semantic.Views.Feed.FeedContent as Export
 import Semantic.Views.Feed.FeedDate as Export
+import Semantic.Views.Feed.FeedEvent as Export
 data Feed ms = Feed_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]
