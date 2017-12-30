@@ -234,6 +234,8 @@ executable semantic-ui-pure
     Semantic.Properties.Widths
     Semantic.Properties.Wrapped
     Semantic.Utils
+    Semantic.Views
+    Semantic.Views.Advertisement
 
   if impl(ghcjs)
     ghc-options: -O2 -dedupe
@@ -465,6 +467,8 @@ library
     Semantic.Properties.Widths
     Semantic.Properties.Wrapped
     Semantic.Utils
+    Semantic.Views
+    Semantic.Views.Advertisement
 
   if impl(ghcjs)
     ghc-options: -O2 -dedupe -fexpose-all-unfoldings
