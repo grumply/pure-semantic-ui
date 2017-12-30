@@ -9,6 +9,7 @@ import Semantic.Properties.As
 import Semantic.Properties.Attributes
 import Semantic.Properties.Children
 import Semantic.Properties.Classes
+import Semantic.Properties.FullWidth
 
 data TableHeader ms = TableHeader_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -57,4 +58,6 @@ instance HasClassesProp (TableHeader ms) where
     getClasses = classes
     setClasses cs th = th { classes = cs }
 
-    
+instance HasFullWidthProp (TableHeader ms) where
+    getFullWidth = fullWidth
+    setFullWidth fw th = th { fullWidth = fw }

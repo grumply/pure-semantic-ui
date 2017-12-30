@@ -146,6 +146,7 @@ executable semantic-ui-pure
     Semantic.Properties.Fluid
     Semantic.Properties.Focus
     Semantic.Properties.Focused
+    Semantic.Properties.FullWidth
     Semantic.Properties.Grouped
     Semantic.Properties.Hidden
     Semantic.Properties.Horizontal
@@ -201,6 +202,7 @@ executable semantic-ui-pure
     Semantic.Properties.SingleLine
     Semantic.Properties.Size
     Semantic.Properties.Sortable
+    Semantic.Properties.Sorted
     Semantic.Properties.Spaced
     Semantic.Properties.Stackable
     Semantic.Properties.Stacked
@@ -372,6 +374,7 @@ library
     Semantic.Properties.Fluid
     Semantic.Properties.Focus
     Semantic.Properties.Focused
+    Semantic.Properties.FullWidth
     Semantic.Properties.Grouped
     Semantic.Properties.Hidden
     Semantic.Properties.Horizontal
@@ -427,6 +430,7 @@ library
     Semantic.Properties.SingleLine
     Semantic.Properties.Size
     Semantic.Properties.Sortable
+    Semantic.Properties.Sorted
     Semantic.Properties.Spaced
     Semantic.Properties.Stackable
     Semantic.Properties.Stacked

@@ -40,6 +40,7 @@ import Semantic.Properties.Floating as Export
 import Semantic.Properties.Fluid as Export
 import Semantic.Properties.Focus as Export
 import Semantic.Properties.Focused as Export
+import Semantic.Properties.FullWidth as Export
 import Semantic.Properties.Grouped as Export
 import Semantic.Properties.Hidden as Export
 import Semantic.Properties.Horizontal as Export
@@ -95,6 +96,7 @@ import Semantic.Properties.Selection as Export
 import Semantic.Properties.SingleLine as Export
 import Semantic.Properties.Size as Export
 import Semantic.Properties.Sortable as Export
+import Semantic.Properties.Sorted as Export
 import Semantic.Properties.Spaced as Export
 import Semantic.Properties.Stackable as Export
 import Semantic.Properties.Stacked as Export
