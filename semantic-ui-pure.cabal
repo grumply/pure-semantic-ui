@@ -252,6 +252,7 @@ executable semantic-ui-pure
     Semantic.Views.Comment.CommentAuthor
     Semantic.Views.Comment.CommentAvatar
     Semantic.Views.Comment.CommentContent
+    Semantic.Views.Comment.CommentGroup
 
   if impl(ghcjs)
     ghc-options: -O2 -dedupe
@@ -501,6 +502,7 @@ library
     Semantic.Views.Comment.CommentAuthor
     Semantic.Views.Comment.CommentAvatar
     Semantic.Views.Comment.CommentContent
+    Semantic.Views.Comment.CommentGroup
 
   if impl(ghcjs)
     ghc-options: -O2 -dedupe -fexpose-all-unfoldings
