@@ -5,6 +5,12 @@ import Pure.View hiding (text)
 
 import Semantic.Utils
 
+import Semantic.Properties.As
+import Semantic.Properties.Attributes
+import Semantic.Properties.Children
+import Semantic.Properties.Classes
+import Semantic.Properties.IsText
+
 import Semantic.Elements.Image
 
 data FeedExtra ms = FeedExtra_
@@ -38,3 +44,26 @@ instance Typeable ms => Pure FeedExtra ms where
                 : attributes
                 )
                 children
+
+instance HasAsProp (FeedExtra ms) where
+    type AsProp (FeedExtra ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs a fe = fe { as = a }
+
+instance HasAttributesProp (FeedExtra ms) where
+    type Attribute (FeedExtra ms) = Feature ms
+    getAttributes = attributes
+    setAttributes as fe = fe { attributes = as }
+
+instance HasChildrenProp (FeedExtra ms) where
+    type Child (FeedExtra ms) = View ms
+    getChildren = children
+    setChildren cs fe = fe { children = cs }
+
+instance HasClassesProp (FeedExtra ms) where
+    getClasses = classes
+    setClasses cs fe = fe { classes = cs }
+
+instance HasIsTextProp (FeedExtra ms) where
+    getIsText = text
+    setIsText it fe = fe { text = it }
