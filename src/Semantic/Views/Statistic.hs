@@ -16,6 +16,7 @@ import Semantic.Properties.Inverted
 import Semantic.Properties.Size
 
 import Semantic.Views.Statistic.StatisticGroup as Export
+import Semantic.Views.Statistic.StatisticLabel as Export
 data Statistic ms = Statistic_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]
