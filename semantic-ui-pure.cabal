@@ -244,6 +244,7 @@ executable semantic-ui-pure
     Semantic.Views.Card.CardGroup
     Semantic.Views.Card.CardHeader
     Semantic.Views.Card.CardMeta
+    Semantic.Views.Comment
 
   if impl(ghcjs)
     ghc-options: -O2 -dedupe
@@ -485,6 +486,7 @@ library
     Semantic.Views.Card.CardGroup
     Semantic.Views.Card.CardHeader
     Semantic.Views.Card.CardMeta
+    Semantic.Views.Comment
 
   if impl(ghcjs)
     ghc-options: -O2 -dedupe -fexpose-all-unfoldings
