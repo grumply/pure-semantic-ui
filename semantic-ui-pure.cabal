@@ -141,6 +141,7 @@ executable semantic-ui-pure
     Semantic.Properties.Doubling
     Semantic.Properties.Empty
     Semantic.Properties.Error
+    Semantic.Properties.Extra
     Semantic.Properties.Fitted
     Semantic.Properties.Fixed
     Semantic.Properties.Flipped
@@ -237,6 +238,7 @@ executable semantic-ui-pure
     Semantic.Views
     Semantic.Views.Advertisement
     Semantic.Views.Card
+    Semantic.Views.Card.CardContent
 
   if impl(ghcjs)
     ghc-options: -O2 -dedupe
@@ -375,6 +377,7 @@ library
     Semantic.Properties.Doubling
     Semantic.Properties.Empty
     Semantic.Properties.Error
+    Semantic.Properties.Extra
     Semantic.Properties.Fitted
     Semantic.Properties.Fixed
     Semantic.Properties.Flipped
@@ -471,6 +474,7 @@ library
     Semantic.Views
     Semantic.Views.Advertisement
     Semantic.Views.Card
+    Semantic.Views.Card.CardContent
 
   if impl(ghcjs)
     ghc-options: -O2 -dedupe -fexpose-all-unfoldings

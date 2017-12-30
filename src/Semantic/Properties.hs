@@ -32,6 +32,7 @@ import Semantic.Properties.Dividing as Export
 import Semantic.Properties.Doubling as Export
 import Semantic.Properties.Empty as Export
 import Semantic.Properties.Error as Export
+import Semantic.Properties.Extra as Export
 import Semantic.Properties.Fitted as Export
 import Semantic.Properties.Fixed as Export
 import Semantic.Properties.Flipped as Export

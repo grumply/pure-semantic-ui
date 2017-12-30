@@ -1,4 +1,4 @@
-module Semantic.Views.Card where
+module Semantic.Views.Card (module Semantic.Views.Card, module Export) where
 
 import GHC.Generics as G
 import Pure.View hiding (color,onClick)
@@ -16,6 +16,8 @@ import Semantic.Properties.Ref
 import Semantic.Properties.Link
 import Semantic.Properties.OnClick
 import Semantic.Properties.Raised
+
+import Semantic.Views.Card.CardContent as Export
 
 data Card ms = Card_
     { as :: [Feature ms] -> [View ms] -> View ms
