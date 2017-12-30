@@ -5,6 +5,18 @@ import Pure.View hiding (color,onClick)
 
 import Semantic.Utils
 
+import Semantic.Properties.As
+import Semantic.Properties.Attributes
+import Semantic.Properties.Children
+import Semantic.Properties.Classes
+import Semantic.Properties.Centered
+import Semantic.Properties.Color
+import Semantic.Properties.Fluid
+import Semantic.Properties.Ref
+import Semantic.Properties.Link
+import Semantic.Properties.OnClick
+import Semantic.Properties.Raised
+
 data Card ms = Card_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]
@@ -48,4 +60,52 @@ instance Typeable ms => Pure Card ms where
                 )
                 children
 
+instance HasAsProp (Card ms) where
+    type AsProp (Card ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs a ad = ad { as = a }
+
+instance HasAttributesProp (Card ms) where
+    type Attribute (Card ms) = Feature ms
+    getAttributes = attributes
+    setAttributes as a = a { attributes = as }
+
+instance HasChildrenProp (Card ms) where
+    type Child (Card ms) = View ms
+    getChildren = children
+    setChildren cs a = a { children = cs }
+
+instance HasClassesProp (Card ms) where
+    getClasses = classes
+    setClasses cs a = a { classes = cs }
+
+instance HasCenteredProp (Card ms) where
+    getCentered = centered
+    setCentered c crd = crd { centered = c }
+
+instance HasColorProp (Card ms) where
+    getColor = color
+    setColor c crd = crd { color = c }
+
+instance HasFluidProp (Card ms) where
+    getFluid = fluid
+    setFluid f c = c { fluid = f }
+
+instance HasRefProp (Card ms) where
+    type RefProp (Card ms) = Feature ms
+    getRef = ref
+    setRef r c = c { ref = r }
+
+instance HasLinkProp (Card ms) where
+    getLink = link
+    setLink l c = c { link = l }
+
+instance HasOnClickProp (Card ms) where
+    type OnClickProp (Card ms) = Ef ms IO ()
+    getOnClick = onClick
+    setOnClick oc c = c { onClick = oc }
+
+instance HasRaisedProp (Card ms) where
+    getRaised = raised
+    setRaised r c = c { raised = r }
 
