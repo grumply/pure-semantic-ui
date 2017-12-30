@@ -16,8 +16,11 @@ pattern Children cs a <- (getChildren &&& id -> (cs,a)) where
     Children cs a = setChildren cs a
 
 infixl 1 !
-(!) c cs = c & Children cs
-       
+(!) c cs = Children cs c
+
+infixl 1 |>
+(|>) c cs = Children cs c       
+
 instance HasChildrenProp (View ms) where
     type Child (View ms) = View ms
 

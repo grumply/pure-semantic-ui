@@ -133,6 +133,9 @@ import Semantic.Properties.Width as Export
 import Semantic.Properties.Widths as Export
 import Semantic.Properties.Wrapped as Export
 
+infixr 0 <|
+(<|) f = f
+
 pattern ToLeft = "left"
 pattern ToRight = "right"
 pattern ToTop = "top"
