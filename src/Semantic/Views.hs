@@ -5,3 +5,4 @@ import Semantic.Views.Card as Export
 import Semantic.Views.Comment as Export
 import Semantic.Views.Feed as Export
 import Semantic.Views.Item as Export
+import Semantic.Views.Statistic as Export
