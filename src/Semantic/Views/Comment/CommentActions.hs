@@ -5,6 +5,11 @@ import Pure.View
 
 import Semantic.Utils
 
+import Semantic.Properties.As
+import Semantic.Properties.Attributes
+import Semantic.Properties.Children
+import Semantic.Properties.Classes
+
 data CommentActions ms = CommentActions_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]
@@ -31,3 +36,22 @@ instance Typeable ms => Pure CommentActions ms where
                 : attributes
                 )
                 children
+
+instance HasAsProp (CommentActions ms) where
+    type AsProp (CommentActions ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs a ca = ca { as = a }
+
+instance HasAttributesProp (CommentActions ms) where
+    type Attribute (CommentActions ms) = Feature ms
+    getAttributes = attributes
+    setAttributes as ca = ca { attributes = as }
+
+instance HasChildrenProp (CommentActions ms) where
+    type Child (CommentActions ms) = View ms
+    getChildren = children
+    setChildren cs ca = ca { children = cs }
+
+instance HasClassesProp (CommentActions ms) where
+    getClasses = classes
+    setClasses cs ca = ca { classes = cs }
