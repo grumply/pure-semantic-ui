@@ -109,12 +109,14 @@ import Semantic.Properties.TabIndex as Export
 import Semantic.Properties.Tabular as Export
 import Semantic.Properties.Tag as Export
 import Semantic.Properties.Tertiary as Export
+import Semantic.Properties.Test as Export
 import Semantic.Properties.TextAlign as Export
 import Semantic.Properties.Toggle as Export
 import Semantic.Properties.Transition as Export
 import Semantic.Properties.Transparent as Export
 import Semantic.Properties.Type as Export
 import Semantic.Properties.UI as Export
+import Semantic.Properties.Unit as Export
 import Semantic.Properties.Unstackable as Export
 import Semantic.Properties.Value as Export
 import Semantic.Properties.Vertical as Export
@@ -205,3 +207,27 @@ pattern Shake = "shake"
 pattern Pulse = "pulse"
 pattern Tada = "tada"
 pattern Bounce = "bounce"
+
+pattern MediumRectangle = "medium rectangle"
+pattern LargeRectangle = "large rectangle"
+pattern VerticalRectangle = "vertical rectangle"
+pattern SmallRectangle = "small rectangle"
+pattern MobileBanner = "mobile banner"
+pattern Banner = "banner"
+pattern VerticalBanner = "vertical banner"
+pattern TopBanner = "top banner"
+pattern HalfBanner = "half banner"
+pattern ButonAd = "button"
+pattern SquareButton = "square button"
+pattern SmallButton = "small button"
+pattern Skyscraper = "skyscraper"
+pattern WideSkyscraper = "wide skyscraper"
+pattern Leaderboard = "leaderboard"
+pattern LargeLeaderboard = "large leaderboard"
+pattern MobileLeaderboard = "mobile leaderboard"
+pattern Billboard = "billboard"
+pattern Panorama = "panorama"
+pattern Netboard = "netboard"
+pattern HalfPage = "half page"
+pattern Square = "square"
+pattern SmallSquare = "small square"
