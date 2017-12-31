@@ -1,5 +1,7 @@
 module Semantic.Properties (module Semantic.Properties, module Export) where
 
+import Pure.Data (def)
+
 import Semantic.Properties.Action as Export
 import Semantic.Properties.Active as Export
 import Semantic.Properties.Animated as Export
@@ -135,6 +137,9 @@ import Semantic.Properties.Wrapped as Export
 
 infixr 0 <|
 (<|) f = f
+
+infixr 0 <||>
+(<||>) c cs = c <| def |> cs
 
 pattern ToLeft = "left"
 pattern ToRight = "right"

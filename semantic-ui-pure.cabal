@@ -1,5 +1,5 @@
 name:              semantic-ui-pure
-version:           0.1.0
+version:           0.1.0.1
 synopsis:          
 homepage:          
 author:            S. M. Hickman
@@ -113,6 +113,7 @@ library
     Semantic.Properties.Active
     Semantic.Properties.Animated
     Semantic.Properties.As
+    Semantic.Properties.Attached
     Semantic.Properties.Attributes
     Semantic.Properties.Avatar
     Semantic.Properties.Basic

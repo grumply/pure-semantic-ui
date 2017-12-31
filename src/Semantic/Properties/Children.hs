@@ -19,7 +19,7 @@ infixl 1 !
 (!) c cs = Children cs c
 
 infixl 1 |>
-(|>) c cs = Children cs c       
+(|>) c cs = Children cs c 
 
 instance HasChildrenProp (View ms) where
     type Child (View ms) = View ms
