@@ -49,6 +49,7 @@ library
     Semantic.Addons
     Semantic.Addons.Accordion
     Semantic.Addons.Accordion.AccordionAccordion
+    Semantic.Addons.Accordion.AccordionContent
     Semantic.Collections
     Semantic.Collections.Breadcrumb
     Semantic.Collections.Breadcrumb.BreadcrumbDivider
