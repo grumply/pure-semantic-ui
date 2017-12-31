@@ -161,16 +161,17 @@ library
     Semantic.Properties.Grouped
     Semantic.Properties.Hidden
     Semantic.Properties.Horizontal
-    Semantic.Properties.Indeterminate
     Semantic.Properties.Index
     Semantic.Properties.Info
     Semantic.Properties.Inline
     Semantic.Properties.Instant
     Semantic.Properties.Internal
     Semantic.Properties.Inverted
+    Semantic.Properties.IsChecked
     Semantic.Properties.IsContainer
     Semantic.Properties.IsHeader
     Semantic.Properties.IsIcon
+    Semantic.Properties.IsIndeterminate
     Semantic.Properties.IsText
     Semantic.Properties.ItemsPerRow
     Semantic.Properties.Labeled
@@ -188,6 +189,7 @@ library
     Semantic.Properties.OnLargeScreen
     Semantic.Properties.Only
     Semantic.Properties.OnMobile
+    Semantic.Properties.OnMouseDown
     Semantic.Properties.OnSubmit
     Semantic.Properties.OnTablet
     Semantic.Properties.OnWidescreen
@@ -199,7 +201,9 @@ library
     Semantic.Properties.Position
     Semantic.Properties.Positive
     Semantic.Properties.Primary
+    Semantic.Properties.Radio
     Semantic.Properties.Raised
+    Semantic.Properties.ReadOnly
     Semantic.Properties.Ref
     Semantic.Properties.Relaxed
     Semantic.Properties.Reply
@@ -214,6 +218,7 @@ library
     Semantic.Properties.Selection
     Semantic.Properties.SingleLine
     Semantic.Properties.Size
+    Semantic.Properties.Slider
     Semantic.Properties.Sortable
     Semantic.Properties.Sorted
     Semantic.Properties.Spaced
@@ -245,6 +250,7 @@ library
     Semantic.Properties.Warning
     Semantic.Properties.Width
     Semantic.Properties.Widths
+    Semantic.Properties.WithRef
     Semantic.Properties.Wrapped
     Semantic.Utils
     Semantic.Views

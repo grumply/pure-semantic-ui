@@ -11,9 +11,9 @@ import Semantic.Properties.Attributes
 import Semantic.Properties.Children
 import Semantic.Properties.Classes
 import Semantic.Properties.Disabled
-import Semantic.Properties.Indeterminate
 import Semantic.Properties.Inline
 import Semantic.Properties.Inverted
+import Semantic.Properties.IsIndeterminate
 import Semantic.Properties.Size
 
 data Loader ms = Loader_ 
@@ -89,9 +89,9 @@ instance HasInlineProp (Loader ms) where
     getInline = inline
     setInline i l = l { inline = i }
 
-instance HasIndeterminateProp (Loader ms) where
-    getIndeterminate = indeterminate
-    setIndeterminate i l = l { indeterminate = i }
+instance HasIsIndeterminateProp (Loader ms) where
+    getIsIndeterminate = indeterminate
+    setIsIndeterminate i l = l { indeterminate = i }
 
 instance HasInvertedProp (Loader ms) where
     getInverted = inverted

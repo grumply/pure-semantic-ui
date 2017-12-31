@@ -48,16 +48,17 @@ import Semantic.Properties.FullWidth as Export
 import Semantic.Properties.Grouped as Export
 import Semantic.Properties.Hidden as Export
 import Semantic.Properties.Horizontal as Export
-import Semantic.Properties.Indeterminate as Export
 import Semantic.Properties.Index as Export
 import Semantic.Properties.Info as Export
 import Semantic.Properties.Inline as Export
 import Semantic.Properties.Instant as Export
 import Semantic.Properties.Internal as Export
 import Semantic.Properties.Inverted as Export
+import Semantic.Properties.IsChecked as Export
 import Semantic.Properties.IsContainer as Export
 import Semantic.Properties.IsHeader as Export
 import Semantic.Properties.IsIcon as Export
+import Semantic.Properties.IsIndeterminate as Export
 import Semantic.Properties.IsText as Export
 import Semantic.Properties.ItemsPerRow as Export
 import Semantic.Properties.Labeled as Export
@@ -75,6 +76,7 @@ import Semantic.Properties.OnDismiss as Export
 import Semantic.Properties.OnLargeScreen as Export
 import Semantic.Properties.Only as Export
 import Semantic.Properties.OnMobile as Export
+import Semantic.Properties.OnMouseDown as Export
 import Semantic.Properties.OnSubmit as Export
 import Semantic.Properties.OnTablet as Export
 import Semantic.Properties.OnWidescreen as Export
@@ -86,7 +88,9 @@ import Semantic.Properties.Pointing as Export
 import Semantic.Properties.Position as Export
 import Semantic.Properties.Positive as Export
 import Semantic.Properties.Primary as Export
+import Semantic.Properties.Radio as Export
 import Semantic.Properties.Raised as Export
+import Semantic.Properties.ReadOnly as Export
 import Semantic.Properties.Ref as Export
 import Semantic.Properties.Relaxed as Export
 import Semantic.Properties.Reply as Export
@@ -101,6 +105,7 @@ import Semantic.Properties.Selectable as Export
 import Semantic.Properties.Selection as Export
 import Semantic.Properties.SingleLine as Export
 import Semantic.Properties.Size as Export
+import Semantic.Properties.Slider as Export
 import Semantic.Properties.Sortable as Export
 import Semantic.Properties.Sorted as Export
 import Semantic.Properties.Spaced as Export
@@ -134,6 +139,7 @@ import Semantic.Properties.Visible as Export
 import Semantic.Properties.Warning as Export
 import Semantic.Properties.Width as Export
 import Semantic.Properties.Widths as Export
+import Semantic.Properties.WithRef as Export
 import Semantic.Properties.Wrapped as Export
 
 infixr 0 <|
