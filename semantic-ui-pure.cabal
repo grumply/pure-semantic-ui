@@ -46,6 +46,8 @@ library
 
   exposed-modules:
     Semantic
+    Semantic.Addons
+    Semantic.Addons.Accordion
     Semantic.Collections
     Semantic.Collections.Breadcrumb
     Semantic.Collections.Breadcrumb.BreadcrumbDivider

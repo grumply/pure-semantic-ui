@@ -1,6 +1,7 @@
 module Semantic (module Semantic, module Export) where
 
 import Data.Function as Export
+import Semantic.Addons as Export
 import Semantic.Collections as Export
 import Semantic.Elements as Export
 import Semantic.Properties as Export
