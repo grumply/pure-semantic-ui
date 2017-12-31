@@ -36,51 +36,58 @@ pattern Size s a <- (getSize &&& id -> (s,a)) where
 With this `Size` pattern, we can modify a default instance of a component with a custom size.
 
 ```haskell
-myButton = Button $ Size "small" def
+myButton :: Button ms
+myButton = Size "small" def
 ```
 
 When chaining properties, it can look better to use `(&)` from `Data.Function` which is automatically exported by `Semantic`.
 
 ```haskell
-myButton = Button $ def & Size "small" & Circular
+myButton = def & Size "small" & Circular
 ```
 
-To add `Children` to a component, there is a `Children` property.
+To add `Children` to a component, there is a `Children` property supporting `Semantic` components as well as primitive Pure `View`s.
 
 ```haskell
-myButton = Button $ def & Size "small" & Circular & Children
-    [ "My Button" ]
+myButton = def & Size "small" & Circular & Children
+    [ "My Button"
+    , Span [] "And my span" 
+    ]
 ```
 
-There is a shorthand, `!` for `& Children`. The following is equivalent.
+There is a shorthand, `!`, for `& Children`.
 
 ```haskell
-myButton = Button $ def & Size "small" & Circular ! [ "My Button" ]
+myButton = def & Size "small" & Circular ! [ "My Button" ]
 ```
 
-And since there is a `FromString` instance for `[View ms]`, we can omit the list syntax.
+And since there is an `IsString` instance for `[View ms]`, we can omit the list syntax.
 
 ```haskell
-myButton = Button $ def & Size "small" & Circular ! "My Button"
+myButton = def & Size "small" & Circular ! "My Button"
 ```
 
-There are four other combinators of import.
+There is a similar shorthand, `%`, for `& Attributes` which allows adding Pure `Feature`s.
+
+```haskell
+infixl 1 %
+(%) c as = c & Attributes as
+```
+
+There are three other combinators of import to ease view construction.
 
 ```haskell
 infixr 0 <|
 (<|) f = f
 
-infixr 0 <||>
-(<||>) c cs = c <| def |> cs
-
-infixl 1 %
-(%) c as = c & Attributes as
-
 infixl 1 |>
 (|>) c cs = Children cs c 
+
+infixr 0 <||>
+(<||>) c cs = c <| def |> cs
 ```
 
-With these, we can get a clean layout construction syntax.
+With these, we can get a cleaner construction syntax.
 
 ```haskell
 myView =
