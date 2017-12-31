@@ -40,7 +40,7 @@ myButton :: Button ms
 myButton = Size "small" def
 ```
 
-When chaining properties, it can look better to use `(&)` from `Data.Function` which is automatically exported by `Semantic`.
+When chaining properties, I suggest using `(&)` from `Data.Function` which is automatically exported by `Semantic`.
 
 ```haskell
 myButton = def & Size "small" & Circular
