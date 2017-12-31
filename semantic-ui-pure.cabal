@@ -50,6 +50,7 @@ library
     Semantic.Addons.Accordion
     Semantic.Addons.Accordion.AccordionAccordion
     Semantic.Addons.Accordion.AccordionContent
+    Semantic.Addons.Accordion.AccordionTitle
     Semantic.Collections
     Semantic.Collections.Breadcrumb
     Semantic.Collections.Breadcrumb.BreadcrumbDivider
