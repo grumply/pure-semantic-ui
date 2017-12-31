@@ -51,6 +51,7 @@ library
     Semantic.Addons.Accordion.AccordionAccordion
     Semantic.Addons.Accordion.AccordionContent
     Semantic.Addons.Accordion.AccordionTitle
+    Semantic.Addons.Checkbox
     Semantic.Collections
     Semantic.Collections.Breadcrumb
     Semantic.Collections.Breadcrumb.BreadcrumbDivider
