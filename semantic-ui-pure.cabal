@@ -219,6 +219,7 @@ library
     Semantic.Properties.Stretched
     Semantic.Properties.Striped
     Semantic.Properties.Structured
+    Semantic.Properties.Styled
     Semantic.Properties.Sub
     Semantic.Properties.Success
     Semantic.Properties.TabIndex

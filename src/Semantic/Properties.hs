@@ -110,6 +110,7 @@ import Semantic.Properties.Stacked as Export
 import Semantic.Properties.Stretched as Export
 import Semantic.Properties.Striped as Export
 import Semantic.Properties.Structured as Export
+import Semantic.Properties.Styled as Export
 import Semantic.Properties.Sub as Export
 import Semantic.Properties.Success as Export
 import Semantic.Properties.TabIndex as Export
