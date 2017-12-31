@@ -13,6 +13,7 @@ import Semantic.Properties.Fluid
 import Semantic.Properties.Inverted
 import Semantic.Properties.Styled
 
+import Semantic.Addons.Accordion.AccordionAccordion as Export
 data Accordion ms = Accordion_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]
