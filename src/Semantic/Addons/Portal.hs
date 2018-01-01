@@ -125,12 +125,12 @@ instance Typeable ms => Pure Portal ms where
                            &&  ( (closeOnDocumentClick && not inRoot)
                                  || (closeOnRootNodeClick && inRoot)
                                )
-                         ) triggerClose
+                         ) closePortal
                 handleDocumentClick _ = return ()
 
                 handleEscape (parseMaybe (.: "keyCode") -> Just (27 :: Int)) = do
                     Portal_ {..} <- getProps self
-                    when closeOnEscape triggerClose
+                    when closeOnEscape closePortal
                 handleEscape _ = return ()
 
                 handlePortalMouseLeave = do
@@ -139,7 +139,7 @@ instance Typeable ms => Pure Portal ms where
                     unless closeOnPortalMouseLeave $ do
                         tid <- forkIO $ do
                             threadDelay mouseLeaveDelay
-                            triggerClose
+                            closePortal
                         modifyIORef timers $ \PST {..} ->
                             PST { mouseLeaveTimer = Just tid, .. }
 
@@ -156,21 +156,21 @@ instance Typeable ms => Pure Portal ms where
                     PSN {..} <- readIORef nodes
                     didFocusPortal <- maybe (return False) (`contains` (unsafeCoerce related)) rootNode 
                     unless (closeOnTriggerBlur || not didFocusPortal) 
-                        triggerClose
+                        closePortal
                 handleTriggerBlur _ = return ()
 
                 handleTriggerClick = do
                     PS {..} <- getState self
                     Portal_ {..} <- getProps self
                     if active && closeOnTriggerClick
-                        then triggerClose
+                        then closePortal
                         else when (not active && openOnTriggerClick)
-                                triggerOpen
+                                openPortal
 
                 handleTriggerFocus = do
                     Portal_ {..} <- getProps self
                     when openOnTriggerFocus 
-                        triggerOpen
+                        openPortal
 
                 handleTriggerMouseLeave = do
                     Portal_ {..} <- getProps self
@@ -178,7 +178,7 @@ instance Typeable ms => Pure Portal ms where
                     when closeOnTriggerMouseLeave $ do
                         tid <- forkIO $ do
                             threadDelay mouseLeaveDelay
-                            triggerClose
+                            closePortal
                         modifyIORef timers $ \PST {..} ->
                             PST { mouseLeaveTimer = Just tid, .. }
 
@@ -188,16 +188,16 @@ instance Typeable ms => Pure Portal ms where
                     when openOnTriggerMouseEnter $ do
                         tid <- forkIO $ do
                             threadDelay mouseEnterDelay
-                            triggerOpen
+                            openPortal
                         modifyIORef timers $ \PST {..} ->
                             PST { mouseEnterTimer = Just tid, .. }
 
-                triggerOpen = do
+                openPortal = do
                     Portal_ {..} <- getProps self
                     setState self $ \_ PS {..} -> PS { active = True, .. }
                     void $ parent self onOpen
 
-                triggerClose = do
+                closePortal = do
                     Portal_ {..} <- getProps self
                     setState self $ \_ PS {..} -> PS { active = False, .. }
                     void $ parent self onClose
