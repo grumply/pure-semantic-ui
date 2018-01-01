@@ -5,7 +5,6 @@ import Control.Concurrent
 import Data.IORef
 import Data.Maybe (fromMaybe)
 import qualified Data.List as List
-import Debug.Trace
 import GHC.Generics as G
 import Pure.Data.Txt as Txt (unwords)
 import Pure.View hiding (active,trigger,Proxy)
@@ -95,15 +94,27 @@ body =
 
 data PortalState = PS
     { active :: Bool
-    , rootNode :: Maybe JSV
-    , portalNode :: Maybe JSV
-    , triggerNode :: Maybe JSV
-    , mouseEnterTimer :: Maybe ThreadId
-    , mouseLeaveTimer :: Maybe ThreadId
-    , mouseLeaveHandler :: IO ()
+    , nodes :: IORef PortalStateNodes
+    , timers :: IORef PortalStateTimers
+    , handlers :: IORef PortalStateHandlers
+    } 
+
+data PortalStateHandlers = PSH
+    { mouseLeaveHandler :: IO ()
     , mouseEnterHandler :: IO ()
     , clickHandler :: IO ()
     , keydownHandler :: IO ()
+    } deriving (Generic,Default)
+
+data PortalStateTimers = PST
+    { mouseEnterTimer :: Maybe ThreadId
+    , mouseLeaveTimer :: Maybe ThreadId
+    } deriving (Generic,Default)
+
+data PortalStateNodes = PSN
+    { rootNode :: Maybe JSV
+    , portalNode :: Maybe JSV
+    , triggerNode :: Maybe JSV
     } deriving (Generic,Default)
 
 instance Typeable ms => Pure Portal ms where
@@ -114,6 +125,7 @@ instance Typeable ms => Pure Portal ms where
                 handleDocumentClick (parseMaybe (.: "target") -> Just (target :: Obj)) = do
                     PS      {..} <- getState self
                     Portal_ {..} <- getProps self
+                    PSN     {..} <- readIORef nodes
                     let check = maybe (return False) (`contains` (unsafeCoerce target))
                     inTrigger <- check triggerNode
                     inPortal  <- check portalNode
@@ -127,35 +139,38 @@ instance Typeable ms => Pure Portal ms where
                                  || (closeOnRootNodeClick && inRoot)
                                )
                          ) triggerClose
-                handleDocumentClick _ = trace "handleDocumentClick.bad" $ return ()
+                handleDocumentClick _ = return ()
 
                 handleEscape (parseMaybe (.: "keyCode") -> Just (27 :: Int)) = do
                     Portal_ {..} <- getProps self
                     when closeOnEscape triggerClose
-                handleEscape _ = trace "handleEscape.bad" $ return ()
+                handleEscape _ = return ()
 
                 handlePortalMouseLeave = do
                     Portal_ {..} <- getProps self
+                    PS {..} <- getState self
                     unless closeOnPortalMouseLeave $ do
                         tid <- forkIO $ do
                             threadDelay mouseLeaveDelay
                             triggerClose
-                        void $ setState self $ \_ PS {..} -> 
-                            PS { mouseLeaveTimer = Just tid, .. }
+                        modifyIORef timers $ \PST {..} ->
+                            PST { mouseLeaveTimer = Just tid, .. }
 
                 handlePortalMouseEnter = do
                     Portal_ {..} <- getProps self
                     PS {..} <- getState self
+                    PST {..} <- readIORef timers
                     unless closeOnPortalMouseLeave $
                         for_ mouseLeaveTimer killThread
 
                 handleTriggerBlur (parseMaybe (.: "relatedTarget") -> Just (related :: Obj)) = do
                     Portal_ {..} <- getProps self
                     PS {..} <- getState self
+                    PSN {..} <- readIORef nodes
                     didFocusPortal <- maybe (return False) (`contains` (unsafeCoerce related)) rootNode 
                     unless (closeOnTriggerBlur || not didFocusPortal) 
                         triggerClose
-                handleTriggerBlur _ = trace "handleTriggerBlur.bad" $ return ()
+                handleTriggerBlur _ = return ()
 
                 handleTriggerClick = do
                     PS {..} <- getState self
@@ -172,21 +187,23 @@ instance Typeable ms => Pure Portal ms where
 
                 handleTriggerMouseLeave = do
                     Portal_ {..} <- getProps self
+                    PS {..} <- getState self
                     when closeOnTriggerMouseLeave $ do
                         tid <- forkIO $ do
                             threadDelay mouseLeaveDelay
                             triggerClose
-                        void $ setState self $ \_ PS {..} -> 
-                            PS { mouseLeaveTimer = Just tid, .. }
+                        modifyIORef timers $ \PST {..} ->
+                            PST { mouseLeaveTimer = Just tid, .. }
 
                 handleTriggerMouseEnter = do
                     Portal_ {..} <- getProps self
+                    PS {..} <- getState self
                     when openOnTriggerMouseEnter $ do
                         tid <- forkIO $ do
                             threadDelay mouseEnterDelay
                             triggerOpen
-                        void $ setState self $ \_ PS {..} -> 
-                            PS { mouseEnterTimer = Just tid, .. }
+                        modifyIORef timers $ \PST {..} ->
+                            PST { mouseEnterTimer = Just tid, .. }
 
                 triggerOpen = do
                     Portal_ {..} <- getProps self
@@ -204,6 +221,8 @@ instance Typeable ms => Pure Portal ms where
                         mountPortal
                         Portal_ {..} <- getProps self
                         PS {..} <- getState self
+                        PSN {..} <- readIORef nodes
+                        PSH {..} <- readIORef handlers
                         for_ rootNode $ \n -> 
                             setProperty (Element n) "className" (Txt.unwords classes)
                         mouseLeaveHandler
@@ -217,36 +236,47 @@ instance Typeable ms => Pure Portal ms where
                         pn <- getChild n 0
                         mlh <- maybe (return (return ())) (\n -> onRaw n "mouseleave" def (\_ _ -> handlePortalMouseLeave)) pn
                         meh <- maybe (return (return ())) (\n -> onRaw n "mouseenter" def (\_ _ -> handlePortalMouseEnter)) pn
-                        void $ setState self $ \_ PS {..} ->
-                            PS { portalNode = maybe Nothing (\(Node n) -> Just n) pn
-                               , mouseLeaveHandler = mlh
-                               , mouseEnterHandler = meh
-                               , .. 
-                               }
+                        modifyIORef handlers $ \PSH {..} ->
+                            PSH { mouseLeaveHandler = mlh
+                                , mouseEnterHandler = meh 
+                                , .. 
+                                }
+                        modifyIORef nodes $ \PSN {..} -> 
+                            PSN { portalNode = maybe Nothing (\(Node n) -> Just n) pn
+                                , .. 
+                                }
 
                 mountPortal = do
                     Portal_ {..} <- getProps self
                     PS {..} <- getState self
+                    PSN {..} <- readIORef nodes
                     when (isNil rootNode) $ do
                         let mn = fromMaybe body mountNode
                         Element root <- create "div"
-                        for_ rootNode $ \rn ->
-                            if prepend
-                                then insertAt (Element mn) (Node rn) 0
-                                else append   (Node mn) (Node rn)
+                        if prepend
+                            then insertAt (Element mn) (Node root) 0
+                            else append   (Node mn) (Node root)
                         Doc d <- getDocument
                         ch <- onRaw (Node d) "click" def (\_ -> handleDocumentClick)
                         kh <- onRaw (Node d) "keydown" def (\_ -> handleEscape)
-                        void $ setStateIO self $ \_ PS {..} -> return (PS 
-                            { rootNode = Just root 
-                            , clickHandler = ch
-                            , keydownHandler = kh
-                            , .. 
-                            }, parent self onMount)
+
+                        modifyIORef nodes $ \PSN {..} -> 
+                            PSN { rootNode = Just root
+                                , .. 
+                                }
+                        modifyIORef handlers $ \PSH {..} -> 
+                            PSH { clickHandler = ch
+                                , keydownHandler = kh
+                                , .. 
+                                }
+
+                        parent self onMount
 
                 unmountPortal = do
                     PS {..} <- getState self
                     Portal_ {..} <- getProps self
+                    PSN {..} <- readIORef nodes
+                    PSH {..} <- readIORef handlers
 
                     for_ rootNode (removeNode . Node) -- does this clean up well enough?
 
@@ -255,26 +285,23 @@ instance Typeable ms => Pure Portal ms where
                     keydownHandler
                     clickHandler
 
-                    void $ setState self $ \_ PS {..} -> 
-                        PS { mouseLeaveHandler = def
-                           , mouseEnterHandler = def
-                           , clickHandler = def
-                           , keydownHandler = def
-                           , rootNode = def
-                           , portalNode = def
-                           , ..
-                           }
+                    writeIORef handlers def
+                    writeIORef nodes def
 
                     parent self onUnmount
                     
 
-                handleRef (Node r) = 
-                    void $ setState self $ \_ PS {..} -> 
-                        PS { triggerNode = Just r, .. }
+                handleRef (Node r) = do
+                    PS {..} <- getState self
+                    modifyIORef nodes $ \PSN {..} ->
+                        PSN { triggerNode = Just r, .. }
 
             in
                 def
-                    { construct = return def { active = defaultOpen p }
+                    { construct = PS (defaultOpen p) 
+                                    <$> newIORef def 
+                                    <*> newIORef def 
+                                    <*> newIORef def
                     , mounted = renderPortal
                     , updated = \_ (active -> wasOpen) _ -> do
                         portal <- getProps self
@@ -283,6 +310,7 @@ instance Typeable ms => Pure Portal ms where
                         when (wasOpen && not nowOpen) unmountPortal
                     , unmount = void $ do
                         PS {..} <- getState self
+                        PST {..} <- readIORef timers
                         unmountPortal
                         for mouseEnterTimer killThread
                         for mouseLeaveTimer killThread
