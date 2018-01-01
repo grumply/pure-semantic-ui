@@ -1,4 +1,5 @@
 {-# LANGUAGE CPP #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 module Semantic.Utils (module Semantic.Utils, module Export) where
 
 import Pure.Data
@@ -137,4 +138,29 @@ contains node target =
     liftIO $ contains_js node target
 #else 
     return True -- hmm?
+#endif
+
+cloneWithProps :: forall ms. View ms -> [Feature ms] -> View ms
+cloneWithProps v fs =
+    case v of
+        ComponentView {..} -> ComponentView { componentView = cloneComponent . componentView, .. }
+        SomeView sv        -> cloneWithProps (render sv) fs
+        NullView {}        -> v
+        TextView {}        -> v
+        _                  -> v { features = features v ++ fs }
+    where
+        cloneComponent :: forall props state. Comp ms props state -> Comp ms props state
+        cloneComponent Comp {..} = Comp { renderer = \p s -> cloneWithProps (renderer p s) fs,  .. }
+
+#ifdef __GHCJS__
+foreign import javascript unsafe
+    "document.body" body_js :: JSV
+#endif
+
+body :: JSV
+body =
+#ifdef __GHCJS__
+    body_js
+#else
+    ()
 #endif
