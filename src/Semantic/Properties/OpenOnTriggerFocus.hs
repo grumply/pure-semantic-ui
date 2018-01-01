@@ -6,6 +6,6 @@ class HasOpenOnTriggerFocusProp a where
     getOpenOnTriggerFocus :: a -> Bool
     setOpenOnTriggerFocus :: Bool -> a -> a
 
-pattern OpenOnTriggerFocus :: HasOpenOnTriggerFocusProp a => Bool -> a -> a
-pattern OpenOnTriggerFocus o a <- (getOpenOnTriggerFocus &&& id -> (o,a)) where
-    OpenOnTriggerFocus o a = setOpenOnTriggerFocus o a
+pattern OpenOnTriggerFocus :: HasOpenOnTriggerFocusProp a => a -> a
+pattern OpenOnTriggerFocus a <- (getOpenOnTriggerFocus &&& id -> (True,a)) where
+    OpenOnTriggerFocus a = setOpenOnTriggerFocus True a

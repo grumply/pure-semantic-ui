@@ -6,6 +6,6 @@ class HasOpenOnTriggerMouseEnterProp a where
     getOpenOnTriggerMouseEnter :: a -> Bool
     setOpenOnTriggerMouseEnter :: Bool -> a -> a
 
-pattern OpenOnTriggerMouseEnter :: HasOpenOnTriggerMouseEnterProp a => Bool -> a -> a
-pattern OpenOnTriggerMouseEnter o a <- (getOpenOnTriggerMouseEnter &&& id -> (o,a)) where
-    OpenOnTriggerMouseEnter o a = setOpenOnTriggerMouseEnter o a
+pattern OpenOnTriggerMouseEnter :: HasOpenOnTriggerMouseEnterProp a => a -> a
+pattern OpenOnTriggerMouseEnter a <- (getOpenOnTriggerMouseEnter &&& id -> (True,a)) where
+    OpenOnTriggerMouseEnter a = setOpenOnTriggerMouseEnter True a
