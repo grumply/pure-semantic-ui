@@ -3,7 +3,7 @@ module Semantic.Collections.Grid.GridColumn where
 import GHC.Generics as G
 import Pure.View hiding (color,textAlign,verticalAlign,width)
 
-import Semantic.Utils
+import Semantic.Utils hiding (only)
 
 import Semantic.Properties.As
 import Semantic.Properties.Attributes

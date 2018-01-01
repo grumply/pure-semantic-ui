@@ -1,7 +1,10 @@
+{-# LANGUAGE CPP #-}
 module Semantic.Utils (module Semantic.Utils, module Export) where
 
 import Pure.Data
 import Pure.View hiding (one,two,Width)
+
+import Pure.Lifted
 
 import qualified Pure.Data.Txt as Txt
 
@@ -72,6 +75,10 @@ _15 = fifteen
 sixteen = Width "sixteen"
 _16 = sixteen
 
+only :: [a] -> a
+only [a] = a
+only _ = error "expected a singular list element"
+
 oneEq :: Eq a => a -> a -> a -> Maybe a
 oneEq l r x = if l == x then Just l else if r == x then Just r else Nothing
 
@@ -118,4 +125,16 @@ extractInputAttrs = foldr go ([],[])
             in if isInputAttr 
                    then (x:inputAttrs,otherAttrs)
                    else (inputAttrs,x:otherAttrs)
- 
+
+#ifdef __GHCJS__
+foreign import javascript unsafe
+    "$1.contains($2)" contains_js :: JSV -> JSV -> IO Bool
+#endif
+
+contains :: MonadIO c => JSV -> JSV -> c Bool
+contains node target = 
+#ifdef __GHCJS__
+    liftIO $ contains_js node target
+#else 
+    return True -- hmm?
+#endif
