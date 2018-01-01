@@ -155,6 +155,7 @@ instance Typeable ms => Pure Portal ms where
                     didFocusPortal <- maybe (return False) (`contains` (unsafeCoerce related)) rootNode 
                     unless (closeOnTriggerBlur || not didFocusPortal) 
                         triggerClose
+                handleTriggerBlur _ = trace "handleTriggerBlur.bad" $ return ()
 
                 handleTriggerClick = do
                     PS {..} <- getState self
