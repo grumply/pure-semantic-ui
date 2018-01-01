@@ -136,6 +136,12 @@ library
     Semantic.Properties.Classes
     Semantic.Properties.Clearing
     Semantic.Properties.Close
+    Semantic.Properties.CloseOnDocumentClick
+    Semantic.Properties.CloseOnEscape
+    Semantic.Properties.CloseOnPortalMouseLeave
+    Semantic.Properties.CloseOnRootNodeClick
+    Semantic.Properties.CloseOnTriggerBlur
+    Semantic.Properties.CloseOnTriggerMouseLeave
     Semantic.Properties.Collapsed
     Semantic.Properties.Collapsing
     Semantic.Properties.Color
@@ -144,6 +150,7 @@ library
     Semantic.Properties.Corner
     Semantic.Properties.Definition
     Semantic.Properties.Compact
+    Semantic.Properties.DefaultOpen
     Semantic.Properties.Disabled
     Semantic.Properties.Divided
     Semantic.Properties.Dividing
@@ -183,19 +190,30 @@ library
     Semantic.Properties.Loading
     Semantic.Properties.Localize
     Semantic.Properties.Minimal
+    Semantic.Properties.MountNode
+    Semantic.Properties.MouseEnterDelay
+    Semantic.Properties.MouseLeaveDelay
     Semantic.Properties.Name
     Semantic.Properties.Negative
     Semantic.Properties.OnChange
     Semantic.Properties.OnClick
+    Semantic.Properties.OnClose
     Semantic.Properties.OnComputer
     Semantic.Properties.OnDismiss
     Semantic.Properties.OnLargeScreen
     Semantic.Properties.Only
     Semantic.Properties.OnMobile
+    Semantic.Properties.OnMount
     Semantic.Properties.OnMouseDown
+    Semantic.Properties.OnOpen
     Semantic.Properties.OnSubmit
     Semantic.Properties.OnTablet
+    Semantic.Properties.OnUnmount
     Semantic.Properties.OnWidescreen
+    Semantic.Properties.Open
+    Semantic.Properties.OpenOnTriggerClick
+    Semantic.Properties.OpenOnTriggerFocus
+    Semantic.Properties.OpenOnTriggerMouseEnter
     Semantic.Properties.Ordered
     Semantic.Properties.Padded
     Semantic.Properties.Pagination
@@ -203,6 +221,7 @@ library
     Semantic.Properties.Pointing
     Semantic.Properties.Position
     Semantic.Properties.Positive
+    Semantic.Properties.Prepend
     Semantic.Properties.Primary
     Semantic.Properties.Radio
     Semantic.Properties.Raised
@@ -243,6 +262,7 @@ library
     Semantic.Properties.Toggle
     Semantic.Properties.Transition
     Semantic.Properties.Transparent
+    Semantic.Properties.Trigger
     Semantic.Properties.Type
     Semantic.Properties.UI
     Semantic.Properties.Unstackable

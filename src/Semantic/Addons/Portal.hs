@@ -8,7 +8,7 @@ import qualified Data.List as List
 import Debug.Trace
 import GHC.Generics as G
 import Pure.Data.Txt as Txt (unwords)
-import Pure.View hiding (active,Proxy)
+import Pure.View hiding (active,trigger,Proxy)
 import Pure.Lifted (getDocument,append,getChild,removeNode,setProperty,create,insertAt,JSV,Node(..),Element(..),Doc(..))
 import Pure.DOM
 
@@ -16,7 +16,29 @@ import Semantic.Utils
 
 import Semantic.Addons.Proxy
 
+import Semantic.Properties.Attributes
 import Semantic.Properties.Children
+import Semantic.Properties.Classes
+import Semantic.Properties.CloseOnDocumentClick
+import Semantic.Properties.CloseOnEscape
+import Semantic.Properties.CloseOnPortalMouseLeave
+import Semantic.Properties.CloseOnRootNodeClick
+import Semantic.Properties.CloseOnTriggerBlur
+import Semantic.Properties.CloseOnTriggerMouseLeave
+import Semantic.Properties.DefaultOpen
+import Semantic.Properties.MountNode
+import Semantic.Properties.MouseEnterDelay
+import Semantic.Properties.MouseLeaveDelay
+import Semantic.Properties.OnClose
+import Semantic.Properties.OnMount
+import Semantic.Properties.OnOpen
+import Semantic.Properties.OnUnmount
+import Semantic.Properties.Open
+import Semantic.Properties.OpenOnTriggerClick
+import Semantic.Properties.OpenOnTriggerFocus
+import Semantic.Properties.OpenOnTriggerMouseEnter
+import Semantic.Properties.Prepend
+import Semantic.Properties.Trigger
 import Semantic.Properties.InnerRef
 
 import Unsafe.Coerce
@@ -33,7 +55,6 @@ data Portal ms = Portal_
     , closeOnTriggerClick :: Bool
     , closeOnTriggerMouseLeave :: Bool
     , defaultOpen :: Bool
-    , eventPool :: Txt
     , mountNode :: Maybe JSV
     , mouseEnterDelay :: Int
     , mouseLeaveDelay :: Int
@@ -53,7 +74,6 @@ instance Default (Portal ms) where
     def = (G.to gdef) 
             { closeOnDocumentClick = True
             , closeOnEscape = True
-            , eventPool = "default"
             , openOnTriggerClick = True 
             }
 
@@ -241,6 +261,7 @@ instance Typeable ms => Pure Portal ms where
                            , keydownHandler = def
                            , rootNode = def
                            , portalNode = def
+                           , ..
                            }
 
                     parent self onUnmount
@@ -289,3 +310,102 @@ cloneWithProps v fs =
     where
         cloneComponent :: forall props state. Comp ms props state -> Comp ms props state
         cloneComponent Comp {..} = Comp { renderer = \p s -> cloneWithProps (renderer p s) fs,  .. }
+
+instance HasAttributesProp (Portal ms) where
+    type Attribute (Portal ms) = Feature ms
+    getAttributes = attributes
+    setAttributes as p = p { attributes = as }
+
+instance HasChildrenProp (Portal ms) where
+    type Child (Portal ms) = View ms
+    getChildren = children
+    setChildren cs p = p { children = cs }
+
+instance HasClassesProp (Portal ms) where
+    getClasses = classes
+    setClasses cs p = p { classes = cs }
+
+instance HasCloseOnDocumentClickProp (Portal ms) where
+    getCloseOnDocumentClick = closeOnDocumentClick
+    setCloseOnDocumentClick codc p = p { closeOnDocumentClick = codc }
+
+instance HasCloseOnEscapeProp (Portal ms) where
+    getCloseOnEscape = closeOnEscape
+    setCloseOnEscape coe p = p { closeOnEscape = coe }
+
+instance HasCloseOnPortalMouseLeaveProp (Portal ms) where
+    getCloseOnPortalMouseLeave = closeOnPortalMouseLeave
+    setCloseOnPortalMouseLeave copml p = p { closeOnPortalMouseLeave = copml }
+
+instance HasCloseOnRootNodeClickProp (Portal ms) where
+    getCloseOnRootNodeClick = closeOnRootNodeClick
+    setCloseOnRootNodeClick cornc p = p { closeOnRootNodeClick = cornc }
+
+instance HasCloseOnTriggerBlurProp (Portal ms) where
+    getCloseOnTriggerBlur = closeOnTriggerBlur
+    setCloseOnTriggerBlur cotb p = p { closeOnTriggerBlur = cotb }
+
+instance HasCloseOnTriggerMouseLeaveProp (Portal ms) where
+    getCloseOnTriggerMouseLeave = closeOnTriggerMouseLeave
+    setCloseOnTriggerMouseLeave cotml p = p { closeOnTriggerMouseLeave = cotml }
+
+instance HasDefaultOpenProp (Portal ms) where
+    getDefaultOpen = defaultOpen
+    setDefaultOpen o p = p { defaultOpen = o }
+
+instance HasMountNodeProp (Portal ms) where
+    getMountNode = mountNode
+    setMountNode mn p = p { mountNode = mn }
+
+instance HasMouseEnterDelayProp (Portal ms) where
+    getMouseEnterDelay = mouseEnterDelay
+    setMouseEnterDelay med p = p { mouseEnterDelay = med }
+
+instance HasMouseLeaveDelayProp (Portal ms) where
+    getMouseLeaveDelay = mouseLeaveDelay
+    setMouseLeaveDelay mld p = p { mouseLeaveDelay = mld }
+
+instance HasOnCloseProp (Portal ms) where
+    type OnCloseProp (Portal ms) = Ef ms IO ()
+    getOnClose = onClose
+    setOnClose oc p = p { onClose = oc }
+
+instance HasOnMountProp (Portal ms) where
+    type OnMountProp (Portal ms) = Ef ms IO ()
+    getOnMount = onMount
+    setOnMount om p = p { onMount = om }
+
+instance HasOnOpenProp (Portal ms) where
+    type OnOpenProp (Portal ms) = Ef ms IO ()
+    getOnOpen = onOpen
+    setOnOpen oo p = p { onOpen = oo }
+
+instance HasOnUnmountProp (Portal ms) where
+    type OnUnmountProp (Portal ms) = Ef ms IO ()
+    getOnUnmount = onUnmount
+    setOnUnmount ou p = p { onUnmount = ou }
+
+instance HasOpenProp (Portal ms) where
+    getOpen = open
+    setOpen o p = p { open = o }
+
+instance HasOpenOnTriggerClickProp (Portal ms) where
+    getOpenOnTriggerClick = openOnTriggerClick
+    setOpenOnTriggerClick ootc p = p { openOnTriggerClick = ootc }
+
+instance HasOpenOnTriggerFocusProp (Portal ms) where
+    getOpenOnTriggerFocus = openOnTriggerFocus
+    setOpenOnTriggerFocus ootf p = p { openOnTriggerFocus = ootf }
+
+instance HasOpenOnTriggerMouseEnterProp (Portal ms) where
+    getOpenOnTriggerMouseEnter = openOnTriggerMouseEnter
+    setOpenOnTriggerMouseEnter ootme p = p { openOnTriggerMouseEnter = ootme }
+
+instance HasPrependProp (Portal ms) where
+    getPrepend = prepend
+    setPrepend pre p = p { prepend = pre }
+
+instance HasTriggerProp (Portal ms) where
+    type TriggerProp (Portal ms) = View ms
+    getTrigger = trigger
+    setTrigger t p = p { trigger = t }
