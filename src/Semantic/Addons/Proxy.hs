@@ -6,6 +6,9 @@ import Pure.Lifted (Node)
 
 import Semantic.Utils
 
+import Semantic.Properties.Children
+import Semantic.Properties.InnerRef
+
 data Proxy ms = Proxy_
     { children :: [View ms]
     , innerRef :: Node -> IO ()
@@ -23,3 +26,13 @@ instance Typeable ms => Pure Proxy ms where
             , mounted = getView self >>= traverse_ (innerRef r) . getHost
             , renderer = \ref _ -> only (children ref)
             }
+
+instance HasChildrenProp (Proxy ms) where
+    type Child (Proxy ms) = View ms
+    getChildren = children
+    setChildren cs p = p { children = cs }
+
+instance HasInnerRefProp (Proxy ms) where
+    type InnerRefProp (Proxy ms) = Node -> IO ()
+    getInnerRef = innerRef
+    setInnerRef ir p = p { innerRef = ir }

@@ -51,6 +51,7 @@ import Semantic.Properties.Horizontal as Export
 import Semantic.Properties.Index as Export
 import Semantic.Properties.Info as Export
 import Semantic.Properties.Inline as Export
+import Semantic.Properties.InnerRef as Export
 import Semantic.Properties.Instant as Export
 import Semantic.Properties.Internal as Export
 import Semantic.Properties.Inverted as Export
