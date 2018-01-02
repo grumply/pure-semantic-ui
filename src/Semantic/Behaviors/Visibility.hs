@@ -63,7 +63,7 @@ data Visibility ms = Visibility_
     } deriving (Generic)
 
 instance Default (Visibility ms) where
-    def = (G.to gdef) { context = Just (coerce window), once = True }
+    def = (G.to gdef) { as = Div, context = Just (coerce window), once = True }
 
 pattern Visibility :: Typeable ms => Visibility ms -> View ms
 pattern Visibility v = View v
@@ -75,7 +75,7 @@ data VisibilityState = VS
     , handlers :: IORef VisibilityHandlers
     , fired :: IORef [Txt]
     , ticking :: IORef Bool
-    , ref :: IORef JSV
+    , ref :: IORef (Maybe JSV)
     }
 
 data VisibilityHandlers = VH
@@ -83,8 +83,22 @@ data VisibilityHandlers = VH
     , scrollHandler :: IO ()
     } deriving (Generic,Default)
 
+data Direction = Down | Up
+    deriving (Generic,Default,Eq,Ord,Show)
+instance ToTxt Direction where 
+    toTxt Up = "up"
+    toTxt _  = "down"
+instance FromTxt Direction where
+    fromTxt "up" = Up
+    fromTxt _    = Down
+
 data Calculations = Calculations
-    { percentagePassed :: Double
+    { direction :: Direction
+    , height :: Double
+    , width :: Double
+    , top :: Double
+    , bottom :: Double
+    , percentagePassed :: Double
     , pixelsPassed :: Double
     , bottomPassed :: Bool
     , bottomVisible :: Bool
@@ -102,7 +116,7 @@ instance Typeable ms => Pure Visibility ms where
             let
                 handleRef (Node n) = do
                     VS {..} <- getState self
-                    writeIORef ref n
+                    writeIORef ref (Just n)
                     return Nothing
 
                 execute Nothing _ = return ()
@@ -193,7 +207,7 @@ instance Typeable ms => Pure Visibility ms where
                     Visibility_ {..} <- getProps self
                     VS          {..} <- getState self
 
-                    r <- readIORef ref
+                    Just r <- readIORef ref
 
                     (bottom,height,top,width) <- boundingRect (Element r)
 
@@ -203,7 +217,7 @@ instance Typeable ms => Pure Visibility ms where
 
                     let (topOffset,bottomOffset) = offset
 
-                        direction    = (newPYO > oldPYO) ? "down" $ "up"
+                        direction    = (newPYO > oldPYO) ? Down $ Up
                         topPassed    = top     < topOffset
                         bottomPassed = bottom  < bottomOffset
 
@@ -228,7 +242,7 @@ instance Typeable ms => Pure Visibility ms where
                                  <*> newIORef def 
                                  <*> newIORef def
                                  <*> newIORef def
-                                 <*> newIORef undefined
+                                 <*> newIORef def
 
                 , mounted = do
                     Visibility_ {..} <- getProps self
