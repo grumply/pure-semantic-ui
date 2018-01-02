@@ -35,7 +35,7 @@ data TableRow ms = TableRow_
     } deriving (Generic)
 
 instance Default (TableRow ms) where
-    def = (G.to gdef) { as = Td }
+    def = (G.to gdef) { as = Tr }
 
 pattern TableRow :: Typeable ms => TableRow ms -> View ms
 pattern TableRow tr = View tr
