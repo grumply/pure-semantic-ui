@@ -10,6 +10,7 @@ import Pure.Lifted
 import qualified Pure.Data.Txt as Txt
 
 import Data.Function as Export
+import Data.Maybe
 
 useKeyOrValueAndKey val key =
   case val of
@@ -164,3 +165,55 @@ body =
 #else
     ()
 #endif
+
+#ifdef __GHCJS__
+foreign import javascript unsafe
+    "window.pageYOffset" pageYOffset_js ::  IO Int
+#endif
+
+pageYOffset :: MonadIO c => c Int
+pageYOffset = 
+#ifdef __GHCJS__
+    liftIO pageYOffset_js
+#else
+    return 0
+#endif
+
+#ifdef __GHCJS__
+foreign import javascript unsafe "$r = $1.getBoundingClientRect()" bounding_client_rect_js :: Element -> IO Obj
+#endif
+
+boundingClientRect :: MonadIO c => Element -> c Obj
+boundingClientRect node =
+#ifdef __GHCJS__
+  liftIO $ bounding_client_rect_js node
+#else
+  return $ fromList [("bottom",toJSON (0 :: Double))
+                    ,("height",toJSON (0 :: Double))
+                    ,("top",toJSON (0 :: Double))
+                    ,("width",toJSON (0 :: Double))]
+#endif
+
+-- (bottom,height,top,width)
+boundingRect :: MonadIO c => Element -> c (Double,Double,Double,Double)
+boundingRect node = do
+  rect <- boundingClientRect node
+  return $ fromJust $ parse rect $ \o ->
+      (,,,) <$> (o .: "bottom") 
+            <*> (o .: "height") 
+            <*> (o .: "top") 
+            <*> (o .: "width")
+
+#ifdef __GHCJS__
+foreign import javascript unsafe 
+    "window.innerHeight" innerHeight_js :: IO Int
+#endif
+
+innerHeight :: MonadIO c => c Int
+innerHeight =
+#ifdef __GHCJS__
+    liftIO innerHeight_js
+#else
+    return 0
+#endif
+

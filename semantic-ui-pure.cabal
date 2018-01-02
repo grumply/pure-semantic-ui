@@ -54,6 +54,8 @@ library
     Semantic.Addons.Checkbox
     Semantic.Addons.Portal
     Semantic.Addons.Proxy
+    Semantic.Behaviors
+    Semantic.Behaviors.Visibility
     Semantic.Collections
     Semantic.Collections.Breadcrumb
     Semantic.Collections.Breadcrumb.BreadcrumbDivider
