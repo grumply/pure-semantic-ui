@@ -149,6 +149,8 @@ library
     Semantic.Properties.Color
     Semantic.Properties.Columns
     Semantic.Properties.Completed
+    Semantic.Properties.Context
+    Semantic.Properties.Continuous
     Semantic.Properties.Corner
     Semantic.Properties.Definition
     Semantic.Properties.Compact
@@ -160,6 +162,7 @@ library
     Semantic.Properties.Empty
     Semantic.Properties.Error
     Semantic.Properties.Extra
+    Semantic.Properties.FireOnMount
     Semantic.Properties.Fitted
     Semantic.Properties.Fixed
     Semantic.Properties.Flipped
@@ -197,6 +200,12 @@ library
     Semantic.Properties.MouseLeaveDelay
     Semantic.Properties.Name
     Semantic.Properties.Negative
+    Semantic.Properties.Offset
+    Semantic.Properties.OnBottomPassed
+    Semantic.Properties.OnBottomPassedReverse
+    Semantic.Properties.OnBottomVisible
+    Semantic.Properties.OnBottomVisibleReverse
+    Semantic.Properties.Once
     Semantic.Properties.OnChange
     Semantic.Properties.OnClick
     Semantic.Properties.OnClose
@@ -207,10 +216,20 @@ library
     Semantic.Properties.OnMobile
     Semantic.Properties.OnMount
     Semantic.Properties.OnMouseDown
+    Semantic.Properties.OnOffScreen
+    Semantic.Properties.OnOnScreen
     Semantic.Properties.OnOpen
+    Semantic.Properties.OnPassed
+    Semantic.Properties.OnPassing
+    Semantic.Properties.OnPassingReverse
     Semantic.Properties.OnSubmit
+    Semantic.Properties.OnTopPassed
+    Semantic.Properties.OnTopPassedReverse
+    Semantic.Properties.OnTopVisible
+    Semantic.Properties.OnTopVisibleReverse
     Semantic.Properties.OnTablet
     Semantic.Properties.OnUnmount
+    Semantic.Properties.OnUpdate
     Semantic.Properties.OnWidescreen
     Semantic.Properties.Open
     Semantic.Properties.OpenOnTriggerClick
