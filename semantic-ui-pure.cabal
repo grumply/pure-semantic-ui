@@ -15,9 +15,6 @@ library
 
   build-depends:
       base >=4.8
-    , tlc
-    , ef-base
-    , ef
     , pure
     -- END DEPENDENCIES
 
@@ -42,6 +39,7 @@ library
     PatternSynonyms
     DuplicateRecordFields
     LambdaCase
+    MultiWayIf
     -- END EXTENSIONS
 
   exposed-modules:
@@ -54,6 +52,8 @@ library
     Semantic.Addons.Checkbox
     Semantic.Addons.Portal
     Semantic.Addons.Proxy
+    Semantic.Addons.Transition
+    Semantic.Addons.Transition.TransitionGroup
     Semantic.Behaviors
     Semantic.Behaviors.Visibility
     Semantic.Collections
@@ -101,6 +101,7 @@ library
     Semantic.Elements.Label
     Semantic.Elements.Label.LabelDetail
     Semantic.Elements.Label.LabelGroup
+    Semantic.Elements.KeyedList
     Semantic.Elements.List
     Semantic.Elements.List.ListContent
     Semantic.Elements.List.ListDescription
@@ -122,6 +123,8 @@ library
     Semantic.Properties.Action
     Semantic.Properties.Active
     Semantic.Properties.Animated
+    Semantic.Properties.Animation
+    Semantic.Properties.AnimationDuration
     Semantic.Properties.As
     Semantic.Properties.Attached
     Semantic.Properties.Attributes
@@ -196,6 +199,7 @@ library
     Semantic.Properties.Localize
     Semantic.Properties.Minimal
     Semantic.Properties.MountNode
+    Semantic.Properties.MountOnShow
     Semantic.Properties.MouseEnterDelay
     Semantic.Properties.MouseLeaveDelay
     Semantic.Properties.Name
@@ -210,7 +214,9 @@ library
     Semantic.Properties.OnClick
     Semantic.Properties.OnClose
     Semantic.Properties.OnComputer
+    Semantic.Properties.OnComplete
     Semantic.Properties.OnDismiss
+    Semantic.Properties.OnHide
     Semantic.Properties.OnLargeScreen
     Semantic.Properties.Only
     Semantic.Properties.OnMobile
@@ -222,6 +228,8 @@ library
     Semantic.Properties.OnPassed
     Semantic.Properties.OnPassing
     Semantic.Properties.OnPassingReverse
+    Semantic.Properties.OnShow
+    Semantic.Properties.OnStart
     Semantic.Properties.OnSubmit
     Semantic.Properties.OnTopPassed
     Semantic.Properties.OnTopPassedReverse
@@ -281,11 +289,12 @@ library
     Semantic.Properties.TextAlign
     Semantic.Properties.Threaded
     Semantic.Properties.Toggle
-    Semantic.Properties.Transition
+    Semantic.Properties.TransitionOnMount
     Semantic.Properties.Transparent
     Semantic.Properties.Trigger
     Semantic.Properties.Type
     Semantic.Properties.UI
+    Semantic.Properties.UnmountOnHide
     Semantic.Properties.Unstackable
     Semantic.Properties.Value
     Semantic.Properties.Vertical

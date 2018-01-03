@@ -5,6 +5,8 @@ import Pure.Data (def)
 import Semantic.Properties.Action as Export
 import Semantic.Properties.Active as Export
 import Semantic.Properties.Animated as Export
+import Semantic.Properties.Animation as Export
+import Semantic.Properties.AnimationDuration as Export
 import Semantic.Properties.As as Export
 import Semantic.Properties.Attached as Export
 import Semantic.Properties.Attributes as Export
@@ -79,6 +81,7 @@ import Semantic.Properties.Loading as Export
 import Semantic.Properties.Localize as Export
 import Semantic.Properties.Minimal as Export
 import Semantic.Properties.MountNode as Export
+import Semantic.Properties.MountOnShow as Export
 import Semantic.Properties.MouseEnterDelay as Export
 import Semantic.Properties.MouseLeaveDelay as Export
 import Semantic.Properties.Name as Export
@@ -92,8 +95,10 @@ import Semantic.Properties.Once as Export
 import Semantic.Properties.OnChange as Export
 import Semantic.Properties.OnClick as Export
 import Semantic.Properties.OnClose as Export
+import Semantic.Properties.OnComplete as Export
 import Semantic.Properties.OnComputer as Export
 import Semantic.Properties.OnDismiss as Export
+import Semantic.Properties.OnHide as Export
 import Semantic.Properties.OnLargeScreen as Export
 import Semantic.Properties.Only as Export
 import Semantic.Properties.OnMobile as Export
@@ -105,6 +110,8 @@ import Semantic.Properties.OnOpen as Export
 import Semantic.Properties.OnPassed as Export
 import Semantic.Properties.OnPassing as Export
 import Semantic.Properties.OnPassingReverse as Export
+import Semantic.Properties.OnShow as Export
+import Semantic.Properties.OnStart as Export
 import Semantic.Properties.OnSubmit as Export
 import Semantic.Properties.OnTablet as Export
 import Semantic.Properties.OnTopPassed as Export
@@ -165,12 +172,13 @@ import Semantic.Properties.Test as Export
 import Semantic.Properties.TextAlign as Export
 import Semantic.Properties.Threaded as Export
 import Semantic.Properties.Toggle as Export
-import Semantic.Properties.Transition as Export
+import Semantic.Properties.TransitionOnMount as Export
 import Semantic.Properties.Transparent as Export
 import Semantic.Properties.Trigger as Export
 import Semantic.Properties.Type as Export
 import Semantic.Properties.UI as Export
 import Semantic.Properties.Unit as Export
+import Semantic.Properties.UnmountOnHide as Export
 import Semantic.Properties.Unstackable as Export
 import Semantic.Properties.Value as Export
 import Semantic.Properties.Vertical as Export

@@ -1,16 +1,21 @@
 {-# LANGUAGE CPP #-}
 {-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE TupleSections #-}
 module Semantic.Utils (module Semantic.Utils, module Export) where
 
-import Pure.Data
-import Pure.View hiding (one,two,Width)
+import Pure.Data hiding (lookup)
+import Pure.View hiding (one,two,lookup,reverse,Width)
 
-import Pure.Lifted
+import Pure.Lifted hiding (lookup)
+import Pure.Data.JSV
 
 import qualified Pure.Data.Txt as Txt
 
 import Data.Function as Export
 import Data.Maybe
+
+import Control.Monad.ST
+import Data.STRef
 
 useKeyOrValueAndKey val key =
   case val of
@@ -109,6 +114,7 @@ foldPures f = foldr $ \x st ->
       View a -> f a st
       _      -> st
 
+extractInputAttrs :: Foldable f => f (Feature ms) -> ([Feature ms],[Feature ms])
 extractInputAttrs = foldr go ([],[])
     where
         go x ~(inputAttrs,otherAttrs) =
@@ -141,17 +147,50 @@ contains node target =
     return True -- hmm?
 #endif
 
-cloneWithProps :: forall ms. View ms -> [Feature ms] -> View ms
-cloneWithProps v fs =
+clone :: forall ms. ([Feature ms] -> [Feature ms]) -> View ms -> View ms
+clone f v =
     case v of
         ComponentView {..} -> ComponentView { componentView = cloneComponent . componentView, .. }
-        SomeView sv        -> cloneWithProps (render sv) fs
+        SomeView sv        -> clone f (render sv)
         NullView {}        -> v
         TextView {}        -> v
-        _                  -> v { features = features v ++ fs }
+        _                  -> v { features = f (features v) }
     where
         cloneComponent :: forall props state. Comp ms props state -> Comp ms props state
-        cloneComponent Comp {..} = Comp { renderer = \p s -> cloneWithProps (renderer p s) fs,  .. }
+        cloneComponent Comp {..} = Comp { renderer = \p s -> clone f (renderer p s), .. }
+        
+updateClasses :: forall ms. ([Txt] -> [Txt]) -> View ms -> View ms
+updateClasses f = clone $ map $ \feature ->
+    case feature of
+        ClassList cs -> ClassList (f cs)
+        _            -> feature
+
+updateStyles :: forall ms. ([(Txt,Txt)] -> [(Txt,Txt)]) -> View ms -> View ms
+updateStyles f = clone $ map $ \feature ->
+    case feature of
+        StyleList ss -> StyleList (f ss)
+        _            -> feature
+
+updateStylesAndClasses :: forall ms. ([(Txt,Txt)] -> [(Txt,Txt)]) -> ([Txt] -> [Txt]) -> View ms -> View ms
+updateStylesAndClasses s c = clone $ map $ \feature ->
+    case feature of
+        ClassList cs -> ClassList (c cs)
+        StyleList ss -> StyleList (s ss)
+        _            -> feature
+
+cloneWithProps :: forall ms. View ms -> [Feature ms] -> View ms
+cloneWithProps v fs = clone (++ fs) v
+
+directionalTransitions = 
+    [ "scale"
+    , "fade", "fade up", "fade down", "fade left", "fade right"
+    , "horizontal flip", "vertical flip"
+    , "drop"
+    , "fly left", "fly right", "fly up", "fly down"
+    , "swing left", "swing right", "swing up", "swing down"
+    , "browse", "browse right"
+    , "slide down", "slide up", "slide right"
+    ]
 
 #ifdef __GHCJS__
 foreign import javascript unsafe
@@ -183,26 +222,19 @@ pageYOffset =
 foreign import javascript unsafe "$r = $1.getBoundingClientRect()" bounding_client_rect_js :: Element -> IO Obj
 #endif
 
-boundingClientRect :: MonadIO c => Element -> c Obj
-boundingClientRect node =
-#ifdef __GHCJS__
-  liftIO $ bounding_client_rect_js node
-#else
-  return $ fromList [("bottom",toJSON (0 :: Double))
-                    ,("height",toJSON (0 :: Double))
-                    ,("top",toJSON (0 :: Double))
-                    ,("width",toJSON (0 :: Double))]
-#endif
-
 -- (bottom,height,top,width)
 boundingRect :: MonadIO c => Element -> c (Double,Double,Double,Double)
 boundingRect node = do
-  rect <- boundingClientRect node
+#ifdef __GHCJS__
+  rect <- liftIO $ bounding_client_rect_js node
   return $ fromJust $ parse rect $ \o ->
       (,,,) <$> (o .: "bottom") 
             <*> (o .: "height") 
             <*> (o .: "top") 
             <*> (o .: "width")
+#else
+    return (0,0,0,0)
+#endif
 
 #ifdef __GHCJS__
 foreign import javascript unsafe 
@@ -217,3 +249,65 @@ innerHeight =
     return 0
 #endif
 
+-- This is hideous; functionalize.
+{-# INLINE mergeMappings #-}
+mergeMappings :: Eq a => [(a,b)] -> [(a,b)] -> [(a,b)]
+mergeMappings prev next = runST $ do
+    childMapping    <- newSTRef []
+    nextKeysPending <- newSTRef []
+    pendingKeys     <- newSTRef []
+
+    let swap ref ys = do
+            xs <- readSTRef ref 
+            writeSTRef ref ys 
+            return xs
+
+    for_ prev $ \(prevKey,_) -> do
+        case lookup prevKey next of
+            Just _ -> do
+                pks <- swap pendingKeys []
+                modifySTRef nextKeysPending ((prevKey,reverse pks):)
+
+            Nothing -> 
+                modifySTRef pendingKeys (prevKey:)
+
+    let value k = fromJust (lookup k next <|> lookup k prev)
+        addChildMapping k = modifySTRef childMapping ((:) (k,value k))
+
+    nkps <- readSTRef nextKeysPending
+    for_ next $ \(nextKey,_) -> do
+        for_ (lookup nextKey nkps) 
+            (traverse_ addChildMapping)
+        addChildMapping nextKey
+
+    pks <- readSTRef pendingKeys
+    for_ (reverse pks) addChildMapping
+
+    reverse <$> readSTRef childMapping
+
+-- Direct transcription. I'm sure there is a much simpler representation,
+-- but I don't have the time to walk through the algorithm.
+{-# INLINE mergeMappings' #-}
+mergeMappings' :: Eq a => [(a,b)] -> [(a,b)] -> [(a,b)]
+mergeMappings' prev next = reverse result
+    where
+        value k = lookup k next <|> lookup k prev
+
+        result = foldr mergePending childMapping leftovers 
+          where
+            mergePending k@(value -> Just v) = ((k,v):)
+            mergePending _ = id
+
+        childMapping = foldl' mergeNext [] next 
+          where
+            addChildMapping k = maybe id ((:) . (k,)) (value k)
+            mergeNext childMapping (k,v) = addChildMapping k $
+                case lookup k pending of
+                    Nothing -> childMapping
+                    Just ks -> foldl' (flip addChildMapping) childMapping ks
+
+        (pending,leftovers) = foldl' mergePrev ([],[]) prev 
+          where
+            mergePrev (nkp,pks) (k@(flip lookup next -> Nothing),_) = (nkp,k:pks)
+            mergePrev (nkp,[]) (k,_)  = (nkp,[])
+            mergePrev (nkp,pks) (k,_) = ((k,reverse pks):nkp,[])

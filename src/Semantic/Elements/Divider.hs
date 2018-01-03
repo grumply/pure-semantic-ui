@@ -34,6 +34,9 @@ data Divider ms = Divider_
 instance Default (Divider ms) where
     def = (G.to gdef) { as = Div }
 
+pattern Divider :: Typeable ms => Divider ms -> View ms
+pattern Divider d = View d
+
 instance Typeable ms => Pure Divider ms where
     render Divider_ {..} =
         let
