@@ -72,25 +72,26 @@ instance Typeable ms => Pure Transition ms where
                     mtd # void (setStateIO self (\_ -> return . f))
 
                 handleStart = do
-                    print "handleStart"
                     Transition_ {..} <- getProps self
                     TS          {..} <- getState self
 
                     upcoming <- readIORef next
                     writeIORef next def
 
-                    for_ upcoming $ \s ->
-                        setSafeState $ \TS {..} -> 
-                            ( TS { status = s, animating = True, .. }
-                            , do parent self (onStart s)
-                                 tid <- forkIO $ do
-                                     threadDelay (normalizeTransitionDuration s duration)
-                                     handleComplete
-                                 writeIORef transitionTimeout (Just tid)
-                            )
+                    setSafeState $ \TS {..} ->
+                        ( TS { status = fromMaybe status upcoming
+                             , animating = True
+                             , .. 
+                             }
+                        , for_ upcoming $ \s -> do 
+                            parent self (onStart s)
+                            tid <- forkIO $ do
+                                threadDelay (normalizeTransitionDuration s duration * 1000)
+                                handleComplete
+                            writeIORef transitionTimeout (Just tid)
+                        )
 
                 handleComplete = do
-                    print "handleComplete"
                     Transition_ {..} <- getProps self
                     TS          {..} <- getState self
                     parent self (onComplete status)
@@ -103,7 +104,6 @@ instance Typeable ms => Pure Transition ms where
                         )
 
                 updateStatus = do
-                    print "updateStatus"
                     Transition_ {..} <- getProps self
                     TS          {..} <- getState self
                     upcoming <- readIORef next
@@ -119,26 +119,29 @@ instance Typeable ms => Pure Transition ms where
 
                 addAnimationClasses status animating animation classes =
                     ( animation : classes) ++ 
-                    [ animating # "animating"
-                    , (animation `elem` directionalTransitions) #
-                        case status of
-                            Entering -> "in"
-                            Exiting  -> "out"
-                            Exited   -> "hidden"
-                            _        -> "visible"
-                    , "transition"
-                    ]
+                        if animation `elem` directionalTransitions
+                            then 
+                                [ animating # "animating"
+                                , case status of
+                                    Entering -> "in"
+                                    Exiting  -> "out"
+                                    Exited   -> "hidden"
+                                    _        -> def
+                                , (status /= Exited) # "visible"
+                                , "transition"
+                                ]
+                            else 
+                                [ animating # "animating transition" ]
 
                 addAnimationStyles status duration styles =
-                    styles <>
-                    [ case status of
-                        Entering -> ("show",ms(normalizeTransitionDuration status duration))
-                        Exiting  -> ("hide",ms(normalizeTransitionDuration status duration))
-                        _        -> def
-                    ]
+                    let ad = 
+                            case status of
+                                Entering -> ("animationDuration",ms(normalizeTransitionDuration status duration))
+                                Exiting  -> ("animationDuration",ms(normalizeTransitionDuration status duration))
+                                _        -> def
+                    in styles <> [ ad ]
 
                 computeCompletedStatus = do
-                    print "computeCOmpletedStatus"
                     Transition_ {..} <- getProps self
                     TS          {..} <- getState self
 
@@ -150,7 +153,6 @@ instance Typeable ms => Pure Transition ms where
                             $ Exited
 
                 computeInitialStatuses = do
-                    print "computeInitialStatuses"
                     Transition_ {..} <- getProps self
                     return $
                         if | visible && transitionOnMount -> (Exited   ,Just Entering) 
@@ -159,59 +161,43 @@ instance Typeable ms => Pure Transition ms where
                            | otherwise                    -> (Exited   ,Nothing)
 
                 computeNextStatus = do
-                    print "computeNextStatus"
                     TS {..} <- getState self
                     return $
                         if animating 
                             then (status == Entering) ? Exiting $ Entering
                             else (status == Entered)  ? Exiting $ Entering
 
-                computeStatuses = do
-                    print "computeStatuses"
-                    Transition_ {..} <- getProps self
-                    TS          {..} <- getState self
-                    return $
-                        if visible
-                            -- keep an eye here
-                            then ( (status == Unmounted) ? Just Exited $ Nothing
-                                 , (status /= Entering && status /= Entered) ? Just Entering $ Nothing
-                                 )
-                            else ( Nothing
-                                 , (status == Entering || status == Entered) ? Just Exiting $ Nothing
-                                 )
+                computeStatuses True status =
+                    ( (status == Unmounted) ? Just Exited $ Nothing
+                    , (status /= Entering && status /= Entered) ? Just Entering $ Nothing
+                    )
+                computeStatuses _ status =
+                    ( Nothing, (status == Entering || status == Entered) ? Just Exiting $ Nothing)
 
             in 
                 def
                     { construct = do
-                        print "construct"
                         (status,next) <- computeInitialStatuses 
                         TS status def <$> newIORef def <*> newIORef next <*> newIORef def
 
                     , mounted = do
-                        print "mounted"
                         TS {..} <- getState self
                         writeIORef mounted True
                         updateStatus
 
                     , receiveProps = \newprops oldstate -> do
-                        print "receiveProps"
                         oldprops <- getProps self
                         TS {..}  <- getState self
-                        (current,upcoming) <- computeStatuses
+                        let (current,upcoming) = computeStatuses (visible newprops) status
                         writeIORef next upcoming
-                        for_ current $ \c -> 
-                            setSafeState $ \TS {..} -> 
-                                ( TS { status = c, .. }
-                                , return ()
-                                )
-                        return oldstate
+                        return TS 
+                            { status = fromMaybe status current
+                            , .. 
+                            }
 
-                    , updated = \_ _ _ -> do
-                        print "updated"
-                        updateStatus
+                    , updated = \_ _ _ -> updateStatus
 
                     , unmount = do
-                        print "unmount"
                         TS {..} <- getState self
                         writeIORef mounted False
 

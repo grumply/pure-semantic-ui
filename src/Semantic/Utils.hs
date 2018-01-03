@@ -160,23 +160,30 @@ clone f v =
         cloneComponent Comp {..} = Comp { renderer = \p s -> clone f (renderer p s), .. }
         
 updateClasses :: forall ms. ([Txt] -> [Txt]) -> View ms -> View ms
-updateClasses f = clone $ map $ \feature ->
-    case feature of
-        ClassList cs -> ClassList (f cs)
-        _            -> feature
+updateClasses f = clone (go False)
+    where
+        go False [] = [ ClassList (f []) ]
+        go True  [] = []
+        go _ (ClassList cs : fs) = ClassList (f cs) : go True fs
+        go b (f : fs) = f : go b fs
 
 updateStyles :: forall ms. ([(Txt,Txt)] -> [(Txt,Txt)]) -> View ms -> View ms
-updateStyles f = clone $ map $ \feature ->
-    case feature of
-        StyleList ss -> StyleList (f ss)
-        _            -> feature
+updateStyles f = clone (go False)
+    where
+        go False [] = [ StyleList (f []) ]
+        go True  [] = []
+        go _ (StyleList ss : fs) = StyleList (f ss) : go True fs
+        go b (f : fs) = f : go b fs
 
 updateStylesAndClasses :: forall ms. ([(Txt,Txt)] -> [(Txt,Txt)]) -> ([Txt] -> [Txt]) -> View ms -> View ms
-updateStylesAndClasses s c = clone $ map $ \feature ->
-    case feature of
-        ClassList cs -> ClassList (c cs)
-        StyleList ss -> StyleList (s ss)
-        _            -> feature
+updateStylesAndClasses s c = clone (go False False) 
+    where
+        go False False []        = [ StyleList (s []), ClassList (c []) ]
+        go False True  []        = [ StyleList (s []) ]
+        go True  False []        = [ ClassList (c []) ]
+        go _ y (StyleList ss : fs) = StyleList (s ss) : go True y fs
+        go x _ (ClassList cs : fs) = ClassList (c cs) : go x True fs
+        go x y (f : fs)            = f : go x y fs
 
 cloneWithProps :: forall ms. View ms -> [Feature ms] -> View ms
 cloneWithProps v fs = clone (++ fs) v
