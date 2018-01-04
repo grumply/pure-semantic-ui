@@ -138,6 +138,7 @@ library
     Semantic.Properties.As
     Semantic.Properties.Attached
     Semantic.Properties.Attributes
+    Semantic.Properties.AutoSuccess
     Semantic.Properties.Avatar
     Semantic.Properties.Basic
     Semantic.Properties.Block
@@ -193,6 +194,7 @@ library
     Semantic.Properties.Hidden
     Semantic.Properties.Horizontal
     Semantic.Properties.Index
+    Semantic.Properties.Indicating
     Semantic.Properties.Info
     Semantic.Properties.Inline
     Semantic.Properties.InnerRef
@@ -263,10 +265,12 @@ library
     Semantic.Properties.Padded
     Semantic.Properties.Page
     Semantic.Properties.Pagination
+    Semantic.Properties.Percent
     Semantic.Properties.Piled
     Semantic.Properties.Pointing
     Semantic.Properties.Position
     Semantic.Properties.Positive
+    Semantic.Properties.Precision
     Semantic.Properties.Prepend
     Semantic.Properties.Primary
     Semantic.Properties.Radio
@@ -309,6 +313,7 @@ library
     Semantic.Properties.TextAlign
     Semantic.Properties.Threaded
     Semantic.Properties.Toggle
+    Semantic.Properties.Total
     Semantic.Properties.TransitionOnMount
     Semantic.Properties.Transparent
     Semantic.Properties.Trigger

@@ -10,6 +10,7 @@ import Semantic.Properties.AnimationDuration as Export
 import Semantic.Properties.As as Export
 import Semantic.Properties.Attached as Export
 import Semantic.Properties.Attributes as Export
+import Semantic.Properties.AutoSuccess as Export
 import Semantic.Properties.Avatar as Export
 import Semantic.Properties.Basic as Export
 import Semantic.Properties.Block as Export
@@ -65,6 +66,7 @@ import Semantic.Properties.Grouped as Export
 import Semantic.Properties.Hidden as Export
 import Semantic.Properties.Horizontal as Export
 import Semantic.Properties.Index as Export
+import Semantic.Properties.Indicating as Export
 import Semantic.Properties.Info as Export
 import Semantic.Properties.Inline as Export
 import Semantic.Properties.InnerRef as Export
@@ -135,10 +137,12 @@ import Semantic.Properties.Ordered as Export
 import Semantic.Properties.Padded as Export
 import Semantic.Properties.Page as Export
 import Semantic.Properties.Pagination as Export
+import Semantic.Properties.Percent as Export
 import Semantic.Properties.Piled as Export
 import Semantic.Properties.Pointing as Export
 import Semantic.Properties.Position as Export
 import Semantic.Properties.Positive as Export
+import Semantic.Properties.Precision as Export
 import Semantic.Properties.Prepend as Export
 import Semantic.Properties.Primary as Export
 import Semantic.Properties.Radio as Export
@@ -182,6 +186,7 @@ import Semantic.Properties.Test as Export
 import Semantic.Properties.TextAlign as Export
 import Semantic.Properties.Threaded as Export
 import Semantic.Properties.Toggle as Export
+import Semantic.Properties.Total as Export
 import Semantic.Properties.TransitionOnMount as Export
 import Semantic.Properties.Transparent as Export
 import Semantic.Properties.Trigger as Export
