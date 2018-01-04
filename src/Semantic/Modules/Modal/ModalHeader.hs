@@ -6,6 +6,11 @@ import qualified Pure.View as HTML
 
 import Semantic.Utils
 
+import Semantic.Properties.As
+import Semantic.Properties.Attributes
+import Semantic.Properties.Children
+import Semantic.Properties.Classes
+
 data ModalHeader ms = ModalHeader_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]
@@ -30,3 +35,22 @@ instance Typeable ms => Pure ModalHeader ms where
                 : attributes
                 ) 
                 children
+
+instance HasAsProp (ModalHeader ms) where
+    type AsProp (ModalHeader ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs f mh = mh { as = f }
+
+instance HasAttributesProp (ModalHeader ms) where
+    type Attribute (ModalHeader ms) = Feature ms
+    getAttributes = attributes 
+    setAttributes cs mh = mh { attributes = cs }
+
+instance HasChildrenProp (ModalHeader ms) where
+    type Child (ModalHeader ms) = View ms
+    getChildren = children
+    setChildren cs mh = mh { children = cs }
+
+instance HasClassesProp (ModalHeader ms) where
+    getClasses = classes
+    setClasses cs mh = mh { classes = cs }
