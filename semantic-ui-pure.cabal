@@ -199,6 +199,7 @@ library
     Semantic.Properties.IsContainer
     Semantic.Properties.IsHeader
     Semantic.Properties.IsIcon
+    Semantic.Properties.IsImage
     Semantic.Properties.IsIndeterminate
     Semantic.Properties.IsText
     Semantic.Properties.ItemsPerRow
@@ -275,6 +276,7 @@ library
     Semantic.Properties.Ribbon
     Semantic.Properties.Rotated
     Semantic.Properties.Rounded
+    Semantic.Properties.Scrolling
     Semantic.Properties.Secondary
     Semantic.Properties.Section
     Semantic.Properties.Selectable

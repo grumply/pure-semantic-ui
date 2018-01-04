@@ -6,6 +6,13 @@ import qualified Pure.View as HTML
 
 import Semantic.Utils
 
+import Semantic.Properties.As
+import Semantic.Properties.Attributes
+import Semantic.Properties.Children
+import Semantic.Properties.Classes
+import Semantic.Properties.IsImage
+import Semantic.Properties.Scrolling
+
 data ModalContent ms = ModalContent_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]
@@ -36,3 +43,30 @@ instance Typeable ms => Pure ModalContent ms where
                 : attributes
                 ) 
                 children
+
+instance HasAsProp (ModalContent ms) where
+    type AsProp (ModalContent ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs f mc = mc { as = f }
+
+instance HasAttributesProp (ModalContent ms) where
+    type Attribute (ModalContent ms) = Feature ms
+    getAttributes = attributes 
+    setAttributes cs mc = mc { attributes = cs }
+
+instance HasChildrenProp (ModalContent ms) where
+    type Child (ModalContent ms) = View ms
+    getChildren = children
+    setChildren cs mc = mc { children = cs }
+
+instance HasClassesProp (ModalContent ms) where
+    getClasses = classes
+    setClasses cs mc = mc { classes = cs }
+
+instance HasIsImageProp (ModalContent ms) where
+    getIsImage = image
+    setIsImage ii mc = mc { image = ii }
+
+instance HasScrollingProp (ModalContent ms) where
+    getScrolling = scrolling
+    setScrolling s mc = mc { scrolling = s }
