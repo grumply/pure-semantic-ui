@@ -1,5 +1,10 @@
 {-# LANGUAGE UndecidableInstances #-}
-module Semantic.Addons.Transition.TransitionGroup (module Semantic.Addons.Transition.TransitionGroup, module Export) where
+module Semantic.Modules.Transition.TransitionGroup where
+
+-- Dependency hierarchy is reversed here. TransitionGroup depends upon Transition for 
+-- component inspection so Transition cannot export TransitionGroup. The solution
+-- is to either import Transition and Transition.TransitionGroup or to import
+-- Semantic or more specifically Semantic.Modules to get both of them.
 
 import Data.Maybe (isJust,fromJust,fromMaybe)
 import GHC.Generics as G
@@ -7,7 +12,7 @@ import Pure.View hiding (animation,lookup,visible)
 
 import Semantic.Utils
 
-import Semantic.Addons.Transition as Export
+import Semantic.Modules.Transition
 
 import Semantic.Properties.As
 import Semantic.Properties.Attributes

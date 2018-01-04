@@ -1,4 +1,4 @@
-module Semantic.Addons.Accordion.AccordionAccordion where
+module Semantic.Modules.Accordion.AccordionAccordion where
 
 import GHC.Generics as G
 import Pure.View

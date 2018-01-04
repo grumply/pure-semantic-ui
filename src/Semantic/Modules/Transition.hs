@@ -1,4 +1,4 @@
-module Semantic.Addons.Transition where
+module Semantic.Modules.Transition where
 
 import Control.Concurrent
 import Data.IORef

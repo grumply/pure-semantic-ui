@@ -1,4 +1,4 @@
-module Semantic.Addons.Accordion.AccordionTitle where
+module Semantic.Modules.Accordion.AccordionTitle where
 
 import GHC.Generics as G
 import Pure.View hiding (active,onClick)

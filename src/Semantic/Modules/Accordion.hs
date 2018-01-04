@@ -1,4 +1,4 @@
-module Semantic.Addons.Accordion where
+module Semantic.Modules.Accordion where
 
 import GHC.Generics as G
 import Pure.View hiding (styled)
@@ -13,9 +13,9 @@ import Semantic.Properties.Fluid
 import Semantic.Properties.Inverted
 import Semantic.Properties.Styled
 
-import Semantic.Addons.Accordion.AccordionAccordion as Export
-import Semantic.Addons.Accordion.AccordionContent as Export 
-import Semantic.Addons.Accordion.AccordionTitle as Export
+import Semantic.Modules.Accordion.AccordionAccordion as Export
+import Semantic.Modules.Accordion.AccordionContent as Export 
+import Semantic.Modules.Accordion.AccordionTitle as Export
 
 data Accordion ms = Accordion_
     { as :: [Feature ms] -> [View ms] -> View ms

@@ -45,15 +45,8 @@ library
   exposed-modules:
     Semantic
     Semantic.Addons
-    Semantic.Addons.Accordion
-    Semantic.Addons.Accordion.AccordionAccordion
-    Semantic.Addons.Accordion.AccordionContent
-    Semantic.Addons.Accordion.AccordionTitle
-    Semantic.Addons.Checkbox
     Semantic.Addons.Portal
     Semantic.Addons.Proxy
-    Semantic.Addons.Transition
-    Semantic.Addons.Transition.TransitionGroup
     Semantic.Behaviors
     Semantic.Behaviors.Visibility
     Semantic.Collections
@@ -119,6 +112,13 @@ library
     Semantic.Elements.Step.StepDescription
     Semantic.Elements.Step.StepGroup
     Semantic.Elements.Step.StepTitle
+    Semantic.Modules.Accordion
+    Semantic.Modules.Accordion.AccordionAccordion
+    Semantic.Modules.Accordion.AccordionContent
+    Semantic.Modules.Accordion.AccordionTitle
+    Semantic.Modules.Checkbox
+    Semantic.Modules.Transition
+    Semantic.Modules.Transition.TransitionGroup
     Semantic.Properties
     Semantic.Properties.Action
     Semantic.Properties.Active

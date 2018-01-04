@@ -1,4 +1,4 @@
-module Semantic.Addons.Checkbox where
+module Semantic.Modules.Checkbox where
 
 import GHC.Generics as G
 import Pure.View hiding (disabled,name,onClick,Checked,Name,Type,Value)
