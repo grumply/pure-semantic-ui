@@ -123,6 +123,7 @@ library
     Semantic.Modules.Modal.ModalActions
     Semantic.Modules.Modal.ModalContent
     Semantic.Modules.Modal.ModalDescription
+    Semantic.Modules.Modal.ModalHeader
     Semantic.Modules.Transition
     Semantic.Modules.Transition.TransitionGroup
     Semantic.Properties
