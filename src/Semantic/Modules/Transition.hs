@@ -63,7 +63,7 @@ data TransitionState = TS
 
 instance Typeable ms => Pure Transition ms where
     render t =
-        Component "Semantic.Addons.Transition" t $ \self ->
+        Component "Semantic.Modules.Transition" t $ \self ->
             let 
 
                 setSafeState f = do

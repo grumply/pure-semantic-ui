@@ -46,7 +46,7 @@ data TransitionGroupState ms = TGS
 
 instance VC ms => Pure TransitionGroup ms where
     render tg =
-        Component "Semantic.Addons.Transition.TransitionGroup" tg $ \self ->
+        Component "Semantic.Modules.Transition.TransitionGroup" tg $ \self ->
             let
                 handleOnHide key _ =
                     void $ setState self $ \_ TGS {..} -> 
