@@ -6,6 +6,11 @@ import qualified Pure.View as HTML
 
 import Semantic.Utils
 
+import Semantic.Properties.As
+import Semantic.Properties.Attributes
+import Semantic.Properties.Children
+import Semantic.Properties.Classes
+
 data ModalActions ms = ModalActions_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]
@@ -26,3 +31,22 @@ instance Typeable ms => Pure ModalActions ms where
             : attributes
             ) 
             children
+
+instance HasAsProp (ModalActions ms) where
+    type AsProp (ModalActions ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs f ma = ma { as = f }
+
+instance HasAttributesProp (ModalActions ms) where
+    type Attribute (ModalActions ms) = Feature ms
+    getAttributes = attributes 
+    setAttributes cs ma = ma { attributes = cs }
+
+instance HasChildrenProp (ModalActions ms) where
+    type Child (ModalActions ms) = View ms
+    getChildren = children
+    setChildren cs ma = ma { children = cs }
+
+instance HasClassesProp (ModalActions ms) where
+    getClasses = classes
+    setClasses cs ma = ma { classes = cs }

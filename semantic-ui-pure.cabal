@@ -121,6 +121,7 @@ library
     Semantic.Modules.Dimmer.DimmerDimmable
     Semantic.Modules.Modal
     Semantic.Modules.Modal.ModalActions
+    Semantic.Modules.Modal.ModalContent
     Semantic.Modules.Transition
     Semantic.Modules.Transition.TransitionGroup
     Semantic.Properties

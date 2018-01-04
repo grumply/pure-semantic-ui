@@ -75,6 +75,7 @@ import Semantic.Properties.IsChecked as Export
 import Semantic.Properties.IsContainer as Export
 import Semantic.Properties.IsHeader as Export
 import Semantic.Properties.IsIcon as Export
+import Semantic.Properties.IsImage as Export
 import Semantic.Properties.IsIndeterminate as Export
 import Semantic.Properties.IsText as Export
 import Semantic.Properties.ItemsPerRow as Export
@@ -91,7 +92,6 @@ import Semantic.Properties.MouseLeaveDelay as Export
 import Semantic.Properties.Name as Export
 import Semantic.Properties.Negative as Export
 import Semantic.Properties.Offset as Export
-import Semantic.Properties.OnActionClick as Export
 import Semantic.Properties.OnBottomPassed as Export
 import Semantic.Properties.OnBottomPassedReverse as Export
 import Semantic.Properties.OnBottomVisible as Export
@@ -152,6 +152,7 @@ import Semantic.Properties.Reversed as Export
 import Semantic.Properties.Ribbon as Export
 import Semantic.Properties.Rotated as Export
 import Semantic.Properties.Rounded as Export
+import Semantic.Properties.Scrolling as Export
 import Semantic.Properties.Secondary as Export
 import Semantic.Properties.Section as Export
 import Semantic.Properties.Selectable as Export
