@@ -124,6 +124,7 @@ library
     Semantic.Modules.Modal.ModalContent
     Semantic.Modules.Modal.ModalDescription
     Semantic.Modules.Modal.ModalHeader
+    Semantic.Modules.Tab
     Semantic.Modules.Transition
     Semantic.Modules.Transition.TransitionGroup
     Semantic.Properties
