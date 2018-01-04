@@ -133,6 +133,7 @@ library
     Semantic.Properties.Avatar
     Semantic.Properties.Basic
     Semantic.Properties.Block
+    Semantic.Properties.Blurring
     Semantic.Properties.Bordered
     Semantic.Properties.Borderless
     Semantic.Properties.Bulleted
@@ -160,6 +161,7 @@ library
     Semantic.Properties.Definition
     Semantic.Properties.Compact
     Semantic.Properties.DefaultOpen
+    Semantic.Properties.Dimmed
     Semantic.Properties.Disabled
     Semantic.Properties.Divided
     Semantic.Properties.Dividing

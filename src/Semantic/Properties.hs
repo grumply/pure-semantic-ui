@@ -13,6 +13,7 @@ import Semantic.Properties.Attributes as Export
 import Semantic.Properties.Avatar as Export
 import Semantic.Properties.Basic as Export
 import Semantic.Properties.Block as Export
+import Semantic.Properties.Blurring as Export
 import Semantic.Properties.Bordered as Export
 import Semantic.Properties.Borderless as Export
 import Semantic.Properties.Bulleted as Export
@@ -40,6 +41,7 @@ import Semantic.Properties.Continuous as Export
 import Semantic.Properties.Corner as Export
 import Semantic.Properties.DefaultOpen as Export
 import Semantic.Properties.Definition as Export
+import Semantic.Properties.Dimmed as Export
 import Semantic.Properties.Disabled as Export
 import Semantic.Properties.Divided as Export
 import Semantic.Properties.Dividing as Export
