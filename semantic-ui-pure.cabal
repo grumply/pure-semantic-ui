@@ -145,6 +145,7 @@ library
     Semantic.Properties.Classes
     Semantic.Properties.Clearing
     Semantic.Properties.Close
+    Semantic.Properties.CloseOnDimmerClick
     Semantic.Properties.CloseOnDocumentClick
     Semantic.Properties.CloseOnEscape
     Semantic.Properties.CloseOnPortalMouseLeave
@@ -163,6 +164,7 @@ library
     Semantic.Properties.Compact
     Semantic.Properties.DefaultOpen
     Semantic.Properties.Dimmed
+    Semantic.Properties.DimmerType
     Semantic.Properties.Disabled
     Semantic.Properties.Divided
     Semantic.Properties.Dividing
@@ -210,6 +212,7 @@ library
     Semantic.Properties.Name
     Semantic.Properties.Negative
     Semantic.Properties.Offset
+    Semantic.Properties.OnActionClick
     Semantic.Properties.OnBottomPassed
     Semantic.Properties.OnBottomPassedReverse
     Semantic.Properties.OnBottomVisible
@@ -288,6 +291,7 @@ library
     Semantic.Properties.Striped
     Semantic.Properties.Structured
     Semantic.Properties.Styled
+    Semantic.Properties.Styles
     Semantic.Properties.Sub
     Semantic.Properties.Success
     Semantic.Properties.TabIndex
@@ -311,6 +315,7 @@ library
     Semantic.Properties.Warning
     Semantic.Properties.Width
     Semantic.Properties.Widths
+    Semantic.Properties.WithPortal
     Semantic.Properties.WithRef
     Semantic.Properties.Wrapped
     Semantic.Utils

@@ -23,8 +23,19 @@ import Semantic.Properties.Open
 import Semantic.Properties.Trigger
 import Semantic.Properties.MountNode
 
+import Semantic.Properties.As
+import Semantic.Properties.Attributes
 import Semantic.Properties.Children
 import Semantic.Properties.Classes
+import Semantic.Properties.Basic
+import Semantic.Properties.CloseOnDimmerClick
+import Semantic.Properties.DefaultOpen
+import Semantic.Properties.DimmerType
+import Semantic.Properties.OnActionClick
+import Semantic.Properties.Size
+import Semantic.Properties.Styles
+import Semantic.Properties.WithPortal
+
 data Modal ms = Modal_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]
@@ -193,3 +204,94 @@ instance VC ms => Pure Modal ms where
                         & OnUnmount (liftIO handlePortalUnmount >> onUnmount)
                         & Children [ renderContent ]
                 }
+
+instance HasAsProp (Modal ms) where
+    type AsProp (Modal ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs a m = m { as = a }
+
+instance HasAttributesProp (Modal ms) where
+    type Attribute (Modal ms) = Feature ms
+    getAttributes = attributes
+    setAttributes as m = m { attributes = as }
+
+instance HasChildrenProp (Modal ms) where
+    type Child (Modal ms) = View ms
+    getChildren = children
+    setChildren cs m = m { children = cs }
+
+instance HasClassesProp (Modal ms) where
+    getClasses = classes
+    setClasses cs m = m { classes = cs }
+
+instance HasBasicProp (Modal ms) where
+    type BasicProp (Modal ms) = Bool
+    getBasic = basic
+    setBasic b m = m { basic = b }
+
+instance HasCloseOnDimmerClickProp (Modal ms) where
+    getCloseOnDimmerClick = closeOnDimmerClick
+    setCloseOnDimmerClick codc m = m { closeOnDimmerClick = codc }
+
+instance HasCloseOnDocumentClickProp (Modal ms) where
+    getCloseOnDocumentClick = closeOnDocumentClick
+    setCloseOnDocumentClick codc m = m { closeOnDocumentClick = codc }
+
+instance HasDefaultOpenProp (Modal ms) where
+    getDefaultOpen = defaultOpen
+    setDefaultOpen o m = m { defaultOpen = o }
+
+instance HasDimmerTypeProp (Modal ms) where
+    getDimmerType = dimmer
+    setDimmerType d m = m { dimmer = d }
+
+instance HasMountNodeProp (Modal ms) where
+    getMountNode = mountNode
+    setMountNode mn m = m { mountNode = mn }
+
+instance HasOnActionClickProp (Modal ms) where
+    type OnActionClickProp (Modal ms) = Ef ms IO ()
+    getOnActionClick = onActionClick
+    setOnActionClick oac m = m { onActionClick = oac }
+
+instance HasOnCloseProp (Modal ms) where
+    type OnCloseProp (Modal ms) = Ef ms IO ()
+    getOnClose = onClose
+    setOnClose oc m = m { onClose = oc }
+
+instance HasOnMountProp (Modal ms) where
+    type OnMountProp (Modal ms) = Ef ms IO ()
+    getOnMount = onMount
+    setOnMount om m = m { onMount = om }
+
+instance HasOnOpenProp (Modal ms) where
+    type OnOpenProp (Modal ms) = Ef ms IO ()
+    getOnOpen = onOpen
+    setOnOpen oo m = m { onOpen = oo }
+
+instance HasOnUnmountProp (Modal ms) where
+    type OnUnmountProp (Modal ms) = Ef ms IO ()
+    getOnUnmount = onUnmount
+    setOnUnmount ou m = m { onUnmount = ou }
+
+instance HasOpenProp (Modal ms) where
+    getOpen = open
+    setOpen o m = m { open = o }
+
+instance HasSizeProp (Modal ms) where
+    getSize = size
+    setSize s m = m { size = s }
+
+instance HasStylesProp (Modal ms) where
+    getStyles = styles
+    setStyles ss m = m { styles = ss }
+
+instance HasWithPortalProp (Modal ms) where
+    type WithPortalProp (Modal ms) = Portal.Portal ms -> Portal.Portal ms
+    getWithPortal = withPortal
+    setWithPortal wp m = m { withPortal = wp }
+
+instance HasTriggerProp (Modal ms) where
+    type TriggerProp (Modal ms) = View ms
+    getTrigger = trigger
+    setTrigger t m = m { trigger = t }

@@ -24,6 +24,7 @@ import Semantic.Properties.Circular as Export
 import Semantic.Properties.Classes as Export
 import Semantic.Properties.Clearing as Export
 import Semantic.Properties.Close as Export
+import Semantic.Properties.CloseOnDimmerClick as Export
 import Semantic.Properties.CloseOnDocumentClick as Export
 import Semantic.Properties.CloseOnEscape as Export
 import Semantic.Properties.CloseOnPortalMouseLeave as Export
@@ -42,6 +43,7 @@ import Semantic.Properties.Corner as Export
 import Semantic.Properties.DefaultOpen as Export
 import Semantic.Properties.Definition as Export
 import Semantic.Properties.Dimmed as Export
+import Semantic.Properties.DimmerType as Export
 import Semantic.Properties.Disabled as Export
 import Semantic.Properties.Divided as Export
 import Semantic.Properties.Dividing as Export
@@ -89,6 +91,7 @@ import Semantic.Properties.MouseLeaveDelay as Export
 import Semantic.Properties.Name as Export
 import Semantic.Properties.Negative as Export
 import Semantic.Properties.Offset as Export
+import Semantic.Properties.OnActionClick as Export
 import Semantic.Properties.OnBottomPassed as Export
 import Semantic.Properties.OnBottomPassedReverse as Export
 import Semantic.Properties.OnBottomVisible as Export
@@ -167,6 +170,7 @@ import Semantic.Properties.Stretched as Export
 import Semantic.Properties.Striped as Export
 import Semantic.Properties.Structured as Export
 import Semantic.Properties.Styled as Export
+import Semantic.Properties.Styles as Export
 import Semantic.Properties.Sub as Export
 import Semantic.Properties.Success as Export
 import Semantic.Properties.TabIndex as Export
@@ -192,6 +196,7 @@ import Semantic.Properties.Visible as Export
 import Semantic.Properties.Warning as Export
 import Semantic.Properties.Width as Export
 import Semantic.Properties.Widths as Export
+import Semantic.Properties.WithPortal as Export
 import Semantic.Properties.WithRef as Export
 import Semantic.Properties.Wrapped as Export
 
