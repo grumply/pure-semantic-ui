@@ -1,5 +1,5 @@
 {-# LANGUAGE UndecidableInstances #-}
-module Semantic.Modules.Dimmer where
+module Semantic.Modules.Dimmer (module Semantic.Modules.Dimmer, module Export) where
 
 import Data.IORef
 import GHC.Generics as G
@@ -28,6 +28,8 @@ import Semantic.Properties.OnClickOutside
 import Semantic.Properties.Inverted
 import Semantic.Properties.Page
 import Semantic.Properties.Simple
+
+import Semantic.Modules.Dimmer.DimmerDimmable as Export
 
 data Dimmer ms = Dimmer_
     { as :: [Feature ms] -> [View ms] -> View ms
