@@ -136,6 +136,19 @@ extractInputAttrs = foldr go ([],[])
 
 #ifdef __GHCJS__
 foreign import javascript unsafe
+    "$1 !== $2" not_equal_js :: JSV -> JSV -> IO Bool
+#endif
+
+unequalTargets :: JSV -> JSV -> IO Bool
+unequalTargets x y =
+#ifdef __GHCJS__
+    not_equal_js x y
+#else
+    return True
+#endif
+
+#ifdef __GHCJS__
+foreign import javascript unsafe
     "$1.contains($2)" contains_js :: JSV -> JSV -> IO Bool
 #endif
 
@@ -318,3 +331,29 @@ mergeMappings' prev next = reverse result
             mergePrev (nkp,pks) (k@(flip lookup next -> Nothing),_) = (nkp,k:pks)
             mergePrev (nkp,[]) (k,_)  = (nkp,[])
             mergePrev (nkp,pks) (k,_) = ((k,reverse pks):nkp,[])
+
+#ifdef __GHCJS__
+foreign import javascript unsafe
+    "document.body.classList.add($1)" addBodyClass_js :: Txt -> IO ()
+#endif
+
+addBodyClass :: MonadIO c => Txt -> c ()
+addBodyClass c =
+#ifdef __GHCJS__
+    liftIO $ addBodyClass_js c
+#else
+    return ()
+#endif
+
+#ifdef __GHCJS__
+foreign import javascript unsafe
+    "document.body.classList.remove($1)" removeBodyClass_js :: Txt -> IO ()
+#endif
+
+removeBodyClass :: MonadIO c => Txt -> c ()
+removeBodyClass c =
+#ifdef __GHCJS__
+    liftIO $ removeBodyClass_js c
+#else
+    return ()
+#endif
