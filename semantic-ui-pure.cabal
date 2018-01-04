@@ -119,6 +119,7 @@ library
     Semantic.Modules.Checkbox
     Semantic.Modules.Dimmer
     Semantic.Modules.Dimmer.DimmerDimmable
+    Semantic.Modules.Modal
     Semantic.Modules.Transition
     Semantic.Modules.Transition.TransitionGroup
     Semantic.Properties

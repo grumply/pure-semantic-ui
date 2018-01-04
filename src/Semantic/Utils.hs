@@ -357,3 +357,29 @@ removeBodyClass c =
 #else
     return ()
 #endif
+
+#ifdef __GHCJS__
+foreign import javascript unsafe
+    "$1.classList.add($2)" addClass_js :: JSV -> Txt -> IO ()
+#endif
+
+addClass :: MonadIO c => JSV -> Txt -> c ()
+addClass n c =
+#ifdef __GHCJS__
+    liftIO $ addClass_js n c
+#else
+    return ()
+#endif
+
+#ifdef __GHCJS__
+foreign import javascript unsafe
+    "$1.classList.remove($2)" removeClass_js :: JSV -> Txt -> IO ()
+#endif
+
+removeClass :: MonadIO c => JSV -> Txt -> c ()
+removeClass n c =
+#ifdef __GHCJS__
+    liftIO $ removeClass_js n c
+#else
+    return ()
+#endif
