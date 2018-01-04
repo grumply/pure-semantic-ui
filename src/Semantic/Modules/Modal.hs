@@ -1,5 +1,5 @@
 {-# LANGUAGE UndecidableInstances #-}
-module Semantic.Modules.Modal where
+module Semantic.Modules.Modal (module Semantic.Modules.Modal, module Export) where
 
 import Data.IORef
 import Data.Maybe
@@ -31,10 +31,14 @@ import Semantic.Properties.Basic
 import Semantic.Properties.CloseOnDimmerClick
 import Semantic.Properties.DefaultOpen
 import Semantic.Properties.DimmerType
-import Semantic.Properties.OnActionClick
 import Semantic.Properties.Size
 import Semantic.Properties.Styles
 import Semantic.Properties.WithPortal
+
+import Semantic.Modules.Modal.ModalActions as Export
+import Semantic.Modules.Modal.ModalContent as Export
+import Semantic.Modules.Modal.ModalDescription as Export
+import Semantic.Modules.Modal.ModalHeader as Export
 
 data Modal ms = Modal_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -47,7 +51,6 @@ data Modal ms = Modal_
     , defaultOpen :: Bool
     , dimmer :: Maybe Txt
     , mountNode :: Maybe JSV
-    , onActionClick :: Ef ms IO ()
     , onClose :: Ef ms IO ()
     , onMount :: Ef ms IO ()
     , onOpen :: Ef ms IO ()
@@ -248,11 +251,6 @@ instance HasDimmerTypeProp (Modal ms) where
 instance HasMountNodeProp (Modal ms) where
     getMountNode = mountNode
     setMountNode mn m = m { mountNode = mn }
-
-instance HasOnActionClickProp (Modal ms) where
-    type OnActionClickProp (Modal ms) = Ef ms IO ()
-    getOnActionClick = onActionClick
-    setOnActionClick oac m = m { onActionClick = oac }
 
 instance HasOnCloseProp (Modal ms) where
     type OnCloseProp (Modal ms) = Ef ms IO ()

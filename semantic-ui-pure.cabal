@@ -120,6 +120,7 @@ library
     Semantic.Modules.Dimmer
     Semantic.Modules.Dimmer.DimmerDimmable
     Semantic.Modules.Modal
+    Semantic.Modules.Modal.ModalActions
     Semantic.Modules.Transition
     Semantic.Modules.Transition.TransitionGroup
     Semantic.Properties
@@ -212,7 +213,6 @@ library
     Semantic.Properties.Name
     Semantic.Properties.Negative
     Semantic.Properties.Offset
-    Semantic.Properties.OnActionClick
     Semantic.Properties.OnBottomPassed
     Semantic.Properties.OnBottomPassedReverse
     Semantic.Properties.OnBottomVisible
