@@ -212,6 +212,7 @@ library
     Semantic.Properties.OnBottomVisibleReverse
     Semantic.Properties.Once
     Semantic.Properties.OnChange
+    Semantic.Properties.OnClickOutside
     Semantic.Properties.OnClick
     Semantic.Properties.OnClose
     Semantic.Properties.OnComputer
@@ -246,6 +247,7 @@ library
     Semantic.Properties.OpenOnTriggerMouseEnter
     Semantic.Properties.Ordered
     Semantic.Properties.Padded
+    Semantic.Properties.Page
     Semantic.Properties.Pagination
     Semantic.Properties.Piled
     Semantic.Properties.Pointing
@@ -268,6 +270,7 @@ library
     Semantic.Properties.Section
     Semantic.Properties.Selectable
     Semantic.Properties.Selection
+    Semantic.Properties.Simple
     Semantic.Properties.SingleLine
     Semantic.Properties.Size
     Semantic.Properties.Slider

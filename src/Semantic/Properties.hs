@@ -94,6 +94,7 @@ import Semantic.Properties.OnBottomVisibleReverse as Export
 import Semantic.Properties.Once as Export
 import Semantic.Properties.OnChange as Export
 import Semantic.Properties.OnClick as Export
+import Semantic.Properties.OnClickOutside as Export
 import Semantic.Properties.OnClose as Export
 import Semantic.Properties.OnComplete as Export
 import Semantic.Properties.OnComputer as Export
@@ -127,6 +128,7 @@ import Semantic.Properties.OpenOnTriggerMouseEnter as Export
 import Semantic.Properties.OnWidescreen as Export
 import Semantic.Properties.Ordered as Export
 import Semantic.Properties.Padded as Export
+import Semantic.Properties.Page as Export
 import Semantic.Properties.Pagination as Export
 import Semantic.Properties.Piled as Export
 import Semantic.Properties.Pointing as Export
@@ -149,6 +151,7 @@ import Semantic.Properties.Secondary as Export
 import Semantic.Properties.Section as Export
 import Semantic.Properties.Selectable as Export
 import Semantic.Properties.Selection as Export
+import Semantic.Properties.Simple as Export
 import Semantic.Properties.SingleLine as Export
 import Semantic.Properties.Size as Export
 import Semantic.Properties.Slider as Export
