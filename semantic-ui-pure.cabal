@@ -50,6 +50,7 @@ library
     Semantic.Addons.Proxy
     Semantic.Addons.Responsive
     Semantic.Addons.TextArea
+    Semantic.Addons.TransitionablePortal
     Semantic.Behaviors
     Semantic.Behaviors.Visibility
     Semantic.Collections

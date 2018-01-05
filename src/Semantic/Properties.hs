@@ -211,6 +211,7 @@ import Semantic.Properties.Width as Export
 import Semantic.Properties.Widths as Export
 import Semantic.Properties.WithModal as Export
 import Semantic.Properties.WithPortal as Export
+import Semantic.Properties.WithTransition as Export
 import Semantic.Properties.WithRef as Export
 import Semantic.Properties.Wrapped as Export
 
