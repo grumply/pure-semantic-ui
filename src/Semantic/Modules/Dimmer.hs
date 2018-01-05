@@ -98,7 +98,7 @@ instance VC ms => Pure Dimmer ms where
 
                             dimmer = 
                                 as 
-                                    ( ClassList cs
+                                    ( mergeClasses $ ClassList cs
                                     : On "click" def (return . Just . handleClick)
                                     : attributes
                                     )

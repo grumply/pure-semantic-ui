@@ -57,7 +57,7 @@ instance Typeable ms => Pure Step ms where
                 )
         in
             e
-                ( ClassList cs 
+                ( mergeClasses $ ClassList cs 
                 : ref
                 : onClick # (disabled #! On "click" def (\_ -> return $ Just onClick))
                 : attributes

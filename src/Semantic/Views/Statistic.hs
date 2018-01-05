@@ -52,7 +52,7 @@ instance Typeable ms => Pure Statistic ms where
                 )
         in
             as
-                ( ClassList cs
+                ( mergeClasses $ ClassList cs
                 : attributes
                 )
                 children

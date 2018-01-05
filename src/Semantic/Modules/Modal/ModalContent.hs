@@ -39,7 +39,7 @@ instance Typeable ms => Pure ModalContent ms where
 
         in
             as
-                ( ClassList cs
+                ( mergeClasses $ ClassList cs
                 : attributes
                 ) 
                 children

@@ -51,7 +51,7 @@ instance Typeable ms => Pure SegmentGroup ms where
                 )
         in
             as
-                ( ClassList cs
+                ( mergeClasses $ ClassList cs
                 : attributes 
                 )
                 children

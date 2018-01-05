@@ -69,7 +69,7 @@ instance Typeable ms => Pure Form ms where
                 )
         in
             as
-                ( ClassList cs
+                ( mergeClasses $ ClassList cs
                 : Prop "action" action
                 : onSubmit # (On "submit" def { preventDef = True } (\_ -> return $ Just onSubmit))
                 : attributes

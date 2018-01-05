@@ -42,7 +42,7 @@ instance Typeable ms => Pure BreadcrumbSection ms where
                 )
         in
             e
-                ( ClassList cs
+                ( mergeClasses $ ClassList cs
                 : ref
                 : onClick # (On "click" def (\_ -> return $ Just onClick))
                 : attributes

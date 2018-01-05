@@ -123,7 +123,7 @@ instance Typeable ms => Pure Input ms where
                 )
         in
             as
-                ( ClassList cs
+                ( mergeClasses $ ClassList cs
                 : otherAttrs
                 )
                 ( map addInputProps children )

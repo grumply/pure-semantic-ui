@@ -58,7 +58,7 @@ instance VC ms => Pure Confirm ms where
         in Modal $ withModal $ def & Size "small" & OnClose onCancel & Children 
             [ ModalHeader header 
             , ModalContent content
-            , ModalActions def & Children
+            , ModalActions $ def & Children
                 [ Button $ cancelButton & OnClick handleCancel
                 , Button $ confirmButton & Primary & OnClick handleConfirm 
                 ]

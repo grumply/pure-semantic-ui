@@ -32,7 +32,7 @@ instance Typeable ms => Pure StepDescription ms where
                 )
         in
             as
-                ( ClassList cs
+                ( mergeClasses $ ClassList cs
                 : attributes
                 )
                 children

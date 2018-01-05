@@ -88,7 +88,7 @@ instance Typeable ms => Pure Progress ms where
                 )
         in
             as
-                ( ClassList cs
+                ( mergeClasses $ ClassList cs
                 : attributes
                 )
                 [ Div [ ClassList [ "bar" ]

@@ -56,7 +56,7 @@ instance Typeable ms => Pure TableRow ms where
                 )
         in
             as
-                ( ClassList cs
+                ( mergeClasses $ ClassList cs
                 : attributes
                 )
                 children

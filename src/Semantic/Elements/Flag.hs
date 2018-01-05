@@ -33,7 +33,7 @@ instance Typeable ms => Pure Flag ms where
                 )
         in
             as
-                ( ClassList cs
+                ( mergeClasses $ ClassList cs
                 : attributes
                 )
                 []

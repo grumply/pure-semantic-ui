@@ -92,7 +92,7 @@ instance Typeable ms => Pure Label ms where
                 )
         in
             as 
-                ( ClassList cs
+                ( mergeClasses $ ClassList cs
                 : onClick # HTML.onClick onClick
                 : attributes
                 )

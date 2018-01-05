@@ -45,7 +45,7 @@ instance Typeable ms => Pure LabelGroup ms where
                 )
         in
             as 
-                ( ClassList cs
+                ( mergeClasses $ ClassList cs
                 : attributes
                 )
                 children

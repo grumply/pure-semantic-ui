@@ -88,7 +88,7 @@ instance Typeable ms => Pure ButtonGroup ms where
                 )
         in
             as
-                ( ClassList cs
+                ( mergeClasses $ ClassList cs
                 : attributes
                 )
                 children

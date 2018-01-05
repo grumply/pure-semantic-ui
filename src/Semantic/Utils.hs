@@ -160,6 +160,32 @@ contains node target =
     return True -- hmm?
 #endif
 
+{-# INLINE mergeClasses #-}
+mergeClasses :: [Feature ms] -> [Feature ms]
+mergeClasses = go []
+  where
+    go acc [] = [ Attribute "class" ( foldr (<<>>) mempty acc ) ]
+    go acc ( Attribute "class" cs : rest ) = go ( cs : acc ) rest
+    go acc ( f : fs ) = f : go acc fs
+
+-- Appends classes to the first ClassList feature only
+addClasses :: forall ms. ([Txt] -> [Txt]) -> View ms -> View ms
+addClasses f v =
+    case v of
+        ComponentView {..} -> ComponentView { componentView = cloneComponent . componentView, .. }
+        SomeView sv        -> addClasses f (render sv)
+        NullView {}        -> v
+        TextView {}        -> v
+        _                  -> v { features = go (features v) }
+    where
+        cloneComponent :: forall props state. Comp ms props state -> Comp ms props state
+        cloneComponent Comp {..} = Comp { renderer = \p s -> addClasses f (renderer p s), .. }
+
+        go [] = [ ClassList (f []) ]
+        go (ClassList cs : fs) = ClassList (f cs) : fs
+        go (f : fs) = f : go fs
+ 
+
 clone :: forall ms. ([Feature ms] -> [Feature ms]) -> View ms -> View ms
 clone f v =
     case v of

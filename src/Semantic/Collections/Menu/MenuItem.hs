@@ -68,7 +68,7 @@ instance Typeable ms => Pure MenuItem ms where
 
         in
             e
-                ( ClassList cs
+                ( mergeClasses $ ClassList cs
                 : onClick # (On "click" def (\_ -> return $ Just onClick))
                 : attributes
                 )

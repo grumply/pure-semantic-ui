@@ -32,7 +32,7 @@ instance Typeable ms => Pure AccordionAccordion ms where
                 )
         in
             as
-                ( ClassList cs
+                ( mergeClasses $ ClassList cs
                 : attributes
                 )
                 children

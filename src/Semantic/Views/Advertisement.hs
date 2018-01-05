@@ -42,7 +42,7 @@ instance Typeable ms => Pure Advertisement ms where
                 )
         in
             as
-                ( ClassList cs
+                ( mergeClasses $ ClassList cs
                 : test # (Property "data-text" test)
                 : attributes
                 )

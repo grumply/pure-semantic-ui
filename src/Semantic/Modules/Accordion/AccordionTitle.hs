@@ -39,7 +39,7 @@ instance Typeable ms => Pure AccordionTitle ms where
                 )
         in
             as
-                ( ClassList cs
+                ( mergeClasses $ ClassList cs
                 : onClick # (On "click" def $ \_ -> return (Just onClick))
                 : attributes
                 )

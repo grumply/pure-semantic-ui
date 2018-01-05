@@ -49,7 +49,7 @@ instance Typeable ms => Pure ListItem ms where
             valueProp = li ? HTML.Value value $ Prop "data-value" value
         in
             as
-                ( HTML.onClick onClick
+                ( mergeClasses $ HTML.onClick onClick
                 : valueProp
                 : ClassList cs
                 : Role "listitem"

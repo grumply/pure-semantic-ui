@@ -44,7 +44,7 @@ instance Typeable ms => Pure Reveal ms where
                 )
         in
             as
-                ( ClassList cs
+                ( mergeClasses $ ClassList cs
                 : attributes
                 )
                 children

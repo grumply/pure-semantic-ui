@@ -187,7 +187,7 @@ instance VC ms => Pure Modal ms where
                                     
                             in
                                 as
-                                    ( ClassList cs
+                                    ( mergeClasses $ ClassList cs
                                     : StyleList ss
                                     : HostRef handleRef
                                     : attributes

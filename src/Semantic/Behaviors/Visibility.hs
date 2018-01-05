@@ -268,7 +268,7 @@ instance Typeable ms => Pure Visibility ms where
 
                 , renderer = \Visibility_ {..} _ -> 
                     as 
-                        ( ClassList classes 
+                        ( mergeClasses $ ClassList classes 
                         : HostRef handleRef
                         : attributes
                         )

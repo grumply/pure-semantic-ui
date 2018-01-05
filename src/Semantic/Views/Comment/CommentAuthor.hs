@@ -32,7 +32,7 @@ instance Typeable ms => Pure CommentAuthor ms where
                 )
         in
             as
-                ( ClassList cs
+                ( mergeClasses $ ClassList cs
                 : attributes
                 )
                 children

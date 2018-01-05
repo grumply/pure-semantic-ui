@@ -154,7 +154,7 @@ instance Typeable ms => Pure Button ms where
                       , (labelPosition == "right") # label
                       ]
                   $ as
-                      ( ClassList cs
+                      ( mergeClasses $ ClassList cs
                       : (disabled && isButton) # HTML.Disabled True
                       : onClick # (On "click" def (\_ -> return $ Just onClick))
                       : Role "button"

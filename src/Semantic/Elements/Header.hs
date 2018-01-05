@@ -74,7 +74,7 @@ instance Typeable ms => Pure Header ms where
                 : classes
                 )
         in
-            as ( ClassList cs
+            as ( mergeClasses $ ClassList cs
                : attributes
                )
                children

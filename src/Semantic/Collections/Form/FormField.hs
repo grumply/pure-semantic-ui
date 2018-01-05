@@ -52,7 +52,7 @@ instance Typeable ms => Pure FormField ms where
                 )
         in
             as
-                ( ClassList cs
+                ( mergeClasses $ ClassList cs
                 : attributes
                 )
                 children

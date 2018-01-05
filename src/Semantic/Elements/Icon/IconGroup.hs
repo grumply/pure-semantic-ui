@@ -33,7 +33,7 @@ instance Typeable ms => Pure IconGroup ms where
                 : "icons"
                 : classes
                 )
-        in as (ClassList cs : attributes) children
+        in as (mergeClasses $ ClassList cs : attributes) children
 
 instance HasAsProp (IconGroup ms) where
     type AsProp (IconGroup ms) = [Feature ms] -> [View ms] -> View ms

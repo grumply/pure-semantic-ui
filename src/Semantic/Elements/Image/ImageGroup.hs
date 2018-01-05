@@ -34,7 +34,7 @@ instance Typeable ms => Pure ImageGroup ms where
                 : classes
                 ) ++ [ "images" ]
         in 
-            as (ClassList cs : attributes) children
+            as (mergeClasses $ ClassList cs : attributes) children
 
 instance HasAsProp (ImageGroup ms) where
     type AsProp (ImageGroup ms) = [Feature ms] -> [View ms] -> View ms

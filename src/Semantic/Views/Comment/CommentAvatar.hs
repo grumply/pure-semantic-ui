@@ -33,7 +33,7 @@ instance Typeable ms => Pure CommentAvatar ms where
                 )
         in
             as
-                ( ClassList cs
+                ( mergeClasses $ ClassList cs
                 : attributes
                 )
                 [Img [ HTML.Src src ] []] 

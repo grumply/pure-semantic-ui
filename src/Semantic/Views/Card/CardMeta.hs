@@ -35,7 +35,7 @@ instance Typeable ms => Pure CardMeta ms where
                 )
         in
             as
-                ( ClassList cs
+                ( mergeClasses $ ClassList cs
                 : attributes
                 )
                 children

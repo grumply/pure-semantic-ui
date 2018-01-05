@@ -81,7 +81,7 @@ instance Typeable ms => Pure Checkbox ms where
 
         in
             as
-                ( ClassList cs
+                ( mergeClasses $ ClassList cs
                 : On "change" def (\_ -> return $ Just (onChange cb))
                 : On "click" def (\_ -> return $ Just (onClick cb))
                 : On "mousedown" def (\_ -> return $ Just (onMouseDown cb))

@@ -48,7 +48,7 @@ instance Typeable ms => Pure TabPane ms where
                 )
         in
             as 
-                ( ClassList cs
+                ( mergeClasses $ ClassList cs
                 : attributes
                 )
                 children

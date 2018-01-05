@@ -78,7 +78,7 @@ instance Typeable ms => Pure Image ms where
                 )
         in
             as
-                ( ClassList cs
+                ( mergeClasses $ ClassList cs
                 : attributes
                 )
                 children

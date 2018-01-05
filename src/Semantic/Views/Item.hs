@@ -40,7 +40,7 @@ instance Typeable ms => Pure Item ms where
                 )
         in
             as
-                ( ClassList cs
+                ( mergeClasses $ ClassList cs
                 : attributes
                 )
                 children

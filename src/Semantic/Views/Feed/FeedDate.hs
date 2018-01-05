@@ -32,7 +32,7 @@ instance Typeable ms => Pure FeedDate ms where
                 )
         in
             as
-                ( ClassList cs
+                ( mergeClasses $ ClassList cs
                 : attributes
                 )
                 children

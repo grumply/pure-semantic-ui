@@ -34,7 +34,7 @@ instance Typeable ms => Pure ModalDescription ms where
 
         in
             as
-                ( ClassList cs
+                ( mergeClasses $ ClassList cs
                 : attributes
                 ) 
                 children

@@ -89,7 +89,7 @@ instance Typeable ms => Pure Message ms where
                 )
         in
             as
-                ( ClassList cs
+                ( mergeClasses $ ClassList cs
                 : attributes
                 )
                 ( dismissIcon : children )

@@ -72,7 +72,7 @@ instance Typeable ms => Pure ListIcon ms where
                 )
         in
             as
-                ( ClassList cs
+                ( mergeClasses $ ClassList cs
                 : Attr "aria-hidden" "true"
                 : attributes
                 )

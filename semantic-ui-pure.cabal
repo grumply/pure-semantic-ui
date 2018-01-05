@@ -133,6 +133,7 @@ library
     Semantic.Modules.Transition
     Semantic.Modules.Transition.TransitionGroup
     Semantic.Modules.Progress
+    Semantic.Modules.Sidebar
     Semantic.Properties
     Semantic.Properties.Action
     Semantic.Properties.Active
@@ -178,6 +179,7 @@ library
     Semantic.Properties.DefaultOpen
     Semantic.Properties.Dimmed
     Semantic.Properties.DimmerType
+    Semantic.Properties.Direction
     Semantic.Properties.Disabled
     Semantic.Properties.Divided
     Semantic.Properties.Dividing

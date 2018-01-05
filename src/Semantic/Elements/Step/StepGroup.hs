@@ -57,7 +57,7 @@ instance Typeable ms => Pure StepGroup ms where
                 )
         in
             as
-                ( ClassList cs
+                ( mergeClasses $ ClassList cs
                 : attributes
                 )
                 children

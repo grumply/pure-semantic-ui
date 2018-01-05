@@ -67,7 +67,7 @@ instance Typeable ms => Pure GridColumn ms where
                 )
         in
             as
-                ( ClassList cs
+                ( mergeClasses $ ClassList cs
                 : attributes
                 ) 
                 children
