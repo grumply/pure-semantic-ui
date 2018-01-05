@@ -41,6 +41,7 @@ instance Default (Confirm ms) where
         { cancelButton  = def & Children [ "Cancel" ]
         , confirmButton = def & Children [ "OK" ]
         , content       = def & Children [ "Are you sure?" ]
+        , withModal     = id
         }
     
 pattern Confirm :: VC ms => Confirm ms -> View ms
