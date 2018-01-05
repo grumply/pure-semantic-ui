@@ -204,7 +204,6 @@ import Semantic.Properties.Visible as Export
 import Semantic.Properties.Warning as Export
 import Semantic.Properties.Width as Export
 import Semantic.Properties.Widths as Export
-import Semantic.Properties.WithCheckbox as Export
 import Semantic.Properties.WithModal as Export
 import Semantic.Properties.WithPortal as Export
 import Semantic.Properties.WithRef as Export

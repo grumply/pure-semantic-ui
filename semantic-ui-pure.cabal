@@ -48,7 +48,7 @@ library
     Semantic.Addons.Confirm
     Semantic.Addons.Portal
     Semantic.Addons.Proxy
-    Semantic.Addons.Radio
+    Semantic.Addons.Responsive
     Semantic.Behaviors
     Semantic.Behaviors.Visibility
     Semantic.Collections
@@ -217,7 +217,9 @@ library
     Semantic.Properties.Link
     Semantic.Properties.Loading
     Semantic.Properties.Localize
+    Semantic.Properties.MaxWidth
     Semantic.Properties.Minimal
+    Semantic.Properties.MinWidth
     Semantic.Properties.MountNode
     Semantic.Properties.MountOnShow
     Semantic.Properties.MouseEnterDelay
@@ -332,7 +334,6 @@ library
     Semantic.Properties.Warning
     Semantic.Properties.Width
     Semantic.Properties.Widths
-    Semantic.Properties.WithCheckbox
     Semantic.Properties.WithModal
     Semantic.Properties.WithPortal
     Semantic.Properties.WithRef

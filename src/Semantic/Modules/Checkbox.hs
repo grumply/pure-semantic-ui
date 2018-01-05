@@ -55,6 +55,9 @@ instance Default (Checkbox ms) where
 pattern Checkbox :: Typeable ms => Checkbox ms -> View ms
 pattern Checkbox c = View c
 
+pattern Radio :: Typeable ms => Checkbox ms -> View ms
+pattern Radio r = View (Type "radio" (IsRadio r))
+
 renderChecked Checked = HTML.Checked True
 renderChecked Indeterminate = HTML.Checked False
 renderChecked Unchecked = nil

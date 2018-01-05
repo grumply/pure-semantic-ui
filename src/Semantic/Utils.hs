@@ -269,6 +269,20 @@ innerHeight =
     return 0
 #endif
 
+#ifdef __GHCJS__
+foreign import javascript unsafe 
+    "window.innerWidth" innerWidth_js :: IO Int
+#endif
+
+innerWidth :: MonadIO c => c Int
+innerWidth =
+#ifdef __GHCJS__
+    liftIO innerWidth_js
+#else
+    return 0
+#endif
+
+
 -- This is hideous; functionalize.
 {-# INLINE mergeMappings #-}
 mergeMappings :: Eq a => [(a,b)] -> [(a,b)] -> [(a,b)]
