@@ -54,3 +54,42 @@ instance VC ms => Pure Confirm ms where
                 , Button $ confirmButton & Primary & OnClick handleConfirm 
                 ]
             ]
+
+instance HasOpenProp (Confirm ms) where
+    getOpen = open
+    setOpen o c = c { open = o }
+
+instance HasCancelButtonProp (Confirm ms) where
+    type CancelButtonProp (Confirm ms) = Button ms
+    getCancelButton = cancelButton
+    setCancelButton cb c = c { cancelButton = cb }
+
+instance HasConfirmButtonProp (Confirm ms) where
+    type ConfirmButtonProp (Confirm ms) = Button ms
+    getConfirmButton = confirmButton
+    setConfirmButton cb c = c { confirmButton = cb }
+
+instance HasHeaderProp (Confirm ms) where
+    type HeaderProp (Confirm ms) = ModalHeader ms
+    getHeader = header
+    setHeader h c = c { header = h }
+
+instance HasContentProp (Confirm ms) where
+    type ContentProp (Confirm ms) = ModalContent ms
+    getContent = content
+    setContent con c = c { content = con }
+
+instance HasOnCancelProp (Confirm ms) where
+    type OnCancelProp (Confirm ms) = Ef ms IO ()
+    getOnCancel = onCancel
+    setOnCancel oc c = c { onCancel = oc }
+
+instance HasOnConfirmProp (Confirm ms) where
+    type OnConfirmProp (Confirm ms) = Ef ms IO ()
+    getOnConfirm = onConfirm
+    setOnConfirm oc c = c { onConfirm = oc }
+
+instance HasWithModalProp (Confirm ms) where
+    type WithModalProp (Confirm ms) = Modal ms -> Modal ms
+    getWithModal = withModal
+    setWithModal wm c = c { withModal = wm }
