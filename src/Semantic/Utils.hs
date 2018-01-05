@@ -257,6 +257,19 @@ boundingRect node = do
 #endif
 
 #ifdef __GHCJS__
+foreign import javascript unsafe
+    "window.getComputedStyle($1)" computed_styles_js :: Element -> IO Obj
+#endif
+
+computedStyles :: MonadIO c => Element -> c Obj
+computedStyles node = do
+#ifdef __GHCJS__
+    liftIO $ computed_styles_js node
+#else
+    return mempty
+#endif
+
+#ifdef __GHCJS__
 foreign import javascript unsafe 
     "window.innerHeight" innerHeight_js :: IO Int
 #endif
@@ -396,4 +409,31 @@ removeClass n c =
     liftIO $ removeClass_js n c
 #else
     return ()
+#endif
+
+#ifdef __GHCJS__
+foreign import javascript unsafe
+    "$1.style[$2]" get_style_js :: Element -> Txt -> IO Txt
+#endif
+
+getStyle :: MonadIO c => Element -> Txt -> c (Maybe Txt)
+getStyle e s = do
+#ifdef __GHCJS__
+    s <- liftIO $ get_style_js e s
+    return (isNull s ? Nothing $ Just s)
+#else
+    return mempty
+#endif
+
+#ifdef __GHCJS__
+foreign import javascript unsafe
+    "$1.scrollHeight" scrollHeight_js :: Element -> IO Int
+#endif
+
+scrollHeight :: MonadIO c => Element -> c Int
+scrollHeight e = do
+#ifdef __GHCJS__
+    liftIO $ scrollHeight_js e
+#else
+    return 0
 #endif
