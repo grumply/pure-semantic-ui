@@ -10,6 +10,7 @@ import Semantic.Properties.AnimationDuration as Export
 import Semantic.Properties.As as Export
 import Semantic.Properties.Attached as Export
 import Semantic.Properties.Attributes as Export
+import Semantic.Properties.AutoHeight as Export
 import Semantic.Properties.AutoSuccess as Export
 import Semantic.Properties.Avatar as Export
 import Semantic.Properties.Basic as Export
@@ -112,6 +113,7 @@ import Semantic.Properties.OnCancel as Export
 import Semantic.Properties.OnConfirm as Export
 import Semantic.Properties.OnDismiss as Export
 import Semantic.Properties.OnHide as Export
+import Semantic.Properties.OnInput as Export
 import Semantic.Properties.OnLargeScreen as Export
 import Semantic.Properties.Only as Export
 import Semantic.Properties.OnMobile as Export
@@ -160,6 +162,7 @@ import Semantic.Properties.Reversed as Export
 import Semantic.Properties.Ribbon as Export
 import Semantic.Properties.Rotated as Export
 import Semantic.Properties.Rounded as Export
+import Semantic.Properties.Rows as Export
 import Semantic.Properties.Scrolling as Export
 import Semantic.Properties.Secondary as Export
 import Semantic.Properties.Section as Export

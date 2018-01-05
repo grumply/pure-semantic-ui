@@ -3,11 +3,23 @@ module Semantic.Addons.TextArea where
 
 import Data.IORef
 import GHC.Generics as G
-import Pure.View as HTML hiding (focus,value)
+import Pure.View hiding (focus,value,onInput)
+import qualified Pure.View as HTML
 import Pure.Lifted (setStyle,removeStyle,focusNode,JSV,Node(..),Element(..))
 
 import Semantic.Utils
 import qualified Semantic.Utils as Utils
+
+import Semantic.Properties.As
+import Semantic.Properties.Attributes
+import Semantic.Properties.Classes
+import Semantic.Properties.AutoHeight
+import Semantic.Properties.OnChange
+import Semantic.Properties.OnInput
+import Semantic.Properties.Rows
+import Semantic.Properties.Styles
+import Semantic.Properties.Value
+import Semantic.Properties.Focus
 
 data TextArea ms = TextArea_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -87,11 +99,14 @@ instance VC ms => Pure TextArea ms where
 
             in def
                 { construct = TAS <$> newIORef def
+
                 , mounted = updateHeight
+
                 , receiveProps = \newprops oldstate -> do
                     oldprops <- getProps self
                     when (not (focus oldprops) && focus newprops) handleFocus
                     return oldstate
+
                 , updated = \oldprops oldstate _ -> do
                     props <- getProps self
 
@@ -115,3 +130,47 @@ instance VC ms => Pure TextArea ms where
 
 
                 }
+
+instance HasAsProp (TextArea ms) where
+    type AsProp (TextArea ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs f ta = ta { as = f }
+
+instance HasAttributesProp (TextArea ms) where
+    type Attribute (TextArea ms) = Feature ms
+    getAttributes = attributes 
+    setAttributes cs ta = ta { attributes = cs }
+
+instance HasClassesProp (TextArea ms) where
+    getClasses = classes
+    setClasses cs ta = ta { classes = cs }
+
+instance HasAutoHeightProp (TextArea ms) where
+    getAutoHeight = autoHeight
+    setAutoHeight ah ta = ta { autoHeight = ah }
+
+instance HasOnChangeProp (TextArea ms) where
+    type OnChangeProp (TextArea ms) = Txt -> Ef ms IO ()
+    getOnChange = onChange
+    setOnChange oc ta = ta { onChange = oc }
+
+instance HasOnInputProp (TextArea ms) where
+    type OnInputProp (TextArea ms) = Txt -> Ef ms IO ()
+    getOnInput = onInput
+    setOnInput oi ta = ta { onInput = oi }
+
+instance HasRowsProp (TextArea ms) where
+    getRows = rows
+    setRows r ta = ta { rows = r }
+
+instance HasStylesProp (TextArea ms) where
+    getStyles = styles
+    setStyles ss ta = ta { styles = ss }
+
+instance HasValueProp (TextArea ms) where
+    getValue = value
+    setValue v ta = ta { value = v }
+
+instance HasFocusProp (TextArea ms) where
+    getFocus = focus
+    setFocus f ta = ta { focus = f }

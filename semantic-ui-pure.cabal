@@ -141,6 +141,7 @@ library
     Semantic.Properties.As
     Semantic.Properties.Attached
     Semantic.Properties.Attributes
+    Semantic.Properties.AutoHeight
     Semantic.Properties.AutoSuccess
     Semantic.Properties.Avatar
     Semantic.Properties.Basic
@@ -243,6 +244,7 @@ library
     Semantic.Properties.OnConfirm
     Semantic.Properties.OnDismiss
     Semantic.Properties.OnHide
+    Semantic.Properties.OnInput
     Semantic.Properties.OnLargeScreen
     Semantic.Properties.Only
     Semantic.Properties.OnMobile
@@ -291,6 +293,7 @@ library
     Semantic.Properties.Ribbon
     Semantic.Properties.Rotated
     Semantic.Properties.Rounded
+    Semantic.Properties.Rows
     Semantic.Properties.Scrolling
     Semantic.Properties.Secondary
     Semantic.Properties.Section
