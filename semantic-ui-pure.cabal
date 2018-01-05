@@ -233,6 +233,8 @@ library
     Semantic.Properties.OnClose
     Semantic.Properties.OnComputer
     Semantic.Properties.OnComplete
+    Semantic.Properties.OnCancel
+    Semantic.Properties.OnConfirm
     Semantic.Properties.OnDismiss
     Semantic.Properties.OnHide
     Semantic.Properties.OnLargeScreen
@@ -328,6 +330,7 @@ library
     Semantic.Properties.Warning
     Semantic.Properties.Width
     Semantic.Properties.Widths
+    Semantic.Properties.WithModal
     Semantic.Properties.WithPortal
     Semantic.Properties.WithRef
     Semantic.Properties.Wrapped

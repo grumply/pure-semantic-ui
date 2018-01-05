@@ -1,6 +1,7 @@
 {-# LANGUAGE UndecidableInstances #-}
 module Semantic.Addons.Confirm where
 
+import Control.Arrow ((&&&))
 import GHC.Generics as G
 import Pure.View hiding (content,Button,Size,OnClose,OnClick)
 
@@ -16,6 +17,13 @@ import Semantic.Properties.Primary
 import Semantic.Properties.Size
 
 import Semantic.Properties.Children
+
+import Semantic.Properties.Open
+import Semantic.Properties.OnCancel
+import Semantic.Properties.OnConfirm
+import Semantic.Properties.CancelButton
+import Semantic.Properties.ConfirmButton
+import Semantic.Properties.WithModal
 
 data Confirm ms = Confirm_
     { cancelButton :: Button ms
@@ -69,15 +77,13 @@ instance HasConfirmButtonProp (Confirm ms) where
     getConfirmButton = confirmButton
     setConfirmButton cb c = c { confirmButton = cb }
 
-instance HasHeaderProp (Confirm ms) where
-    type HeaderProp (Confirm ms) = ModalHeader ms
-    getHeader = header
-    setHeader h c = c { header = h }
+pattern ConfirmHeader :: ModalHeader ms -> Confirm ms -> Confirm ms
+pattern ConfirmHeader mh c <- (header &&& id -> (mh,c)) where
+    ConfirmHeader mh c = c { header = mh }
 
-instance HasContentProp (Confirm ms) where
-    type ContentProp (Confirm ms) = ModalContent ms
-    getContent = content
-    setContent con c = c { content = con }
+pattern ConfirmContent :: ModalContent ms -> Confirm ms -> Confirm ms
+pattern ConfirmContent mc c <- (content &&& id -> (mc,c)) where
+    ConfirmContent mc c = c { content = mc }
 
 instance HasOnCancelProp (Confirm ms) where
     type OnCancelProp (Confirm ms) = Ef ms IO ()

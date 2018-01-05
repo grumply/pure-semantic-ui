@@ -105,6 +105,8 @@ import Semantic.Properties.OnClickOutside as Export
 import Semantic.Properties.OnClose as Export
 import Semantic.Properties.OnComplete as Export
 import Semantic.Properties.OnComputer as Export
+import Semantic.Properties.OnCancel as Export
+import Semantic.Properties.OnConfirm as Export
 import Semantic.Properties.OnDismiss as Export
 import Semantic.Properties.OnHide as Export
 import Semantic.Properties.OnLargeScreen as Export
@@ -202,6 +204,7 @@ import Semantic.Properties.Visible as Export
 import Semantic.Properties.Warning as Export
 import Semantic.Properties.Width as Export
 import Semantic.Properties.Widths as Export
+import Semantic.Properties.WithModal as Export
 import Semantic.Properties.WithPortal as Export
 import Semantic.Properties.WithRef as Export
 import Semantic.Properties.Wrapped as Export
