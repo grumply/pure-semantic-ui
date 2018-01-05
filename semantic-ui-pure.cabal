@@ -341,6 +341,7 @@ library
     Semantic.Properties.Widths
     Semantic.Properties.WithModal
     Semantic.Properties.WithPortal
+    Semantic.Properties.WithTransition
     Semantic.Properties.WithRef
     Semantic.Properties.Wrapped
     Semantic.Utils
