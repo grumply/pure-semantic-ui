@@ -332,6 +332,7 @@ library
     Semantic.Properties.Warning
     Semantic.Properties.Width
     Semantic.Properties.Widths
+    Semantic.Properties.WithCheckbox
     Semantic.Properties.WithModal
     Semantic.Properties.WithPortal
     Semantic.Properties.WithRef

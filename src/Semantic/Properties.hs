@@ -79,6 +79,7 @@ import Semantic.Properties.IsHeader as Export
 import Semantic.Properties.IsIcon as Export
 import Semantic.Properties.IsImage as Export
 import Semantic.Properties.IsIndeterminate as Export
+import Semantic.Properties.IsRadio as Export
 import Semantic.Properties.IsText as Export
 import Semantic.Properties.ItemsPerRow as Export
 import Semantic.Properties.Labeled as Export
@@ -147,7 +148,6 @@ import Semantic.Properties.Positive as Export
 import Semantic.Properties.Precision as Export
 import Semantic.Properties.Prepend as Export
 import Semantic.Properties.Primary as Export
-import Semantic.Properties.Radio as Export
 import Semantic.Properties.Raised as Export
 import Semantic.Properties.ReadOnly as Export
 import Semantic.Properties.Ref as Export
@@ -204,6 +204,7 @@ import Semantic.Properties.Visible as Export
 import Semantic.Properties.Warning as Export
 import Semantic.Properties.Width as Export
 import Semantic.Properties.Widths as Export
+import Semantic.Properties.WithCheckbox as Export
 import Semantic.Properties.WithModal as Export
 import Semantic.Properties.WithPortal as Export
 import Semantic.Properties.WithRef as Export
