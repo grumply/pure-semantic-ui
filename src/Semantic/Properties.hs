@@ -87,7 +87,9 @@ import Semantic.Properties.LabelPosition as Export
 import Semantic.Properties.Link as Export
 import Semantic.Properties.Loading as Export
 import Semantic.Properties.Localize as Export
+import Semantic.Properties.MaxWidth as Export
 import Semantic.Properties.Minimal as Export
+import Semantic.Properties.MinWidth as Export
 import Semantic.Properties.MountNode as Export
 import Semantic.Properties.MountOnShow as Export
 import Semantic.Properties.MouseEnterDelay as Export
