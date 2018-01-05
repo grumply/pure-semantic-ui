@@ -45,6 +45,7 @@ library
   exposed-modules:
     Semantic
     Semantic.Addons
+    Semantic.Addons.Confirm
     Semantic.Addons.Portal
     Semantic.Addons.Proxy
     Semantic.Behaviors
