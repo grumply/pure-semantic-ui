@@ -48,6 +48,7 @@ library
     Semantic.Addons.Confirm
     Semantic.Addons.Portal
     Semantic.Addons.Proxy
+    Semantic.Addons.Radio
     Semantic.Behaviors
     Semantic.Behaviors.Visibility
     Semantic.Collections
@@ -208,6 +209,7 @@ library
     Semantic.Properties.IsIcon
     Semantic.Properties.IsImage
     Semantic.Properties.IsIndeterminate
+    Semantic.Properties.IsRadio
     Semantic.Properties.IsText
     Semantic.Properties.ItemsPerRow
     Semantic.Properties.Labeled
@@ -276,7 +278,6 @@ library
     Semantic.Properties.Precision
     Semantic.Properties.Prepend
     Semantic.Properties.Primary
-    Semantic.Properties.Radio
     Semantic.Properties.Raised
     Semantic.Properties.ReadOnly
     Semantic.Properties.Ref

@@ -19,7 +19,7 @@ import Semantic.Properties.OnChange
 import Semantic.Properties.OnClick
 import Semantic.Properties.OnMouseDown
 import Semantic.Properties.WithRef
-import Semantic.Properties.Radio
+import Semantic.Properties.IsRadio
 import Semantic.Properties.ReadOnly
 import Semantic.Properties.Slider
 import Semantic.Properties.TabIndex
@@ -153,9 +153,9 @@ instance HasWithRefProp (Checkbox ms) where
     getWithRef = withRef
     setWithRef wr cb = cb { withRef = wr }
 
-instance HasRadioProp (Checkbox ms) where
-    getRadio = radio
-    setRadio r cb = cb { radio = r }
+instance HasIsRadioProp (Checkbox ms) where
+    getIsRadio = radio
+    setIsRadio r cb = cb { radio = r }
 
 instance HasReadOnlyProp (Checkbox ms) where
     getReadOnly = readOnly
