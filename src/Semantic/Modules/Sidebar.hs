@@ -18,6 +18,7 @@ import Semantic.Properties.Direction
 import Semantic.Properties.Visible
 import Semantic.Properties.Width
 
+import Semantic.Modules.Sidebar.SidebarPusher as Export
 import Semantic.Modules.Sidebar.SidebarPushable as Export
 
 data Sidebar ms = Sidebar_

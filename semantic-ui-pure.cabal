@@ -135,6 +135,7 @@ library
     Semantic.Modules.Progress
     Semantic.Modules.Sidebar
     Semantic.Modules.Sidebar.SidebarPushable
+    Semantic.Modules.Sidebar.SidebarPusher
     Semantic.Properties
     Semantic.Properties.Action
     Semantic.Properties.Active
