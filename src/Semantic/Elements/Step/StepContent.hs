@@ -3,7 +3,7 @@ module Semantic.Elements.Step.StepContent where
 import GHC.Generics as G
 import Pure.View
 
-import Semantic.Properties.Utils
+import Semantic.Utils
 
 import Semantic.Properties.As
 import Semantic.Properties.Attributes
