@@ -46,6 +46,7 @@ import Semantic.Properties.DefaultOpen as Export
 import Semantic.Properties.Definition as Export
 import Semantic.Properties.Dimmed as Export
 import Semantic.Properties.DimmerType as Export
+import Semantic.Properties.Direction as Export
 import Semantic.Properties.Disabled as Export
 import Semantic.Properties.Divided as Export
 import Semantic.Properties.Dividing as Export

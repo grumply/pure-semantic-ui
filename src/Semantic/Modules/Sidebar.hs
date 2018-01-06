@@ -9,6 +9,15 @@ import Semantic.Utils
 
 import Semantic.Properties.AnimationDuration
 
+import Semantic.Properties.As
+import Semantic.Properties.Attributes
+import Semantic.Properties.Children
+import Semantic.Properties.Classes
+import Semantic.Properties.Animation
+import Semantic.Properties.Direction
+import Semantic.Properties.Visible
+import Semantic.Properties.Width
+
 data Sidebar ms = Sidebar_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]
@@ -78,3 +87,43 @@ instance Typeable ms => Pure Sidebar ms where
                             )
                             children
                 }
+
+instance HasAsProp (Sidebar ms) where
+    type AsProp (Sidebar ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs f sb = sb { as = f }
+
+instance HasAttributesProp (Sidebar ms) where
+    type Attribute (Sidebar ms) = Feature ms
+    getAttributes = attributes 
+    setAttributes cs sb = sb { attributes = cs }
+
+instance HasChildrenProp (Sidebar ms) where
+    type Child (Sidebar ms) = View ms
+    getChildren = children
+    setChildren cs sb = sb { children = cs }
+
+instance HasClassesProp (Sidebar ms) where
+    getClasses = classes
+    setClasses cs sb = sb { classes = cs }
+
+instance HasAnimationProp (Sidebar ms) where
+    getAnimation = animation
+    setAnimation a sb = sb { animation = a }
+
+instance HasDirectionProp (Sidebar ms) where
+    getDirection = direction
+    setDirection d sb = sb { direction = d }
+
+instance HasAnimationDurationProp (Sidebar ms) where
+    getAnimationDuration = duration
+    setAnimationDuration d sb = sb { duration = d }
+
+instance HasVisibleProp (Sidebar ms) where
+    getVisible = visible
+    setVisible v sb = sb { visible = v }
+
+instance HasWidthProp (Sidebar ms) where
+    type WidthProp (Sidebar ms) = Txt
+    getWidth = width
+    setWidth w sb = sb { width = w }
