@@ -5,6 +5,11 @@ import Pure.View
 
 import Semantic.Utils
 
+import Semantic.Properties.As
+import Semantic.Properties.Attributes
+import Semantic.Properties.Children
+import Semantic.Properties.Classes
+
 data SidebarPushable ms = SidebarPushable_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]
@@ -32,3 +37,21 @@ instance Typeable ms => Pure SidebarPushable ms where
                 )
                 children
 
+instance HasAsProp (SidebarPushable ms) where
+    type AsProp (SidebarPushable ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs a sp = sp { as = a }
+
+instance HasAttributesProp (SidebarPushable ms) where
+    type Attribute (SidebarPushable ms) = Feature ms
+    getAttributes = attributes
+    setAttributes as sp = sp { attributes = as }
+
+instance HasChildrenProp (SidebarPushable ms) where
+    type Child (SidebarPushable ms) = View ms
+    getChildren = children
+    setChildren cs sp = sp { children = cs }
+
+instance HasClassesProp (SidebarPushable ms) where
+    getClasses = classes
+    setClasses cs sp = sp { classes = cs }
