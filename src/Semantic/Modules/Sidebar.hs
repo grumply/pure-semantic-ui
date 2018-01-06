@@ -1,4 +1,4 @@
-module Semantic.Modules.Sidebar where
+module Semantic.Modules.Sidebar (module Semantic.Modules.Sidebar, module Export) where
 
 import Control.Concurrent
 import Data.IORef
@@ -17,6 +17,8 @@ import Semantic.Properties.Animation
 import Semantic.Properties.Direction
 import Semantic.Properties.Visible
 import Semantic.Properties.Width
+
+import Semantic.Modules.Sidebar.SidebarPushable as Export
 
 data Sidebar ms = Sidebar_
     { as :: [Feature ms] -> [View ms] -> View ms

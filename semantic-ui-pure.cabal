@@ -134,6 +134,7 @@ library
     Semantic.Modules.Transition.TransitionGroup
     Semantic.Modules.Progress
     Semantic.Modules.Sidebar
+    Semantic.Modules.Sidebar.SidebarPushable
     Semantic.Properties
     Semantic.Properties.Action
     Semantic.Properties.Active
