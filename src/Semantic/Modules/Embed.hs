@@ -1,15 +1,33 @@
 {-# LANGUAGE UndecidableInstances #-}
 module Semantic.Modules.Embed where
 
+import Control.Arrow ((&&&))
 import GHC.Generics as G
-import Pure.View hiding (color,Name,Width)
+import Pure.View hiding (active,onClick,url,color,Name,Width)
 import Pure.Route (encodeURI)
 
-import Semantic.Utils
+import Semantic.Utils hiding (id)
 
 import Semantic.Elements.Icon
 
 import Semantic.Properties.Name
+
+import Semantic.Properties.As
+import Semantic.Properties.Attributes
+import Semantic.Properties.Children
+import Semantic.Properties.Classes
+import Semantic.Properties.Active
+import Semantic.Properties.AspectRatio
+import Semantic.Properties.Autoplay
+import Semantic.Properties.Branded
+import Semantic.Properties.Color
+import Semantic.Properties.DefaultActive
+import Semantic.Properties.OnClick
+import Semantic.Properties.Placeholder
+import Semantic.Properties.URL
+
+import Prelude hiding (id)
+import qualified Prelude
 
 data EmbedSource = YouTube | Vimeo | OtherSource Txt
 
@@ -128,3 +146,80 @@ instance VC ms => Pure Embed ms where
                             ]
 
                 }
+
+
+instance HasAsProp (Embed ms) where
+    type AsProp (Embed ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs a sp = sp { as = a }
+
+instance HasAttributesProp (Embed ms) where
+    type Attribute (Embed ms) = Feature ms
+    getAttributes = attributes
+    setAttributes as sp = sp { attributes = as }
+
+instance HasChildrenProp (Embed ms) where
+    type Child (Embed ms) = View ms
+    getChildren = children
+    setChildren cs sp = sp { children = cs }
+
+instance HasClassesProp (Embed ms) where
+    getClasses = classes
+    setClasses cs sp = sp { classes = cs }
+
+instance HasActiveProp (Embed ms) where
+    getActive = active
+    setActive a e = e { active = a }
+
+instance HasAspectRatioProp (Embed ms) where
+    getAspectRatio = aspectRatio
+    setAspectRatio ar e = e { aspectRatio = ar }
+
+instance HasAutoplayProp (Embed ms) where
+    getAutoplay = autoplay
+    setAutoplay a e = e { autoplay = a }
+
+instance HasBrandedProp (Embed ms) where
+    getBranded = branded
+    setBranded b e = e { branded = b }
+
+instance HasColorProp (Embed ms) where
+    getColor = color
+    setColor c e = e { color = c }
+
+instance HasDefaultActiveProp (Embed ms) where
+    getDefaultActive = defaultActive
+    setDefaultActive da e = e { defaultActive = da }
+
+pattern HD :: Embed ms -> Embed ms
+pattern HD e <- (hd &&& Prelude.id -> (True,e)) where
+    HD e = e { hd = True }
+
+pattern EmbedIcon :: Icon ms -> Embed ms -> Embed ms
+pattern EmbedIcon i e <- (icon &&& Prelude.id -> (i,e)) where
+    EmbedIcon i e = e { icon = i }
+
+pattern EmbedId :: Txt -> Embed ms -> Embed ms
+pattern EmbedId i e <- (id &&& Prelude.id -> (i,e)) where
+    EmbedId i e = e { id = i }
+
+pattern EmbedIframe :: [Feature ms] -> Embed ms -> Embed ms
+pattern EmbedIframe fs e <- (iframe &&& Prelude.id -> (fs,e)) where
+    EmbedIframe fs e = e { iframe = fs }
+
+instance HasOnClickProp (Embed ms) where
+    type OnClickProp (Embed ms) = Ef ms IO ()
+    getOnClick = onClick
+    setOnClick oc e = e { onClick = oc }
+
+instance HasPlaceholderProp (Embed ms) where
+    getPlaceholder = placeholder
+    setPlaceholder p e = e { placeholder = p }
+
+pattern EmbedSource :: EmbedSource -> Embed ms -> Embed ms
+pattern EmbedSource es e <- (source &&& Prelude.id -> (Just es,e)) where
+    EmbedSource es e = e { source = Just es }
+
+instance HasURLProp (Embed ms) where
+    getURL = url
+    setURL u e = e { url = u }

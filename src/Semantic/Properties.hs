@@ -8,9 +8,11 @@ import Semantic.Properties.Animated as Export
 import Semantic.Properties.Animation as Export
 import Semantic.Properties.AnimationDuration as Export
 import Semantic.Properties.As as Export
+import Semantic.Properties.AspectRatio as Export
 import Semantic.Properties.Attached as Export
 import Semantic.Properties.Attributes as Export
 import Semantic.Properties.AutoHeight as Export
+import Semantic.Properties.Autoplay as Export
 import Semantic.Properties.AutoSuccess as Export
 import Semantic.Properties.Avatar as Export
 import Semantic.Properties.Basic as Export
@@ -18,6 +20,7 @@ import Semantic.Properties.Block as Export
 import Semantic.Properties.Blurring as Export
 import Semantic.Properties.Bordered as Export
 import Semantic.Properties.Borderless as Export
+import Semantic.Properties.Branded as Export
 import Semantic.Properties.Bulleted as Export
 import Semantic.Properties.Celled as Export
 import Semantic.Properties.Centered as Export
@@ -42,6 +45,7 @@ import Semantic.Properties.Completed as Export
 import Semantic.Properties.Context as Export
 import Semantic.Properties.Continuous as Export
 import Semantic.Properties.Corner as Export
+import Semantic.Properties.DefaultActive as Export
 import Semantic.Properties.DefaultOpen as Export
 import Semantic.Properties.Definition as Export
 import Semantic.Properties.Dimmed as Export
@@ -147,6 +151,7 @@ import Semantic.Properties.Page as Export
 import Semantic.Properties.Pagination as Export
 import Semantic.Properties.Percent as Export
 import Semantic.Properties.Piled as Export
+import Semantic.Properties.Placeholder as Export
 import Semantic.Properties.Pointing as Export
 import Semantic.Properties.Position as Export
 import Semantic.Properties.Positive as Export
@@ -203,6 +208,7 @@ import Semantic.Properties.UI as Export
 import Semantic.Properties.Unit as Export
 import Semantic.Properties.UnmountOnHide as Export
 import Semantic.Properties.Unstackable as Export
+import Semantic.Properties.URL as Export
 import Semantic.Properties.Value as Export
 import Semantic.Properties.Vertical as Export
 import Semantic.Properties.VerticalAlign as Export

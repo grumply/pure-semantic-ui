@@ -144,9 +144,11 @@ library
     Semantic.Properties.Animation
     Semantic.Properties.AnimationDuration
     Semantic.Properties.As
+    Semantic.Properties.AspectRatio
     Semantic.Properties.Attached
     Semantic.Properties.Attributes
     Semantic.Properties.AutoHeight
+    Semantic.Properties.Autoplay
     Semantic.Properties.AutoSuccess
     Semantic.Properties.Avatar
     Semantic.Properties.Basic
@@ -154,6 +156,7 @@ library
     Semantic.Properties.Blurring
     Semantic.Properties.Bordered
     Semantic.Properties.Borderless
+    Semantic.Properties.Branded
     Semantic.Properties.Bulleted
     Semantic.Properties.Celled
     Semantic.Properties.Centered
@@ -179,6 +182,7 @@ library
     Semantic.Properties.Corner
     Semantic.Properties.Definition
     Semantic.Properties.Compact
+    Semantic.Properties.DefaultActive
     Semantic.Properties.DefaultOpen
     Semantic.Properties.Dimmed
     Semantic.Properties.DimmerType
@@ -283,6 +287,7 @@ library
     Semantic.Properties.Pagination
     Semantic.Properties.Percent
     Semantic.Properties.Piled
+    Semantic.Properties.Placeholder
     Semantic.Properties.Pointing
     Semantic.Properties.Position
     Semantic.Properties.Positive
@@ -335,6 +340,7 @@ library
     Semantic.Properties.Trigger
     Semantic.Properties.Type
     Semantic.Properties.UI
+    Semantic.Properties.URL
     Semantic.Properties.UnmountOnHide
     Semantic.Properties.Unstackable
     Semantic.Properties.Value
