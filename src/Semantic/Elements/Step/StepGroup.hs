@@ -50,7 +50,7 @@ instance Typeable ms => Pure StepGroup ms where
                 : unstackable # "unstackable"
                 : vertical # "vertical"
                 : may (<>> "attached") attached
-                : stackable # stackable <>> "stackable"
+                : stackable # (stackable <>> "stackable")
                 : widthProp widths def def
                 : "steps"
                 : classes

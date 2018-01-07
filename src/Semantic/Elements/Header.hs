@@ -63,7 +63,7 @@ instance Typeable ms => Pure Header ms where
                 : block # "block"
                 : disabled # "disabled"
                 : dividing # "dividing"
-                : floated # floated <<>> "floated"
+                : floated # (floated <<>> "floated")
                 : icon # "icon"
                 : image # "image"
                 : inverted # "inverted"
