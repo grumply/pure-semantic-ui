@@ -168,6 +168,7 @@ library
     Semantic.Properties.Children
     Semantic.Properties.Circular
     Semantic.Properties.Classes
+    Semantic.Properties.Clearable
     Semantic.Properties.Clearing
     Semantic.Properties.Close
     Semantic.Properties.CloseOnDimmerClick
@@ -185,9 +186,11 @@ library
     Semantic.Properties.Context
     Semantic.Properties.Continuous
     Semantic.Properties.Corner
+    Semantic.Properties.CurrentRating
     Semantic.Properties.Compact
     Semantic.Properties.DefaultActive
     Semantic.Properties.DefaultOpen
+    Semantic.Properties.DefaultRating
     Semantic.Properties.Definition
     Semantic.Properties.Dimmed
     Semantic.Properties.DimmerType
@@ -234,6 +237,7 @@ library
     Semantic.Properties.Link
     Semantic.Properties.Loading
     Semantic.Properties.Localize
+    Semantic.Properties.MaxRating
     Semantic.Properties.MaxWidth
     Semantic.Properties.Minimal
     Semantic.Properties.MinWidth
@@ -266,12 +270,14 @@ library
     Semantic.Properties.OnMobile
     Semantic.Properties.OnMount
     Semantic.Properties.OnMouseDown
+    Semantic.Properties.OnMouseEnter
     Semantic.Properties.OnOffScreen
     Semantic.Properties.OnOnScreen
     Semantic.Properties.OnOpen
     Semantic.Properties.OnPassed
     Semantic.Properties.OnPassing
     Semantic.Properties.OnPassingReverse
+    Semantic.Properties.OnRate
     Semantic.Properties.OnShow
     Semantic.Properties.OnStart
     Semantic.Properties.OnSubmit
@@ -315,6 +321,7 @@ library
     Semantic.Properties.Secondary
     Semantic.Properties.Section
     Semantic.Properties.Selectable
+    Semantic.Properties.Selected
     Semantic.Properties.Selection
     Semantic.Properties.Simple
     Semantic.Properties.SingleLine

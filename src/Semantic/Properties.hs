@@ -30,6 +30,7 @@ import Semantic.Properties.Centered as Export
 import Semantic.Properties.Children as Export
 import Semantic.Properties.Circular as Export
 import Semantic.Properties.Classes as Export
+import Semantic.Properties.Clearable as Export
 import Semantic.Properties.Clearing as Export
 import Semantic.Properties.Close as Export
 import Semantic.Properties.CloseOnDimmerClick as Export
@@ -48,8 +49,10 @@ import Semantic.Properties.Completed as Export
 import Semantic.Properties.Context as Export
 import Semantic.Properties.Continuous as Export
 import Semantic.Properties.Corner as Export
+import Semantic.Properties.CurrentRating as Export
 import Semantic.Properties.DefaultActive as Export
 import Semantic.Properties.DefaultOpen as Export
+import Semantic.Properties.DefaultRating as Export
 import Semantic.Properties.Definition as Export
 import Semantic.Properties.Dimmed as Export
 import Semantic.Properties.DimmerType as Export
@@ -96,6 +99,7 @@ import Semantic.Properties.LabelPosition as Export
 import Semantic.Properties.Link as Export
 import Semantic.Properties.Loading as Export
 import Semantic.Properties.Localize as Export
+import Semantic.Properties.MaxRating as Export
 import Semantic.Properties.MaxWidth as Export
 import Semantic.Properties.Minimal as Export
 import Semantic.Properties.MinWidth as Export
@@ -127,6 +131,7 @@ import Semantic.Properties.OnLargeScreen as Export
 import Semantic.Properties.Only as Export
 import Semantic.Properties.OnMobile as Export
 import Semantic.Properties.OnMouseDown as Export
+import Semantic.Properties.OnMouseEnter as Export
 import Semantic.Properties.OnMount as Export
 import Semantic.Properties.OnOffScreen as Export
 import Semantic.Properties.OnOnScreen as Export
@@ -134,6 +139,7 @@ import Semantic.Properties.OnOpen as Export
 import Semantic.Properties.OnPassed as Export
 import Semantic.Properties.OnPassing as Export
 import Semantic.Properties.OnPassingReverse as Export
+import Semantic.Properties.OnRate as Export
 import Semantic.Properties.OnShow as Export
 import Semantic.Properties.OnStart as Export
 import Semantic.Properties.OnSubmit as Export
@@ -177,6 +183,7 @@ import Semantic.Properties.Scrolling as Export
 import Semantic.Properties.Secondary as Export
 import Semantic.Properties.Section as Export
 import Semantic.Properties.Selectable as Export
+import Semantic.Properties.Selected as Export
 import Semantic.Properties.Selection as Export
 import Semantic.Properties.Simple as Export
 import Semantic.Properties.SingleLine as Export

@@ -16,6 +16,20 @@ import Semantic.Properties.Index
 import Semantic.Properties.OnClick
 import Semantic.Properties.OnMouseEnter
 import Semantic.Properties.Selected
+
+import Semantic.Properties.As
+import Semantic.Properties.Attributes
+import Semantic.Properties.Children
+import Semantic.Properties.Classes
+import Semantic.Properties.Clearable
+import Semantic.Properties.CurrentRating
+import Semantic.Properties.DefaultRating
+import Semantic.Properties.Disabled
+import Semantic.Properties.IsIcon
+import Semantic.Properties.MaxRating
+import Semantic.Properties.OnRate
+import Semantic.Properties.Size
+
 import Semantic.Modules.Rating.RatingIcon as Export
 
 data Rating ms = Rating_
@@ -122,3 +136,56 @@ instance VC ms => Pure Rating ms where
                                     & Selected (selectedIndex >= Just n && isSelecting)
                             )
                 }
+
+instance HasAsProp (Rating ms) where
+    type AsProp (Rating ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs a r = r { as = a }
+
+instance HasAttributesProp (Rating ms) where
+    type Attribute (Rating ms) = Feature ms
+    getAttributes = attributes
+    setAttributes as r = r { attributes = as }
+
+instance HasChildrenProp (Rating ms) where
+    type Child (Rating ms) = View ms
+    getChildren = children
+    setChildren cs r = r { children = cs }
+
+instance HasClassesProp (Rating ms) where
+    getClasses = classes
+    setClasses cs r = r { classes = cs }
+
+instance HasClearableProp (Rating ms) where
+    getClearable = clearable
+    setClearable c r = r { clearable = c }
+
+instance HasDefaultRatingProp (Rating ms) where
+    getDefaultRating = defaultRating
+    setDefaultRating dr r = r { defaultRating = dr }
+
+instance HasDisabledProp (Rating ms) where
+    getDisabled = disabled
+    setDisabled d r = r { disabled = d }
+
+instance HasIsIconProp (Rating ms) where
+    type IsIconProp (Rating ms) = Txt
+    getIsIcon = icon
+    setIsIcon i r = r { icon = i }
+
+instance HasMaxRatingProp (Rating ms) where
+    getMaxRating = maxRating
+    setMaxRating mr r = r { maxRating = mr }
+
+instance HasOnRateProp (Rating ms) where
+    type OnRateProp (Rating ms) = Maybe Int -> Ef ms IO ()
+    getOnRate = onRate
+    setOnRate or r = r { onRate = or }
+
+instance HasCurrentRatingProp (Rating ms) where
+    getCurrentRating = rating
+    setCurrentRating cr r = r { rating = cr }
+
+instance HasSizeProp (Rating ms) where
+    getSize = size
+    setSize s r = r { size = s }
