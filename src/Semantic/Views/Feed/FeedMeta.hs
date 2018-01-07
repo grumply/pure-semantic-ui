@@ -20,10 +20,10 @@ data FeedMeta ms = FeedMeta_
 instance Default (FeedMeta ms) where
     def = (G.to gdef) { as = Div }
 
-pattern FeedMeta :: Typeable ms => FeedMeta ms -> View ms
+pattern FeedMeta :: FeedMeta ms -> View ms
 pattern FeedMeta fm = View fm
 
-instance Typeable ms => Pure FeedMeta ms where
+instance Pure FeedMeta ms where
     render FeedMeta_ {..} =
         let
             cs =

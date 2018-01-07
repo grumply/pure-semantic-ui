@@ -46,10 +46,10 @@ data ListIcon ms = ListIcon_
 instance Default (ListIcon ms) where
     def = (G.to gdef) { as = I }
 
-pattern ListIcon :: Typeable ms => ListIcon ms -> View ms
+pattern ListIcon :: ListIcon ms -> View ms
 pattern ListIcon li = View li
 
-instance Typeable ms => Pure ListIcon ms where
+instance Pure ListIcon ms where
     render ListIcon_ {..} = 
         let
             cs =

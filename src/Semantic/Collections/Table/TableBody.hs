@@ -20,10 +20,10 @@ data TableBody ms = TableBody_
 instance Default (TableBody ms) where
     def = (G.to gdef) { as = Tbody }
 
-pattern TableBody :: Typeable ms => TableBody ms -> View ms
+pattern TableBody :: TableBody ms -> View ms
 pattern TableBody tb = View tb
 
-instance Typeable ms => Pure TableBody ms where
+instance Pure TableBody ms where
     render TableBody_ {..} =
         as
             ( ClassList classes

@@ -44,10 +44,10 @@ data GridColumn ms = GridColumn_
 instance Default (GridColumn ms) where
     def = (G.to gdef) { as = Div }
 
-pattern GridColumn :: Typeable ms => GridColumn ms -> View ms
+pattern GridColumn :: GridColumn ms -> View ms
 pattern GridColumn gc = View gc
 
-instance Typeable ms => Pure GridColumn ms where
+instance Pure GridColumn ms where
     render GridColumn_ {..} =
         let
             cs =

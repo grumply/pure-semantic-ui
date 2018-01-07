@@ -28,10 +28,10 @@ data Item ms = Item_
 instance Default (Item ms) where
     def = (G.to gdef) { as = Div }
 
-pattern Item :: Typeable ms => Item ms -> View ms
+pattern Item :: Item ms -> View ms
 pattern Item i = View i
 
-instance Typeable ms => Pure Item ms where
+instance Pure Item ms where
     render Item_ {..} =
         let
             cs =

@@ -22,10 +22,10 @@ data CardHeader ms = CardHeader_
 instance Default (CardHeader ms) where
     def = (G.to gdef) { as = Div }
 
-pattern CardHeader :: Typeable ms => CardHeader ms -> View ms
+pattern CardHeader :: CardHeader ms -> View ms
 pattern CardHeader ch = View ch 
 
-instance Typeable ms => Pure CardHeader ms where
+instance Pure CardHeader ms where
     render CardHeader_ {..} =
         let
             cs =

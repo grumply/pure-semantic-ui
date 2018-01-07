@@ -20,10 +20,10 @@ data CommentMetadata ms = CommentMetadata_
 instance Default (CommentMetadata ms) where
     def = (G.to gdef) { as = A }
 
-pattern CommentMetadata :: Typeable ms => CommentMetadata ms -> View ms
+pattern CommentMetadata :: CommentMetadata ms -> View ms
 pattern CommentMetadata cm = View cm
 
-instance Typeable ms => Pure CommentMetadata ms where
+instance Pure CommentMetadata ms where
     render CommentMetadata_ {..} =
         let
             cs =

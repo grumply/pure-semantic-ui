@@ -22,10 +22,10 @@ data SidebarPusher ms = SidebarPusher_
 instance Default (SidebarPusher ms) where
     def = (G.to gdef) { as = Div }
 
-pattern SidebarPusher :: Typeable ms => SidebarPusher ms -> View ms
+pattern SidebarPusher :: SidebarPusher ms -> View ms
 pattern SidebarPusher sp = View sp
 
-instance Typeable ms => Pure SidebarPusher ms where
+instance Pure SidebarPusher ms where
     render SidebarPusher_ {..} =
         let
             cs = 

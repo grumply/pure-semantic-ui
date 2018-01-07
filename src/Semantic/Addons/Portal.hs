@@ -8,7 +8,7 @@ import qualified Data.List as List
 import GHC.Generics as G
 import Pure.Data.Txt as Txt (unwords)
 import Pure.View hiding (active,trigger,Proxy)
-import Pure.Lifted (getDocument,append,getChild,removeNode,setProperty,create,insertAt,JSV,Node(..),Element(..),Doc(..))
+import Pure.Lifted (getDocument,append,getChild,removeNode,setProperty,create,insertAt,JSV,Node(..),Element(..),Doc(..),(.#))
 import Pure.DOM
 
 import Semantic.Utils
@@ -76,7 +76,7 @@ instance Default (Portal ms) where
             , openOnTriggerClick = True 
             }
 
-pattern Portal :: Typeable ms => Portal ms -> View ms
+pattern Portal :: Portal ms -> View ms
 pattern Portal p = View p
 
 data PortalState = PS
@@ -104,12 +104,12 @@ data PortalStateNodes = PSN
     , triggerNode :: Maybe JSV
     } deriving (Generic,Default)
 
-instance Typeable ms => Pure Portal ms where
+instance Pure Portal ms where
     render p =
         Component "Semantic.Addons.Portal" p $ \self -> 
             let
 
-                handleDocumentClick (parseMaybe (.: "target") -> Just (target :: Obj)) = do
+                handleDocumentClick ((.# "target") -> Just (target :: JSV)) = do
                     PS      {..} <- getState self
                     Portal_ {..} <- getProps self
                     PSN     {..} <- readIORef nodes
@@ -128,7 +128,7 @@ instance Typeable ms => Pure Portal ms where
                          ) closePortal
                 handleDocumentClick _ = return ()
 
-                handleEscape (parseMaybe (.: "keyCode") -> Just (27 :: Int)) = do
+                handleEscape ((.# "keyCode") -> Just (27 :: Int)) = do
                     Portal_ {..} <- getProps self
                     when closeOnEscape closePortal
                 handleEscape _ = return ()
@@ -150,7 +150,7 @@ instance Typeable ms => Pure Portal ms where
                     unless closeOnPortalMouseLeave $
                         for_ mouseLeaveTimer killThread
 
-                handleTriggerBlur (parseMaybe (.: "relatedTarget") -> Just (related :: Obj)) = do
+                handleTriggerBlur ((.# "relatedTarget") . evtObj -> Just (related :: JSV)) = do
                     Portal_ {..} <- getProps self
                     PS {..} <- getState self
                     PSN {..} <- readIORef nodes
@@ -305,7 +305,7 @@ instance Typeable ms => Pure Portal ms where
                         trigger #
                             (Proxy $ def & InnerRef handleRef & Children
                                 [ cloneWithProps trigger
-                                    [ On "blur" def (\e -> handleTriggerBlur (evtObj e) >> return Nothing)
+                                    [ On "blur" def (\e -> handleTriggerBlur e >> return Nothing)
                                     , On "click" def (\_ -> handleTriggerClick >> return Nothing)
                                     , On "focus" def (\_ -> handleTriggerFocus >> return Nothing)
                                     , On "mouseleave" def (\_ -> handleTriggerMouseLeave >> return Nothing)

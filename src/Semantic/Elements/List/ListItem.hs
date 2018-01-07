@@ -29,10 +29,10 @@ data ListItem ms = ListItem_
 instance Default (ListItem ms) where
     def = (G.to gdef) { as = Div }
 
-pattern ListItem :: Typeable ms => ListItem ms -> View ms
+pattern ListItem :: ListItem ms -> View ms
 pattern ListItem li = View li
 
-instance Typeable ms => Pure ListItem ms where
+instance Pure ListItem ms where
     render ListItem_ {..} =
         let
             li = 

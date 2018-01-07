@@ -39,10 +39,10 @@ data Step ms = Step_
 instance Default (Step ms) where
     def = (G.to gdef) { as = Div }
 
-pattern Step :: Typeable ms => Step ms -> View ms
+pattern Step :: Step ms -> View ms
 pattern Step s = View s
 
-instance Typeable ms => Pure Step ms where
+instance Pure Step ms where
     render Step_ {..} =
         let
             e = onClick ? A $ as

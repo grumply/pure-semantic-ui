@@ -22,10 +22,10 @@ data CommentAction ms = CommentAction_
 instance Default (CommentAction ms) where
     def = (G.to gdef) { as = A }
 
-pattern CommentAction :: Typeable ms => CommentAction ms -> View ms
+pattern CommentAction :: CommentAction ms -> View ms
 pattern CommentAction ca = View ca
 
-instance Typeable ms => Pure CommentAction ms where
+instance Pure CommentAction ms where
     render CommentAction_ {..} =
         let
             cs =

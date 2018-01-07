@@ -48,10 +48,10 @@ data TableHeaderCell ms = TableHeaderCell_
 instance Default (TableHeaderCell ms) where
     def = (G.to gdef) { as = Th }
 
-pattern TableHeaderCell :: Typeable ms => TableHeaderCell ms -> View ms
+pattern TableHeaderCell :: TableHeaderCell ms -> View ms
 pattern TableHeaderCell thc = View thc 
 
-instance Typeable ms => Pure TableHeaderCell ms where
+instance Pure TableHeaderCell ms where
     render TableHeaderCell_ {..} =
         let
             cs =

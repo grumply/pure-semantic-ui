@@ -55,10 +55,10 @@ data ButtonGroup ms = ButtonGroup_
 instance Default (ButtonGroup ms) where
     def = (G.to gdef) { as = Div }
 
-pattern ButtonGroup :: Typeable ms => ButtonGroup ms -> View ms
+pattern ButtonGroup :: ButtonGroup ms -> View ms
 pattern ButtonGroup bc = View bc
 
-instance Typeable ms => Pure ButtonGroup ms where
+instance Pure ButtonGroup ms where
     render ButtonGroup_ {..} =
         let
             icon =

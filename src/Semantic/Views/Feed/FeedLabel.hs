@@ -20,10 +20,10 @@ data FeedLabel ms = FeedLabel_
 instance Default (FeedLabel ms) where
     def = (G.to gdef) { as = Div }
 
-pattern FeedLabel :: Typeable ms => FeedLabel ms -> View ms
+pattern FeedLabel :: FeedLabel ms -> View ms
 pattern FeedLabel fl = View fl
 
-instance Typeable ms => Pure FeedLabel ms where
+instance Pure FeedLabel ms where
     render FeedLabel_ {..} =
         let
             cs =

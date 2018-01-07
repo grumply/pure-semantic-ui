@@ -20,10 +20,10 @@ data ListList ms = ListList_
 instance Default (ListList ms) where
     def = (G.to gdef) { as = Div }
 
-pattern ListList :: Typeable ms => ListList ms -> View ms
+pattern ListList :: ListList ms -> View ms
 pattern ListList ll = View ll
 
-instance Typeable ms => Pure ListList ms where
+instance Pure ListList ms where
     render ListList_ {..} =
         let
             proxy =

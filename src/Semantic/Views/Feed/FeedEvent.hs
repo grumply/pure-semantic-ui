@@ -20,10 +20,10 @@ data FeedEvent ms = FeedEvent_
 instance Default (FeedEvent ms) where
     def = (G.to gdef) { as = Div }
 
-pattern FeedEvent :: Typeable ms => FeedEvent ms -> View ms
+pattern FeedEvent :: FeedEvent ms -> View ms
 pattern FeedEvent fe = View fe
 
-instance Typeable ms => Pure FeedEvent ms where
+instance Pure FeedEvent ms where
     render FeedEvent_ {..} =
         let
             cs =

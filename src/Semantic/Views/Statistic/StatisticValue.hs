@@ -22,10 +22,10 @@ data StatisticValue ms = StatisticValue_
 instance Default (StatisticValue ms) where
     def = (G.to gdef) { as = Div }
 
-pattern StatisticValue :: Typeable ms => StatisticValue ms -> View ms
+pattern StatisticValue :: StatisticValue ms -> View ms
 pattern StatisticValue sv = View sv
 
-instance Typeable ms => Pure StatisticValue ms where
+instance Pure StatisticValue ms where
     render StatisticValue_ {..} =
         let
             cs =

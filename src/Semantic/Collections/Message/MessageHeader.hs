@@ -20,10 +20,10 @@ data MessageHeader ms = MessageHeader_
 instance Default (MessageHeader ms) where
     def = (G.to gdef) { as = Div }
 
-pattern MessageHeader :: Typeable ms => MessageHeader ms -> View ms
+pattern MessageHeader :: MessageHeader ms -> View ms
 pattern MessageHeader mh = View mh
 
-instance Typeable ms => Pure MessageHeader ms where
+instance Pure MessageHeader ms where
     render MessageHeader_ {..} =
         let
             cs =

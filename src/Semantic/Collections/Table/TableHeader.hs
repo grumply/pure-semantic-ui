@@ -22,10 +22,10 @@ data TableHeader ms = TableHeader_
 instance Default (TableHeader ms) where
     def = (G.to gdef) { as = Thead }
 
-pattern TableHeader :: Typeable ms => TableHeader ms -> View ms
+pattern TableHeader :: TableHeader ms -> View ms
 pattern TableHeader th = View th
 
-instance Typeable ms => Pure TableHeader ms where
+instance Pure TableHeader ms where
     render TableHeader_ {..} =
         let
             cs =

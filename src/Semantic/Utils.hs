@@ -173,7 +173,7 @@ addClasses :: forall ms. ([Txt] -> [Txt]) -> View ms -> View ms
 addClasses f v =
     case v of
         ComponentView {..} -> ComponentView { componentView = cloneComponent . componentView, .. }
-        SomeView sv        -> addClasses f (render sv)
+        SomeView _ sv      -> addClasses f (render sv)
         NullView {}        -> v
         TextView {}        -> v
         _                  -> v { features = go (features v) }
@@ -190,7 +190,7 @@ clone :: forall ms. ([Feature ms] -> [Feature ms]) -> View ms -> View ms
 clone f v =
     case v of
         ComponentView {..} -> ComponentView { componentView = cloneComponent . componentView, .. }
-        SomeView sv        -> clone f (render sv)
+        SomeView _ sv      -> clone f (render sv)
         NullView {}        -> v
         TextView {}        -> v
         _                  -> v { features = f (features v) }
@@ -253,7 +253,7 @@ body =
 
 #ifdef __GHCJS__
 foreign import javascript unsafe
-    "window.pageYOffset" pageYOffset_js ::  IO Int
+    "window.pageYOffset" pageYOffset_js :: IO Int
 #endif
 
 pageYOffset :: MonadIO c => c Int

@@ -21,10 +21,10 @@ data CommentAvatar ms = CommentAvatar_
 instance Default (CommentAvatar ms) where
     def = (G.to gdef) { as = Div }
 
-pattern CommentAvatar :: Typeable ms => CommentAvatar ms -> View ms
+pattern CommentAvatar :: CommentAvatar ms -> View ms
 pattern CommentAvatar ca = View ca
 
-instance Typeable ms => Pure CommentAvatar ms where
+instance Pure CommentAvatar ms where
     render CommentAvatar_ {..} =
         let
             cs =

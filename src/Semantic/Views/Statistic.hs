@@ -34,10 +34,10 @@ data Statistic ms = Statistic_
 instance Default (Statistic ms) where
     def = (G.to gdef) { as = Div }
 
-pattern Statistic :: Typeable ms => Statistic ms -> View ms
+pattern Statistic :: Statistic ms -> View ms
 pattern Statistic s = View s
 
-instance Typeable ms => Pure Statistic ms where
+instance Pure Statistic ms where
     render Statistic_ {..} =
         let
             cs =

@@ -20,10 +20,10 @@ data Flag ms = Flag_
 instance Default (Flag ms) where
     def = (G.to gdef) { as = I }
 
-pattern Flag :: Typeable ms => Flag ms -> View ms
+pattern Flag :: Flag ms -> View ms
 pattern Flag f = View f
 
-instance Typeable ms => Pure Flag ms where
+instance Pure Flag ms where
     render Flag_ {..} =
         let
             cs =

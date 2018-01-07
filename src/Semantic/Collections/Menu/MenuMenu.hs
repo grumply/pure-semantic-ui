@@ -22,10 +22,10 @@ data MenuMenu ms = MenuMenu_
 instance Default (MenuMenu ms) where
     def = (G.to gdef) { as = Div }
 
-pattern MenuMenu :: Typeable ms => MenuMenu ms -> View ms
+pattern MenuMenu :: MenuMenu ms -> View ms
 pattern MenuMenu mm = View mm
 
-instance Typeable ms => Pure MenuMenu ms where
+instance Pure MenuMenu ms where
     render MenuMenu_ {..} =
         let
             cs =

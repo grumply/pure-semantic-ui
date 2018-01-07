@@ -45,10 +45,10 @@ data TableCell ms = TableCell_
 instance Default (TableCell ms) where
     def = (G.to gdef) { as = Td }
 
-pattern TableCell :: Typeable ms => TableCell ms -> View ms
+pattern TableCell :: TableCell ms -> View ms
 pattern TableCell tc = View tc
 
-instance Typeable ms => Pure TableCell ms where
+instance Pure TableCell ms where
     render TableCell_ {..} =
         let
             cs =

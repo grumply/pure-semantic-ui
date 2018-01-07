@@ -72,10 +72,10 @@ data Button ms = Button_
 instance Default (Button ms) where
     def = (G.to gdef) { as = HTML.Button }
 
-pattern Button :: Typeable ms => Button ms -> View ms
+pattern Button :: Button ms -> View ms
 pattern Button b = View b
 
-instance Typeable ms => Pure Button ms where
+instance Pure Button ms where
     render Button_ {..} =
         let baseClasses xs =
               ( color

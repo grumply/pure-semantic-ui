@@ -20,10 +20,10 @@ data FeedDate ms = FeedDate_
 instance Default (FeedDate ms) where
     def = (G.to gdef) { as = Div }
 
-pattern FeedDate :: Typeable ms => FeedDate ms -> View ms
+pattern FeedDate :: FeedDate ms -> View ms
 pattern FeedDate fd = View fd
 
-instance Typeable ms => Pure FeedDate ms where
+instance Pure FeedDate ms where
     render FeedDate_ {..} =
         let
             cs =

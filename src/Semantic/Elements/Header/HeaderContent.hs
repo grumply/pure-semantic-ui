@@ -20,10 +20,10 @@ data HeaderContent ms = HeaderContent_
 instance Default (HeaderContent ms) where
     def = (G.to gdef) { as = Div }
 
-pattern HeaderContent :: Typeable ms => HeaderContent ms -> View ms
+pattern HeaderContent :: HeaderContent ms -> View ms
 pattern HeaderContent hc = View hc
 
-instance Typeable ms => Pure HeaderContent ms where
+instance Pure HeaderContent ms where
     render HeaderContent_ {..} =
         as 
             ( ClassList ( "content" : classes) 

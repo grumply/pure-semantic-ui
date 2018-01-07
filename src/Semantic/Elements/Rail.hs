@@ -32,10 +32,10 @@ data Rail ms = Rail_
 instance Default (Rail ms) where
     def = (G.to gdef) { as = Div }
 
-pattern Rail :: Typeable ms => Rail ms -> View ms
+pattern Rail :: Rail ms -> View ms
 pattern Rail r = View r
 
-instance Typeable ms => Pure Rail ms where
+instance Pure Rail ms where
     render Rail_ {..} =
         let
             cs =

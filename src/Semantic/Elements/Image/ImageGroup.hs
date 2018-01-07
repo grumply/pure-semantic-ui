@@ -22,10 +22,10 @@ data ImageGroup ms = ImageGroup_
 instance Default (ImageGroup ms) where
     def = (G.to gdef) { as = Div }
 
-pattern ImageGroup :: Typeable ms => ImageGroup ms -> View ms
+pattern ImageGroup :: ImageGroup ms -> View ms
 pattern ImageGroup ig = View ig
 
-instance Typeable ms => Pure ImageGroup ms where
+instance Pure ImageGroup ms where
     render ImageGroup_ {..} =
         let
             cs =

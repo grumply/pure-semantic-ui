@@ -40,7 +40,7 @@ instance Default (Sidebar ms) where
         , duration = Uniform 500
         }
 
-pattern Sidebar :: Typeable ms => Sidebar ms -> View ms
+pattern Sidebar :: Sidebar ms -> View ms
 pattern Sidebar sb = View sb
 
 data SidebarState = SS
@@ -48,7 +48,7 @@ data SidebarState = SS
     , animator :: IORef (Maybe ThreadId)
     }
 
-instance Typeable ms => Pure Sidebar ms where
+instance Pure Sidebar ms where
     render sb =
         Component "Semantic.Modules.Sidebar" sb $ \self ->
             let

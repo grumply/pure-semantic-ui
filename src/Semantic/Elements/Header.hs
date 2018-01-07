@@ -47,10 +47,10 @@ data Header ms = Header_
 instance Default (Header ms) where
     def = (G.to gdef) { as = Div }
 
-pattern Header :: Typeable ms => Header ms -> View ms
+pattern Header :: Header ms -> View ms
 pattern Header h = View h
 
-instance Typeable ms => Pure Header ms where
+instance Pure Header ms where
     render Header_ {..} =
         let
             icon = foldPures (\Icon_{} -> const True) False children

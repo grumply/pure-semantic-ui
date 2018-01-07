@@ -25,10 +25,10 @@ data ModalContent ms = ModalContent_
 instance Default (ModalContent ms) where
     def = (G.to gdef) { as = Div }
 
-pattern ModalContent :: Typeable ms => ModalContent ms -> View ms
+pattern ModalContent :: ModalContent ms -> View ms
 pattern ModalContent mc = View mc
 
-instance Typeable ms => Pure ModalContent ms where
+instance Pure ModalContent ms where
     render ModalContent_ {..} =
         let
             cs = classes ++

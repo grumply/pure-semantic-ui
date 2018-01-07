@@ -20,10 +20,10 @@ data MessageContent ms = MessageContent_
 instance Default (MessageContent ms) where
     def = (G.to gdef) { as = Div }
 
-pattern MessageContent :: Typeable ms => MessageContent ms -> View ms
+pattern MessageContent :: MessageContent ms -> View ms
 pattern MessageContent mc = View mc
 
-instance Typeable ms => Pure MessageContent ms where
+instance Pure MessageContent ms where
     render MessageContent_ {..} =
         let
             cs =

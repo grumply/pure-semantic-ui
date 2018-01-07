@@ -31,22 +31,22 @@ data Responsive ms = Responsive_
 instance Default (Responsive ms) where
     def = (G.to gdef) { as = Div }
 
-pattern Responsive :: Typeable ms => Responsive ms -> View ms
+pattern Responsive :: Responsive ms -> View ms
 pattern Responsive r = View r
 
-pattern OnlyMobile :: Typeable ms => Responsive ms -> View ms
+pattern OnlyMobile :: Responsive ms -> View ms
 pattern OnlyMobile r = View (MinWidth 320 (MaxWidth 767 r))
 
-pattern OnlyTablet :: Typeable ms => Responsive ms -> View ms
+pattern OnlyTablet :: Responsive ms -> View ms
 pattern OnlyTablet r = View (MinWidth 768 (MaxWidth 991 r))
 
-pattern OnlyComputer :: Typeable ms => Responsive ms -> View ms
+pattern OnlyComputer :: Responsive ms -> View ms
 pattern OnlyComputer r = View (MinWidth 992 r)
 
-pattern OnlyLargeScreen :: Typeable ms => Responsive ms -> View ms
+pattern OnlyLargeScreen :: Responsive ms -> View ms
 pattern OnlyLargeScreen r = View (MinWidth 1200 (MaxWidth 1919 r))
 
-pattern OnlyWidescreen :: Typeable ms => Responsive ms -> View ms
+pattern OnlyWidescreen :: Responsive ms -> View ms
 pattern OnlyWidescreen r = View (MinWidth 1920 r)
 
 data ResponsiveState = RS
@@ -55,7 +55,7 @@ data ResponsiveState = RS
     , ticking :: IORef Bool
     }
 
-instance Typeable ms => Pure Responsive ms where
+instance Pure Responsive ms where
     render r =
         Component "Semantic.Addons.Responsive" r $ \self -> 
             let 

@@ -30,10 +30,10 @@ data Breadcrumb ms = Breadcrumb_
 instance Default (Breadcrumb ms) where
     def = (G.to gdef) { as = Div }
 
-pattern Breadcrumb :: Typeable ms => Breadcrumb ms -> View ms
+pattern Breadcrumb :: Breadcrumb ms -> View ms
 pattern Breadcrumb bc = View bc
 
-instance Typeable ms => Pure Breadcrumb ms where
+instance Pure Breadcrumb ms where
     render Breadcrumb_ {..} =
         let
             cs =
@@ -88,12 +88,12 @@ instance HasSizeProp (Breadcrumb ms) where
 --            |> Children [ "Sweets" ]
 --       ]
 --
-breadcrumbs :: Typeable ms => Bool -> [View ms] -> [([View ms],Txt)] -> Breadcrumb ms
+breadcrumbs :: Bool -> [View ms] -> [([View ms],Txt)] -> Breadcrumb ms
 breadcrumbs activateLast divider = (def !) 
     . List.intersperse (BreadcrumbDivider $ def ! divider) 
     . crumbs
   where
-      crumb :: Typeable ms => ([View ms],Txt) -> BreadcrumbSection ms
+      crumb :: ([View ms],Txt) -> BreadcrumbSection ms
       crumb (bc,l)  = def ! bc & (l ? Ref (Lref l) $ id)
 
       crumbs []     = nil

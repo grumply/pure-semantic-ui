@@ -49,10 +49,10 @@ data ItemImage ms = ItemImage_
 instance Default (ItemImage ms) where
     def = (G.to gdef) { as = Img }
 
-pattern ItemImage :: Typeable ms => ItemImage ms -> View ms
+pattern ItemImage :: ItemImage ms -> View ms
 pattern ItemImage i = View i
 
-instance Typeable ms => Pure ItemImage ms where
+instance Pure ItemImage ms where
     render ItemImage_ {..} =
         let
             cs =

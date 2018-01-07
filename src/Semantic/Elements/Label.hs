@@ -54,10 +54,10 @@ data Label ms = Label_
 instance Default (Label ms) where
     def = (G.to gdef) { as = Div }
 
-pattern Label :: Typeable ms => Label ms -> View ms
+pattern Label :: Label ms -> View ms
 pattern Label l = View l
 
-instance Typeable ms => Pure Label ms where
+instance Pure Label ms where
     render Label_ {..} =
         let
             pointingClass =

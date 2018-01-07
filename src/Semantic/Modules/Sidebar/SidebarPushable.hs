@@ -20,10 +20,10 @@ data SidebarPushable ms = SidebarPushable_
 instance Default (SidebarPushable ms) where
     def = (G.to gdef) { as = Div }
 
-pattern SidebarPushable :: Typeable ms => SidebarPushable ms -> View ms
+pattern SidebarPushable :: SidebarPushable ms -> View ms
 pattern SidebarPushable sp = View sp
 
-instance Typeable ms => Pure SidebarPushable ms where
+instance Pure SidebarPushable ms where
     render SidebarPushable_ {..} =
         let
             cs = 

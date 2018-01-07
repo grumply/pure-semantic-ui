@@ -24,10 +24,10 @@ data DimmerDimmable ms = DimmerDimmable_
 instance Default (DimmerDimmable ms) where
     def = (G.to gdef) { as = Div }
 
-pattern DimmerDimmable :: Typeable ms => DimmerDimmable ms -> View ms
+pattern DimmerDimmable :: DimmerDimmable ms -> View ms
 pattern DimmerDimmable dd = View dd
 
-instance Typeable ms => Pure DimmerDimmable ms where
+instance Pure DimmerDimmable ms where
     render DimmerDimmable_ {..} =
         let
             cs =

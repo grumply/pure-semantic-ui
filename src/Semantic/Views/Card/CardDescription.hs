@@ -22,10 +22,10 @@ data CardDescription ms = CardDescription_
 instance Default (CardDescription ms) where
     def = (G.to gdef) { as = Div }
 
-pattern CardDescription :: Typeable ms => CardDescription ms -> View ms
+pattern CardDescription :: CardDescription ms -> View ms
 pattern CardDescription cd = View cd
 
-instance Typeable ms => Pure CardDescription ms where
+instance Pure CardDescription ms where
     render CardDescription_ {..} =
         let
             cs =

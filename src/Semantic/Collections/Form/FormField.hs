@@ -35,10 +35,10 @@ data FormField ms = FormField_
 instance Default (FormField ms) where
     def = (G.to gdef) { as = Div }
 
-pattern FormField :: Typeable ms => FormField ms -> View ms
+pattern FormField :: FormField ms -> View ms
 pattern FormField ff = View ff
 
-instance Typeable ms => Pure FormField ms where
+instance Pure FormField ms where
     render FormField_ {..} =
         let
             cs =

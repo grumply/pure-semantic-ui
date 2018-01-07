@@ -52,10 +52,10 @@ data Image ms = Image_
 instance Default (Image ms) where
     def = (G.to gdef) { ui = True, as = Img }
 
-pattern Image :: Typeable ms => Image ms -> View ms
+pattern Image :: Image ms -> View ms
 pattern Image i = View i
 
-instance Typeable ms => Pure Image ms where
+instance Pure Image ms where
     render Image_ {..} =
         let
             cs =

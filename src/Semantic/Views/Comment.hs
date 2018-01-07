@@ -31,10 +31,10 @@ data Comment ms = Comment_
 instance Default (Comment ms) where
     def = (G.to gdef) { as = Div }
 
-pattern Comment :: Typeable ms => Comment ms -> View ms
+pattern Comment :: Comment ms -> View ms
 pattern Comment a = View a
 
-instance Typeable ms => Pure Comment ms where
+instance Pure Comment ms where
     render Comment_ {..} =
         let
             cs =

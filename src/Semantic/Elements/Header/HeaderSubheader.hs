@@ -20,10 +20,10 @@ data HeaderSubheader ms = HeaderSubheader_
 instance Default (HeaderSubheader ms) where
     def = (G.to gdef) { as = Div }
 
-pattern HeaderSubheader :: Typeable ms => HeaderSubheader ms -> View ms
+pattern HeaderSubheader :: HeaderSubheader ms -> View ms
 pattern HeaderSubheader hs = View hs
 
-instance Typeable ms => Pure HeaderSubheader ms where
+instance Pure HeaderSubheader ms where
     render HeaderSubheader_ {..} =
         as
             ( ClassList ( "sub" : "header" : classes )

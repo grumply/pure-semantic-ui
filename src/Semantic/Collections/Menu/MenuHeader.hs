@@ -20,10 +20,10 @@ data MenuHeader ms = MenuHeader_
 instance Default (MenuHeader ms) where
     def = (G.to gdef) { as = Div }
 
-pattern MenuHeader :: Typeable ms => MenuHeader ms -> View ms
+pattern MenuHeader :: MenuHeader ms -> View ms
 pattern MenuHeader mh = View mh
 
-instance Typeable ms => Pure MenuHeader ms where
+instance Pure MenuHeader ms where
     render MenuHeader_ {..} =
         let
             cs =

@@ -60,10 +60,10 @@ data Segment ms = Segment_
 instance Default (Segment ms) where
     def = (G.to gdef) { as = Div }
 
-pattern Segment :: Typeable ms => Segment ms -> View ms
+pattern Segment :: Segment ms -> View ms
 pattern Segment s = View s
 
-instance Typeable ms => Pure Segment ms where
+instance Pure Segment ms where
     render Segment_ {..} =
         let
             cs =

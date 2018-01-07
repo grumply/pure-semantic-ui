@@ -25,7 +25,7 @@ data TabPane ms = TabPane_
     , loading :: Bool
     } deriving (Generic)
 
-instance Typeable ms => Default (TabPane ms) where
+instance  Default (TabPane ms) where
     def = (G.to gdef) 
         { as = \fs cs -> 
             Segment $ def 
@@ -34,10 +34,10 @@ instance Typeable ms => Default (TabPane ms) where
                 & Children cs 
         }
 
-pattern TabPane :: Typeable ms => TabPane ms -> View ms
+pattern TabPane :: TabPane ms -> View ms
 pattern TabPane tp = View tp
 
-instance Typeable ms => Pure TabPane ms where
+instance Pure TabPane ms where
     render TabPane_ {..} =
         let
             cs =

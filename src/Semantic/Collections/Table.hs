@@ -70,10 +70,10 @@ data Table ms = Table_
 instance Default (Table ms) where
     def = (G.to gdef) { as = HTML.Table }
 
-pattern Table :: Typeable ms => Table ms -> View ms
+pattern Table :: Table ms -> View ms
 pattern Table t = View t
 
-instance Typeable ms => Pure Table ms where
+instance Pure Table ms where
     render Table_ {..} =
         let
             cs =

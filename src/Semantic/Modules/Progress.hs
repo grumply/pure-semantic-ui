@@ -53,10 +53,10 @@ data Progress ms = Progress_
 instance Default (Progress ms) where
     def = (G.to gdef) { as = Div }
 
-pattern Progress :: Typeable ms => Progress ms -> View ms
+pattern Progress :: Progress ms -> View ms
 pattern Progress p = View p
 
-instance Typeable ms => Pure Progress ms where
+instance Pure Progress ms where
     render Progress_ {..} =
         let
             decimals p x = (fromInteger $ Prelude.round $ x * (10^p)) / (10.0^^p)

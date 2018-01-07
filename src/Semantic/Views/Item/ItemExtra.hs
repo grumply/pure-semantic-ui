@@ -20,10 +20,10 @@ data ItemExtra ms = ItemExtra_
 instance Default (ItemExtra ms) where
     def = (G.to gdef) { as = Div }
 
-pattern ItemExtra :: Typeable ms => ItemExtra ms -> View ms
+pattern ItemExtra :: ItemExtra ms -> View ms
 pattern ItemExtra ie = View ie
 
-instance Typeable ms => Pure ItemExtra ms where
+instance Pure ItemExtra ms where
     render ItemExtra_ {..} =
         let
             cs =

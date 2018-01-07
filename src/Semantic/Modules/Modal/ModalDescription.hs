@@ -21,10 +21,10 @@ data ModalDescription ms = ModalDescription_
 instance Default (ModalDescription ms) where
     def = (G.to gdef) { as = Div }
 
-pattern ModalDescription :: Typeable ms => ModalDescription ms -> View ms
+pattern ModalDescription :: ModalDescription ms -> View ms
 pattern ModalDescription md = View md
 
-instance Typeable ms => Pure ModalDescription ms where
+instance Pure ModalDescription ms where
     render ModalDescription_ {..} =
         let
             cs =

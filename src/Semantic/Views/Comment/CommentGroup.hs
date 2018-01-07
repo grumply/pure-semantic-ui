@@ -28,10 +28,10 @@ data CommentGroup ms = CommentGroup_
 instance Default (CommentGroup ms) where
     def = (G.to gdef) { as = Div }
 
-pattern CommentGroup :: Typeable ms => CommentGroup ms -> View ms
+pattern CommentGroup :: CommentGroup ms -> View ms
 pattern CommentGroup cg = View cg
 
-instance Typeable ms => Pure CommentGroup ms where
+instance Pure CommentGroup ms where
     render CommentGroup_ {..} =
         let
             cs =

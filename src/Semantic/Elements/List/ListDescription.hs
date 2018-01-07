@@ -20,10 +20,10 @@ data ListDescription ms = ListDescription_
 instance Default (ListDescription ms) where
     def = (G.to gdef) { as = Div }
 
-pattern ListDescription :: Typeable ms => ListDescription ms -> View ms
+pattern ListDescription :: ListDescription ms -> View ms
 pattern ListDescription ld = View ld
 
-instance Typeable ms => Pure ListDescription ms where
+instance Pure ListDescription ms where
     render ListDescription_ {..} =
         as ( ClassList (classes ++ [ "description" ]) : attributes ) children
 

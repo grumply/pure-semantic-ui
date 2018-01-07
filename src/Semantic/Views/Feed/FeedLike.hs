@@ -20,10 +20,10 @@ data FeedLike ms = FeedLike_
 instance Default (FeedLike ms) where
     def = (G.to gdef) { as = Div }
 
-pattern FeedLike :: Typeable ms => FeedLike ms -> View ms
+pattern FeedLike :: FeedLike ms -> View ms
 pattern FeedLike fl = View fl
 
-instance Typeable ms => Pure FeedLike ms where
+instance Pure FeedLike ms where
     render FeedLike_ {..} =
         let
             cs =

@@ -47,10 +47,10 @@ data Form ms = Form_
 instance Default (Form ms) where
     def = (G.to gdef) { as = HTML.Form }
 
-pattern Form :: Typeable ms => Form ms -> View ms
+pattern Form :: Form ms -> View ms
 pattern Form f = View f
 
-instance Typeable ms => Pure Form ms where
+instance Pure Form ms where
     render Form_ {..} =
         let
             cs = 

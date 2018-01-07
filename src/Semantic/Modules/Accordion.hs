@@ -30,10 +30,10 @@ data Accordion ms = Accordion_
 instance Default (Accordion ms) where
     def = (G.to gdef) { as = Div }
 
-pattern Accordion :: Typeable ms => Accordion ms -> View ms
+pattern Accordion :: Accordion ms -> View ms
 pattern Accordion a = View a
 
-instance Typeable ms => Pure Accordion ms where
+instance Pure Accordion ms where
     render Accordion_ {..} =
         let
             cs =

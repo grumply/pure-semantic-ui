@@ -58,10 +58,10 @@ data Message ms = Message_
 instance Default (Message ms) where
     def = (G.to gdef) { as = Div }
 
-pattern Message :: Typeable ms => Message ms -> View ms
+pattern Message :: Message ms -> View ms
 pattern Message m = View m
 
-instance Typeable ms => Pure Message ms where
+instance Pure Message ms where
     render Message_ {..} =
         let
             icon = foldPures (\(Icon_ {}) -> const True) False children

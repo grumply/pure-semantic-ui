@@ -24,10 +24,10 @@ data CardContent ms = CardContent_
 instance Default (CardContent ms) where
     def = (G.to gdef) { as = Div }
 
-pattern CardContent :: Typeable ms => CardContent ms -> View ms
+pattern CardContent :: CardContent ms -> View ms
 pattern CardContent cc = View cc
 
-instance Typeable ms => Pure CardContent ms where
+instance Pure CardContent ms where
     render CardContent_ {..} =
         let
             cs =

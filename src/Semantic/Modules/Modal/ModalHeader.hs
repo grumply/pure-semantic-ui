@@ -21,10 +21,10 @@ data ModalHeader ms = ModalHeader_
 instance Default (ModalHeader ms) where
     def = (G.to gdef) { as = Div }
 
-pattern ModalHeader :: Typeable ms => ModalHeader ms -> View ms
+pattern ModalHeader :: ModalHeader ms -> View ms
 pattern ModalHeader mh = View mh
 
-instance Typeable ms => Pure ModalHeader ms where
+instance Pure ModalHeader ms where
     render ModalHeader_ {..} =
         let
             cs = classes <> [ "header" ]

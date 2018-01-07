@@ -50,7 +50,7 @@ instance Default (Transition ms) where
         , mountOnShow = True
         }
 
-pattern Transition :: Typeable ms => Transition ms -> View ms
+pattern Transition :: Transition ms -> View ms
 pattern Transition t = View t
 
 data TransitionState = TS
@@ -61,7 +61,7 @@ data TransitionState = TS
     , transitionTimeout :: IORef (Maybe ThreadId)
     }
 
-instance Typeable ms => Pure Transition ms where
+instance Pure Transition ms where
     render t =
         Component "Semantic.Modules.Transition" t $ \self ->
             let 

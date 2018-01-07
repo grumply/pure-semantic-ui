@@ -28,10 +28,10 @@ data BreadcrumbSection ms = BreadcrumbSection_
 instance Default (BreadcrumbSection ms) where
     def = (G.to gdef) { as = Div }
 
-pattern BreadcrumbSection :: Typeable ms => BreadcrumbSection ms -> View ms
+pattern BreadcrumbSection :: BreadcrumbSection ms -> View ms
 pattern BreadcrumbSection bcs = View bcs
 
-instance Typeable ms => Pure BreadcrumbSection ms where
+instance Pure BreadcrumbSection ms where
     render BreadcrumbSection_ {..} =
         let
             e = link ? A $ ref ? A $ as

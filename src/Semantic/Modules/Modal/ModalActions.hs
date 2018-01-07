@@ -21,10 +21,10 @@ data ModalActions ms = ModalActions_
 instance Default (ModalActions ms) where
     def = (G.to gdef) { as = Div }
 
-pattern ModalActions :: Typeable ms => ModalActions ms -> View ms
+pattern ModalActions :: ModalActions ms -> View ms
 pattern ModalActions ma = View ma
 
-instance Typeable ms => Pure ModalActions ms where
+instance Pure ModalActions ms where
     render ModalActions_ {..} =
         as
             ( ClassList ( "actions" : classes )

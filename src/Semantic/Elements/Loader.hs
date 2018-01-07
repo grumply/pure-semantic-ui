@@ -32,10 +32,10 @@ data Loader ms = Loader_
 instance Default (Loader ms) where
     def = (G.to gdef) { as = Div }
 
-pattern Loader :: Typeable ms => Loader ms -> View ms
+pattern Loader :: Loader ms -> View ms
 pattern Loader l = View l
 
-instance Typeable ms => Pure Loader ms where
+instance Pure Loader ms where
     render Loader_ {..} =
         let
             cs =

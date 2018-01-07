@@ -20,10 +20,10 @@ data FeedSummary ms = FeedSummary_
 instance Default (FeedSummary ms) where
     def = (G.to gdef) { as = Div }
 
-pattern FeedSummary :: Typeable ms => FeedSummary ms -> View ms
+pattern FeedSummary :: FeedSummary ms -> View ms
 pattern FeedSummary fs = View fs
 
-instance Typeable ms => Pure FeedSummary ms where
+instance Pure FeedSummary ms where
     render FeedSummary_ {..} =
         let
             cs =

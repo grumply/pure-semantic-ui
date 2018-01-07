@@ -20,10 +20,10 @@ data MessageList ms = MessageList_
 instance Default (MessageList ms) where
     def = (G.to gdef) { as = Ul }
 
-pattern MessageList :: Typeable ms => MessageList ms -> View ms
+pattern MessageList :: MessageList ms -> View ms
 pattern MessageList ml = View ml 
 
-instance Typeable ms => Pure MessageList ms where
+instance Pure MessageList ms where
     render MessageList_ {..} =
         let
             cs =

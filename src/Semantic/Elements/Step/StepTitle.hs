@@ -20,10 +20,10 @@ data StepTitle ms = StepTitle_
 instance Default (StepTitle ms) where
     def = (G.to gdef) { as = Div }
 
-pattern StepTitle :: Typeable ms => StepTitle ms -> View ms
+pattern StepTitle :: StepTitle ms -> View ms
 pattern StepTitle st = View st
 
-instance Typeable ms => Pure StepTitle ms where
+instance Pure StepTitle ms where
     render StepTitle_ {..} =
         let
             cs =

@@ -30,10 +30,10 @@ data StatisticGroup ms = StatisticGroup_
 instance Default (StatisticGroup ms) where
     def = (G.to gdef) { as = Div }
 
-pattern StatisticGroup :: Typeable ms => StatisticGroup ms -> View ms
+pattern StatisticGroup :: StatisticGroup ms -> View ms
 pattern StatisticGroup sg = View sg
 
-instance Typeable ms => Pure StatisticGroup ms where
+instance Pure StatisticGroup ms where
     render StatisticGroup_ {..} =
         let
             cs =

@@ -20,10 +20,10 @@ data ItemDescription ms = ItemDescription_
 instance Default (ItemDescription ms) where
     def = (G.to gdef) { as = Div }
 
-pattern ItemDescription :: Typeable ms => ItemDescription ms -> View ms
+pattern ItemDescription :: ItemDescription ms -> View ms
 pattern ItemDescription id = View id
 
-instance Typeable ms => Pure ItemDescription ms where
+instance Pure ItemDescription ms where
     render ItemDescription_ {..} =
         let
             cs =

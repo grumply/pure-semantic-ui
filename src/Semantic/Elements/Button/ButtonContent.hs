@@ -25,10 +25,10 @@ data ButtonContent ms = ButtonContent_
 instance Default (ButtonContent ms) where
     def = (G.to gdef) { as = Div }
 
-pattern ButtonContent :: Typeable ms => ButtonContent ms -> View ms
+pattern ButtonContent :: ButtonContent ms -> View ms
 pattern ButtonContent bc = View bc
 
-instance Typeable ms => Pure ButtonContent ms where
+instance Pure ButtonContent ms where
     render ButtonContent_ {..} =
         let
             cs =

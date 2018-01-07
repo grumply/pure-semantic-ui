@@ -52,17 +52,17 @@ data Checkbox ms = Checkbox_
 instance Default (Checkbox ms) where
     def = (G.to gdef) { as = Div }
 
-pattern Checkbox :: Typeable ms => Checkbox ms -> View ms
+pattern Checkbox :: Checkbox ms -> View ms
 pattern Checkbox c = View c
 
-pattern Radio :: Typeable ms => Checkbox ms -> View ms
+pattern Radio :: Checkbox ms -> View ms
 pattern Radio r = View (Type "radio" (IsRadio r))
 
 renderChecked Checked = HTML.Checked True
 renderChecked Indeterminate = HTML.Checked False
 renderChecked Unchecked = nil
 
-instance Typeable ms => Pure Checkbox ms where
+instance Pure Checkbox ms where
     render cb@Checkbox_ {..} =
         let
             cs =

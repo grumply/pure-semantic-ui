@@ -26,10 +26,10 @@ data AccordionTitle ms = AccordionTitle_
 instance Default (AccordionTitle ms) where
     def = (G.to gdef) { as = Div }
 
-pattern AccordionTitle :: Typeable ms => AccordionTitle ms -> View ms
+pattern AccordionTitle :: AccordionTitle ms -> View ms
 pattern AccordionTitle at = View at
 
-instance Typeable ms => Pure AccordionTitle ms where
+instance Pure AccordionTitle ms where
     render AccordionTitle_ {..} =
         let
             cs =

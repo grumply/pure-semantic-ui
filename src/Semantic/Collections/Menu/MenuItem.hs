@@ -40,10 +40,10 @@ data MenuItem ms = MenuItem_
 instance Default (MenuItem ms) where
     def = (G.to gdef) { as = Div }
 
-pattern MenuItem :: Typeable ms => MenuItem ms -> View ms
+pattern MenuItem :: MenuItem ms -> View ms
 pattern MenuItem mi = View mi
 
-instance Typeable ms => Pure MenuItem ms where
+instance Pure MenuItem ms where
     render MenuItem_ {..} =
         let
             e = onClick ? A $ as

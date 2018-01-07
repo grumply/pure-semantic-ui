@@ -28,10 +28,10 @@ data LabelGroup ms = LabelGroup_
 instance Default (LabelGroup ms) where
     def = (G.to gdef) { as = Div }
 
-pattern LabelGroup :: Typeable ms => LabelGroup ms -> View ms
+pattern LabelGroup :: LabelGroup ms -> View ms
 pattern LabelGroup lg = View lg
 
-instance Typeable ms => Pure LabelGroup ms where
+instance Pure LabelGroup ms where
     render LabelGroup_ {..} =
         let
             cs =

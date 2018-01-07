@@ -46,10 +46,10 @@ data Icon ms = Icon_
 instance Default (Icon ms) where
     def = (G.to gdef) { as = I }
 
-pattern Icon :: Typeable ms => Icon ms -> View ms
+pattern Icon :: Icon ms -> View ms
 pattern Icon i = View i
 
-instance Typeable ms => Pure Icon ms where
+instance Pure Icon ms where
     render Icon_ {..} =
         let
             cs =

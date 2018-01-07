@@ -16,10 +16,10 @@ data Proxy ms = Proxy_
 
 instance Default (Proxy ms)
 
-pattern Proxy :: Typeable ms => Proxy ms -> View ms
+pattern Proxy :: Proxy ms -> View ms
 pattern Proxy r = View r
 
-instance Typeable ms => Pure Proxy ms where
+instance Pure Proxy ms where
     render r =
         Component "Semantic.Addons.Proxy" r $ \self -> def
             { construct = return ()

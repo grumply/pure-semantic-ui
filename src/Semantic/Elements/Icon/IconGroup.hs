@@ -22,10 +22,10 @@ data IconGroup ms = IconGroup_
 instance Default (IconGroup ms) where
     def = (G.to gdef) { as = I }
 
-pattern IconGroup :: Typeable ms => IconGroup ms -> View ms
+pattern IconGroup :: IconGroup ms -> View ms
 pattern IconGroup ig = View ig
 
-instance Typeable ms => Pure IconGroup ms where
+instance Pure IconGroup ms where
     render IconGroup_ {..} =
         let
             cs =

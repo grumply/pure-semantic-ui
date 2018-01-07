@@ -29,10 +29,10 @@ data FormGroup ms = FormGroup_
 instance Default (FormGroup ms) where
     def = (G.to gdef) { as = Div }
 
-pattern FormGroup :: Typeable ms => FormGroup ms -> View ms
+pattern FormGroup :: FormGroup ms -> View ms
 pattern FormGroup fg = View fg
 
-instance Typeable ms => Pure FormGroup ms where
+instance Pure FormGroup ms where
     render FormGroup_ {..} =
         let
             cs =

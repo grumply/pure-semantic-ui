@@ -32,10 +32,10 @@ data Feed ms = Feed_
 instance Default (Feed ms) where
     def = (G.to gdef) { as = Div }
 
-pattern Feed :: Typeable ms => Feed ms -> View ms
+pattern Feed :: Feed ms -> View ms
 pattern Feed f = View f
 
-instance Typeable ms => Pure Feed ms where
+instance Pure Feed ms where
     render Feed_ {..} =
         let
             cs =

@@ -24,10 +24,10 @@ data ListContent ms = ListContent_
 instance Default (ListContent ms) where
     def = (G.to gdef) { as = Div }
 
-pattern ListContent :: Typeable ms => ListContent ms -> View ms
+pattern ListContent :: ListContent ms -> View ms
 pattern ListContent lc = View lc
 
-instance Typeable ms => Pure ListContent ms where
+instance Pure ListContent ms where
     render ListContent_ {..} =
         let
             cs =

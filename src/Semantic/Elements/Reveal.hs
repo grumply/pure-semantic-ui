@@ -27,10 +27,10 @@ data Reveal ms = Reveal_
 instance Default (Reveal ms) where
     def = (G.to gdef) { as = Div }
 
-pattern Reveal :: Typeable ms => Reveal ms -> View ms
+pattern Reveal :: Reveal ms -> View ms
 pattern Reveal r = View r
 
-instance Typeable ms => Pure Reveal ms where
+instance Pure Reveal ms where
     render Reveal_ {..} =
         let
             cs =

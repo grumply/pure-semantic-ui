@@ -24,10 +24,10 @@ data FeedExtra ms = FeedExtra_
 instance Default (FeedExtra ms) where
     def = (G.to gdef) { as = Div }
 
-pattern FeedExtra :: Typeable ms => FeedExtra ms -> View ms
+pattern FeedExtra :: FeedExtra ms -> View ms
 pattern FeedExtra fe = View fe
 
-instance Typeable ms => Pure FeedExtra ms where
+instance Pure FeedExtra ms where
     render FeedExtra_ {..} =
         let
             image = foldPures (\(Image_ {}) -> const True) False children

@@ -25,7 +25,7 @@ data Container ms = Container_
 instance Default (Container ms) where
     def = (G.to gdef) { as = Div }
 
-pattern Container :: Typeable ms => Container ms -> View ms
+pattern Container :: Container ms -> View ms
 pattern Container c = View c
 
 pattern TextContainer c <- (getTextContainer -> (True,c)) where
@@ -43,7 +43,7 @@ setTextContainer c =
         View Container_ {..} -> View Container_ { text = True, .. }
         _                    -> c
 
-instance Typeable ms => Pure Container ms where
+instance Pure Container ms where
     render Container_ {..} =
         let cs = 
               ( "ui"

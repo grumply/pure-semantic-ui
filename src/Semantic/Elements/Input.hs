@@ -52,7 +52,7 @@ data Input ms = Input_
 instance Default (Input ms) where
     def = (G.to gdef) { as = Div, _type = "text" }
 
-pattern Input :: Typeable ms => Input ms -> View ms
+pattern Input :: Input ms -> View ms
 pattern Input i = View i
 
 data InputFormatter = IF
@@ -62,7 +62,7 @@ data InputFormatter = IF
   , actionPosition :: Maybe Txt
   } deriving (Generic,Default)
 
-calculatePositions :: forall ms. Typeable ms => [View ms] -> InputFormatter
+calculatePositions :: forall ms.  [View ms] -> InputFormatter
 calculatePositions = foldr analyze def
     where
         analyze :: View ms -> InputFormatter -> InputFormatter
@@ -78,7 +78,7 @@ calculatePositions = foldr analyze def
             | otherwise                = state { actionPosition = Just "left" }
         analyze _ state                = state
 
-instance Typeable ms => Pure Input ms where
+instance Pure Input ms where
     render Input_ {..} =
         let
             _focus e = do

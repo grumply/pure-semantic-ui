@@ -22,10 +22,10 @@ data CardMeta ms = CardMeta_
 instance Default (CardMeta ms) where
     def = (G.to gdef) { as = Div }
 
-pattern CardMeta :: Typeable ms => CardMeta ms -> View ms
+pattern CardMeta :: CardMeta ms -> View ms
 pattern CardMeta cm = View cm
 
-instance Typeable ms => Pure CardMeta ms where
+instance Pure CardMeta ms where
     render CardMeta_ {..} =
         let
             cs =

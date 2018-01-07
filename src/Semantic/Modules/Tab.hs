@@ -22,10 +22,10 @@ data Tab ms = Tab_
 instance Default (Tab ms) where
     def = (G.to gdef) { as = Div }
 
-pattern Tab :: Typeable ms => Tab ms -> View ms
+pattern Tab :: Tab ms -> View ms
 pattern Tab t = View t
 
-instance Typeable ms => Pure Tab ms where
+instance Pure Tab ms where
     render Tab_ {..} = as ( ClassList classes : attributes ) children
 
 instance HasAsProp (Tab ms) where

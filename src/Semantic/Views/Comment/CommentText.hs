@@ -20,10 +20,10 @@ data CommentText ms = CommentText_
 instance Default (CommentText ms) where
     def = (G.to gdef) { as = A }
 
-pattern CommentText :: Typeable ms => CommentText ms -> View ms
+pattern CommentText :: CommentText ms -> View ms
 pattern CommentText ct = View ct 
 
-instance Typeable ms => Pure CommentText ms where
+instance Pure CommentText ms where
     render CommentText_ {..} =
         let
             cs =

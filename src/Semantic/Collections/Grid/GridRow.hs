@@ -38,10 +38,10 @@ data GridRow ms = GridRow_
 instance Default (GridRow ms) where
     def = (G.to gdef) { as = Div }
 
-pattern GridRow :: Typeable ms => GridRow ms -> View ms
+pattern GridRow :: GridRow ms -> View ms
 pattern GridRow gr = View gr
 
-instance Typeable ms => Pure GridRow ms where
+instance Pure GridRow ms where
     render GridRow_ {..} =
         let
             cs =

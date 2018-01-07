@@ -37,10 +37,10 @@ data TableRow ms = TableRow_
 instance Default (TableRow ms) where
     def = (G.to gdef) { as = Tr }
 
-pattern TableRow :: Typeable ms => TableRow ms -> View ms
+pattern TableRow :: TableRow ms -> View ms
 pattern TableRow tr = View tr
 
-instance Typeable ms => Pure TableRow ms where
+instance Pure TableRow ms where
     render TableRow_ {..} =
         let
             cs =

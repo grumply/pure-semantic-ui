@@ -65,7 +65,7 @@ data Visibility ms = Visibility_
 instance Default (Visibility ms) where
     def = (G.to gdef) { as = Div, context = Just (coerce window), once = True }
 
-pattern Visibility :: Typeable ms => Visibility ms -> View ms
+pattern Visibility :: Visibility ms -> View ms
 pattern Visibility v = View v
 
 data VisibilityState = VS
@@ -110,7 +110,7 @@ data Calculations = Calculations
     , topVisible :: Bool
     } deriving (Generic,Default)
 
-instance Typeable ms => Pure Visibility ms where
+instance Pure Visibility ms where
     render v =
         Component "Semantic.Behaviors.Visibility" v $ \self -> 
             let

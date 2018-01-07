@@ -20,10 +20,10 @@ data TableFooter ms = TableFooter_
 instance Default (TableFooter ms) where
     def = (G.to gdef) { as = Tfoot }
 
-pattern TableFooter :: Typeable ms => TableFooter ms -> View ms
+pattern TableFooter :: TableFooter ms -> View ms
 pattern TableFooter tf = View tf 
 
-instance Typeable ms => Pure TableFooter ms where
+instance Pure TableFooter ms where
     render TableFooter_ {..} =
         as
             ( ClassList classes

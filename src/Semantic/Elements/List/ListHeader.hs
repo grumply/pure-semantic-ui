@@ -20,10 +20,10 @@ data ListHeader ms = ListHeader_
 instance Default (ListHeader ms) where
     def = (G.to gdef) { as = Div }
 
-pattern ListHeader :: Typeable ms => ListHeader ms -> View ms
+pattern ListHeader :: ListHeader ms -> View ms
 pattern ListHeader lh = View lh
 
-instance Typeable ms => Pure ListHeader ms where
+instance Pure ListHeader ms where
     render ListHeader_ {..} =
         as ( ClassList ( "header" : classes ) : attributes ) children
 

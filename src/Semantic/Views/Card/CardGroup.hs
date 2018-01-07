@@ -28,10 +28,10 @@ data CardGroup ms = CardGroup_
 instance Default (CardGroup ms) where
     def = (G.to gdef) { as = Div }
 
-pattern CardGroup :: Typeable ms => CardGroup ms -> View ms
+pattern CardGroup :: CardGroup ms -> View ms
 pattern CardGroup cg = View cg
 
-instance Typeable ms => Pure CardGroup ms where
+instance Pure CardGroup ms where
     render CardGroup_ {..} =
         let
             cs =

@@ -20,10 +20,10 @@ data BreadcrumbDivider ms = BreadcrumbDivider_
 instance Default (BreadcrumbDivider ms) where
     def = (G.to gdef) { as = Div }
 
-pattern BreadcrumbDivider :: Typeable ms => BreadcrumbDivider ms -> View ms
+pattern BreadcrumbDivider :: BreadcrumbDivider ms -> View ms
 pattern BreadcrumbDivider bcd = View bcd
 
-instance Typeable ms => Pure BreadcrumbDivider ms where
+instance Pure BreadcrumbDivider ms where
     render BreadcrumbDivider_ {..} =
         let
             cs =

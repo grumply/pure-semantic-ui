@@ -22,10 +22,10 @@ data AccordionContent ms = AccordionContent_
 instance Default (AccordionContent ms) where
     def = (G.to gdef) { as = Div }
 
-pattern AccordionContent :: Typeable ms => AccordionContent ms -> View ms
+pattern AccordionContent :: AccordionContent ms -> View ms
 pattern AccordionContent ac = View ac
 
-instance Typeable ms => Pure AccordionContent ms where
+instance Pure AccordionContent ms where
     render AccordionContent_ {..} =
         let
             cs =

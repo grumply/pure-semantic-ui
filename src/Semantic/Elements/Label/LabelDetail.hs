@@ -20,10 +20,10 @@ data LabelDetail ms = LabelDetail_
 instance Default (LabelDetail ms) where
     def = G.to gdef
 
-pattern LabelDetail :: Typeable ms => LabelDetail ms -> View ms
+pattern LabelDetail :: LabelDetail ms -> View ms
 pattern LabelDetail ld = View ld
 
-instance Typeable ms => Pure LabelDetail ms where
+instance Pure LabelDetail ms where
     render LabelDetail_ {..} =
         as 
             ( ClassList ("detail" : classes)

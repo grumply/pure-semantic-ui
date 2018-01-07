@@ -36,10 +36,10 @@ data StepGroup ms = StepGroup_
 instance Default (StepGroup ms) where
     def = (G.to gdef) { as = Div }
 
-pattern StepGroup :: Typeable ms => StepGroup ms -> View ms
+pattern StepGroup :: StepGroup ms -> View ms
 pattern StepGroup sg = View sg
 
-instance Typeable ms => Pure StepGroup ms where
+instance Pure StepGroup ms where
     render StepGroup_ {..} =
         let
             cs =

@@ -26,10 +26,10 @@ data Advertisement ms = Advertisement_
 instance Default (Advertisement ms) where
     def = (G.to gdef) { as = Div }
 
-pattern Advertisement :: Typeable ms => Advertisement ms -> View ms
+pattern Advertisement :: Advertisement ms -> View ms
 pattern Advertisement a = View a
 
-instance Typeable ms => Pure Advertisement ms where
+instance Pure Advertisement ms where
     render Advertisement_ {..} =
         let
             cs =

@@ -20,10 +20,10 @@ data CommentAuthor ms = CommentAuthor_
 instance Default (CommentAuthor ms) where
     def = (G.to gdef) { as = Div }
 
-pattern CommentAuthor :: Typeable ms => CommentAuthor ms -> View ms
+pattern CommentAuthor :: CommentAuthor ms -> View ms
 pattern CommentAuthor ca = View ca
 
-instance Typeable ms => Pure CommentAuthor ms where
+instance Pure CommentAuthor ms where
     render CommentAuthor_ {..} =
         let
             cs =

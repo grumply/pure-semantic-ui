@@ -40,10 +40,10 @@ data Card ms = Card_
 instance Default (Card ms) where
     def = (G.to gdef) { as = Div }
 
-pattern Card :: Typeable ms => Card ms -> View ms
+pattern Card :: Card ms -> View ms
 pattern Card a = View a
 
-instance Typeable ms => Pure Card ms where
+instance Pure Card ms where
     render Card_ {..} =
         let
             e = onClick ? A $ as

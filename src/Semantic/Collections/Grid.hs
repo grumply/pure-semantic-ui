@@ -51,10 +51,10 @@ data Grid ms = Grid_
 instance Default (Grid ms) where
     def = (G.to gdef) { as = Div }
 
-pattern Grid :: Typeable ms => Grid ms -> View ms
+pattern Grid :: Grid ms -> View ms
 pattern Grid g = View g
 
-instance Typeable ms => Pure Grid ms where
+instance Pure Grid ms where
     render Grid_ {..} =
         let
             cs =

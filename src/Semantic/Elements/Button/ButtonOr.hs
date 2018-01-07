@@ -22,10 +22,10 @@ data ButtonOr ms = ButtonOr_
 instance Default (ButtonOr ms) where
     def = (G.to gdef) { as = Div }
 
-pattern ButtonOr :: Typeable ms => ButtonOr ms -> View ms
+pattern ButtonOr :: ButtonOr ms -> View ms
 pattern ButtonOr bo = View bo
 
-instance Typeable ms => Pure ButtonOr ms where
+instance Pure ButtonOr ms where
     render ButtonOr_ {..} =
         as
             ( ClassList ( "or" : classes )

@@ -20,10 +20,10 @@ data FeedUser ms = FeedUser_
 instance Default (FeedUser ms) where
     def = (G.to gdef) { as = A }
 
-pattern FeedUser :: Typeable ms => FeedUser ms -> View ms
+pattern FeedUser :: FeedUser ms -> View ms
 pattern FeedUser fu = View fu
 
-instance Typeable ms => Pure FeedUser ms where
+instance Pure FeedUser ms where
     render FeedUser_ {..} =
         let
             cs =
