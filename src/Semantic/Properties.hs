@@ -7,6 +7,9 @@ import Semantic.Properties.Active as Export
 import Semantic.Properties.Animated as Export
 import Semantic.Properties.Animation as Export
 import Semantic.Properties.AnimationDuration as Export
+import Semantic.Properties.AriaChecked as Export
+import Semantic.Properties.AriaPosinset as Export
+import Semantic.Properties.AriaSetsize as Export
 import Semantic.Properties.As as Export
 import Semantic.Properties.AspectRatio as Export
 import Semantic.Properties.Attached as Export
@@ -119,6 +122,7 @@ import Semantic.Properties.OnConfirm as Export
 import Semantic.Properties.OnDismiss as Export
 import Semantic.Properties.OnHide as Export
 import Semantic.Properties.OnInput as Export
+import Semantic.Properties.OnKeyUp as Export
 import Semantic.Properties.OnLargeScreen as Export
 import Semantic.Properties.Only as Export
 import Semantic.Properties.OnMobile as Export

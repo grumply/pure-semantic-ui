@@ -144,6 +144,9 @@ library
     Semantic.Properties.Animated
     Semantic.Properties.Animation
     Semantic.Properties.AnimationDuration
+    Semantic.Properties.AriaChecked
+    Semantic.Properties.AriaPosinset
+    Semantic.Properties.AriaSetsize
     Semantic.Properties.As
     Semantic.Properties.AspectRatio
     Semantic.Properties.Attached
@@ -181,10 +184,10 @@ library
     Semantic.Properties.Context
     Semantic.Properties.Continuous
     Semantic.Properties.Corner
-    Semantic.Properties.Definition
     Semantic.Properties.Compact
     Semantic.Properties.DefaultActive
     Semantic.Properties.DefaultOpen
+    Semantic.Properties.Definition
     Semantic.Properties.Dimmed
     Semantic.Properties.DimmerType
     Semantic.Properties.Direction
@@ -256,6 +259,7 @@ library
     Semantic.Properties.OnDismiss
     Semantic.Properties.OnHide
     Semantic.Properties.OnInput
+    Semantic.Properties.OnKeyUp
     Semantic.Properties.OnLargeScreen
     Semantic.Properties.Only
     Semantic.Properties.OnMobile

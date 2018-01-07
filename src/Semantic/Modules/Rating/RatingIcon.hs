@@ -6,6 +6,19 @@ import Pure.View hiding (active,onClick,onKeyUp,Selected)
 
 import Semantic.Utils
 
+import Semantic.Properties.As
+import Semantic.Properties.Attributes
+import Semantic.Properties.Classes
+import Semantic.Properties.AriaChecked
+import Semantic.Properties.AriaPosinset
+import Semantic.Properties.AriaSetsize
+import Semantic.Properties.Active
+import Semantic.Properties.Index
+import Semantic.Properties.OnClick
+import Semantic.Properties.OnKeyUp
+import Semantic.Properties.OnMouseEnter
+import Semantic.Properties.Selected
+
 data RatingIcon ms = RatingIcon_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]
@@ -65,3 +78,57 @@ instance VC ms => Pure RatingIcon ms where
                 : attributes
                 )
                 []
+                
+
+instance HasAsProp (RatingIcon ms) where
+    type AsProp (RatingIcon ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs a ri = ri { as = a }
+
+instance HasAttributesProp (RatingIcon ms) where
+    type Attribute (RatingIcon ms) = Feature ms
+    getAttributes = attributes
+    setAttributes as ri = ri { attributes = as }
+
+instance HasClassesProp (RatingIcon ms) where
+    getClasses = classes
+    setClasses cs ri = ri { classes = cs }
+
+instance HasActiveProp (RatingIcon ms) where
+    getActive = active
+    setActive a ri = ri { active = a }
+
+instance HasAriaCheckedProp (RatingIcon ms) where
+    getAriaChecked = ariaChecked
+    setAriaChecked ac ri = ri { ariaChecked = ac }
+
+instance HasAriaPosinsetProp (RatingIcon ms) where
+    getAriaPosinset = ariaPosinset
+    setAriaPosinset ap ri = ri { ariaPosinset = ap }
+
+instance HasAriaSetsizeProp (RatingIcon ms) where
+    getAriaSetsize = ariaSetsize
+    setAriaSetsize as ri = ri { ariaSetsize = as }
+
+instance HasIndexProp (RatingIcon ms) where
+    getIndex = index
+    setIndex i ri = ri { index = i }
+
+instance HasOnClickProp (RatingIcon ms) where
+    type OnClickProp (RatingIcon ms) = Int -> Ef ms IO ()
+    getOnClick = onClick
+    setOnClick oc ri = ri { onClick = oc }
+
+instance HasOnKeyUpProp (RatingIcon ms) where
+    type OnKeyUpProp (RatingIcon ms) = Int -> Evt -> Ef ms IO ()
+    getOnKeyUp = onKeyUp
+    setOnKeyUp oku ri = ri { onKeyUp = oku }
+
+instance HasOnMouseEnterProp (RatingIcon ms) where
+    type OnMouseEnterProp (RatingIcon ms) = Int -> Ef ms IO ()
+    getOnMouseEnter = onMouseEnter
+    setOnMouseEnter ome ri = ri { onMouseEnter = ome }
+
+instance HasSelectedProp (RatingIcon ms) where
+    getSelected = selected
+    setSelected s ri = ri { selected = s }
