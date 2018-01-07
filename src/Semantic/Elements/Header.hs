@@ -53,8 +53,8 @@ pattern Header h = View h
 instance Typeable ms => Pure Header ms where
     render Header_ {..} =
         let
-            icon = foldr (\(View Icon{}) -> const True) False children
-            image = foldr (\(View Image{}) -> const True) False children
+            icon = foldPures (\Icon_{} -> const True) False children
+            image = foldPures (\Image_{} -> const True) False children
 
             cs =
                 ( "ui"
