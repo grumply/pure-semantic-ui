@@ -10,6 +10,21 @@ import Pure.DOM (addAnimation)
 
 import Semantic.Utils hiding (body)
 
+import Semantic.Properties.As
+import Semantic.Properties.Attributes
+import Semantic.Properties.Children
+import Semantic.Properties.Classes
+import Semantic.Properties.Active
+import Semantic.Properties.BottomOffset
+import Semantic.Properties.Context
+import Semantic.Properties.Offset
+import Semantic.Properties.OnBottom
+import Semantic.Properties.OnStick
+import Semantic.Properties.OnTop
+import Semantic.Properties.OnUnstick
+import Semantic.Properties.Pushing
+import Semantic.Properties.ScrollContext
+
 data Sticky ms = Sticky_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]
@@ -216,3 +231,69 @@ instance VC ms => Pure Sticky ms where
                             ]
 
                 }
+
+
+instance HasAsProp (Sticky ms) where
+    type AsProp (Sticky ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs f s = s { as = f }
+
+instance HasAttributesProp (Sticky ms) where
+    type Attribute (Sticky ms) = Feature ms
+    getAttributes = attributes 
+    setAttributes cs s = s { attributes = cs }
+
+instance HasChildrenProp (Sticky ms) where
+    type Child (Sticky ms) = View ms
+    getChildren = children
+    setChildren cs s = s { children = cs }
+
+instance HasClassesProp (Sticky ms) where
+    getClasses = classes
+    setClasses cs s = s { classes = cs }
+
+instance HasActiveProp (Sticky ms) where
+    getActive = active
+    setActive a s = s { active = a }
+
+instance HasBottomOffsetProp (Sticky ms) where
+    getBottomOffset = bottomOffset
+    setBottomOffset bo s = s { bottomOffset = bo }
+
+instance HasContextProp (Sticky ms) where
+    type ContextProp (Sticky ms) = Maybe JSV
+    getContext = context
+    setContext c s = s { context = c }
+
+instance HasOffsetProp (Sticky ms) where
+    type OffsetProp (Sticky ms) = Double
+    getOffset = offset
+    setOffset o s = s { offset = o }
+
+instance HasOnBottomProp (Sticky ms) where
+    type OnBottomProp (Sticky ms) = Ef ms IO ()
+    getOnBottom = onBottom
+    setOnBottom ob s = s { onBottom = ob }
+
+instance HasOnStickProp (Sticky ms) where
+    type OnStickProp (Sticky ms) = Ef ms IO ()
+    getOnStick = onStick
+    setOnStick os s = s { onStick = os }
+
+instance HasOnTopProp (Sticky ms) where
+    type OnTopProp (Sticky ms) = Ef ms IO ()
+    getOnTop = onTop
+    setOnTop ot s = s { onTop = ot }
+
+instance HasOnUnstickProp (Sticky ms) where
+    type OnUnstickProp (Sticky ms) = Ef ms IO ()
+    getOnUnstick = onUnstick
+    setOnUnstick ou s = s { onUnstick = ou }
+
+instance HasPushingProp (Sticky ms) where
+    getPushing = pushing
+    setPushing p s = s { pushing = p }
+
+instance HasScrollContextProp (Sticky ms) where
+    getScrollContext = scrollContext
+    setScrollContext sc s = s { scrollContext = sc }

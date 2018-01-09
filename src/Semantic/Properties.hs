@@ -23,6 +23,7 @@ import Semantic.Properties.Block as Export
 import Semantic.Properties.Blurring as Export
 import Semantic.Properties.Bordered as Export
 import Semantic.Properties.Borderless as Export
+import Semantic.Properties.BottomOffset as Export
 import Semantic.Properties.Branded as Export
 import Semantic.Properties.Bulleted as Export
 import Semantic.Properties.Celled as Export
@@ -110,6 +111,7 @@ import Semantic.Properties.MouseLeaveDelay as Export
 import Semantic.Properties.Name as Export
 import Semantic.Properties.Negative as Export
 import Semantic.Properties.Offset as Export
+import Semantic.Properties.OnBottom as Export
 import Semantic.Properties.OnBottomPassed as Export
 import Semantic.Properties.OnBottomPassedReverse as Export
 import Semantic.Properties.OnBottomVisible as Export
@@ -142,13 +144,16 @@ import Semantic.Properties.OnPassingReverse as Export
 import Semantic.Properties.OnRate as Export
 import Semantic.Properties.OnShow as Export
 import Semantic.Properties.OnStart as Export
+import Semantic.Properties.OnStick as Export
 import Semantic.Properties.OnSubmit as Export
 import Semantic.Properties.OnTablet as Export
+import Semantic.Properties.OnTop as Export
 import Semantic.Properties.OnTopPassed as Export
 import Semantic.Properties.OnTopPassedReverse as Export
 import Semantic.Properties.OnTopVisible as Export
 import Semantic.Properties.OnTopVisibleReverse as Export
 import Semantic.Properties.OnUnmount as Export
+import Semantic.Properties.OnUnstick as Export
 import Semantic.Properties.OnUpdate as Export
 import Semantic.Properties.Open as Export
 import Semantic.Properties.OpenOnTriggerClick as Export
@@ -168,6 +173,7 @@ import Semantic.Properties.Positive as Export
 import Semantic.Properties.Precision as Export
 import Semantic.Properties.Prepend as Export
 import Semantic.Properties.Primary as Export
+import Semantic.Properties.Pushing as Export
 import Semantic.Properties.Raised as Export
 import Semantic.Properties.ReadOnly as Export
 import Semantic.Properties.Ref as Export
@@ -179,6 +185,7 @@ import Semantic.Properties.Ribbon as Export
 import Semantic.Properties.Rotated as Export
 import Semantic.Properties.Rounded as Export
 import Semantic.Properties.Rows as Export
+import Semantic.Properties.ScrollContext as Export
 import Semantic.Properties.Scrolling as Export
 import Semantic.Properties.Secondary as Export
 import Semantic.Properties.Section as Export

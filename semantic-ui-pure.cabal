@@ -162,8 +162,10 @@ library
     Semantic.Properties.Blurring
     Semantic.Properties.Bordered
     Semantic.Properties.Borderless
+    Semantic.Properties.BottomOffset
     Semantic.Properties.Branded
     Semantic.Properties.Bulleted
+    Semantic.Properties.CancelButton
     Semantic.Properties.Celled
     Semantic.Properties.Centered
     Semantic.Properties.Children
@@ -184,6 +186,7 @@ library
     Semantic.Properties.Color
     Semantic.Properties.Columns
     Semantic.Properties.Completed
+    Semantic.Properties.ConfirmButton
     Semantic.Properties.Context
     Semantic.Properties.Continuous
     Semantic.Properties.Corner
@@ -249,6 +252,7 @@ library
     Semantic.Properties.Name
     Semantic.Properties.Negative
     Semantic.Properties.Offset
+    Semantic.Properties.OnBottom
     Semantic.Properties.OnBottomPassed
     Semantic.Properties.OnBottomPassedReverse
     Semantic.Properties.OnBottomVisible
@@ -282,11 +286,13 @@ library
     Semantic.Properties.OnShow
     Semantic.Properties.OnStart
     Semantic.Properties.OnSubmit
+    Semantic.Properties.OnTop
     Semantic.Properties.OnTopPassed
     Semantic.Properties.OnTopPassedReverse
     Semantic.Properties.OnTopVisible
     Semantic.Properties.OnTopVisibleReverse
     Semantic.Properties.OnTablet
+    Semantic.Properties.OnUnstick
     Semantic.Properties.OnUnmount
     Semantic.Properties.OnUpdate
     Semantic.Properties.OnWidescreen
@@ -307,6 +313,7 @@ library
     Semantic.Properties.Precision
     Semantic.Properties.Prepend
     Semantic.Properties.Primary
+    Semantic.Properties.Pushing
     Semantic.Properties.Raised
     Semantic.Properties.ReadOnly
     Semantic.Properties.Ref
@@ -318,6 +325,7 @@ library
     Semantic.Properties.Rotated
     Semantic.Properties.Rounded
     Semantic.Properties.Rows
+    Semantic.Properties.ScrollContext
     Semantic.Properties.Scrolling
     Semantic.Properties.Secondary
     Semantic.Properties.Section
