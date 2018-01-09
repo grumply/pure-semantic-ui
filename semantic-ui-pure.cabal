@@ -123,6 +123,7 @@ library
     Semantic.Modules.Checkbox
     Semantic.Modules.Dimmer
     Semantic.Modules.Dimmer.DimmerDimmable
+    Semantic.Modules.Dropdown.DropdownDivider
     Semantic.Modules.Embed
     Semantic.Modules.Modal
     Semantic.Modules.Modal.ModalActions
