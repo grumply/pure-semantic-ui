@@ -231,6 +231,7 @@ library
     Semantic.Properties.Info
     Semantic.Properties.Inline
     Semantic.Properties.InnerRef
+    Semantic.Properties.InputRef
     Semantic.Properties.Instant
     Semantic.Properties.Internal
     Semantic.Properties.Inverted

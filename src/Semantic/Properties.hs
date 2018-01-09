@@ -83,6 +83,7 @@ import Semantic.Properties.Indicating as Export
 import Semantic.Properties.Info as Export
 import Semantic.Properties.Inline as Export
 import Semantic.Properties.InnerRef as Export
+import Semantic.Properties.InputRef as Export
 import Semantic.Properties.Instant as Export
 import Semantic.Properties.Internal as Export
 import Semantic.Properties.Inverted as Export
