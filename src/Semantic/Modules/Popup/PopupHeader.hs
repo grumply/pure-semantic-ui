@@ -5,6 +5,11 @@ import Pure.View
 
 import Semantic.Utils
 
+import Semantic.Properties.As
+import Semantic.Properties.Attributes
+import Semantic.Properties.Children
+import Semantic.Properties.Classes
+
 data PopupHeader ms = PopupHeader_ 
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms] 
@@ -31,3 +36,22 @@ instance Pure PopupHeader ms where
                 : attributes
                 )
                 children
+
+instance HasAsProp (PopupHeader ms) where
+    type AsProp (PopupHeader ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs f ph = ph { as = f }
+
+instance HasAttributesProp (PopupHeader ms) where
+    type Attribute (PopupHeader ms) = Feature ms
+    getAttributes = attributes 
+    setAttributes cs ph = ph { attributes = cs }
+
+instance HasChildrenProp (PopupHeader ms) where
+    type Child (PopupHeader ms) = View ms
+    getChildren = children
+    setChildren cs ph = ph { children = cs }
+
+instance HasClassesProp (PopupHeader ms) where
+    getClasses = classes
+    setClasses cs ph = ph { classes = cs }
