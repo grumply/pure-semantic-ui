@@ -6,6 +6,12 @@ import Pure.View hiding (active,onClick)
 
 import Semantic.Utils
 
+import Semantic.Properties.As
+import Semantic.Properties.Attributes
+import Semantic.Properties.Classes
+import Semantic.Properties.Active
+import Semantic.Properties.OnClick
+
 data SearchResult item ms = SearchResult_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]
@@ -37,3 +43,34 @@ instance Typeable item => Pure (SearchResult item) ms where
                 : attributes
                 )
                 (renderSearchResult sr)
+
+instance HasAsProp (SearchResult item ms) where
+    type AsProp (SearchResult item ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs f sr = sr { as = f }
+
+instance HasAttributesProp (SearchResult item ms) where
+    type Attribute (SearchResult item ms) = Feature ms
+    getAttributes = attributes 
+    setAttributes cs sr = sr { attributes = cs }
+
+instance HasClassesProp (SearchResult item ms) where
+    getClasses = classes
+    setClasses cs sr = sr { classes = cs }
+
+instance HasActiveProp (SearchResult item ms) where
+    getActive = active
+    setActive a sr = sr { active = a }
+
+pattern SearchResultItem :: Maybe item -> SearchResult item ms -> SearchResult item ms
+pattern SearchResultItem i sr <- (item &&& id -> (i,sr)) where
+    SearchResultItem i sr = sr { item = i }
+
+instance HasOnClickProp (SearchResult item ms) where
+    type OnClickProp (SearchResult item ms) = Maybe item -> Ef ms IO ()
+    getOnClick = onClick
+    setOnClick oc sr = sr { onClick = oc }
+
+pattern RenderSearchResult :: (SearchResult item ms -> [View ms]) -> SearchResult item ms -> SearchResult item ms
+pattern RenderSearchResult rsr sr <- (renderSearchResult &&& id -> (rsr,sr)) where
+    RenderSearchResult rsr sr = sr { renderSearchResult = rsr }
