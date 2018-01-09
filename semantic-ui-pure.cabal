@@ -140,6 +140,7 @@ library
     Semantic.Modules.Rating.RatingIcon
     Semantic.Modules.Search.SearchCategory
     Semantic.Modules.Search.SearchResult
+    Semantic.Modules.Search.SearchResults
     Semantic.Modules.Sidebar
     Semantic.Modules.Sidebar.SidebarPushable
     Semantic.Modules.Sidebar.SidebarPusher
