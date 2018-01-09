@@ -327,6 +327,7 @@ library
     Semantic.Properties.Relaxed
     Semantic.Properties.Reply
     Semantic.Properties.Required
+    Semantic.Properties.Results
     Semantic.Properties.Reversed
     Semantic.Properties.Ribbon
     Semantic.Properties.Rotated
