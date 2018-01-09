@@ -11,6 +11,8 @@ import Semantic.Properties.Attributes
 import Semantic.Properties.Classes
 import Semantic.Properties.Active
 import Semantic.Properties.OnClick
+import Semantic.Properties.Renderer
+import Semantic.Properties.Value
 
 data SearchResult item ms = SearchResult_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -62,15 +64,17 @@ instance HasActiveProp (SearchResult item ms) where
     getActive = active
     setActive a sr = sr { active = a }
 
-pattern SearchResultItem :: Maybe item -> SearchResult item ms -> SearchResult item ms
-pattern SearchResultItem i sr <- (item &&& id -> (i,sr)) where
-    SearchResultItem i sr = sr { item = i }
+instance HasValueProp (SearchResult item ms) where
+    type ValueProp (SearchResult item ms) = Maybe item
+    getValue = item
+    setValue v sr = sr { item = v }
 
 instance HasOnClickProp (SearchResult item ms) where
     type OnClickProp (SearchResult item ms) = Maybe item -> Ef ms IO ()
     getOnClick = onClick
     setOnClick oc sr = sr { onClick = oc }
 
-pattern RenderSearchResult :: (SearchResult item ms -> [View ms]) -> SearchResult item ms -> SearchResult item ms
-pattern RenderSearchResult rsr sr <- (renderSearchResult &&& id -> (rsr,sr)) where
-    RenderSearchResult rsr sr = sr { renderSearchResult = rsr }
+instance HasRendererProp (SearchResult item ms) where
+    type RendererProp (SearchResult item ms) = SearchResult item ms -> [View ms]
+    getRenderer = renderSearchResult
+    setRenderer r sr = sr { renderSearchResult = r }
