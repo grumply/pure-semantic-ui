@@ -129,19 +129,19 @@ library
     Semantic.Modules.Modal.ModalContent
     Semantic.Modules.Modal.ModalDescription
     Semantic.Modules.Modal.ModalHeader
-    Semantic.Modules.Tab
-    Semantic.Modules.Tab.TabPane
-    Semantic.Modules.Transition
-    Semantic.Modules.Transition.TransitionGroup
     Semantic.Modules.Popup.PopupContent
     Semantic.Modules.Popup.PopupHeader
     Semantic.Modules.Progress
+    Semantic.Modules.Rating
+    Semantic.Modules.Rating.RatingIcon
     Semantic.Modules.Sidebar
     Semantic.Modules.Sidebar.SidebarPushable
     Semantic.Modules.Sidebar.SidebarPusher
     Semantic.Modules.Sticky
-    Semantic.Modules.Rating
-    Semantic.Modules.Rating.RatingIcon
+    Semantic.Modules.Tab
+    Semantic.Modules.Tab.TabPane
+    Semantic.Modules.Transition
+    Semantic.Modules.Transition.TransitionGroup
     Semantic.Properties
     Semantic.Properties.Action
     Semantic.Properties.Active
