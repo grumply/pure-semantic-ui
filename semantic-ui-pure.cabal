@@ -329,7 +329,6 @@ library
     Semantic.Properties.ReadOnly
     Semantic.Properties.Ref
     Semantic.Properties.Relaxed
-    Semantic.Properties.Renderer
     Semantic.Properties.Reply
     Semantic.Properties.Required
     Semantic.Properties.Results
