@@ -5,6 +5,11 @@ import Pure.View
 
 import Semantic.Utils
 
+import Semantic.Properties.As
+import Semantic.Properties.Attributes
+import Semantic.Properties.Children
+import Semantic.Properties.Classes
+
 data PopupContent ms = PopupContent_ 
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms] 
@@ -31,3 +36,22 @@ instance Pure PopupContent ms where
                 : attributes
                 )
                 children
+
+instance HasAsProp (PopupContent ms) where
+    type AsProp (PopupContent ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs f pc = pc { as = f }
+
+instance HasAttributesProp (PopupContent ms) where
+    type Attribute (PopupContent ms) = Feature ms
+    getAttributes = attributes 
+    setAttributes cs pc = pc { attributes = cs }
+
+instance HasChildrenProp (PopupContent ms) where
+    type Child (PopupContent ms) = View ms
+    getChildren = children
+    setChildren cs pc = pc { children = cs }
+
+instance HasClassesProp (PopupContent ms) where
+    getClasses = classes
+    setClasses cs pc = pc { classes = cs }
