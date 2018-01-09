@@ -133,6 +133,7 @@ library
     Semantic.Modules.Tab.TabPane
     Semantic.Modules.Transition
     Semantic.Modules.Transition.TransitionGroup
+    Semantic.Modules.Popup.PopupContent
     Semantic.Modules.Progress
     Semantic.Modules.Sidebar
     Semantic.Modules.Sidebar.SidebarPushable
