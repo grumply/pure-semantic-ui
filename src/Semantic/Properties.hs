@@ -179,6 +179,7 @@ import Semantic.Properties.Raised as Export
 import Semantic.Properties.ReadOnly as Export
 import Semantic.Properties.Ref as Export
 import Semantic.Properties.Relaxed as Export
+import Semantic.Properties.Renderer as Export
 import Semantic.Properties.Reply as Export
 import Semantic.Properties.Required as Export
 import Semantic.Properties.Results as Export
