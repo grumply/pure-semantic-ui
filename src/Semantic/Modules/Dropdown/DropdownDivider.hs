@@ -5,6 +5,10 @@ import Pure.View
 
 import Semantic.Utils
 
+import Semantic.Properties.As
+import Semantic.Properties.Attributes
+import Semantic.Properties.Classes
+
 data DropdownDivider ms = DropdownDivider_ 
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms] 
@@ -30,3 +34,17 @@ instance Pure DropdownDivider ms where
                 : attributes
                 )
                 []
+
+instance HasAsProp (DropdownDivider ms) where
+    type AsProp (DropdownDivider ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs f dd = dd { as = f }
+
+instance HasAttributesProp (DropdownDivider ms) where
+    type Attribute (DropdownDivider ms) = Feature ms
+    getAttributes = attributes 
+    setAttributes cs dd = dd { attributes = cs }
+
+instance HasClassesProp (DropdownDivider ms) where
+    getClasses = classes
+    setClasses cs dd = dd { classes = cs }
