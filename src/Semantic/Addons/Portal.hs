@@ -8,7 +8,7 @@ import qualified Data.List as List
 import GHC.Generics as G
 import Pure.Data.Txt as Txt (unwords)
 import Pure.View hiding (active,trigger,Proxy)
-import Pure.Lifted (getDocument,append,getChild,removeNode,setProperty,create,insertAt,JSV,Node(..),Element(..),Doc(..),(.#))
+import Pure.Lifted (getDocument,append,getChild,removeNode,setProperty,create,insertAt,body,IsJSV(..),JSV,Node(..),Element(..),Doc(..),(.#))
 import Pure.DOM
 
 import Semantic.Utils
@@ -238,7 +238,7 @@ instance Pure Portal ms where
                     PS {..} <- getState self
                     PSN {..} <- readIORef nodes
                     when (isNil rootNode) $ do
-                        let mn = fromMaybe body mountNode
+                        let mn = fromMaybe (toJSV body) mountNode
                         Element root <- create "div"
                         if prepend
                             then insertAt (Element mn) (Node root) 0

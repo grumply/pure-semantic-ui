@@ -6,7 +6,7 @@ import Data.Maybe
 import GHC.Generics as G
 import Pure.View hiding (round,addClass,trigger,OnClose)
 import Pure.DOM (addAnimation)
-import Pure.Lifted (JSV,Node(..),Element(..))
+import Pure.Lifted (body,IsJSV(..),JSV,Node(..),Element(..))
 
 import Semantic.Utils
 
@@ -86,7 +86,7 @@ instance VC ms => Pure Modal ms where
             let
                 getMountNode = do
                     Modal_ {..} <- getProps self
-                    return $ fromMaybe body mountNode 
+                    return $ fromMaybe (toJSV body) mountNode 
 
                 handleRef (Node n) = do
                     MS {..} <- getState self

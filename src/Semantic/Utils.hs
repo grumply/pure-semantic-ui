@@ -240,19 +240,6 @@ directionalTransitions =
 
 #ifdef __GHCJS__
 foreign import javascript unsafe
-    "document.body" body_js :: JSV
-#endif
-
-body :: JSV
-body =
-#ifdef __GHCJS__
-    body_js
-#else
-    ()
-#endif
-
-#ifdef __GHCJS__
-foreign import javascript unsafe
     "window.pageYOffset" pageYOffset_js :: IO Int
 #endif
 
