@@ -13,7 +13,7 @@ class HasAttributesProp a where
 
 pattern Attributes :: HasAttributesProp a => [Attribute a] -> a -> a
 pattern Attributes cs a <- (getAttributes &&& id -> (cs,a)) where
-    Attributes cs a = setAttributes cs a
+    Attributes cs a = setAttributes (getAttributes a ++ cs) a
 
 infixl 1 %
 (%) c as = c & Attributes as
