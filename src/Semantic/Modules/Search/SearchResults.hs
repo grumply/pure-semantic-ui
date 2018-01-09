@@ -5,6 +5,11 @@ import Pure.View
 
 import Semantic.Utils
 
+import Semantic.Properties.As
+import Semantic.Properties.Attributes
+import Semantic.Properties.Children
+import Semantic.Properties.Classes
+
 data SearchResults ms = SearchResults_ 
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms] 
@@ -31,3 +36,22 @@ instance Pure SearchResults ms where
                 : attributes
                 )
                 children
+
+instance HasAsProp (SearchResults ms) where
+    type AsProp (SearchResults ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs f sr = sr { as = f }
+
+instance HasAttributesProp (SearchResults ms) where
+    type Attribute (SearchResults ms) = Feature ms
+    getAttributes = attributes 
+    setAttributes cs sr = sr { attributes = cs }
+
+instance HasChildrenProp (SearchResults ms) where
+    type Child (SearchResults ms) = View ms
+    getChildren = children
+    setChildren cs sr = sr { children = cs }
+
+instance HasClassesProp (SearchResults ms) where
+    getClasses = classes
+    setClasses cs sr = sr { classes = cs }
