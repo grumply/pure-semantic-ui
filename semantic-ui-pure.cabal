@@ -137,6 +137,7 @@ library
     Semantic.Modules.Sidebar
     Semantic.Modules.Sidebar.SidebarPushable
     Semantic.Modules.Sidebar.SidebarPusher
+    Semantic.Modules.Sticky
     Semantic.Modules.Rating
     Semantic.Modules.Rating.RatingIcon
     Semantic.Properties

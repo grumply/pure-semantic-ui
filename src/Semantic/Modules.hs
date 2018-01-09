@@ -10,4 +10,5 @@ import Semantic.Modules.Transition as Export
 import Semantic.Modules.Transition.TransitionGroup as Export -- dependency cycle if Transition exports TransitionGroup
 import Semantic.Modules.Progress as Export
 import Semantic.Modules.Sidebar as Export
+import Semantic.Modules.Sticky as Export hiding (SS)
 import Semantic.Modules.Rating as Export
