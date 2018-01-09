@@ -126,6 +126,7 @@ library
     Semantic.Modules.Dropdown.DropdownDivider
     Semantic.Modules.Dropdown.DropdownHeader
     Semantic.Modules.Dropdown.DropdownMenu
+    Semantic.Modules.Dropdown.DropdownSearchInput
     Semantic.Modules.Embed
     Semantic.Modules.Modal
     Semantic.Modules.Modal.ModalActions
