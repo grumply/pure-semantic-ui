@@ -43,6 +43,17 @@ import Semantic.Modules.Dropdown.DropdownSearchInput as Export
 
 import Prelude hiding (error)
 
+{-
+Approaching this differently than Semantic-UI-React. Instead of managing
+everything internally, I want this to be a pure component that is maximally
+extensible so that customized dropdown components can be built on top 
+of it without too much work. The Semantic-UI-React/dropdown component should
+be implementable with this approach with this pure component as a core.
+
+I will likely split managed dropdown components off into their own library
+similarly to semantic-ui-pure-forms.
+-}
+
 data Dropdown ms = Dropdown_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]
