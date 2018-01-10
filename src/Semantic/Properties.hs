@@ -26,6 +26,7 @@ import Semantic.Properties.Borderless as Export
 import Semantic.Properties.BottomOffset as Export
 import Semantic.Properties.Branded as Export
 import Semantic.Properties.Bulleted as Export
+import Semantic.Properties.CancelButton as Export
 import Semantic.Properties.Celled as Export
 import Semantic.Properties.Centered as Export
 import Semantic.Properties.Children as Export
@@ -47,6 +48,7 @@ import Semantic.Properties.Color as Export
 import Semantic.Properties.Columns as Export
 import Semantic.Properties.Compact as Export
 import Semantic.Properties.Completed as Export
+import Semantic.Properties.ConfirmButton as Export
 import Semantic.Properties.Context as Export
 import Semantic.Properties.Continuous as Export
 import Semantic.Properties.Corner as Export
