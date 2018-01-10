@@ -125,6 +125,7 @@ library
     Semantic.Modules.Checkbox
     Semantic.Modules.Dimmer
     Semantic.Modules.Dimmer.DimmerDimmable
+    Semantic.Modules.Dropdown
     Semantic.Modules.Dropdown.DropdownDivider
     Semantic.Modules.Dropdown.DropdownHeader
     Semantic.Modules.Dropdown.DropdownItem
