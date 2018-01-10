@@ -44,7 +44,8 @@ instance VC ms => Pure RatingIcon ms where
     render RatingIcon_ {..} =
         let
             handleClick _ = 
-                return $ Just (onClick index)
+                let oc = onClick index
+                in return $ oc # Just oc
 
             handleKeyUp e@Enter = do
                 prevDef e
@@ -55,7 +56,8 @@ instance VC ms => Pure RatingIcon ms where
             handleKeyUp e = return $ Just $ onKeyUp index e
 
             handleMouseEnter _ = 
-                return $ Just (onMouseEnter index)
+                let ome = onMouseEnter index
+                in return $ ome # Just ome
 
             cs =
                 ( active # "active"

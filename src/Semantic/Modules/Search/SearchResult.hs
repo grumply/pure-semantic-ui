@@ -39,7 +39,7 @@ instance Pure SearchResult ms where
         in
             as
                 ( mergeClasses $ ClassList cs 
-                : On "click" def (\_ -> return $ Just onClick)
+                : onClick # On "click" def (\_ -> return $ Just onClick)
                 : attributes
                 )
                 children

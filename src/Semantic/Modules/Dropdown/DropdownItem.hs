@@ -44,7 +44,7 @@ instance Pure (DropdownItem ) ms where
         in
             as
                 ( mergeClasses $ ClassList cs
-                : On "click" def (\_ -> return $ Just onClick)
+                : onClick # On "click" def (\_ -> return $ Just onClick)
                 : Role "option"
                 : Attribute "aria-disabled" (disabled ? "true" $ "false")
                 : Attribute "aria-active" (active ? "true" $ "false")
