@@ -241,13 +241,16 @@ library
     Semantic.Properties.Instant
     Semantic.Properties.Internal
     Semantic.Properties.Inverted
+    Semantic.Properties.IsButton
     Semantic.Properties.IsChecked
     Semantic.Properties.IsContainer
     Semantic.Properties.IsHeader
     Semantic.Properties.IsIcon
     Semantic.Properties.IsImage
     Semantic.Properties.IsIndeterminate
+    Semantic.Properties.IsItem
     Semantic.Properties.IsRadio
+    Semantic.Properties.IsSearch
     Semantic.Properties.IsText
     Semantic.Properties.ItemsPerRow
     Semantic.Properties.Labeled
@@ -263,6 +266,7 @@ library
     Semantic.Properties.MountOnShow
     Semantic.Properties.MouseEnterDelay
     Semantic.Properties.MouseLeaveDelay
+    Semantic.Properties.Multiple
     Semantic.Properties.Name
     Semantic.Properties.Negative
     Semantic.Properties.Offset
@@ -378,10 +382,12 @@ library
     Semantic.Properties.Transparent
     Semantic.Properties.Trigger
     Semantic.Properties.Type
-    Semantic.Properties.UI
-    Semantic.Properties.URL
+    Semantic.Properties.Upward
+    Semantic.Properties.Unit
     Semantic.Properties.UnmountOnHide
     Semantic.Properties.Unstackable
+    Semantic.Properties.UI
+    Semantic.Properties.URL
     Semantic.Properties.Value
     Semantic.Properties.Vertical
     Semantic.Properties.VerticalAlign

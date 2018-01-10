@@ -88,13 +88,16 @@ import Semantic.Properties.InputRef as Export
 import Semantic.Properties.Instant as Export
 import Semantic.Properties.Internal as Export
 import Semantic.Properties.Inverted as Export
+import Semantic.Properties.IsButton as Export
 import Semantic.Properties.IsChecked as Export
 import Semantic.Properties.IsContainer as Export
 import Semantic.Properties.IsHeader as Export
 import Semantic.Properties.IsIcon as Export
 import Semantic.Properties.IsImage as Export
 import Semantic.Properties.IsIndeterminate as Export
+import Semantic.Properties.IsItem as Export
 import Semantic.Properties.IsRadio as Export
+import Semantic.Properties.IsSearch as Export
 import Semantic.Properties.IsText as Export
 import Semantic.Properties.ItemsPerRow as Export
 import Semantic.Properties.Labeled as Export
@@ -110,6 +113,7 @@ import Semantic.Properties.MountNode as Export
 import Semantic.Properties.MountOnShow as Export
 import Semantic.Properties.MouseEnterDelay as Export
 import Semantic.Properties.MouseLeaveDelay as Export
+import Semantic.Properties.Multiple as Export
 import Semantic.Properties.Name as Export
 import Semantic.Properties.Negative as Export
 import Semantic.Properties.Offset as Export
@@ -227,10 +231,11 @@ import Semantic.Properties.TransitionOnMount as Export
 import Semantic.Properties.Transparent as Export
 import Semantic.Properties.Trigger as Export
 import Semantic.Properties.Type as Export
-import Semantic.Properties.UI as Export
 import Semantic.Properties.Unit as Export
 import Semantic.Properties.UnmountOnHide as Export
 import Semantic.Properties.Unstackable as Export
+import Semantic.Properties.Upward as Export
+import Semantic.Properties.UI as Export
 import Semantic.Properties.URL as Export
 import Semantic.Properties.Value as Export
 import Semantic.Properties.Vertical as Export
