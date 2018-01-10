@@ -73,7 +73,6 @@ instance Pure ListIcon ms where
         in
             as
                 ( mergeClasses $ ClassList cs
-                : Attr "aria-hidden" "true"
                 : attributes
                 )
                 []

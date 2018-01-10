@@ -8,9 +8,6 @@ import Semantic.Properties.Aligned as Export
 import Semantic.Properties.Animated as Export
 import Semantic.Properties.Animation as Export
 import Semantic.Properties.AnimationDuration as Export
-import Semantic.Properties.AriaChecked as Export
-import Semantic.Properties.AriaPosinset as Export
-import Semantic.Properties.AriaSetsize as Export
 import Semantic.Properties.As as Export
 import Semantic.Properties.AspectRatio as Export
 import Semantic.Properties.Attached as Export

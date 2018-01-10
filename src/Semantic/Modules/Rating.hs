@@ -9,9 +9,6 @@ import Semantic.Utils
 import Semantic.Modules.Rating.RatingIcon
 
 import Semantic.Properties.Active
-import Semantic.Properties.AriaChecked
-import Semantic.Properties.AriaPosinset
-import Semantic.Properties.AriaSetsize
 import Semantic.Properties.Index
 import Semantic.Properties.OnClick
 import Semantic.Properties.OnMouseEnter
@@ -127,9 +124,6 @@ instance VC ms => Pure Rating ms where
                             (flip map [1..maxRating] $ \n ->
                                 RatingIcon $ def 
                                     & Active (rating >= Just n) 
-                                    & AriaChecked (rating == Just n) 
-                                    & AriaPosinset n 
-                                    & AriaSetsize maxRating 
                                     & Index n
                                     & OnClick handleIconClick
                                     & OnMouseEnter handleIconMouseEnter

@@ -47,10 +47,8 @@ instance Pure DropdownSearchInput ms where
                 : HostRef (\(Node n) -> return . Just $ inputRef n)
                 : may Tabindex tabIndex
                 : HTML.Type _type
-                : Attribute "aria-autocomplete" "list"
                 : Attribute "autoComplete" "off"
-                : mergeClasses $ ClassList cs 
-                : attributes
+                : mergeClasses (ClassList cs : attributes)
                 )
                 []
 

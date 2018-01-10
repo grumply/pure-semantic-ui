@@ -9,9 +9,6 @@ import Semantic.Utils
 import Semantic.Properties.As
 import Semantic.Properties.Attributes
 import Semantic.Properties.Classes
-import Semantic.Properties.AriaChecked
-import Semantic.Properties.AriaPosinset
-import Semantic.Properties.AriaSetsize
 import Semantic.Properties.Active
 import Semantic.Properties.Index
 import Semantic.Properties.OnClick
@@ -24,9 +21,6 @@ data RatingIcon ms = RatingIcon_
     , attributes :: [Feature ms]
     , classes :: [Txt]
     , active :: Bool
-    , ariaChecked :: Bool
-    , ariaPosinset :: Int
-    , ariaSetsize :: Int
     , index :: Int
     , onClick :: Int -> Ef ms IO ()
     , onKeyUp :: Int -> Evt -> Ef ms IO ()
@@ -69,9 +63,6 @@ instance VC ms => Pure RatingIcon ms where
         in
             as
                 ( mergeClasses $ ClassList cs
-                : Attribute "aria-checked" (ariaChecked ? "true" $ "false")
-                : Attribute "aria-posinset" (toTxt ariaPosinset)
-                : Attribute "aria-setsize" (toTxt ariaSetsize)
                 : On "click" def handleClick
                 : On "keyup" def handleKeyUp
                 : On "mouseenter" def handleMouseEnter
@@ -99,18 +90,6 @@ instance HasClassesProp (RatingIcon ms) where
 instance HasActiveProp (RatingIcon ms) where
     getActive = active
     setActive a ri = ri { active = a }
-
-instance HasAriaCheckedProp (RatingIcon ms) where
-    getAriaChecked = ariaChecked
-    setAriaChecked ac ri = ri { ariaChecked = ac }
-
-instance HasAriaPosinsetProp (RatingIcon ms) where
-    getAriaPosinset = ariaPosinset
-    setAriaPosinset ap ri = ri { ariaPosinset = ap }
-
-instance HasAriaSetsizeProp (RatingIcon ms) where
-    getAriaSetsize = ariaSetsize
-    setAriaSetsize as ri = ri { ariaSetsize = as }
 
 instance HasIndexProp (RatingIcon ms) where
     getIndex = index
