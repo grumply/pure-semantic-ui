@@ -250,7 +250,42 @@ pageYOffset =
 #endif
 
 #ifdef __GHCJS__
-foreign import javascript unsafe "$r = $1.getBoundingClientRect()" bounding_client_rect_js :: Element -> IO Obj
+foreign import javascript unsafe
+    "window.pageXOffset" pageXOffset_js :: IO Int
+#endif
+
+pageXOffset :: MonadIO c => c Int
+pageXOffset = 
+#ifdef __GHCJS__
+    liftIO pageXOffset_js
+#else
+    return 0
+#endif
+
+#ifdef __GHCJS__
+foreign import javascript unsafe
+    "document.documentElement.clientWidth" clientWidth_js :: IO Int
+#endif
+
+clientWidth :: MonadIO c => c Int
+clientWidth =
+#ifdef __GHCJS__
+    liftIO clientWidth_js
+#else
+    return 0
+#endif
+
+#ifdef __GHCJS__
+foreign import javascript unsafe
+    "document.documentElement.clientHeight" clientHeight_js :: IO Int
+#endif
+
+clientHeight :: MonadIO c => c Int
+clientHeight =
+#ifdef __GHCJS__
+    liftIO clientHeight_js
+#else
+    return 0
 #endif
 
 #ifdef __GHCJS__
@@ -324,7 +359,6 @@ innerWidth =
 #else
     return 0
 #endif
-
 
 -- This is hideous; functionalize.
 {-# INLINE mergeMappings #-}
