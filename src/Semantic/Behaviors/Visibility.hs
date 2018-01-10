@@ -209,7 +209,7 @@ instance Pure Visibility ms where
 
                     Just r <- readIORef ref
 
-                    (bottom,height,top,width) <- boundingRect (Element r)
+                    BR { brBottom = bottom, brHeight = height, brTop = top, brWidth = width } <- boundingRect (Element r)
 
                     oldPYO <- readIORef verticalOffset
                     newPYO <- pageYOffset

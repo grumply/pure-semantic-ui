@@ -253,18 +253,37 @@ pageYOffset =
 foreign import javascript unsafe "$r = $1.getBoundingClientRect()" bounding_client_rect_js :: Element -> IO Obj
 #endif
 
--- (bottom,height,top,width)
-boundingRect :: MonadIO c => Element -> c (Double,Double,Double,Double)
+#ifdef __GHCJS__
+foreign import javascript unsafe "$r = $1.getBoundingClientRect()" bounding_client_rect_js :: Element -> IO JSV
+#endif
+
+data BoundingRect = BR
+    { brLeft :: Double
+    , brTop :: Double
+    , brRight :: Double
+    , brBottom :: Double
+    , brX :: Double
+    , brY :: Double
+    , brWidth :: Double
+    , brHeight :: Double
+    } deriving (Generic,Default)
+
+boundingRect :: MonadIO c => Element -> c BoundingRect
 boundingRect node = do
 #ifdef __GHCJS__
-  rect <- liftIO $ bounding_client_rect_js node
-  return $ fromJust $ parse rect $ \o ->
-      (,,,) <$> (o .: "bottom") 
-            <*> (o .: "height") 
-            <*> (o .: "top") 
-            <*> (o .: "width")
+  o <- liftIO $ bounding_client_rect_js node
+  return $ fromJust $ do
+    brLeft   <- o .# "left"
+    brTop    <- o .# "top"
+    brRight  <- o .# "right"
+    brBottom <- o .# "bottom"
+    brX      <- o .# "x"
+    brY      <- o .# "y"
+    brWidth  <- o .# "width"
+    brHeight <- o .# "height"
+    return BR {..}
 #else
-    return (0,0,0,0)
+    return $ BR 0 0 0 0 0 0 0 0
 #endif
 
 #ifdef __GHCJS__

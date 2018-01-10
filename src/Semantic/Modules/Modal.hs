@@ -99,7 +99,7 @@ instance VC ms => Pure Modal ms where
                     void $ setState self $ \_ MS {..} -> 
                         MS { open = False, .. }
 
-                handleOpen = do
+                handleOpen _ = do
                     Modal_ {..} <- getProps self
                     onOpen
                     void $ setState self $ \_ MS {..} ->

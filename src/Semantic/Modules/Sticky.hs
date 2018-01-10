@@ -78,14 +78,14 @@ instance VC ms => Pure Sticky ms where
                     mtr <- readIORef triggerRef
                     tr <- case mtr of
                         Just tr -> boundingRect (Element tr)
-                        Nothing -> return (0,0,0,0)
+                        Nothing -> return def
 
                     cr <- boundingRect (Element $ fromMaybe (toJSV body) context)
                     
                     msr <- readIORef stickyRef
                     sr <- case msr of
                         Just sr -> boundingRect (Element sr)
-                        Nothing -> return (0,0,0,0)
+                        Nothing -> return def
                     
                     return (tr,cr,sr)
 
@@ -94,25 +94,20 @@ instance VC ms => Pure Sticky ms where
                     ss@SS {..} <- getState self
                     writeIORef ticking False
                     ih <- innerHeight
-                    (w triggerRect /= triggerWidth) #
-                        void (setState self $ \_ SS {..} -> SS { triggerWidth = w triggerRect, .. })
+                    (brWidth triggerRect /= triggerWidth) #
+                        void (setState self $ \_ SS {..} -> SS { triggerWidth = brWidth triggerRect, .. })
                     void (upd' s ss ih)
                     where
-                        b (b_,_,_,_) = b_
-                        h (_,h_,_,_) = h_
-                        t (_,_,t_,_) = t_
-                        w (_,_,_,w_) = w_
-
                         upd' Sticky_ {..} SS {..} (fromIntegral -> ih)
-                            | isPushing && t stickyRect <= t triggerRect     = stickToContextTop
-                            | isPushing && b contextRect + bottomOffset > ih = stickToScreenBottom
-                            | isPushing                                      = stickToContextBottom
-                            | h stickyRect > ih && t contextRect > 0         = stickToContextTop
-                            | h stickyRect > ih && b contextRect < ih        = stickToContextBottom
-                            | t triggerRect < offset && 
-                              h stickyRect + offset >= b contextRect         = stickToContextBottom
-                            | t triggerRect < offset                         = stickToScreenTop
-                            | True                                           = stickToContextTop
+                            | isPushing && brTop stickyRect <= brTop triggerRect    = stickToContextTop
+                            | isPushing && brBottom contextRect + bottomOffset > ih = stickToScreenBottom
+                            | isPushing                                             = stickToContextBottom
+                            | brHeight stickyRect > ih && brTop contextRect > 0     = stickToContextTop
+                            | brHeight stickyRect > ih && brBottom contextRect < ih = stickToContextBottom
+                            | brTop triggerRect < offset && 
+                              brHeight stickyRect + offset >= brBottom contextRect  = stickToContextBottom
+                            | brTop triggerRect < offset                            = stickToScreenTop
+                            | True                                                  = stickToContextTop
                             where
 
                                 setPushing p = pushing # do
@@ -128,7 +123,7 @@ instance VC ms => Pure Sticky ms where
                                     onBottom # parent self onBottom
                                     setSticking True
                                     setState self $ \_ SS {..} -> SS 
-                                        { top = Just (b contextRect - h stickyRect)
+                                        { top = Just (brBottom contextRect - brHeight stickyRect)
                                         , bottom = Nothing
                                         , .. 
                                         }
