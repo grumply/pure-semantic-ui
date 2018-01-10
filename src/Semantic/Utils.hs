@@ -1,6 +1,4 @@
 {-# LANGUAGE CPP #-}
-{-# LANGUAGE ScopedTypeVariables #-}
-{-# LANGUAGE TupleSections #-}
 module Semantic.Utils (module Semantic.Utils, module Export) where
 
 import Pure.Data hiding (lookup)

@@ -1,4 +1,3 @@
-{-# LANGUAGE ScopedTypeVariables #-}
 module Semantic.Addons.Portal where
 
 import Control.Concurrent

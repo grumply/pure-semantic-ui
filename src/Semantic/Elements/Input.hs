@@ -1,4 +1,3 @@
-{-# LANGUAGE ScopedTypeVariables #-}
 module Semantic.Elements.Input where
 
 import GHC.Generics as G

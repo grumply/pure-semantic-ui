@@ -40,6 +40,8 @@ library
     DuplicateRecordFields
     LambdaCase
     MultiWayIf
+    ScopedTypeVariables
+    TupleSections
     -- END EXTENSIONS
 
   exposed-modules:
