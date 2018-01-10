@@ -58,7 +58,7 @@ data Portal ms = Portal_
     , mouseLeaveDelay :: Int
     , onClose :: Ef ms IO ()
     , onMount :: Ef ms IO ()
-    , onOpen :: Ef ms IO ()
+    , onOpen :: Evt -> Ef ms IO ()
     , onUnmount :: Ef ms IO ()
     , open :: Bool
     , openOnTriggerClick :: Bool
@@ -158,18 +158,18 @@ instance Pure Portal ms where
                         closePortal
                 handleTriggerBlur _ = return ()
 
-                handleTriggerClick = do
+                handleTriggerClick e = do
                     PS {..} <- getState self
                     Portal_ {..} <- getProps self
                     if active && closeOnTriggerClick
                         then closePortal
                         else when (not active && openOnTriggerClick)
-                                openPortal
+                                (openPortal e)
 
-                handleTriggerFocus = do
+                handleTriggerFocus e = do
                     Portal_ {..} <- getProps self
                     when openOnTriggerFocus 
-                        openPortal
+                        (openPortal e)
 
                 handleTriggerMouseLeave = do
                     Portal_ {..} <- getProps self
@@ -181,20 +181,20 @@ instance Pure Portal ms where
                         modifyIORef timers $ \PST {..} ->
                             PST { mouseLeaveTimer = Just tid, .. }
 
-                handleTriggerMouseEnter = do
+                handleTriggerMouseEnter e = do
                     Portal_ {..} <- getProps self
                     PS {..} <- getState self
                     when openOnTriggerMouseEnter $ do
                         tid <- forkIO $ do
                             threadDelay mouseEnterDelay
-                            openPortal
+                            openPortal e
                         modifyIORef timers $ \PST {..} ->
                             PST { mouseEnterTimer = Just tid, .. }
 
-                openPortal = do
+                openPortal e = do
                     Portal_ {..} <- getProps self
                     setState self $ \_ PS {..} -> PS { active = True, .. }
-                    void $ parent self onOpen
+                    void $ parent self (onOpen e)
 
                 closePortal = do
                     Portal_ {..} <- getProps self
@@ -305,10 +305,10 @@ instance Pure Portal ms where
                             (Proxy $ def & InnerRef handleRef & Children
                                 [ cloneWithProps trigger
                                     [ On "blur" def (\e -> handleTriggerBlur e >> return Nothing)
-                                    , On "click" def (\_ -> handleTriggerClick >> return Nothing)
-                                    , On "focus" def (\_ -> handleTriggerFocus >> return Nothing)
+                                    , On "click" def (\e -> handleTriggerClick e >> return Nothing)
+                                    , On "focus" def (\e -> handleTriggerFocus e >> return Nothing)
                                     , On "mouseleave" def (\_ -> handleTriggerMouseLeave >> return Nothing)
-                                    , On "mouseenter" def (\_ -> handleTriggerMouseEnter >> return Nothing)
+                                    , On "mouseenter" def (\e -> handleTriggerMouseEnter e >> return Nothing)
                                     ]
                                 ]
                             )
@@ -379,7 +379,7 @@ instance HasOnMountProp (Portal ms) where
     setOnMount om p = p { onMount = om }
 
 instance HasOnOpenProp (Portal ms) where
-    type OnOpenProp (Portal ms) = Ef ms IO ()
+    type OnOpenProp (Portal ms) = Evt -> Ef ms IO ()
     getOnOpen = onOpen
     setOnOpen oo p = p { onOpen = oo }
 

@@ -59,7 +59,7 @@ instance VC ms => Pure TransitionablePortal ms where
                     TPS {..} <- getState self
                     isNil open # void (setState self $ \_ TPS {..} -> TPS { portalOpen = not portalOpen, .. })
 
-                handlePortalOpen = void $ setState self $ \_ TPS {..} -> TPS { portalOpen = True, .. }
+                handlePortalOpen _ = void $ setState self $ \_ TPS {..} -> TPS { portalOpen = True, .. }
 
                 handleTransitionHide status = do
                     TransitionablePortal_ {..} <- getProps self
