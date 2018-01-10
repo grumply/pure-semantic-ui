@@ -139,6 +139,7 @@ library
     Semantic.Modules.Progress
     Semantic.Modules.Rating
     Semantic.Modules.Rating.RatingIcon
+    Semantic.Modules.Search
     Semantic.Modules.Search.SearchCategory
     Semantic.Modules.Search.SearchResult
     Semantic.Modules.Search.SearchResults
@@ -153,6 +154,7 @@ library
     Semantic.Properties
     Semantic.Properties.Action
     Semantic.Properties.Active
+    Semantic.Properties.Aligned
     Semantic.Properties.Animated
     Semantic.Properties.Animation
     Semantic.Properties.AnimationDuration
@@ -175,6 +177,7 @@ library
     Semantic.Properties.BottomOffset
     Semantic.Properties.Branded
     Semantic.Properties.Bulleted
+    Semantic.Properties.Category
     Semantic.Properties.CancelButton
     Semantic.Properties.Celled
     Semantic.Properties.Centered
@@ -263,6 +266,7 @@ library
     Semantic.Properties.Name
     Semantic.Properties.Negative
     Semantic.Properties.Offset
+    Semantic.Properties.OnBlur
     Semantic.Properties.OnBottom
     Semantic.Properties.OnBottomPassed
     Semantic.Properties.OnBottomPassedReverse
@@ -278,6 +282,7 @@ library
     Semantic.Properties.OnCancel
     Semantic.Properties.OnConfirm
     Semantic.Properties.OnDismiss
+    Semantic.Properties.OnFocus
     Semantic.Properties.OnHide
     Semantic.Properties.OnInput
     Semantic.Properties.OnKeyUp

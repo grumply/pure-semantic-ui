@@ -4,6 +4,7 @@ import Pure.Data (def)
 
 import Semantic.Properties.Action as Export
 import Semantic.Properties.Active as Export
+import Semantic.Properties.Aligned as Export
 import Semantic.Properties.Animated as Export
 import Semantic.Properties.Animation as Export
 import Semantic.Properties.AnimationDuration as Export
@@ -26,6 +27,7 @@ import Semantic.Properties.Borderless as Export
 import Semantic.Properties.BottomOffset as Export
 import Semantic.Properties.Branded as Export
 import Semantic.Properties.Bulleted as Export
+import Semantic.Properties.Category as Export
 import Semantic.Properties.CancelButton as Export
 import Semantic.Properties.Celled as Export
 import Semantic.Properties.Centered as Export
@@ -114,6 +116,7 @@ import Semantic.Properties.MouseLeaveDelay as Export
 import Semantic.Properties.Name as Export
 import Semantic.Properties.Negative as Export
 import Semantic.Properties.Offset as Export
+import Semantic.Properties.OnBlur as Export
 import Semantic.Properties.OnBottom as Export
 import Semantic.Properties.OnBottomPassed as Export
 import Semantic.Properties.OnBottomPassedReverse as Export
@@ -129,6 +132,7 @@ import Semantic.Properties.OnComputer as Export
 import Semantic.Properties.OnCancel as Export
 import Semantic.Properties.OnConfirm as Export
 import Semantic.Properties.OnDismiss as Export
+import Semantic.Properties.OnFocus as Export
 import Semantic.Properties.OnHide as Export
 import Semantic.Properties.OnInput as Export
 import Semantic.Properties.OnKeyUp as Export
