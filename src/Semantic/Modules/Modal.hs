@@ -130,7 +130,7 @@ instance VC ms => Pure Modal ms where
 
                     mr <- readIORef ref
                     for_ mr $ \r -> do
-                        (_,h,_,_) <- boundingRect (Element r)
+                        BR { brHeight = h } <- boundingRect (Element r)
                         ih <- innerHeight
 
                         let topMargin' = negate (round (h / 2))
