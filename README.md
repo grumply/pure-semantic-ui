@@ -2,7 +2,7 @@
 
 Semantic-UI-Pure implements the [Semantic-UI](https://semantic-ui.com/) by porting [Semantic-UI-React](https://react.semantic-ui.com/). 
 
-Many thanks to the people over at Semantic-UI-React who did all of the hard work of the initial react-style component implementations.
+Many thanks to the people over at Semantic-UI-React who did all of the hard work of the react component implementations.
 
 ## Usage
 
