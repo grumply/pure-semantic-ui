@@ -92,6 +92,9 @@ instance Default (Dropdown ms) where
 pattern Dropdown :: Dropdown ms -> View ms
 pattern Dropdown d = View d
 
+pattern Select :: Dropdown ms -> View ms
+pattern Select d = View (Selection d)
+
 instance Pure Dropdown ms where
     render Dropdown_ {..} =
         let 
