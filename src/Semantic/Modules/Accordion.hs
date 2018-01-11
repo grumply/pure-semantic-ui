@@ -1,4 +1,4 @@
-module Semantic.Modules.Accordion where
+module Semantic.Modules.Accordion (module Semantic.Modules.Accordion, module Export) where
 
 import GHC.Generics as G
 import Pure.View hiding (styled)

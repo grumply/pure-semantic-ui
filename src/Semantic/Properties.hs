@@ -24,8 +24,8 @@ import Semantic.Properties.Borderless as Export
 import Semantic.Properties.BottomOffset as Export
 import Semantic.Properties.Branded as Export
 import Semantic.Properties.Bulleted as Export
-import Semantic.Properties.Category as Export
 import Semantic.Properties.CancelButton as Export
+import Semantic.Properties.Category as Export
 import Semantic.Properties.Celled as Export
 import Semantic.Properties.Centered as Export
 import Semantic.Properties.Children as Export
@@ -126,6 +126,7 @@ import Semantic.Properties.OnBottomPassed as Export
 import Semantic.Properties.OnBottomPassedReverse as Export
 import Semantic.Properties.OnBottomVisible as Export
 import Semantic.Properties.OnBottomVisibleReverse as Export
+import Semantic.Properties.OnCancel as Export
 import Semantic.Properties.Once as Export
 import Semantic.Properties.OnChange as Export
 import Semantic.Properties.OnClick as Export
@@ -133,7 +134,6 @@ import Semantic.Properties.OnClickOutside as Export
 import Semantic.Properties.OnClose as Export
 import Semantic.Properties.OnComplete as Export
 import Semantic.Properties.OnComputer as Export
-import Semantic.Properties.OnCancel as Export
 import Semantic.Properties.OnConfirm as Export
 import Semantic.Properties.OnDismiss as Export
 import Semantic.Properties.OnFocus as Export
@@ -143,9 +143,9 @@ import Semantic.Properties.OnKeyUp as Export
 import Semantic.Properties.OnLargeScreen as Export
 import Semantic.Properties.Only as Export
 import Semantic.Properties.OnMobile as Export
+import Semantic.Properties.OnMount as Export
 import Semantic.Properties.OnMouseDown as Export
 import Semantic.Properties.OnMouseEnter as Export
-import Semantic.Properties.OnMount as Export
 import Semantic.Properties.OnOffScreen as Export
 import Semantic.Properties.OnOnScreen as Export
 import Semantic.Properties.OnOpen as Export
@@ -166,11 +166,11 @@ import Semantic.Properties.OnTopVisibleReverse as Export
 import Semantic.Properties.OnUnmount as Export
 import Semantic.Properties.OnUnstick as Export
 import Semantic.Properties.OnUpdate as Export
+import Semantic.Properties.OnWidescreen as Export
 import Semantic.Properties.Open as Export
 import Semantic.Properties.OpenOnTriggerClick as Export
 import Semantic.Properties.OpenOnTriggerFocus as Export
 import Semantic.Properties.OpenOnTriggerMouseEnter as Export
-import Semantic.Properties.OnWidescreen as Export
 import Semantic.Properties.Ordered as Export
 import Semantic.Properties.Padded as Export
 import Semantic.Properties.Page as Export
@@ -225,7 +225,6 @@ import Semantic.Properties.TabIndex as Export
 import Semantic.Properties.Tabular as Export
 import Semantic.Properties.Tag as Export
 import Semantic.Properties.Tertiary as Export
-import Semantic.Properties.Test as Export
 import Semantic.Properties.TextAlign as Export
 import Semantic.Properties.Threaded as Export
 import Semantic.Properties.Toggle as Export
@@ -235,11 +234,11 @@ import Semantic.Properties.Transparent as Export
 import Semantic.Properties.Trigger as Export
 import Semantic.Properties.TriggerOn as Export
 import Semantic.Properties.Type as Export
+import Semantic.Properties.UI as Export
 import Semantic.Properties.Unit as Export
 import Semantic.Properties.UnmountOnHide as Export
 import Semantic.Properties.Unstackable as Export
 import Semantic.Properties.Upward as Export
-import Semantic.Properties.UI as Export
 import Semantic.Properties.URL as Export
 import Semantic.Properties.Value as Export
 import Semantic.Properties.Vertical as Export
@@ -251,8 +250,8 @@ import Semantic.Properties.Width as Export
 import Semantic.Properties.Widths as Export
 import Semantic.Properties.WithModal as Export
 import Semantic.Properties.WithPortal as Export
-import Semantic.Properties.WithTransition as Export
 import Semantic.Properties.WithRef as Export
+import Semantic.Properties.WithTransition as Export
 import Semantic.Properties.Wrapped as Export
 
 infixr 0 <|

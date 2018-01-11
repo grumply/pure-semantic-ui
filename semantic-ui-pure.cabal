@@ -97,10 +97,10 @@ library
     Semantic.Elements.Image
     Semantic.Elements.Image.ImageGroup
     Semantic.Elements.Input
+    Semantic.Elements.KeyedList
     Semantic.Elements.Label
     Semantic.Elements.Label.LabelDetail
     Semantic.Elements.Label.LabelGroup
-    Semantic.Elements.KeyedList
     Semantic.Elements.List
     Semantic.Elements.List.ListContent
     Semantic.Elements.List.ListDescription
@@ -178,8 +178,8 @@ library
     Semantic.Properties.BottomOffset
     Semantic.Properties.Branded
     Semantic.Properties.Bulleted
-    Semantic.Properties.Category
     Semantic.Properties.CancelButton
+    Semantic.Properties.Category
     Semantic.Properties.Celled
     Semantic.Properties.Centered
     Semantic.Properties.Children
@@ -199,13 +199,13 @@ library
     Semantic.Properties.Collapsing
     Semantic.Properties.Color
     Semantic.Properties.Columns
+    Semantic.Properties.Compact
     Semantic.Properties.Completed
     Semantic.Properties.ConfirmButton
     Semantic.Properties.Context
     Semantic.Properties.Continuous
     Semantic.Properties.Corner
     Semantic.Properties.CurrentRating
-    Semantic.Properties.Compact
     Semantic.Properties.DefaultActive
     Semantic.Properties.DefaultOpen
     Semantic.Properties.DefaultRating
@@ -280,14 +280,14 @@ library
     Semantic.Properties.OnBottomPassedReverse
     Semantic.Properties.OnBottomVisible
     Semantic.Properties.OnBottomVisibleReverse
+    Semantic.Properties.OnCancel
     Semantic.Properties.Once
     Semantic.Properties.OnChange
-    Semantic.Properties.OnClickOutside
     Semantic.Properties.OnClick
+    Semantic.Properties.OnClickOutside
     Semantic.Properties.OnClose
-    Semantic.Properties.OnComputer
     Semantic.Properties.OnComplete
-    Semantic.Properties.OnCancel
+    Semantic.Properties.OnComputer
     Semantic.Properties.OnConfirm
     Semantic.Properties.OnDismiss
     Semantic.Properties.OnFocus
@@ -309,15 +309,16 @@ library
     Semantic.Properties.OnRate
     Semantic.Properties.OnShow
     Semantic.Properties.OnStart
+    Semantic.Properties.OnStick
     Semantic.Properties.OnSubmit
+    Semantic.Properties.OnTablet
     Semantic.Properties.OnTop
     Semantic.Properties.OnTopPassed
     Semantic.Properties.OnTopPassedReverse
     Semantic.Properties.OnTopVisible
     Semantic.Properties.OnTopVisibleReverse
-    Semantic.Properties.OnTablet
-    Semantic.Properties.OnUnstick
     Semantic.Properties.OnUnmount
+    Semantic.Properties.OnUnstick
     Semantic.Properties.OnUpdate
     Semantic.Properties.OnWidescreen
     Semantic.Properties.Open
@@ -387,12 +388,13 @@ library
     Semantic.Properties.Trigger
     Semantic.Properties.TriggerOn
     Semantic.Properties.Type
-    Semantic.Properties.Upward
+    Semantic.Properties.UI
     Semantic.Properties.Unit
     Semantic.Properties.UnmountOnHide
     Semantic.Properties.Unstackable
-    Semantic.Properties.UI
+    Semantic.Properties.Upward
     Semantic.Properties.URL
+    Semantic.Properties.Utils
     Semantic.Properties.Value
     Semantic.Properties.Vertical
     Semantic.Properties.VerticalAlign
@@ -403,8 +405,8 @@ library
     Semantic.Properties.Widths
     Semantic.Properties.WithModal
     Semantic.Properties.WithPortal
-    Semantic.Properties.WithTransition
     Semantic.Properties.WithRef
+    Semantic.Properties.WithTransition
     Semantic.Properties.Wrapped
     Semantic.Utils
     Semantic.Views
