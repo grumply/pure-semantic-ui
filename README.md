@@ -94,21 +94,19 @@ Most components implement the `Children` property.
 
 ```haskell
 myButton = Button $ def & Size "small" & Circular & Children
-    [ "My Button"
-    , Span [] "And my span" 
-    ]
+    [ "My Button" ]
 ```
 
 There is a shorthand, `!`, for `& Children`.
 
 ```haskell
-myButton = def & Size "small" & Circular ! [ "My Button" ]
+myButton = Button $ def & Size "small" & Circular ! [ "My Button" ]
 ```
 
 And since there is an `IsString` instance for `[View ms]`, we can omit the list syntax.
 
 ```haskell
-myButton = def & Size "small" & Circular ! "My Button"
+myButton = Button $ def & Size "small" & Circular ! "My Button"
 ```
 
 ### Attributes/Features
@@ -121,6 +119,8 @@ There is a shorthand, `%`, for `& Attributes`.
 infixl 1 %
 (%) c as = c & Attributes as
 ```
+
+### Clean Syntax
 
 There are three other combinators of import to ease view construction.
 
