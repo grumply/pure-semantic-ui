@@ -301,7 +301,7 @@ data BoundingRect = BR
     , brY :: Double
     , brWidth :: Double
     , brHeight :: Double
-    } deriving (Generic,Default)
+    } deriving (Generic,Default,Eq)
 
 boundingRect :: MonadIO c => Element -> c BoundingRect
 boundingRect node = do

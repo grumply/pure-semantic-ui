@@ -17,7 +17,23 @@ import Semantic.Modules.Popup.PopupHeader as Export
 
 import Semantic.Addons.Portal hiding (PS)
 
+import Semantic.Properties.As
+import Semantic.Properties.Attributes
 import Semantic.Properties.Children
+import Semantic.Properties.Classes
+import Semantic.Properties.Basic
+import Semantic.Properties.Flowing
+import Semantic.Properties.HideOnScroll
+import Semantic.Properties.Hoverable
+import Semantic.Properties.Inverted
+import Semantic.Properties.Offset
+import Semantic.Properties.Position
+import Semantic.Properties.Size
+import Semantic.Properties.Styles
+import Semantic.Properties.TriggerOn
+import Semantic.Properties.Wide
+import Semantic.Properties.WithPortal
+
 import Semantic.Properties.OnMount
 import Semantic.Properties.OnUnmount
 import Semantic.Properties.OnOpen
@@ -275,3 +291,97 @@ instance VC ms => Pure Popup ms where
                                         children
                                     ]
                 }
+
+instance HasAsProp (Popup ms) where
+    type AsProp (Popup ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs f p = p { as = f }
+
+instance HasAttributesProp (Popup ms) where
+    type Attribute (Popup ms) = Feature ms
+    getAttributes = attributes 
+    setAttributes cs p = p { attributes = cs }
+
+instance HasChildrenProp (Popup ms) where
+    type Child (Popup ms) = View ms
+    getChildren = children
+    setChildren cs p = p { children = cs }
+
+instance HasClassesProp (Popup ms) where
+    getClasses = classes
+    setClasses cs p = p { classes = cs }                
+
+instance HasBasicProp (Popup ms) where
+    getBasic = basic
+    setBasic b p = p { basic = b }
+
+instance HasFlowingProp (Popup ms) where
+    getFlowing = flowing
+    setFlowing f p = p { flowing = f }
+
+instance HasHideOnScrollProp (Popup ms) where
+    getHideOnScroll = hideOnScroll
+    setHideOnScroll hos p = p { hideOnScroll = hos }
+
+instance HasHoverableProp (Popup ms) where
+    getHoverable = hoverable
+    setHoverable h p = p { hoverable = h }
+
+instance HasInvertedProp (Popup ms) where
+    getInverted = inverted
+    setInverted i p = p { inverted = i }
+
+instance HasOffsetProp (Popup ms) where
+    type OffsetProp (Popup ms) = Double
+    getOffset = offset
+    setOffset o p = p { offset = o }
+
+instance HasOnCloseProp (Popup ms) where
+    type OnCloseProp (Popup ms) = Ef ms IO ()
+    getOnClose = onClose
+    setOnClose oc p = p { onClose = oc }
+
+instance HasOnMountProp (Popup ms) where
+    type OnMountProp (Popup ms) = Ef ms IO ()
+    getOnMount = onMount
+    setOnMount om p = p { onMount = om }
+
+instance HasOnOpenProp (Popup ms) where
+    type OnOpenProp (Popup ms) = Ef ms IO ()
+    getOnOpen = onOpen
+    setOnOpen oo p = p { onOpen = oo }
+
+instance HasOnUnmountProp (Popup ms) where
+    type OnUnmountProp (Popup ms) = Ef ms IO ()
+    getOnUnmount = onUnmount
+    setOnUnmount ou p = p { onUnmount = ou }
+
+instance HasPositionProp (Popup ms) where
+    getPosition = position
+    setPosition pos p = p { position = pos }
+
+instance HasSizeProp (Popup ms) where
+    getSize = size
+    setSize sz p = p { size = sz }
+
+instance HasStylesProp (Popup ms) where
+    getStyles = styles
+    setStyles s p = p { styles = s }
+
+instance HasTriggerProp (Popup ms) where
+    type TriggerProp (Popup ms) = View ms
+    getTrigger = trigger
+    setTrigger t p = p { trigger = t }
+
+instance HasTriggerOnProp (Popup ms) where
+    getTriggerOn = triggerOn
+    setTriggerOn to p = p { triggerOn = to }
+
+instance HasWideProp (Popup ms) where
+    getWide = wide
+    setWide w p = p { wide = w }
+
+instance HasWithPortalProp (Popup ms) where
+    type WithPortalProp (Popup ms) = Portal ms -> Portal ms
+    getWithPortal = withPortal
+    setWithPortal wp p = p { withPortal = wp }

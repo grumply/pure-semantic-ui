@@ -72,13 +72,16 @@ import Semantic.Properties.Fixed as Export
 import Semantic.Properties.Flipped as Export
 import Semantic.Properties.Floated as Export
 import Semantic.Properties.Floating as Export
+import Semantic.Properties.Flowing as Export
 import Semantic.Properties.Fluid as Export
 import Semantic.Properties.Focus as Export
 import Semantic.Properties.Focused as Export
 import Semantic.Properties.FullWidth as Export
 import Semantic.Properties.Grouped as Export
 import Semantic.Properties.Hidden as Export
+import Semantic.Properties.HideOnScroll as Export
 import Semantic.Properties.Horizontal as Export
+import Semantic.Properties.Hoverable as Export
 import Semantic.Properties.Index as Export
 import Semantic.Properties.Indicating as Export
 import Semantic.Properties.Info as Export
@@ -230,6 +233,7 @@ import Semantic.Properties.Total as Export
 import Semantic.Properties.TransitionOnMount as Export
 import Semantic.Properties.Transparent as Export
 import Semantic.Properties.Trigger as Export
+import Semantic.Properties.TriggerOn as Export
 import Semantic.Properties.Type as Export
 import Semantic.Properties.Unit as Export
 import Semantic.Properties.UnmountOnHide as Export
@@ -242,6 +246,7 @@ import Semantic.Properties.Vertical as Export
 import Semantic.Properties.VerticalAlign as Export
 import Semantic.Properties.Visible as Export
 import Semantic.Properties.Warning as Export
+import Semantic.Properties.Wide as Export
 import Semantic.Properties.Width as Export
 import Semantic.Properties.Widths as Export
 import Semantic.Properties.WithModal as Export

@@ -226,13 +226,16 @@ library
     Semantic.Properties.Flipped
     Semantic.Properties.Floated
     Semantic.Properties.Floating
+    Semantic.Properties.Flowing
     Semantic.Properties.Fluid
     Semantic.Properties.Focus
     Semantic.Properties.Focused
     Semantic.Properties.FullWidth
     Semantic.Properties.Grouped
     Semantic.Properties.Hidden
+    Semantic.Properties.HideOnScroll
     Semantic.Properties.Horizontal
+    Semantic.Properties.Hoverable
     Semantic.Properties.Index
     Semantic.Properties.Indicating
     Semantic.Properties.Info
@@ -382,6 +385,7 @@ library
     Semantic.Properties.TransitionOnMount
     Semantic.Properties.Transparent
     Semantic.Properties.Trigger
+    Semantic.Properties.TriggerOn
     Semantic.Properties.Type
     Semantic.Properties.Upward
     Semantic.Properties.Unit
@@ -394,6 +398,7 @@ library
     Semantic.Properties.VerticalAlign
     Semantic.Properties.Visible
     Semantic.Properties.Warning
+    Semantic.Properties.Wide
     Semantic.Properties.Width
     Semantic.Properties.Widths
     Semantic.Properties.WithModal
