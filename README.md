@@ -1,55 +1,99 @@
 # Semantic UI Pure
 
+Semantic-UI-Pure implements the [Semantic-UI](https://semantic-ui.com/) by porting [Semantic-UI-React](https://react.semantic-ui.com/). 
+
+Many thanks to the people over at Semantic-UI-React who did all of the hard work of the initial react-style component implementations.
+
 ## Usage
 
-Semantic-UI-Pure takes a `Component + Patterns + Properties` approach. Every component has a pattern for construction and inspection and for each property a component supports, an instance of a `Has*Prop` class is declared.
+Semantic-UI-Pure takes a `Component + Patterns` approach. Every component has a pattern for construction and inspection and for each property a component supports, an instance of a `Has*Prop` class is declared with a bi-directional pattern to get and set it.
 
 ### Construction
 
-Every component has an instance of `Default` as well as a bi-directional pattern for injection into a `View` as well as for pattern matching a `View`.
-
-Here, `Grid` is our pattern declared in `Semantic.Collections.Grid` and `def` will be automatically instantiated to type `def :: Grid ms` to unify with `pattern Grid`.
+Each component has a pattern for injection and type unification. For example, `Grid` has:
 
 ```haskell
--- construction
+data Grid ms = Grid_ {...}
+
+pattern Grid :: Grid ms -> View ms
+pattern Grid g = View g
+```
+
+Here, we'll use the `Grid` pattern to inject a grid component into a view. 
+
+```haskell
 myGrid :: View ms
 myGrid = Grid def
 ```
 
-With bidirectional patterns, we can use the same keyword, here `Grid`, to pattern match over a `View ms` to look for a `Grid ms` component.
+Note that `Grid` admits an instance of `Default`, so we can simply create a basic `Grid` with `def`.
+
+With our bidirectional `Grid` pattern, we can use the same keyword to pattern match over a `View ms` to look for a `Grid ms` component.
 
 ```haskell
--- pattern matching
 getGrid :: View ms -> Maybe (Grid ms)
 getGrid (Grid g) = Just g
 getGrid _        = Nothing
 ```
 
-The best way to modify a component is via typeclass-encoded property patterns. For instance, many components support a `Size` property. So there exists a `Size` bidirectional pattern to both pattern match and inject sizes.
+### Properties
+
+Each component implements a set of properties. For instance, `Grid` has an inverted property. 
 
 ```haskell
-pattern Size :: HasSizeProp a => Txt -> a -> a
-pattern Size s a <- (getSize &&& id -> (s,a)) where
-    Size s a = setSize s a
+data Grid ms = Grid_
+    { 
+    ...
+    , inverted :: Bool
+    ...
+    }
+
+instance HasInvertedProp (Grid ms) where
+    getInverted = inverted
+    setInverted i grid = grid { inverted = i }
 ```
 
-With this `Size` pattern, we can modify a default instance of a component with a custom size.
+And there exists an `Inverted` pattern.
 
 ```haskell
-myButton :: Button ms
-myButton = Size "small" def
+pattern Inverted :: HasInvertedProp a => a -> a
+pattern Inverted a <- (getInverted &&& id -> (True,a)) where
+    Inverted a = setInverted True a
 ```
 
-When chaining properties, I suggest using `(&)` from `Data.Function` which is automatically exported by `Semantic`.
+With this pattern we can set the inverted prop of a grid to `True`.
 
 ```haskell
-myButton = def & Size "small" & Circular
+myInverteGrid = Grid $ def & Inverted
 ```
 
-To add `Children` to a component, there is a `Children` property supporting `Semantic` components as well as primitive Pure `View`s.
+And because this is a bi-directional pattern, we can even pattern match for inverted grids.
 
 ```haskell
-myButton = def & Size "small" & Circular & Children
+getInvertedGrid :: View ms -> Maybe (Grid ms)
+getInvertedGrid (Inverted (Grid g)) = Just g
+getInvertedGrid _ = Nothing
+```
+
+We can even create a pattern for inverted grids.
+
+```haskell
+pattern InvertedGrid :: Grid ms -> View ms
+pattern InvertedGrid g = Inverted (Grid g)
+```
+
+Note that properties can be easily chained together: 
+
+```haskell
+myButton = Button $ def & Size "small" & Circular
+```
+
+### Children
+
+Most components implement the `Children` property.
+
+```haskell
+myButton = Button $ def & Size "small" & Circular & Children
     [ "My Button"
     , Span [] "And my span" 
     ]
@@ -67,7 +111,11 @@ And since there is an `IsString` instance for `[View ms]`, we can omit the list 
 myButton = def & Size "small" & Circular ! "My Button"
 ```
 
-There is a similar shorthand, `%`, for `& Attributes` which allows adding Pure `Feature`s.
+### Attributes/Features
+
+Similarly to `Children`, there is an `Attributes` property for raw features like event listeners and HTML attributes and properties.
+
+There is a shorthand, `%`, for `& Attributes`. 
 
 ```haskell
 infixl 1 %
@@ -87,7 +135,7 @@ infixr 0 <||>
 (<||>) c cs = c <| def |> cs
 ```
 
-With these, we can get a cleaner construction syntax.
+With these, we can get a clean construction syntax.
 
 ```haskell
 myView =
@@ -100,11 +148,17 @@ myView =
     ]
 ```
 
-`(%)` allows the addition of primitive pure-based `Feature`s, like custom event handlers, attributes and properties.
+### Augmentation
+
+Most components can be modified to render as other components or HTML elements via the `As` property.
+
+```haskell
+divButton = Button <| def & As Div |> "Div-based Button"
+```
 
 Note that most components support the following properties:
 
-* `As` to modify the embedded element, for instance `Button <| def & As Div |> "Some Div Button"` would construct a `<div>`-based button.
-* `Children` to supply children
-* `Attributes` to supply features like attributes, properties and event handlers
-* `Classes` to supply custom classes
+* `As` to modify rendering 
+* `Children` to supply children (children are concatenated)
+* `Attributes` to supply features (features are concatenated)
+* `Classes` to supply classes (classes are concatenated)
