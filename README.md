@@ -164,3 +164,13 @@ Note that most components support the following properties:
 * `Children` to supply children (children are concatenated)
 * `Attributes` to supply features (features are concatenated)
 * `Classes` to supply classes (classes are concatenated)
+
+This is still a beta library as well as an active test of pure for framework development, so expect some bugs. 
+
+A few of the automatically managed components from Semantic-UI-React are left unmanaged in this library. They are:
+
+* Form (refer to #168 and grumply/semantic-ui-pure-forms#1)
+* Dropdown
+* Search
+
+Since shorthands are avoided in this library, the approach that Semantic-UI-React took is inapplicable; I plan to implement managed versions of each as appropriate implementations are found. If no implementations are found, I will implement the Semantic-UI-React approach with shorthands.
