@@ -137,6 +137,7 @@ library
     Semantic.Modules.Modal.ModalContent
     Semantic.Modules.Modal.ModalDescription
     Semantic.Modules.Modal.ModalHeader
+    Semantic.Modules.Popup
     Semantic.Modules.Popup.PopupContent
     Semantic.Modules.Popup.PopupHeader
     Semantic.Modules.Progress

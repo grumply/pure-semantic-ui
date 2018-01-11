@@ -9,6 +9,7 @@ import Semantic.Modules.Modal as Export
 import Semantic.Modules.Tab as Export
 import Semantic.Modules.Transition as Export
 import Semantic.Modules.Transition.TransitionGroup as Export -- dependency cycle if Transition exports TransitionGroup
+import Semantic.Modules.Popup as Export
 import Semantic.Modules.Progress as Export
 import Semantic.Modules.Search as Export
 import Semantic.Modules.Sidebar as Export
