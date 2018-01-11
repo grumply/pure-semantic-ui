@@ -156,6 +156,8 @@ Most components can be modified to render as other components or HTML elements v
 divButton = Button <| def & As Div |> "Div-based Button"
 ```
 
+### Notes
+
 Note that most components support the following properties:
 
 * `As` to modify rendering 
