@@ -22,6 +22,7 @@ import Semantic.Properties.CloseOnEscape
 import Semantic.Properties.CloseOnPortalMouseLeave
 import Semantic.Properties.CloseOnRootNodeClick
 import Semantic.Properties.CloseOnTriggerBlur
+import Semantic.Properties.CloseOnTriggerClick
 import Semantic.Properties.CloseOnTriggerMouseLeave
 import Semantic.Properties.DefaultOpen
 import Semantic.Properties.MountNode
@@ -347,6 +348,10 @@ instance HasCloseOnRootNodeClickProp (Portal ms) where
 instance HasCloseOnTriggerBlurProp (Portal ms) where
     getCloseOnTriggerBlur = closeOnTriggerBlur
     setCloseOnTriggerBlur cotb p = p { closeOnTriggerBlur = cotb }
+
+instance HasCloseOnTriggerClickProp (Portal ms) where
+    getCloseOnTriggerClick = closeOnTriggerClick
+    setCloseOnTriggerClick cotc p = p { closeOnTriggerClick = cotc }
 
 instance HasCloseOnTriggerMouseLeaveProp (Portal ms) where
     getCloseOnTriggerMouseLeave = closeOnTriggerMouseLeave
