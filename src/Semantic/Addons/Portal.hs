@@ -229,7 +229,7 @@ instance Pure Portal ms where
                                 , .. 
                                 }
                         modifyIORef nodes $ \PSN {..} -> 
-                            PSN { portalNode = maybe Nothing (\(Node n) -> Just n) pn
+                            PSN { portalNode = fmap toJSV pn
                                 , .. 
                                 }
 
@@ -291,9 +291,8 @@ instance Pure Portal ms where
                                     <*> newIORef def
                     , mounted = renderPortal
                     , updated = \_ (active -> wasOpen) _ -> do
-                        portal <- getProps self
                         (active -> nowOpen) <- getState self
-                        renderPortal
+                        when (wasOpen /= nowOpen) renderPortal
                         when (wasOpen && not nowOpen) unmountPortal
                     , unmount = void $ do
                         PS {..} <- getState self
