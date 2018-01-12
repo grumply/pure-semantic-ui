@@ -67,6 +67,7 @@ instance Default (Modal ms) where
         { as = Div 
         , closeOnDimmerClick = True
         , closeOnDocumentClick = True
+        , withPortal = id
         }
 
 pattern Modal :: VC ms => Modal ms -> View ms

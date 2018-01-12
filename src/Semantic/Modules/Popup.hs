@@ -90,6 +90,7 @@ instance Default (Popup ms) where
         { as = Div
         , position = "top left"
         , triggerOn = [ "hover" ] 
+        , withPortal = id
         }
 
 pattern Popup :: VC ms => Popup ms -> View ms

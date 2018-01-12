@@ -40,6 +40,8 @@ instance Default (TransitionablePortal ms) where
     def = (G.to gdef) 
         { animation = "scale"
         , duration = Uniform 400 
+        , withPortal = id
+        , withTransition = id
         }
 
 pattern TransitionablePortal :: VC ms => TransitionablePortal ms -> View ms
