@@ -136,7 +136,7 @@ instance Pure Portal ms where
                 handlePortalMouseLeave = do
                     Portal_ {..} <- getProps self
                     PS {..} <- getState self
-                    unless closeOnPortalMouseLeave $ do
+                    when closeOnPortalMouseLeave $ do
                         tid <- forkIO $ do
                             threadDelay mouseLeaveDelay
                             closePortal
@@ -147,7 +147,7 @@ instance Pure Portal ms where
                     Portal_ {..} <- getProps self
                     PS {..} <- getState self
                     PST {..} <- readIORef timers
-                    unless closeOnPortalMouseLeave $
+                    when closeOnPortalMouseLeave $
                         for_ mouseLeaveTimer killThread
 
                 handleTriggerBlur ((.# "relatedTarget") . evtObj -> Just (related :: JSV)) = do
@@ -155,7 +155,7 @@ instance Pure Portal ms where
                     PS {..} <- getState self
                     PSN {..} <- readIORef nodes
                     didFocusPortal <- maybe (return False) (`contains` (unsafeCoerce related)) rootNode 
-                    unless (closeOnTriggerBlur || not didFocusPortal) 
+                    unless (not closeOnTriggerBlur || didFocusPortal)
                         closePortal
                 handleTriggerBlur _ = return ()
 
