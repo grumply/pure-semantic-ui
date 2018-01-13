@@ -66,13 +66,13 @@ calculatePositions = foldr analyze def
     where
         analyze :: View ms -> InputFormatter -> InputFormatter
         analyze (HTML.Input _ _) state = state { inputSeen = True }
-        analyze (View Label{}) state
+        analyze (View Label_{}) state
             | inputSeen state          = state { labelPosition = Just "" }
             | otherwise                = state { labelPosition = Just "left" }
-        analyze (View Icon{}) state
+        analyze (View Icon_{}) state
             | inputSeen state          = state { iconPosition = Just "" }
             | otherwise                = state { iconPosition = Just "left" }
-        analyze (View Button{}) state
+        analyze (View Button_{}) state
             | inputSeen state          = state { actionPosition = Just "" }
             | otherwise                = state { actionPosition = Just "left" }
         analyze _ state                = state
