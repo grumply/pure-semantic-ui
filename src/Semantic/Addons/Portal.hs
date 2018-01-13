@@ -113,7 +113,7 @@ instance Pure Portal ms where
                     PS      {..} <- getState self
                     Portal_ {..} <- getProps self
                     PSN     {..} <- readIORef nodes
-                    let check nm = maybe (return False) (`contains` (unsafeCoerce target))
+                    let check = maybe (return False) (`contains` (unsafeCoerce target))
                     inTrigger <- check triggerNode
                     inPortal  <- check portalNode
                     inRoot    <- check rootNode
