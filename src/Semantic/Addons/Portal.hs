@@ -113,19 +113,13 @@ instance Pure Portal ms where
                     PS      {..} <- getState self
                     Portal_ {..} <- getProps self
                     PSN     {..} <- readIORef nodes
-                    let check = maybe (return False) (`contains` (unsafeCoerce target))
+                    let check nm = maybe (return False) (`contains` (unsafeCoerce target))
                     inTrigger <- check triggerNode
                     inPortal  <- check portalNode
                     inRoot    <- check rootNode
-                    when ( not ( isNil rootNode 
-                                 || isNil portalNode 
-                                 || inTrigger 
-                                 || inPortal
-                               )
-                           &&  ( (closeOnDocumentClick && not inRoot)
-                                 || (closeOnRootNodeClick && inRoot)
-                               )
-                         ) closePortal
+                    unless ( isNil rootNode || isNil portalNode || inTrigger || inPortal ) $
+                        when ( (closeOnDocumentClick && not inRoot) || (closeOnRootNodeClick && inRoot) )
+                            closePortal
                 handleDocumentClick _ = return ()
 
                 handleEscape ((.# "keyCode") -> Just (27 :: Int)) = do
@@ -220,16 +214,15 @@ instance Pure Portal ms where
                         addAnimation $ do
                             for_ rootNode $ \rn -> append (Node rn) n
                             join $ readIORef mtd 
-                        pn <- getChild n 0
-                        mlh <- maybe (return (return ())) (\n -> onRaw n "mouseleave" def (\_ _ -> handlePortalMouseLeave)) pn
-                        meh <- maybe (return (return ())) (\n -> onRaw n "mouseenter" def (\_ _ -> handlePortalMouseEnter)) pn
+                        mlh <- onRaw n "mouseleave" def (\_ _ -> handlePortalMouseLeave)
+                        meh <- onRaw n "mouseenter" def (\_ _ -> handlePortalMouseEnter)
                         modifyIORef handlers $ \PSH {..} ->
                             PSH { mouseLeaveHandler = mlh
                                 , mouseEnterHandler = meh 
                                 , .. 
                                 }
                         modifyIORef nodes $ \PSN {..} -> 
-                            PSN { portalNode = fmap toJSV pn
+                            PSN { portalNode = Just $ toJSV n
                                 , .. 
                                 }
 
@@ -273,7 +266,7 @@ instance Pure Portal ms where
                     clickHandler
 
                     writeIORef handlers def
-                    writeIORef nodes def
+                    writeIORef nodes PSN { rootNode = def, portalNode = def, .. }
 
                     parent self onUnmount
                     
