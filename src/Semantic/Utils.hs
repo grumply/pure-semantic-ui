@@ -297,8 +297,6 @@ data BoundingRect = BR
     , brTop :: Double
     , brRight :: Double
     , brBottom :: Double
-    , brX :: Double
-    , brY :: Double
     , brWidth :: Double
     , brHeight :: Double
     } deriving (Generic,Default,Eq)
@@ -307,18 +305,16 @@ boundingRect :: MonadIO c => Element -> c BoundingRect
 boundingRect node = do
 #ifdef __GHCJS__
   o <- liftIO $ bounding_client_rect_js node
-  return $ fromJust $ do
+  return $ fromMaybe (error "Semantic.Utils.boundingRect: fromMaybe got Nothing") $ do
     brLeft   <- o .# "left"
     brTop    <- o .# "top"
     brRight  <- o .# "right"
     brBottom <- o .# "bottom"
-    brX      <- o .# "x"
-    brY      <- o .# "y"
     brWidth  <- o .# "width"
     brHeight <- o .# "height"
     return BR {..}
 #else
-    return $ BR 0 0 0 0 0 0 0 0
+    return $ BR 0 0 0 0 0 0
 #endif
 
 #ifdef __GHCJS__
