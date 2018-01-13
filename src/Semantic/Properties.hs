@@ -197,6 +197,7 @@ import Semantic.Properties.Ribbon as Export
 import Semantic.Properties.Rotated as Export
 import Semantic.Properties.Rounded as Export
 import Semantic.Properties.Rows as Export
+import Semantic.Properties.Scrollable as Export
 import Semantic.Properties.ScrollContext as Export
 import Semantic.Properties.Scrolling as Export
 import Semantic.Properties.Secondary as Export

@@ -31,6 +31,7 @@ import Semantic.Properties.Basic
 import Semantic.Properties.CloseOnDimmerClick
 import Semantic.Properties.DefaultOpen
 import Semantic.Properties.DimmerType
+import Semantic.Properties.Scrollable
 import Semantic.Properties.Size
 import Semantic.Properties.Styles
 import Semantic.Properties.WithPortal
@@ -56,6 +57,7 @@ data Modal ms = Modal_
     , onOpen :: Ef ms IO ()
     , onUnmount :: Ef ms IO ()
     , open :: Bool
+    , scrollable :: Bool
     , size :: Txt
     , styles :: [(Txt,Txt)]
     , withPortal :: Portal.Portal ms -> Portal.Portal ms
@@ -65,6 +67,7 @@ data Modal ms = Modal_
 instance Default (Modal ms) where
     def = (G.to gdef) 
         { as = Div 
+        , dimmer = Just ""
         , closeOnDimmerClick = True
         , closeOnDocumentClick = True
         , withPortal = id
@@ -120,7 +123,6 @@ instance VC ms => Pure Modal ms where
                     traverse_ (removeClass n) ["blurring","dimmable","dimmed","scrolling"]
                     writeIORef pendingAnimation def
 
-                setPositionAndClassNames :: IO ()
                 setPositionAndClassNames = do
                     Modal_ {..} <- getProps self
                     MS     {..} <- getState self
@@ -129,7 +131,15 @@ instance VC ms => Pure Modal ms where
                     dimmer # traverse_ (addClass n) ["dimmable","dimmed"]
                     (dimmer == Just "blurring") # addClass n "blurring"
 
+                    scrollable # handleScrolling
+                
+                handleScrolling = do
+                    Modal_ {..} <- getProps self
+                    MS     {..} <- getState self
+                    n           <- getMountNode
+
                     mr <- readIORef ref
+
                     for_ mr $ \r -> do
                         BR { brHeight = h } <- boundingRect (Element r)
                         ih <- innerHeight
@@ -144,11 +154,11 @@ instance VC ms => Pure Modal ms where
                         (topMargin /= Just topMargin' || scrolling /= Just scrolling') #
                             setState self $ \_ MS {..} -> 
                                 MS { topMargin = Just topMargin'
-                                   , scrolling = Just scrolling'
-                                   , .. 
-                                   }
+                                , scrolling = Just scrolling'
+                                , .. 
+                                }
 
-                    writeIORef pendingAnimation setPositionAndClassNames
+                    writeIORef pendingAnimation handleScrolling
                     void $ addAnimation (join $ readIORef pendingAnimation)
 
             in def
@@ -276,6 +286,10 @@ instance HasOnUnmountProp (Modal ms) where
 instance HasOpenProp (Modal ms) where
     getOpen = open
     setOpen o m = m { open = o }
+
+instance HasScrollableProp (Modal ms) where
+    getScrollable = scrollable
+    setScrollable s m = m { scrollable = s }
 
 instance HasSizeProp (Modal ms) where
     getSize = size
