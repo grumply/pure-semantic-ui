@@ -230,9 +230,13 @@ instance Pure Portal ms where
                                 , .. 
                                 }
 
-                diffPortal = do
+                diffPortal updateRootClasses = do
                     PS {..} <- getState self
                     Portal_ {..} <- getProps self
+                    updateRootClasses # do
+                        PSN {..} <- readIORef nodes
+                        for_ rootNode $ \n -> 
+                            setProperty (Element n) "className" (Txt.unwords classes)
                     active # do
                         (mid,old) <- readIORef liveView
                         mtd  <- newIORef (return ())
@@ -243,6 +247,7 @@ instance Pure Portal ms where
                             barrier <- newEmptyMVar
                             addAnimation $ runPlan (putMVar barrier ():plan)
                             takeMVar barrier
+                        writeIORef liveView (new,newLive)
                         m
 
                 mountPortal = do
@@ -276,8 +281,10 @@ instance Pure Portal ms where
                     Portal_ {..} <- getProps self
                     PSN {..} <- readIORef nodes
                     PSH {..} <- readIORef handlers
+                    (_,live) <- readIORef liveView
 
-                    for_ rootNode (removeNode . Node) -- does this clean up well enough?
+                    cleanup live
+                    for_ rootNode (removeNode . Node)
 
                     mouseLeaveHandler
                     mouseEnterHandler
@@ -303,11 +310,13 @@ instance Pure Portal ms where
                                     <*> newIORef def
                                     <*> newIORef def
                     , mounted = renderPortal
-                    , updated = \_ (active -> wasOpen) _ -> do
-                        (active -> nowOpen) <- getState self
-                        when (wasOpen /= nowOpen) renderPortal
-                        when (wasOpen && nowOpen) diffPortal
-                        when (wasOpen && not nowOpen) unmountPortal
+                    , updated = \(classes -> oldCs) (active -> wasOpen@(not -> wasClosed)) _ -> do
+                        (classes -> newCs) <- getProps self
+                        (active -> nowOpen@(not -> nowClosed)) <- getState self
+                        if | wasClosed && nowOpen -> renderPortal
+                           | wasOpen && nowClosed -> unmountPortal
+                           | nowOpen              -> diffPortal (oldCs /= newCs)
+                           | otherwise            -> return ()
                     , unmount = void $ do
                         PS {..} <- getState self
                         PST {..} <- readIORef timers

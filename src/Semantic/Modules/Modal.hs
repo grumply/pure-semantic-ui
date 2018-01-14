@@ -131,13 +131,6 @@ instance VC ms => Pure Modal ms where
                     dimmer # traverse_ (addClass n) ["dimmable","dimmed"]
                     (dimmer == Just "blurring") # addClass n "blurring"
 
-                    scrollable # handleScrolling
-                
-                handleScrolling = do
-                    Modal_ {..} <- getProps self
-                    MS     {..} <- getState self
-                    n           <- getMountNode
-
                     mr <- readIORef ref
 
                     for_ mr $ \r -> do
@@ -154,11 +147,11 @@ instance VC ms => Pure Modal ms where
                         (topMargin /= Just topMargin' || scrolling /= Just scrolling') #
                             setState self $ \_ MS {..} -> 
                                 MS { topMargin = Just topMargin'
-                                , scrolling = Just scrolling'
-                                , .. 
-                                }
+                                   , scrolling = Just scrolling'
+                                   , .. 
+                                   }
 
-                    writeIORef pendingAnimation handleScrolling
+                    writeIORef pendingAnimation setPositionAndClassNames
                     void $ addAnimation (join $ readIORef pendingAnimation)
 
             in def
@@ -169,7 +162,7 @@ instance VC ms => Pure Modal ms where
                     Modal_ {..} <- getProps self
                     handlePortalUnmount
                     parent self onUnmount
-                , renderer = \Modal_ {..} MS { open = o, ..} -> 
+                , renderer = \Modal_ {..} MS { open = o, ..} ->
                     let
                         dimmerClasses = 
                             dimmer #
