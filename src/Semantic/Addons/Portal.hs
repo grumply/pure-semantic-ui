@@ -2,6 +2,7 @@ module Semantic.Addons.Portal where
 
 import Control.Concurrent
 import Data.IORef
+import Data.List as List
 import Data.Maybe (fromMaybe)
 import qualified Data.List as List
 import GHC.Generics as G
@@ -79,11 +80,12 @@ instance Default (Portal ms) where
 pattern Portal :: Portal ms -> View ms
 pattern Portal p = View p
 
-data PortalState = PS
+data PortalState ms = PS
     { active :: Bool
     , nodes :: IORef PortalStateNodes
     , timers :: IORef PortalStateTimers
     , handlers :: IORef PortalStateHandlers
+    , liveView :: IORef (View ms,View ms)
     } 
 
 data PortalStateHandlers = PSH
@@ -198,7 +200,7 @@ instance Pure Portal ms where
 
                 renderPortal = do
                     PS {..} <- getState self
-                    when active $ do
+                    active # do
                         mountPortal
                         Portal_ {..} <- getProps self
                         PS {..} <- getState self
@@ -208,8 +210,10 @@ instance Pure Portal ms where
                             setProperty (Element n) "className" (Txt.unwords classes)
                         mouseLeaveHandler
                         mouseEnterHandler
+                        let chld = only children
                         mtd <- newIORef (return ())
-                        new <- Pure.DOM.build (parent self) mtd Nothing (only children)
+                        new <- Pure.DOM.build (parent self) mtd Nothing chld
+                        writeIORef liveView (chld,new)
                         let Just n = getHost new
                         addAnimation $ do
                             for_ rootNode $ \rn -> append (Node rn) n
@@ -225,6 +229,21 @@ instance Pure Portal ms where
                             PSN { portalNode = Just $ toJSV n
                                 , .. 
                                 }
+
+                diffPortal = do
+                    PS {..} <- getState self
+                    Portal_ {..} <- getProps self
+                    active # do
+                        (mid,old) <- readIORef liveView
+                        mtd  <- newIORef (return ())
+                        let new = only children
+                            (plan,newLive) = buildPlan (\p -> diffDeferred (parent self) mtd p old mid new)
+                        m <- plan `seq` readIORef mtd
+                        unless (List.null plan) $ do
+                            barrier <- newEmptyMVar
+                            addAnimation $ runPlan (putMVar barrier ():plan)
+                            takeMVar barrier
+                        m
 
                 mountPortal = do
                     Portal_ {..} <- getProps self
@@ -282,10 +301,12 @@ instance Pure Portal ms where
                                     <$> newIORef def 
                                     <*> newIORef def 
                                     <*> newIORef def
+                                    <*> newIORef def
                     , mounted = renderPortal
                     , updated = \_ (active -> wasOpen) _ -> do
                         (active -> nowOpen) <- getState self
                         when (wasOpen /= nowOpen) renderPortal
+                        when (wasOpen && nowOpen) diffPortal
                         when (wasOpen && not nowOpen) unmountPortal
                     , unmount = void $ do
                         PS {..} <- getState self
