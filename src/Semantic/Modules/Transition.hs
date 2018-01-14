@@ -23,10 +23,10 @@ import Semantic.Properties.UnmountOnHide
 data TransitionStatus = Unmounted | Entered | Entering | Exited | Exiting
     deriving (Generic,Default,Ord,Eq)
 
-normalizeTransitionDuration :: TransitionStatus -> AnimationDuration -> Int
-normalizeTransitionDuration _        (Uniform d) = d
-normalizeTransitionDuration Exiting  Skewed {..} = hide
-normalizeTransitionDuration _        Skewed {..} = show
+calculateTransitionDuration :: TransitionStatus -> AnimationDuration -> Int
+calculateTransitionDuration _        (Uniform d) = d
+calculateTransitionDuration Exiting  Skewed {..} = hide
+calculateTransitionDuration _        Skewed {..} = show
 
 data Transition ms = Transition_
     { children :: [View ms]
@@ -86,7 +86,7 @@ instance Pure Transition ms where
                         , for_ upcoming $ \s -> do 
                             parent self (onStart s)
                             tid <- forkIO $ do
-                                threadDelay (normalizeTransitionDuration s duration * 1000)
+                                threadDelay (calculateTransitionDuration s duration * 1000)
                                 handleComplete
                             writeIORef transitionTimeout (Just tid)
                         )
@@ -136,8 +136,8 @@ instance Pure Transition ms where
                 addAnimationStyles status duration styles =
                     let ad = 
                             case status of
-                                Entering -> ("animationDuration",ms(normalizeTransitionDuration status duration))
-                                Exiting  -> ("animationDuration",ms(normalizeTransitionDuration status duration))
+                                Entering -> ("animationDuration",ms(calculateTransitionDuration status duration))
+                                Exiting  -> ("animationDuration",ms(calculateTransitionDuration status duration))
                                 _        -> def
                     in styles <> [ ad ]
 
@@ -190,8 +190,9 @@ instance Pure Transition ms where
                         TS {..}  <- getState self
                         let (current,upcoming) = computeStatuses (visible newprops) status
                         writeIORef next upcoming
+                        let newStatus = fromMaybe status current
                         return TS 
-                            { status = fromMaybe status current
+                            { status = newStatus
                             , .. 
                             }
 
