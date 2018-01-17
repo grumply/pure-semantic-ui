@@ -4,7 +4,7 @@ module Semantic.Modules.Modal (module Semantic.Modules.Modal, module Export) whe
 import Data.IORef
 import Data.Maybe
 import GHC.Generics as G
-import Pure.View hiding (round,addClass,trigger,OnClose)
+import Pure.View hiding (active,round,addClass,trigger,OnClose)
 import Pure.DOM (addAnimation)
 import Pure.Lifted (body,IsJSV(..),JSV,Node(..),Element(..))
 
@@ -79,7 +79,7 @@ pattern Modal m = View m
 data ModalState = MS
     { topMargin :: Maybe Int
     , scrolling :: Maybe Bool
-    , open :: Bool
+    , active :: Bool
     , ref :: IORef (Maybe JSV)
     , pendingAnimation :: IORef (IO ())
     }
@@ -101,13 +101,13 @@ instance VC ms => Pure Modal ms where
                     Modal_ {..} <- getProps self
                     onClose
                     void $ setState self $ \_ MS {..} -> 
-                        MS { open = False, .. }
+                        MS { active = False, .. }
 
                 handleOpen _ = do
                     Modal_ {..} <- getProps self
                     onOpen
                     void $ setState self $ \_ MS {..} ->
-                        MS { open = True, .. }
+                        MS { active = True, .. }
 
                 handlePortalMount = do
                     Modal_ {..} <- getProps self
@@ -157,12 +157,16 @@ instance VC ms => Pure Modal ms where
             in def
                 { construct = do
                     Modal_ {..} <- getProps self
-                    MS def def defaultOpen <$> newIORef def <*> newIORef def
+                    MS def def (open || defaultOpen) <$> newIORef def <*> newIORef def
+                , receiveProps = \newprops oldstate -> return $
+                    (open newprops /= active oldstate)
+                      ? oldstate { active = open newprops }
+                      $ oldstate
                 , unmount = do
                     Modal_ {..} <- getProps self
                     handlePortalUnmount
                     parent self onUnmount
-                , renderer = \Modal_ {..} MS { open = o, ..} ->
+                , renderer = \Modal_ {..} MS {..} ->
                     let
                         dimmerClasses = 
                             dimmer #
@@ -204,7 +208,7 @@ instance VC ms => Pure Modal ms where
                         & Trigger trigger
                         & Classes dimmerClasses
                         & MountNode mountNode
-                        & Open o
+                        & Open active
                         & OnClose handleClose
                         & OnMount handlePortalMount
                         & OnOpen handleOpen
