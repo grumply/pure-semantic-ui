@@ -5,7 +5,10 @@ import Data.IORef
 import GHC.Generics as G
 import Pure.View hiding (focus,value,onInput)
 import qualified Pure.View as HTML
-import Pure.Lifted (setStyle,removeStyle,focusNode,JSV,Node(..),Element(..))
+import Pure.Lifted (setStyle,removeStyle,focusNode,JSV,Node(..),Element(..),(.#))
+import qualified Pure.Data.Txt as T
+import Data.Char (isDigit)
+import Text.Read (readMaybe)
 
 import Semantic.Utils
 import qualified Semantic.Utils as Utils
@@ -51,10 +54,11 @@ instance VC ms => Pure TextArea ms where
                 computedTextAreaStyles :: Element -> IO (Maybe (Double,Double,Double))
                 computedTextAreaStyles e = do
                     cs <- computedStyles e
-                    return $ parse cs $ \o -> do
-                        mh  <- o .: "minHeight"
-                        bbw <- o .: "borderBottomWidth"
-                        btw <- o .: "borderTopWidth"
+                    return $ do
+                        let measure = (cs .#) >=> (readMaybe . fromTxt . T.takeWhile isDigit)
+                        mh  <- measure "minHeight"
+                        bbw <- measure "borderBottomWidth"
+                        btw <- measure "borderTopWidth"
                         return (mh,bbw,btw)
 
                 removeAutoHeightStyles = do
@@ -67,16 +71,18 @@ instance VC ms => Pure TextArea ms where
                 updateHeight = do
                     TextArea_ {..} <- getProps self
                     TAS {..} <- getState self
-                    not autoHeight # do
+                    autoHeight # do
                         mr <- liftIO (readIORef ref)
                         for_ mr $ \(Element -> r) -> do
                             ctas <- computedTextAreaStyles r
                             for_ ctas $ \(mh,bbw,btw) -> do
                                 setStyle r height auto
-                                setStyle r overflowY hidden
+                                setStyle r "overflowY" hidden
                                 sh <- fromIntegral <$> scrollHeight r
-                                setStyle r height (pxs (max (Prelude.round mh) (ceiling (sh + bbw + btw))))
-                                setStyle r overflowY mempty
+                                let mh' = Prelude.round mh
+                                    sh' = ceiling (sh + bbw + btw)
+                                setStyle r height (pxs (max mh' sh'))
+                                setStyle r "overflowY" mempty
 
                 handleChange txt = do
                     TextArea_ {..} <- getProps self
@@ -127,7 +133,6 @@ instance VC ms => Pure TextArea ms where
                         : attributes
                         )
                         []
-
 
                 }
 
