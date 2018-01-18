@@ -147,7 +147,7 @@ unequalTargets x y =
 
 #ifdef __GHCJS__
 foreign import javascript unsafe
-    "$1.contains($2)" contains_js :: JSV -> JSV -> IO Bool
+    "$r = $1.contains($2)" contains_js :: JSV -> JSV -> IO Bool
 #endif
 
 contains :: MonadIO c => JSV -> JSV -> c Bool
@@ -238,7 +238,7 @@ directionalTransitions =
 
 #ifdef __GHCJS__
 foreign import javascript unsafe
-    "window.pageYOffset" pageYOffset_js :: IO Int
+    "$r = window.pageYOffset" pageYOffset_js :: IO Int
 #endif
 
 pageYOffset :: MonadIO c => c Int
@@ -251,7 +251,7 @@ pageYOffset =
 
 #ifdef __GHCJS__
 foreign import javascript unsafe
-    "window.pageXOffset" pageXOffset_js :: IO Int
+    "$r = window.pageXOffset" pageXOffset_js :: IO Int
 #endif
 
 pageXOffset :: MonadIO c => c Int
@@ -264,7 +264,7 @@ pageXOffset =
 
 #ifdef __GHCJS__
 foreign import javascript unsafe
-    "document.documentElement.clientWidth" clientWidth_js :: IO Int
+    "$r = document.documentElement.clientWidth" clientWidth_js :: IO Int
 #endif
 
 clientWidth :: MonadIO c => c Int
@@ -277,7 +277,7 @@ clientWidth =
 
 #ifdef __GHCJS__
 foreign import javascript unsafe
-    "document.documentElement.clientHeight" clientHeight_js :: IO Int
+    "$r = document.documentElement.clientHeight" clientHeight_js :: IO Int
 #endif
 
 clientHeight :: MonadIO c => c Int
@@ -319,15 +319,15 @@ boundingRect node = do
 
 #ifdef __GHCJS__
 foreign import javascript unsafe
-    "window.getComputedStyle($1)" computed_styles_js :: Element -> IO Obj
+    "$r = window.getComputedStyle($1)" computed_styles_js :: Element -> IO JSV
 #endif
 
-computedStyles :: MonadIO c => Element -> c Obj
+computedStyles :: MonadIO c => Element -> c JSV
 computedStyles node = do
 #ifdef __GHCJS__
     liftIO $ computed_styles_js node
 #else
-    return mempty
+    return ()
 #endif
 
 #ifdef __GHCJS__
@@ -345,7 +345,7 @@ innerHeight =
 
 #ifdef __GHCJS__
 foreign import javascript unsafe 
-    "window.innerWidth" innerWidth_js :: IO Int
+    "$r = window.innerWidth" innerWidth_js :: IO Int
 #endif
 
 innerWidth :: MonadIO c => c Int
@@ -473,7 +473,7 @@ removeClass n c =
 
 #ifdef __GHCJS__
 foreign import javascript unsafe
-    "$1.style[$2]" get_style_js :: Element -> Txt -> IO Txt
+    "$r = $1.style[$2]" get_style_js :: Element -> Txt -> IO Txt
 #endif
 
 getStyle :: MonadIO c => Element -> Txt -> c (Maybe Txt)
@@ -487,7 +487,7 @@ getStyle e s = do
 
 #ifdef __GHCJS__
 foreign import javascript unsafe
-    "$1.scrollHeight" scrollHeight_js :: Element -> IO Int
+    "$r = $1.scrollHeight" scrollHeight_js :: Element -> IO Int
 #endif
 
 scrollHeight :: MonadIO c => Element -> c Int
