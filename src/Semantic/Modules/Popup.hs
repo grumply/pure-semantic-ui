@@ -100,8 +100,8 @@ data PopupState = PS
     { closed :: Bool
     , currentStyles :: [(Txt,Txt)]
     , currentPosition :: Txt
-    , coords :: IORef BoundingRect
-    , popupCoords :: IORef BoundingRect
+    , coords :: IORef (Maybe BoundingRect)
+    , popupCoords :: IORef (Maybe BoundingRect)
     , scrollHandler :: IORef (IO ())
     }
 
@@ -184,11 +184,10 @@ instance VC ms => Pure Popup ms where
                 setPopupStyles = do
                     PS {..} <- getState self
                     Popup_ {..} <- getProps self
-                    cbr <- readIORef coords
-                    pbr <- readIORef popupCoords
-                    bs  <- bounds
-
-                    (cbr /= def && pbr /= def) #
+                    mcbr <- readIORef coords
+                    mpbr <- readIORef popupCoords
+                    for_ ((,) <$> mcbr <*> mpbr) $ \(cbr,pbr) -> do
+                        bs  <- bounds
                         let 
                             render d x = (d,maybe auto (pxs . round) x)
 
@@ -205,34 +204,32 @@ instance VC ms => Pure Popup ms where
 
                             (p,(l,r,t,b)) = findValid ps
 
-                        in 
-                            setState self $ \_ PS {..} -> 
-                                PS { currentStyles    = [render left l,render right r,render top t,render bottom b]
-                                   , currentPosition = p
-                                   , .. 
-                                   }
+                        let ss = [("position","absolute"),render left l,render right r,render top t,render bottom b]
+                        setState self $ \_ PS {..} -> 
+                            PS { currentStyles  = ss
+                               , currentPosition = p
+                               , .. 
+                               }
 
-                scrollHide = do
+                handleOpen (evtTarget -> t) = do
                     Popup_ {..} <- getProps self
                     PS {..} <- getState self
-                    setState self $ \_ PS {..} -> PS { closed = True, .. }
-                    join $ readIORef scrollHandler
-                    forkIO $ do 
-                        threadDelay 50000
-                        void $ setState self $ \_ PS {..} -> PS { closed = False, .. }
-                    void $ parent self onClose
-
-                handleOpen (evtObj -> o) = do
-                    Popup_ {..} <- getProps self
-                    PS {..} <- getState self
-                    br <- boundingRect (Element $ fromJust $ o .# "currentTarget")
-                    liftIO $ writeIORef coords br
+                    br <- boundingRect (Element t)
+                    liftIO $ writeIORef coords (Just br)
                     onOpen
 
                 handlePortalMount = do
                     Popup_ {..} <- getProps self
                     PS {..} <- getState self
-                    sh <- liftIO $ onRaw (Node $ toJSV window) "scroll" def (\_ _ -> liftIO scrollHide)
+                    sh <- liftIO $ onRaw (Node $ toJSV window) "scroll" def $ \_ _ -> liftIO $ do
+                        Popup_ {..} <- getProps self
+                        PS {..} <- getState self
+                        setState self $ \_ PS {..} -> PS { closed = True, .. }
+                        join $ readIORef scrollHandler
+                        forkIO $ do 
+                            threadDelay 50000
+                            void $ setState self $ \_ PS {..} -> PS { closed = False, .. }
+                        void $ parent self onClose
                     liftIO $ writeIORef scrollHandler sh
                     onMount
 
@@ -243,14 +240,16 @@ instance VC ms => Pure Popup ms where
                     onUnmount
 
                 handlePopupRef (Node n) = do
-                    br <- boundingRect (Element n)
-                    PS {..} <- getState self
-                    liftIO $ writeIORef popupCoords br
-                    liftIO setPopupStyles
+                    setStateIO self $ \_ PS {..} -> 
+                        return (PS {..},do
+                            br <- boundingRect (Element n)
+                            liftIO $ writeIORef popupCoords (isNull n ? Nothing $ Just br)
+                            liftIO setPopupStyles
+                          )
                     return Nothing
 
             in def
-                { construct = PS def def "absolute" <$> newIORef def <*> newIORef def <*> newIORef def
+                { construct = PS def def "top left" <$> newIORef def <*> newIORef def <*> newIORef def
                 , renderer = \Popup_ {..} PS {..} -> 
                     let
                         applyPortalProps =
@@ -285,7 +284,7 @@ instance VC ms => Pure Popup ms where
                                 & Children
                                     [ as
                                         ( mergeClasses $ ClassList cs
-                                        : StyleList styles
+                                        : StyleList currentStyles
                                         : HostRef handlePopupRef
                                         : attributes
                                         )
