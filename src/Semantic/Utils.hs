@@ -147,7 +147,7 @@ unequalTargets x y =
 
 #ifdef __GHCJS__
 foreign import javascript unsafe
-    "$r = $1.contains($2)" contains_js :: JSV -> JSV -> IO Bool
+    "$1.contains($2)" contains_js :: JSV -> JSV -> IO Bool
 #endif
 
 contains :: MonadIO c => JSV -> JSV -> c Bool
