@@ -134,7 +134,7 @@ instance Pure Portal ms where
                     PS {..} <- getState self
                     when closeOnPortalMouseLeave $ do
                         tid <- forkIO $ do
-                            threadDelay mouseLeaveDelay
+                            threadDelay (mouseLeaveDelay * 1000)
                             closePortal
                         modifyIORef timers $ \PST {..} ->
                             PST { mouseLeaveTimer = Just tid, .. }
@@ -173,7 +173,7 @@ instance Pure Portal ms where
                     PS {..} <- getState self
                     when closeOnTriggerMouseLeave $ do
                         tid <- forkIO $ do
-                            threadDelay mouseLeaveDelay
+                            threadDelay (mouseLeaveDelay * 1000)
                             closePortal
                         modifyIORef timers $ \PST {..} ->
                             PST { mouseLeaveTimer = Just tid, .. }
@@ -183,7 +183,7 @@ instance Pure Portal ms where
                     PS {..} <- getState self
                     when openOnTriggerMouseEnter $ do
                         tid <- forkIO $ do
-                            threadDelay mouseEnterDelay
+                            threadDelay (mouseEnterDelay * 1000)
                             openPortal e
                         modifyIORef timers $ \PST {..} ->
                             PST { mouseEnterTimer = Just tid, .. }
