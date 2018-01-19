@@ -310,10 +310,12 @@ instance Pure Portal ms where
                                     <*> newIORef def
                                     <*> newIORef def
                     , mounted = renderPortal
-                    , receiveProps = \newprops oldstate -> return $
-                        (open newprops /= active oldstate)
-                          ? oldstate { active = open newprops }
-                          $ oldstate
+                    , receiveProps = \newprops oldstate -> do
+                        oldprops <- getProps self
+                        return $
+                          (open newprops /= open oldprops)
+                            ? oldstate { active = open newprops }
+                            $ oldstate
                     , updated = \(classes -> oldCs) (active -> wasOpen@(not -> wasClosed)) _ -> do
                         (classes -> newCs) <- getProps self
                         (active -> nowOpen@(not -> nowClosed)) <- getState self
