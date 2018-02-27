@@ -40,6 +40,7 @@ import Semantic.Properties.CloseOnEscape as Export
 import Semantic.Properties.CloseOnPortalMouseLeave as Export
 import Semantic.Properties.CloseOnRootNodeClick as Export
 import Semantic.Properties.CloseOnTriggerBlur as Export
+import Semantic.Properties.CloseOnTriggerClick as Export
 import Semantic.Properties.CloseOnTriggerMouseLeave as Export
 import Semantic.Properties.Collapsed as Export
 import Semantic.Properties.Collapsing as Export

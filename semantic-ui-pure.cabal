@@ -194,6 +194,7 @@ library
     Semantic.Properties.CloseOnPortalMouseLeave
     Semantic.Properties.CloseOnRootNodeClick
     Semantic.Properties.CloseOnTriggerBlur
+    Semantic.Properties.CloseOnTriggerClick
     Semantic.Properties.CloseOnTriggerMouseLeave
     Semantic.Properties.Collapsed
     Semantic.Properties.Collapsing
