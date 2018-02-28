@@ -381,6 +381,7 @@ library
     Semantic.Properties.Tabular
     Semantic.Properties.Tag
     Semantic.Properties.Tertiary
+    Semantic.Properties.Test
     Semantic.Properties.TextAlign
     Semantic.Properties.Threaded
     Semantic.Properties.Toggle

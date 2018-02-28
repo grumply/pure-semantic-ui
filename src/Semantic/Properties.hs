@@ -227,6 +227,7 @@ import Semantic.Properties.TabIndex as Export
 import Semantic.Properties.Tabular as Export
 import Semantic.Properties.Tag as Export
 import Semantic.Properties.Tertiary as Export
+import Semantic.Properties.Test as Export
 import Semantic.Properties.TextAlign as Export
 import Semantic.Properties.Threaded as Export
 import Semantic.Properties.Toggle as Export
