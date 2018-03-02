@@ -71,10 +71,10 @@ data Portal ms = Portal_
     } deriving (Generic)
 
 instance Default (Portal ms) where
-    def = (G.to gdef) 
+    def = (G.to gdef)
             { closeOnDocumentClick = True
             , closeOnEscape = True
-            , openOnTriggerClick = True 
+            , openOnTriggerClick = True
             }
 
 pattern Portal :: Portal ms -> View ms
@@ -86,7 +86,7 @@ data PortalState ms = PS
     , timers :: IORef PortalStateTimers
     , handlers :: IORef PortalStateHandlers
     , liveView :: IORef (View ms,View ms)
-    } 
+    }
 
 data PortalStateHandlers = PSH
     { mouseLeaveHandler :: IO ()
@@ -108,7 +108,7 @@ data PortalStateNodes = PSN
 
 instance Pure Portal ms where
     render p =
-        Component "Semantic.Addons.Portal" p $ \self -> 
+        Component "Semantic.Addons.Portal" p $ \self ->
             let
 
                 handleDocumentClick ((.# "target") -> Just (target :: JSV)) = do
@@ -150,7 +150,7 @@ instance Pure Portal ms where
                     Portal_ {..} <- getProps self
                     PS {..} <- getState self
                     PSN {..} <- readIORef nodes
-                    didFocusPortal <- maybe (return False) (`contains` (unsafeCoerce related)) rootNode 
+                    didFocusPortal <- maybe (return False) (`contains` (unsafeCoerce related)) rootNode
                     unless (not closeOnTriggerBlur || didFocusPortal)
                         closePortal
                 handleTriggerBlur _ = return ()
@@ -165,7 +165,7 @@ instance Pure Portal ms where
 
                 handleTriggerFocus e = do
                     Portal_ {..} <- getProps self
-                    when openOnTriggerFocus 
+                    when openOnTriggerFocus
                         (openPortal e)
 
                 handleTriggerMouseLeave = do
@@ -206,7 +206,7 @@ instance Pure Portal ms where
                         PS {..} <- getState self
                         PSN {..} <- readIORef nodes
                         PSH {..} <- readIORef handlers
-                        for_ rootNode $ \n -> 
+                        for_ rootNode $ \n ->
                             setProperty (Element n) "className" (Txt.unwords classes)
                         mouseLeaveHandler
                         mouseEnterHandler
@@ -217,17 +217,17 @@ instance Pure Portal ms where
                         let Just n = getHost new
                         addAnimation $ do
                             for_ rootNode $ \rn -> append (Node rn) n
-                            join $ readIORef mtd 
+                            join $ readIORef mtd
                         mlh <- onRaw n "mouseleave" def (\_ _ -> handlePortalMouseLeave)
                         meh <- onRaw n "mouseenter" def (\_ _ -> handlePortalMouseEnter)
                         modifyIORef handlers $ \PSH {..} ->
                             PSH { mouseLeaveHandler = mlh
-                                , mouseEnterHandler = meh 
-                                , .. 
+                                , mouseEnterHandler = meh
+                                , ..
                                 }
-                        modifyIORef nodes $ \PSN {..} -> 
+                        modifyIORef nodes $ \PSN {..} ->
                             PSN { portalNode = Just $ toJSV n
-                                , .. 
+                                , ..
                                 }
 
                 diffPortal updateRootClasses = do
@@ -235,7 +235,7 @@ instance Pure Portal ms where
                     Portal_ {..} <- getProps self
                     updateRootClasses # do
                         PSN {..} <- readIORef nodes
-                        for_ rootNode $ \n -> 
+                        for_ rootNode $ \n ->
                             setProperty (Element n) "className" (Txt.unwords classes)
                     active # do
                         (mid,old) <- readIORef liveView
@@ -264,14 +264,14 @@ instance Pure Portal ms where
                         ch <- onRaw (Node d) "click" def (\_ -> handleDocumentClick)
                         kh <- onRaw (Node d) "keydown" def (\_ -> handleEscape)
 
-                        modifyIORef nodes $ \PSN {..} -> 
+                        modifyIORef nodes $ \PSN {..} ->
                             PSN { rootNode = Just root
-                                , .. 
+                                , ..
                                 }
-                        modifyIORef handlers $ \PSH {..} -> 
+                        modifyIORef handlers $ \PSH {..} ->
                             PSH { clickHandler = ch
                                 , keydownHandler = kh
-                                , .. 
+                                , ..
                                 }
 
                         parent self onMount
@@ -295,7 +295,6 @@ instance Pure Portal ms where
                     writeIORef nodes PSN { rootNode = def, portalNode = def, .. }
 
                     parent self onUnmount
-                    
 
                 handleRef (Node r) = do
                     PS {..} <- getState self
@@ -304,9 +303,9 @@ instance Pure Portal ms where
 
             in
                 def
-                    { construct = PS (defaultOpen p) 
-                                    <$> newIORef def 
-                                    <*> newIORef def 
+                    { construct = PS (defaultOpen p)
+                                    <$> newIORef def
+                                    <*> newIORef def
                                     <*> newIORef def
                                     <*> newIORef def
                     , mounted = renderPortal
@@ -329,7 +328,7 @@ instance Pure Portal ms where
                         unmountPortal
                         for mouseEnterTimer killThread
                         for mouseLeaveTimer killThread
-                    , renderer = \Portal_ {..} ps -> 
+                    , renderer = \Portal_ {..} ps ->
                         trigger #
                             (Proxy $ def & InnerRef handleRef & Children
                                 [ cloneWithProps trigger

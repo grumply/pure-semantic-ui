@@ -65,8 +65,8 @@ data Modal ms = Modal_
     } deriving (Generic)
 
 instance Default (Modal ms) where
-    def = (G.to gdef) 
-        { as = Div 
+    def = (G.to gdef)
+        { as = Div
         , dimmer = Just ""
         , closeOnDimmerClick = True
         , closeOnDocumentClick = True
@@ -90,7 +90,7 @@ instance VC ms => Pure Modal ms where
             let
                 getMountNode = do
                     Modal_ {..} <- getProps self
-                    return $ fromMaybe (toJSV body) mountNode 
+                    return $ fromMaybe (toJSV body) mountNode
 
                 handleRef (Node n) = do
                     MS {..} <- getState self
@@ -100,7 +100,7 @@ instance VC ms => Pure Modal ms where
                 handleClose = do
                     Modal_ {..} <- getProps self
                     onClose
-                    void $ setState self $ \_ MS {..} -> 
+                    void $ setState self $ \_ MS {..} ->
                         MS { active = False, .. }
 
                 handleOpen _ = do
@@ -134,22 +134,26 @@ instance VC ms => Pure Modal ms where
                     mr <- readIORef ref
 
                     for_ mr $ \r -> do
-                        BR { brHeight = h } <- boundingRect (Element r)
-                        ih <- innerHeight
+                      BR { brHeight = h } <- boundingRect (Element r)
 
-                        let topMargin' = negate (round (h / 2))
-                            scrolling' = h >= fromIntegral ih
+                      ih <- innerHeight
 
-                        (scrolling /= Just scrolling') #
-                            (scrolling' ? addClass n $ removeClass n) 
-                                "scrolling"
+                      let topMargin' = negate (round (h / 2))
+                          scrolling' = h >= fromIntegral ih
 
-                        (topMargin /= Just topMargin' || scrolling /= Just scrolling') #
-                            setState self $ \_ MS {..} -> 
-                                MS { topMargin = Just topMargin'
-                                   , scrolling = Just scrolling'
-                                   , .. 
-                                   }
+                          scrollingChange = scrolling /= Just scrolling'
+                          topMarginChange = topMargin /= Just topMargin'
+
+                      scrollingChange #
+                        (scrolling' ? addClass n $ removeClass n)
+                          "scrolling"
+
+                      (scrollingChange || topMarginChange) #
+                        setState self $ \_ MS {..} ->
+                          MS { topMargin = Just topMargin'
+                             , scrolling = Just scrolling'
+                             , ..
+                             }
 
                     writeIORef pendingAnimation setPositionAndClassNames
                     void $ addAnimation (join $ readIORef pendingAnimation)
@@ -168,9 +172,9 @@ instance VC ms => Pure Modal ms where
                     parent self onUnmount
                 , renderer = \Modal_ {..} MS {..} ->
                     let
-                        dimmerClasses = 
+                        dimmerClasses =
                             dimmer #
-                                [ "ui" 
+                                [ "ui"
                                 , (dimmer == Just "inverted") # "inverted"
                                 , "page modals dimmer transition visible active"
                                 ]
@@ -192,7 +196,7 @@ instance VC ms => Pure Modal ms where
                                     case c of
                                         -- add ModalAction mapping here
                                         _ -> c
-                                    
+
                             in
                                 as
                                     ( mergeClasses $ ClassList cs
