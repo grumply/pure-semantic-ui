@@ -62,20 +62,16 @@ data InputFormatter = IF
   } deriving (Generic,Default)
 
 calculatePositions :: forall ms.  [View ms] -> InputFormatter
-calculatePositions = foldr analyze def
+calculatePositions = foldl' analyze def
     where
-        analyze :: View ms -> InputFormatter -> InputFormatter
-        analyze (HTML.Input _ _) state = state { inputSeen = True }
-        analyze (View Label_{}) state
-            | inputSeen state          = state { labelPosition = Just "" }
-            | otherwise                = state { labelPosition = Just "left" }
-        analyze (View Icon_{}) state
-            | inputSeen state          = state { iconPosition = Just "" }
-            | otherwise                = state { iconPosition = Just "left" }
-        analyze (View Button_{}) state
-            | inputSeen state          = state { actionPosition = Just "" }
-            | otherwise                = state { actionPosition = Just "left" }
-        analyze _ state                = state
+        analyze :: InputFormatter -> View ms -> InputFormatter
+        analyze IF {..} v = let nis = not inputSeen # "left" in
+            case v of
+                HTML.Input _ _  -> IF { inputSeen      = True    , .. }
+                View Label_{}   -> IF { labelPosition  = Just nis, .. }
+                View Icon_{}    -> IF { iconPosition   = Just nis, .. }
+                View Button_{}  -> IF { actionPosition = Just nis, .. }
+                _               -> IF {..}
 
 instance Pure Input ms where
     render Input_ {..} =
@@ -86,16 +82,16 @@ instance Pure Input ms where
 
             addInputProps :: View ms -> View ms
             addInputProps (HTML.Input fs cs) =
-                HTML.Input 
+                HTML.Input
                     (( HostRef ((focused #) . _focus)
-                    : HTML.Disabled disabled 
-                    : HTML.Type _type 
-                    : index 
-                    : onInput onChange 
+                    : HTML.Disabled disabled
+                    : HTML.Type _type
+                    : index
+                    : onInput onChange
                     : inputAttrs
                     ) ++ fs)
                     cs
-            
+
             addInputProps c = c
 
             (inputAttrs,otherAttrs) = extractInputAttrs attributes
@@ -134,7 +130,7 @@ instance HasAsProp (Input ms) where
 
 instance HasAttributesProp (Input ms) where
     type Attribute (Input ms) = Feature ms
-    getAttributes = attributes 
+    getAttributes = attributes
     setAttributes cs i = i { attributes = cs }
 
 instance HasOnChangeProp (Input ms) where
