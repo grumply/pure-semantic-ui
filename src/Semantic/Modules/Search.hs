@@ -76,8 +76,8 @@ instance Pure Search ms where
         in as
                ( mergeClasses $ ClassList cs
                : onMouseDown # On "mousedown" def (\_ -> return $ Just onMouseDown)
-               : onFocus # On "focus" def (\_ -> return $ Just onFocus)
-               : onBlur # On "blur" def (\_ -> return $ Just onBlur)
+               : onFocus # On "focusin" def (\_ -> return $ Just onFocus)
+               : onBlur # On "focusout" def (\_ -> return $ Just onBlur)
                : attributes
                )
                children
