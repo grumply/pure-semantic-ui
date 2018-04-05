@@ -4,7 +4,7 @@ module Semantic.Modules.Sticky where
 import Data.IORef
 import Data.Maybe
 import GHC.Generics as G
-import Pure.Lifted (window,body,IsJSV(..),JSV,Node(..),Element(..))
+import Pure.Lifted (same,window,body,IsJSV(..),JSV,Node(..),Element(..))
 import Pure.View hiding (active,bottom,offset,top,round)
 import Pure.DOM (addAnimation)
 
@@ -199,10 +199,18 @@ instance VC ms => Pure Sticky ms where
 
                 , receiveProps = \newprops oldstate -> do
                     oldprops <- getProps self
-                    let changed = active oldprops /= active newprops
-                    if | changed && active newprops -> handleUpdate >> addListeners newprops >> return oldstate
-                       | changed                    -> removeListeners >> return oldstate { isSticking = False }
-                       | True                       -> return oldstate     
+                    let newContext =
+                          case (scrollContext oldprops,scrollContext newprops) of
+                            (Just x,Just y) -> same x y
+                            (Nothing,Nothing) -> False
+                            _ -> True
+                    if | active newprops == active oldprops -> do
+                         when newContext $ do
+                           removeListeners
+                           addListeners newprops
+                         return oldstate
+                       | active newprops -> handleUpdate >> addListeners newprops >> return oldstate
+                       | True -> removeListeners >> return oldstate { isSticking = False }
 
                 , unmount = do
                     Sticky_ {..} <- getProps self
