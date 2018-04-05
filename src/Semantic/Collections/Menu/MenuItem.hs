@@ -61,7 +61,7 @@ instance Pure MenuItem ms where
                 : icon # "icon"
                 : header # "header"
                 : link # "link"
-                : fitted # "fitted"
+                : may ("fitted" <<>>) fitted
                 : "item"
                 : classes
                 )
