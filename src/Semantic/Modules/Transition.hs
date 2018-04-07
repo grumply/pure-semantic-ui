@@ -43,7 +43,7 @@ data Transition ms = Transition_
     } deriving (Generic)
 
 instance Default (Transition ms) where
-    def = (G.to gdef) 
+    def = (G.to gdef)
         { animation = "fade"
         , duration = Uniform 500
         , visible = True
@@ -64,7 +64,7 @@ data TransitionState = TS
 instance Pure Transition ms where
     render t =
         Component "Semantic.Modules.Transition" t $ \self ->
-            let 
+            let
 
                 setSafeState f = do
                     TS {..} <- getState self
@@ -81,9 +81,9 @@ instance Pure Transition ms where
                     setSafeState $ \TS {..} ->
                         ( TS { status = fromMaybe status upcoming
                              , animating = True
-                             , .. 
+                             , ..
                              }
-                        , for_ upcoming $ \s -> do 
+                        , for_ upcoming $ \s -> do
                             parent self (onStart s)
                             tid <- forkIO $ do
                                 threadDelay (calculateTransitionDuration s duration * 1000)
@@ -111,36 +111,6 @@ instance Pure Transition ms where
                         writeIORef next . Just =<< computeNextStatus
                         (not animating) # handleStart
 
-                computeFeatures status animating animation duration =
-                    map (updateStylesAndClasses 
-                            (addAnimationStyles status duration)
-                            (addAnimationClasses status animating animation)
-                        )
-
-                addAnimationClasses status animating animation classes =
-                    ( animation : classes) ++ 
-                        if animation `elem` directionalTransitions
-                            then 
-                                [ animating # "animating"
-                                , case status of
-                                    Entering -> "in"
-                                    Exiting  -> "out"
-                                    Exited   -> "hidden"
-                                    _        -> def
-                                , (status /= Exited) # "visible"
-                                , "transition"
-                                ]
-                            else 
-                                [ animating # "animating transition" ]
-
-                addAnimationStyles status duration styles =
-                    let ad = 
-                            case status of
-                                Entering -> ("animationDuration",ms(calculateTransitionDuration status duration))
-                                Exiting  -> ("animationDuration",ms(calculateTransitionDuration status duration))
-                                _        -> def
-                    in styles <> [ ad ]
-
                 computeCompletedStatus = do
                     Transition_ {..} <- getProps self
                     TS          {..} <- getState self
@@ -148,14 +118,14 @@ instance Pure Transition ms where
                     return $
                       (status == Entering)
                         ? Entered
-                        $ unmountOnHide 
-                            ? Unmounted 
+                        $ unmountOnHide
+                            ? Unmounted
                             $ Exited
 
                 computeInitialStatuses = do
                     Transition_ {..} <- getProps self
                     return $
-                        if | visible && transitionOnMount -> (Exited   ,Just Entering) 
+                        if | visible && transitionOnMount -> (Exited   ,Just Entering)
                            | visible                      -> (Entered  ,Nothing)
                            | mountOnShow || unmountOnHide -> (Unmounted,Nothing)
                            | otherwise                    -> (Exited   ,Nothing)
@@ -163,7 +133,7 @@ instance Pure Transition ms where
                 computeNextStatus = do
                     TS {..} <- getState self
                     return $
-                        if animating 
+                        if animating
                             then (status == Entering) ? Exiting $ Entering
                             else (status == Entered)  ? Exiting $ Entering
 
@@ -174,10 +144,10 @@ instance Pure Transition ms where
                 computeStatuses _ status =
                     ( Nothing, (status == Entering || status == Entered) ? Just Exiting $ Nothing)
 
-            in 
+            in
                 def
                     { construct = do
-                        (status,next) <- computeInitialStatuses 
+                        (status,next) <- computeInitialStatuses
                         TS status def <$> newIORef def <*> newIORef next <*> newIORef def
 
                     , mounted = do
@@ -191,22 +161,48 @@ instance Pure Transition ms where
                         let (current,upcoming) = computeStatuses (visible newprops) status
                         writeIORef next upcoming
                         let newStatus = fromMaybe status current
-                        return TS 
+                        return TS
                             { status = newStatus
-                            , .. 
+                            , ..
                             }
 
-                    , updated = \_ _ _ -> updateStatus
+                    , updated = \_ _ _ ->
+                        updateStatus
 
                     , unmount = do
                         TS {..} <- getState self
                         writeIORef mounted False
 
                     , renderer = \Transition_ {..} TS {..} ->
-                        (status /= Unmounted) #
-                            case computeFeatures status animating animation duration children of
-                                []    -> nil
-                                (c:_) -> c
+                          let
+                              animationClasses =
+                                  ( animation ) :
+                                      if animation `elem` directionalTransitions
+                                          then
+                                              [ animating # "animating"
+                                              , case status of
+                                                  Entering -> "in"
+                                                  Exiting  -> "out"
+                                                  Exited   -> "hidden"
+                                                  _        -> def
+                                              , (status /= Exited) # "visible"
+                                              , "transition"
+                                              ]
+                                          else
+                                              [ animating # "animating transition" ]
+
+                              animationStyles =
+                                  let ad =
+                                          case status of
+                                              Entering -> ("animation-duration",ms(calculateTransitionDuration status duration))
+                                              Exiting  -> ("animation-duration",ms(calculateTransitionDuration status duration))
+                                              _        -> def
+                                  in [ ad ]
+
+                          in
+                              (status /= Unmounted) #
+                                  Div [ ClassList animationClasses, StyleList animationStyles ]
+                                      children
 
                     }
 
