@@ -162,10 +162,12 @@ contains node target =
 mergeClasses :: [Feature ms] -> [Feature ms]
 mergeClasses = go []
   where
-    go acc [] = [ Attribute "class" ( foldr (<<>>) mempty acc ) ]
-    go acc ( Attribute "class" cs : rest ) = go ( cs : acc ) rest
+    go acc [] = [ Property "class" ( foldr (<<>>) mempty acc ) ]
+    go acc ( Property "class" cs : rest ) = go ( cs : acc ) rest
     go acc ( f : fs ) = f : go acc fs
 
+-- Note: This method only applies to the first rendering of a ComponentView.
+--       Subsequent renderings with addClasses will not apply to ComponentView.
 -- Appends classes to the first ClassList feature only
 addClasses :: forall ms. ([Txt] -> [Txt]) -> View ms -> View ms
 addClasses f v =
@@ -182,8 +184,14 @@ addClasses f v =
         go [] = [ ClassList (f []) ]
         go (ClassList cs : fs) = ClassList (f cs) : fs
         go (f : fs) = f : go fs
- 
 
+-- Note: This method only applies to the first rendering of a ComponentView.
+--       Subsequent renderings with clone will not apply to ComponentView.
+--       Currently, this method is only used in Transition where the immediate
+--       descendant is always a Div, so this isn't an issue. But this does show
+--       that pure is lacking a feature that is useful, and finding a way to
+--       inject the renderer on each change will be difficult with the current
+--       implementation without wrapping the render method in a mutable container.
 clone :: forall ms. ([Feature ms] -> [Feature ms]) -> View ms -> View ms
 clone f v =
     case v of
@@ -195,7 +203,7 @@ clone f v =
     where
         cloneComponent :: forall props state. Comp ms props state -> Comp ms props state
         cloneComponent Comp {..} = Comp { renderer = \p s -> clone f (renderer p s), .. }
-        
+
 updateClasses :: forall ms. ([Txt] -> [Txt]) -> View ms -> View ms
 updateClasses f = clone (go False)
     where
@@ -213,7 +221,7 @@ updateStyles f = clone (go False)
         go b (f : fs) = f : go b fs
 
 updateStylesAndClasses :: forall ms. ([(Txt,Txt)] -> [(Txt,Txt)]) -> ([Txt] -> [Txt]) -> View ms -> View ms
-updateStylesAndClasses s c = clone (go False False) 
+updateStylesAndClasses s c = clone (go False False)
     where
         go False False []        = [ StyleList (s []), ClassList (c []) ]
         go False True  []        = [ StyleList (s []) ]
