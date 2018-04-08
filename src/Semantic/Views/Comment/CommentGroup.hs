@@ -5,14 +5,16 @@ import Pure.View hiding (textAlign)
 
 import Semantic.Utils
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Collapsed
-import Semantic.Properties.Minimal
-import Semantic.Properties.Size
-import Semantic.Properties.Threaded
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasCollapsedProp(..), pattern Collapsed
+  , HasMinimalProp(..), pattern Minimal
+  , HasSizeProp(..), pattern Size
+  , HasThreadedProp(..), pattern Threaded
+  )
 
 data CommentGroup ms = CommentGroup_
     { as :: [Feature ms] -> [View ms] -> View ms

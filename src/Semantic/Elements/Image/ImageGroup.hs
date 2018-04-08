@@ -5,11 +5,13 @@ import Pure.View as View
 
 import Semantic.Utils
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Size
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasSizeProp(..), pattern Size
+  )
 
 data ImageGroup ms = ImageGroup_
     { as :: [Feature ms] -> [View ms] -> View ms

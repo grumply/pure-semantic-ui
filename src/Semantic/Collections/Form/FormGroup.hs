@@ -6,14 +6,16 @@ import qualified Pure.View as HTML
 
 import Semantic.Utils
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Grouped
-import Semantic.Properties.Inline
-import Semantic.Properties.Unstackable
-import Semantic.Properties.Widths
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasGroupedProp(..), pattern Grouped
+  , HasInlineProp(..), pattern Inline
+  , HasUnstackableProp(..), pattern Unstackable
+  , HasWidthsProp(..), pattern Widths
+  )
 
 data FormGroup ms = FormGroup_
     { as :: [Feature ms] -> [View ms] -> View ms

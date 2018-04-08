@@ -11,24 +11,26 @@ import Semantic.Elements.Label.LabelGroup as Export
 
 import Semantic.Elements.Image
 
-import Semantic.Properties.Active
-import Semantic.Properties.As
-import Semantic.Properties.Attached
-import Semantic.Properties.Attributes
-import Semantic.Properties.Basic
-import Semantic.Properties.Children
-import Semantic.Properties.Circular
-import Semantic.Properties.Classes
-import Semantic.Properties.Color
-import Semantic.Properties.Corner
-import Semantic.Properties.Empty
-import Semantic.Properties.Floating
-import Semantic.Properties.Horizontal
-import Semantic.Properties.OnClick
-import Semantic.Properties.Pointing
-import Semantic.Properties.Ribbon
-import Semantic.Properties.Size
-import Semantic.Properties.Tag
+import Semantic.Properties as Properties
+  ( HasActiveProp(..), pattern Active
+  , HasAsProp(..), pattern As
+  , HasAttachedProp(..), pattern Attached
+  , HasAttributesProp(..), pattern Attributes
+  , HasBasicProp(..), pattern Basic
+  , HasChildrenProp(..), pattern Children
+  , HasCircularProp(..), pattern Circular
+  , HasClassesProp(..), pattern Classes
+  , HasColorProp(..), pattern Color
+  , HasCornerProp(..), pattern Corner
+  , HasEmptyProp(..), pattern Empty
+  , HasFloatingProp(..), pattern Floating
+  , HasHorizontalProp(..), pattern Horizontal
+  , HasOnClickProp(..), pattern OnClick
+  , HasPointingProp(..), pattern Pointing
+  , HasRibbonProp(..), pattern Ribbon
+  , HasSizeProp(..), pattern Size
+  , HasTagProp(..), pattern Tag
+  )
 
 data Label ms = Label_
     { as :: [Feature ms] -> [View ms] -> View ms

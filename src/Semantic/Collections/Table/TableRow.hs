@@ -4,18 +4,21 @@ import GHC.Generics as G
 import Pure.View hiding (active,disabled,textAlign,verticalAlign)
 
 import Semantic.Utils
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Active
-import Semantic.Properties.Disabled
-import Semantic.Properties.Error
-import Semantic.Properties.Negative
-import Semantic.Properties.Positive
-import Semantic.Properties.TextAlign
-import Semantic.Properties.VerticalAlign
-import Semantic.Properties.Warning
+
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasActiveProp(..), pattern Active
+  , HasDisabledProp(..), pattern Disabled
+  , HasErrorProp(..), pattern Error
+  , HasNegativeProp(..), pattern Negative
+  , HasPositiveProp(..), pattern Positive
+  , HasTextAlignProp(..), pattern TextAlign
+  , HasVerticalAlignProp(..), pattern VerticalAlign
+  , HasWarningProp(..), pattern Warning
+  )
 
 import Prelude hiding (error)
 

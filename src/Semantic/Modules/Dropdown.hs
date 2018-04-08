@@ -5,35 +5,37 @@ import Pure.View hiding (button,disabled,inline,onBlur,onClick,onFocus,simple)
 
 import Semantic.Utils
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Basic
-import Semantic.Properties.IsButton
-import Semantic.Properties.Compact
-import Semantic.Properties.Disabled
-import Semantic.Properties.Error
-import Semantic.Properties.Fluid
-import Semantic.Properties.Floating
-import Semantic.Properties.Inline
-import Semantic.Properties.Labeled
-import Semantic.Properties.Loading
-import Semantic.Properties.IsItem
-import Semantic.Properties.Multiple
-import Semantic.Properties.OnBlur
-import Semantic.Properties.OnChange
-import Semantic.Properties.OnClick
-import Semantic.Properties.OnFocus
-import Semantic.Properties.OnMouseDown
-import Semantic.Properties.Open
-import Semantic.Properties.Pointing
-import Semantic.Properties.IsSearch
-import Semantic.Properties.Selection
-import Semantic.Properties.Simple
-import Semantic.Properties.Scrolling
-import Semantic.Properties.TabIndex
-import Semantic.Properties.Upward
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasBasicProp(..), pattern Basic
+  , HasIsButtonProp(..), pattern IsButton
+  , HasCompactProp(..), pattern Compact
+  , HasDisabledProp(..), pattern Disabled
+  , HasErrorProp(..), pattern Error
+  , HasFluidProp(..), pattern Fluid
+  , HasFloatingProp(..), pattern Floating
+  , HasInlineProp(..), pattern Inline
+  , HasLabeledProp(..), pattern Labeled
+  , HasLoadingProp(..), pattern Loading
+  , HasIsItemProp(..), pattern IsItem
+  , HasMultipleProp(..), pattern Multiple
+  , HasOnBlurProp(..), pattern OnBlur
+  , HasOnChangeProp(..), pattern OnChange
+  , HasOnClickProp(..), pattern OnClick
+  , HasOnFocusProp(..), pattern OnFocus
+  , HasOnMouseDownProp(..), pattern OnMouseDown
+  , HasOpenProp(..), pattern Open
+  , HasPointingProp(..), pattern Pointing
+  , HasIsSearchProp(..), pattern IsSearch
+  , HasSelectionProp(..), pattern Selection
+  , HasSimpleProp(..), pattern Simple
+  , HasScrollingProp(..), pattern Scrolling
+  , HasTabIndexProp(..), pattern TabIndex
+  , HasUpwardProp(..), pattern Upward
+  )
 
 import Semantic.Modules.Dropdown.DropdownDivider as Export
 import Semantic.Modules.Dropdown.DropdownHeader as Export

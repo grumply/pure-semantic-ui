@@ -7,22 +7,24 @@ import Semantic.Utils
 
 import Semantic.Elements.Icon.IconGroup as Export
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Bordered
-import Semantic.Properties.Circular
-import Semantic.Properties.Classes
-import Semantic.Properties.Color
-import Semantic.Properties.Corner
-import Semantic.Properties.Disabled
-import Semantic.Properties.Fitted
-import Semantic.Properties.Flipped
-import Semantic.Properties.Inverted
-import Semantic.Properties.Link
-import Semantic.Properties.Loading
-import Semantic.Properties.Name
-import Semantic.Properties.Rotated
-import Semantic.Properties.Size
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasBorderedProp(..), pattern Bordered
+  , HasCircularProp(..), pattern Circular
+  , HasClassesProp(..), pattern Classes
+  , HasColorProp(..), pattern Color
+  , HasCornerProp(..), pattern Corner
+  , HasDisabledProp(..), pattern Disabled
+  , HasFittedProp(..), pattern Fitted
+  , HasFlippedProp(..), pattern Flipped
+  , HasInvertedProp(..), pattern Inverted
+  , HasLinkProp(..), pattern Link
+  , HasLoadingProp(..), pattern Loading
+  , HasNameProp(..), pattern Name
+  , HasRotatedProp(..), pattern Rotated
+  , HasSizeProp(..), pattern Size
+  )
 
 data Icon ms = Icon_
     { as :: [Feature ms] -> [View ms] -> View ms

@@ -5,15 +5,17 @@ import Pure.View hiding (color,horizontal)
 
 import Semantic.Utils
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Color
-import Semantic.Properties.Floated
-import Semantic.Properties.Horizontal
-import Semantic.Properties.Inverted
-import Semantic.Properties.Size
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasColorProp(..), pattern Color
+  , HasFloatedProp(..), pattern Floated
+  , HasHorizontalProp(..), pattern Horizontal
+  , HasInvertedProp(..), pattern Inverted
+  , HasSizeProp(..), pattern Size
+  )
 
 import Semantic.Views.Statistic.StatisticGroup as Export
 import Semantic.Views.Statistic.StatisticLabel as Export

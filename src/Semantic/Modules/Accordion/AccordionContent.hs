@@ -5,11 +5,13 @@ import Pure.View hiding (active)
 
 import Semantic.Utils
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Active
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasActiveProp(..), pattern Active
+  )
 
 data AccordionContent ms = AccordionContent_
     { as :: [Feature ms] -> [View ms] -> View ms

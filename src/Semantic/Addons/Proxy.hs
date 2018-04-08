@@ -1,4 +1,8 @@
-module Semantic.Addons.Proxy where
+module Semantic.Addons.Proxy
+  ( module Properties
+  , module Tools
+  , Proxy(..), pattern Proxy
+  )where
 
 import GHC.Generics as G
 import Pure.View hiding (children,Proxy)
@@ -6,8 +10,12 @@ import Pure.Lifted (Node)
 
 import Semantic.Utils
 
-import Semantic.Properties.Children
-import Semantic.Properties.InnerRef
+import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
+
+import Semantic.Properties as Properties
+  ( HasChildrenProp(..), pattern Children
+  , HasInnerRefProp(..), pattern InnerRef
+  )
 
 data Proxy ms = Proxy_
     { children :: [View ms]

@@ -5,10 +5,12 @@ import Pure.View
 
 import Semantic.Utils
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  )
 
 data MessageList ms = MessageList_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -21,7 +23,7 @@ instance Default (MessageList ms) where
     def = (G.to gdef) { as = Ul }
 
 pattern MessageList :: MessageList ms -> View ms
-pattern MessageList ml = View ml 
+pattern MessageList ml = View ml
 
 instance Pure MessageList ms where
     render MessageList_ {..} =

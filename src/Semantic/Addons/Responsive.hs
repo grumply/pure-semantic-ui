@@ -1,4 +1,10 @@
-module Semantic.Addons.Responsive where
+module Semantic.Addons.Responsive
+  ( module Properties
+  , module Tools
+  , Responsive(..), pattern Responsive
+  , pattern OnlyMobile, pattern OnlyTablet
+  , pattern OnlyComputer, pattern OnlyLargeScreen, pattern OnlyWidescreen
+  )where
 
 import Data.IORef
 import GHC.Generics as G
@@ -8,24 +14,28 @@ import Pure.Lifted (Win(..),Node(..),getWindow)
 
 import Semantic.Utils
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.MinWidth
-import Semantic.Properties.MaxWidth
-import Semantic.Properties.FireOnMount
-import Semantic.Properties.OnUpdate
+import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
 
-data Responsive ms = Responsive_ 
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+import Semantic.Properties as Properties
+  ( HasAsProp(..)          , pattern As
+  , HasAttributesProp(..)  , pattern Attributes
+  , HasChildrenProp(..)    , pattern Children
+  , HasClassesProp(..)     , pattern Classes
+  , HasMinWidthProp(..)    , pattern MinWidth
+  , HasMaxWidthProp(..)    , pattern MaxWidth
+  , HasFireOnMountProp(..) , pattern FireOnMount
+  , HasOnUpdateProp(..)    , pattern OnUpdate
+  )
+
+data Responsive ms = Responsive_
+    { as          :: [Feature ms] -> [View ms] -> View ms
+    , attributes  :: [Feature ms]
+    , children    :: [View ms]
+    , classes     :: [Txt]
     , fireOnMount :: Bool
-    , maxWidth :: Int
-    , minWidth :: Int
-    , onUpdate :: Ef ms IO ()
+    , maxWidth    :: Int
+    , minWidth    :: Int
+    , onUpdate    :: Ef ms IO ()
     } deriving (Generic)
 
 instance Default (Responsive ms) where
@@ -50,15 +60,15 @@ pattern OnlyWidescreen :: Responsive ms -> View ms
 pattern OnlyWidescreen r = View (MinWidth 1920 r)
 
 data ResponsiveState = RS
-    { width :: Int
+    { width   :: Int
     , handler :: IORef (IO ())
     , ticking :: IORef Bool
     }
 
 instance Pure Responsive ms where
     render r =
-        Component "Semantic.Addons.Responsive" r $ \self -> 
-            let 
+        Component "Semantic.Addons.Responsive" r $ \self ->
+            let
                 handleResize = liftIO $ do
                     RS {..} <- getState self
                     tick <- readIORef ticking
@@ -72,11 +82,11 @@ instance Pure Responsive ms where
                     writeIORef ticking False
                     w <- innerWidth
                     setState self $ \_ RS {..} -> RS { width = w, .. }
-                    void $ parent self onUpdate 
+                    void $ parent self onUpdate
 
             in def
                 { construct = RS <$> innerWidth <*> newIORef def <*> newIORef def
-                
+
                 , mounted = do
                     Responsive_ {..} <- getProps self
                     RS {..} <- getState self
@@ -91,7 +101,7 @@ instance Pure Responsive ms where
                     writeIORef handler def
 
                 , renderer = \Responsive_ {..} RS {..} ->
-                     (width <= maxWidth && width >= minWidth) # 
+                     (width <= maxWidth && width >= minWidth) #
                         as attributes children
 
                 }

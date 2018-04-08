@@ -5,16 +5,18 @@ import Pure.View hiding (active,disabled,inline,verticalAlign)
 
 import Semantic.Utils
 
-import Semantic.Properties.Active
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Disabled
-import Semantic.Properties.Inline
-import Semantic.Properties.Inverted
-import Semantic.Properties.IsIndeterminate
-import Semantic.Properties.Size
+import Semantic.Properties as Properties
+  ( HasActiveProp(..), pattern Active
+  , HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasDisabledProp(..), pattern Disabled
+  , HasInlineProp(..), pattern Inline
+  , HasInvertedProp(..), pattern Inverted
+  , HasIsIndeterminateProp(..), pattern IsIndeterminate
+  , HasSizeProp(..), pattern Size
+  )
 
 data Loader ms = Loader_ 
     { as :: [Feature ms] -> [View ms] -> View ms

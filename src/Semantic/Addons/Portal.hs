@@ -1,4 +1,8 @@
-module Semantic.Addons.Portal where
+module Semantic.Addons.Portal
+  ( module Properties
+  , module Tools
+  , Portal(..), pattern Portal
+  ) where
 
 import Control.Concurrent
 import Data.IORef
@@ -15,75 +19,80 @@ import Semantic.Utils
 
 import Semantic.Addons.Proxy
 
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.CloseOnDocumentClick
-import Semantic.Properties.CloseOnEscape
-import Semantic.Properties.CloseOnPortalMouseLeave
-import Semantic.Properties.CloseOnRootNodeClick
-import Semantic.Properties.CloseOnTriggerBlur
-import Semantic.Properties.CloseOnTriggerClick
-import Semantic.Properties.CloseOnTriggerMouseLeave
-import Semantic.Properties.DefaultOpen
-import Semantic.Properties.MountNode
-import Semantic.Properties.MouseEnterDelay
-import Semantic.Properties.MouseLeaveDelay
-import Semantic.Properties.OnClose
-import Semantic.Properties.OnMount
-import Semantic.Properties.OnOpen
-import Semantic.Properties.OnUnmount
-import Semantic.Properties.Open
-import Semantic.Properties.OpenOnTriggerClick
-import Semantic.Properties.OpenOnTriggerFocus
-import Semantic.Properties.OpenOnTriggerMouseEnter
-import Semantic.Properties.Prepend
-import Semantic.Properties.Trigger
-import Semantic.Properties.InnerRef
+import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
 
+import Semantic.Properties as Properties
+  ( HasAttributesProp(..)               , pattern Attributes
+  , HasChildrenProp(..)                 , pattern Children
+  , HasClassesProp(..)                  , pattern Classes
+  , HasCloseOnDocumentClickProp(..)     , pattern CloseOnDocumentClick
+  , HasCloseOnEscapeProp(..)            , pattern CloseOnEscape
+  , HasCloseOnPortalMouseLeaveProp(..)  , pattern CloseOnPortalMouseLeave
+  , HasCloseOnRootNodeClickProp(..)     , pattern CloseOnRootNodeClick
+  , HasCloseOnTriggerBlurProp(..)       , pattern CloseOnTriggerBlur
+  , HasCloseOnTriggerClickProp(..)      , pattern CloseOnTriggerClick
+  , HasCloseOnTriggerMouseLeaveProp(..) , pattern CloseOnTriggerMouseLeave
+  , HasDefaultOpenProp(..)              , pattern DefaultOpen
+  , HasMountNodeProp(..)                , pattern MountNode
+  , HasMouseEnterDelayProp(..)          , pattern MouseEnterDelay
+  , HasMouseLeaveDelayProp(..)          , pattern MouseLeaveDelay
+  , HasOnCloseProp(..)                  , pattern OnClose
+  , HasOnMountProp(..)                  , pattern OnMount
+  , HasOnOpenProp(..)                   , pattern OnOpen
+  , HasOnUnmountProp(..)                , pattern OnUnmount
+  , HasOpenProp(..)                     , pattern Open
+  , HasOpenOnTriggerClickProp(..)       , pattern OpenOnTriggerClick
+  , HasOpenOnTriggerFocusProp(..)       , pattern OpenOnTriggerFocus
+  , HasOpenOnTriggerMouseEnterProp(..)  , pattern OpenOnTriggerMouseEnter
+  , HasPrependProp(..)                  , pattern Prepend
+  , HasTriggerProp(..)                  , pattern Trigger
+  , HasInnerRefProp(..)                 , pattern InnerRef
+  )
+
+-- used safely
 import Unsafe.Coerce
 
 data Portal ms = Portal_
-    { attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
-    , closeOnDocumentClick :: Bool
-    , closeOnEscape :: Bool
-    , closeOnPortalMouseLeave :: Bool
-    , closeOnRootNodeClick :: Bool
-    , closeOnTriggerBlur :: Bool
-    , closeOnTriggerClick :: Bool
+    { attributes               :: [Feature ms]
+    , children                 :: [View ms]
+    , classes                  :: [Txt]
+    , closeOnDocumentClick     :: Bool
+    , closeOnEscape            :: Bool
+    , closeOnPortalMouseLeave  :: Bool
+    , closeOnRootNodeClick     :: Bool
+    , closeOnTriggerBlur       :: Bool
+    , closeOnTriggerClick      :: Bool
     , closeOnTriggerMouseLeave :: Bool
-    , defaultOpen :: Bool
-    , mountNode :: Maybe JSV
-    , mouseEnterDelay :: Int
-    , mouseLeaveDelay :: Int
-    , onClose :: Ef ms IO ()
-    , onMount :: Ef ms IO ()
-    , onOpen :: Evt -> Ef ms IO ()
-    , onUnmount :: Ef ms IO ()
-    , open :: Bool
-    , openOnTriggerClick :: Bool
-    , openOnTriggerFocus :: Bool
-    , openOnTriggerMouseEnter :: Bool
-    , prepend :: Bool
-    , trigger :: View ms
+    , defaultOpen              :: Bool
+    , mountNode                :: Maybe JSV
+    , mouseEnterDelay          :: Int
+    , mouseLeaveDelay          :: Int
+    , onClose                  :: Ef ms IO ()
+    , onMount                  :: Ef ms IO ()
+    , onOpen                   :: Evt -> Ef ms IO ()
+    , onUnmount                :: Ef ms IO ()
+    , open                     :: Bool
+    , openOnTriggerClick       :: Bool
+    , openOnTriggerFocus       :: Bool
+    , openOnTriggerMouseEnter  :: Bool
+    , prepend                  :: Bool
+    , trigger                  :: View ms
     } deriving (Generic)
 
 instance Default (Portal ms) where
     def = (G.to gdef)
             { closeOnDocumentClick = True
-            , closeOnEscape = True
-            , openOnTriggerClick = True
+            , closeOnEscape        = True
+            , openOnTriggerClick   = True
             }
 
 pattern Portal :: Portal ms -> View ms
 pattern Portal p = View p
 
 data PortalState ms = PS
-    { active :: Bool
-    , nodes :: IORef PortalStateNodes
-    , timers :: IORef PortalStateTimers
+    { active   :: Bool
+    , nodes    :: IORef PortalStateNodes
+    , timers   :: IORef PortalStateTimers
     , handlers :: IORef PortalStateHandlers
     , liveView :: IORef (View ms,View ms)
     }
@@ -91,8 +100,8 @@ data PortalState ms = PS
 data PortalStateHandlers = PSH
     { mouseLeaveHandler :: IO ()
     , mouseEnterHandler :: IO ()
-    , clickHandler :: IO ()
-    , keydownHandler :: IO ()
+    , clickHandler      :: IO ()
+    , keydownHandler    :: IO ()
     } deriving (Generic,Default)
 
 data PortalStateTimers = PST
@@ -101,8 +110,8 @@ data PortalStateTimers = PST
     } deriving (Generic,Default)
 
 data PortalStateNodes = PSN
-    { rootNode :: Maybe JSV
-    , portalNode :: Maybe JSV
+    { rootNode    :: Maybe JSV
+    , portalNode  :: Maybe JSV
     , triggerNode :: Maybe JSV
     } deriving (Generic,Default)
 

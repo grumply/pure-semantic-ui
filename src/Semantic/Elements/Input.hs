@@ -10,22 +10,24 @@ import Semantic.Elements.Button
 import Semantic.Elements.Icon
 import Semantic.Elements.Label
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Disabled
-import Semantic.Properties.Error
-import Semantic.Properties.Fluid
-import Semantic.Properties.Focus
-import Semantic.Properties.Focused
-import Semantic.Properties.Inverted
-import Semantic.Properties.Loading
-import Semantic.Properties.OnChange
-import Semantic.Properties.Size
-import Semantic.Properties.TabIndex
-import Semantic.Properties.Transparent
-import Semantic.Properties.Type
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasDisabledProp(..), pattern Disabled
+  , HasErrorProp(..), pattern Error
+  , HasFluidProp(..), pattern Fluid
+  , HasFocusProp(..), pattern Focus
+  , HasFocusedProp(..), pattern Focused
+  , HasInvertedProp(..), pattern Inverted
+  , HasLoadingProp(..), pattern Loading
+  , HasOnChangeProp(..), pattern OnChange
+  , HasSizeProp(..), pattern Size
+  , HasTabIndexProp(..), pattern TabIndex
+  , HasTransparentProp(..), pattern Transparent
+  , HasTypeProp(..), pattern Type
+  )
 
 import Prelude hiding (error)
 

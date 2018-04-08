@@ -13,32 +13,34 @@ import Semantic.Elements.Button.ButtonContent as Export
 import Semantic.Elements.Button.ButtonGroup as Export
 import Semantic.Elements.Button.ButtonOr as Export
 
-import Semantic.Properties.Active
-import Semantic.Properties.Animated
-import Semantic.Properties.As
-import Semantic.Properties.Attached
-import Semantic.Properties.Attributes
-import Semantic.Properties.Basic
-import Semantic.Properties.Children
-import Semantic.Properties.Circular
-import Semantic.Properties.Classes
-import Semantic.Properties.Color
-import Semantic.Properties.Compact
-import Semantic.Properties.Disabled
-import Semantic.Properties.Floated
-import Semantic.Properties.Fluid
-import Semantic.Properties.Focus
-import Semantic.Properties.Inverted
-import Semantic.Properties.LabelPosition
-import Semantic.Properties.Loading
-import Semantic.Properties.Negative
-import Semantic.Properties.OnClick
-import Semantic.Properties.Positive
-import Semantic.Properties.Primary
-import Semantic.Properties.Secondary
-import Semantic.Properties.Size
-import Semantic.Properties.TabIndex
-import Semantic.Properties.Toggle
+import Semantic.Properties as Properties
+  ( HasActiveProp(..), pattern Active
+  , HasAnimatedProp(..), pattern Animated
+  , HasAsProp(..), pattern As
+  , HasAttachedProp(..), pattern Attached
+  , HasAttributesProp(..), pattern Attributes
+  , HasBasicProp(..), pattern Basic
+  , HasChildrenProp(..), pattern Children
+  , HasCircularProp(..), pattern Circular
+  , HasClassesProp(..), pattern Classes
+  , HasColorProp(..), pattern Color
+  , HasCompactProp(..), pattern Compact
+  , HasDisabledProp(..), pattern Disabled
+  , HasFloatedProp(..), pattern Floated
+  , HasFluidProp(..), pattern Fluid
+  , HasFocusProp(..), pattern Focus
+  , HasInvertedProp(..), pattern Inverted
+  , HasLabelPositionProp(..), pattern LabelPosition
+  , HasLoadingProp(..), pattern Loading
+  , HasNegativeProp(..), pattern Negative
+  , HasOnClickProp(..), pattern OnClick
+  , HasPositiveProp(..), pattern Positive
+  , HasPrimaryProp(..), pattern Primary
+  , HasSecondaryProp(..), pattern Secondary
+  , HasSizeProp(..), pattern Size
+  , HasTabIndexProp(..), pattern TabIndex
+  , HasToggleProp(..), pattern Toggle
+  )
 
 data Button ms = Button_
   { as :: [Feature ms] -> [View ms] -> View ms

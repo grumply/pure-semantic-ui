@@ -7,13 +7,15 @@ import Pure.Lifted (JSV,Node(..),(.#))
 
 import Semantic.Utils
 
-import Semantic.Properties.Attributes
-import Semantic.Properties.Classes
-import Semantic.Properties.InputRef
-import Semantic.Properties.OnChange
-import Semantic.Properties.TabIndex
-import Semantic.Properties.Type
-import Semantic.Properties.Value
+import Semantic.Properties as Properties
+  ( HasAttributesProp(..), pattern Attributes
+  , HasClassesProp(..), pattern Classes
+  , HasInputRefProp(..), pattern InputRef
+  , HasOnChangeProp(..), pattern OnChange
+  , HasTabIndexProp(..), pattern TabIndex
+  , HasTypeProp(..), pattern Type
+  , HasValueProp(..), pattern Value
+  )
 
 data DropdownSearchInput ms = DropdownSearchInput_ 
     { attributes :: [Feature ms] 

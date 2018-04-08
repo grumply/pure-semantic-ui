@@ -7,19 +7,21 @@ import Semantic.Utils
 
 import Semantic.Elements.Icon
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Active
-import Semantic.Properties.Color
-import Semantic.Properties.Disabled
-import Semantic.Properties.Fitted
-import Semantic.Properties.Index
-import Semantic.Properties.IsHeader
-import Semantic.Properties.Link
-import Semantic.Properties.OnClick
-import Semantic.Properties.Position
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasActiveProp(..), pattern Active
+  , HasColorProp(..), pattern Color
+  , HasDisabledProp(..), pattern Disabled
+  , HasFittedProp(..), pattern Fitted
+  , HasIndexProp(..), pattern Index
+  , HasIsHeaderProp(..), pattern IsHeader
+  , HasLinkProp(..), pattern Link
+  , HasOnClickProp(..), pattern OnClick
+  , HasPositionProp(..), pattern Position
+  )
 
 data MenuItem ms = MenuItem_
     { as :: [Feature ms] -> [View ms] -> View ms

@@ -6,31 +6,33 @@ import qualified Pure.View as HTML
 
 import Semantic.Utils
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Attached
-import Semantic.Properties.Basic
-import Semantic.Properties.Celled
-import Semantic.Properties.Collapsing
-import Semantic.Properties.Color
-import Semantic.Properties.Columns
-import Semantic.Properties.Compact
-import Semantic.Properties.Definition
-import Semantic.Properties.Fixed
-import Semantic.Properties.Inverted
-import Semantic.Properties.Padded
-import Semantic.Properties.Selectable
-import Semantic.Properties.SingleLine
-import Semantic.Properties.Size
-import Semantic.Properties.Sortable
-import Semantic.Properties.Stackable
-import Semantic.Properties.Striped
-import Semantic.Properties.Structured
-import Semantic.Properties.TextAlign
-import Semantic.Properties.Unstackable
-import Semantic.Properties.VerticalAlign
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasAttachedProp(..), pattern Attached
+  , HasBasicProp(..), pattern Basic
+  , HasCelledProp(..), pattern Celled
+  , HasCollapsingProp(..), pattern Collapsing
+  , HasColorProp(..), pattern Color
+  , HasColumnsProp(..), pattern Columns
+  , HasCompactProp(..), pattern Compact
+  , HasDefinitionProp(..), pattern Definition
+  , HasFixedProp(..), pattern Fixed
+  , HasInvertedProp(..), pattern Inverted
+  , HasPaddedProp(..), pattern Padded
+  , HasSelectableProp(..), pattern Selectable
+  , HasSingleLineProp(..), pattern SingleLine
+  , HasSizeProp(..), pattern Size
+  , HasSortableProp(..), pattern Sortable
+  , HasStackableProp(..), pattern Stackable
+  , HasStripedProp(..), pattern Striped
+  , HasStructuredProp(..), pattern Structured
+  , HasTextAlignProp(..), pattern TextAlign
+  , HasUnstackableProp(..), pattern Unstackable
+  , HasVerticalAlignProp(..), pattern VerticalAlign
+  )
 
 import Semantic.Collections.Table.TableBody as Export
 import Semantic.Collections.Table.TableCell as Export

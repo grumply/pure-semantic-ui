@@ -2,7 +2,7 @@
 module Semantic.Utils (module Semantic.Utils, module Export) where
 
 import Pure.Data hiding (lookup)
-import Pure.View hiding (one,two,lookup,reverse,Width)
+import Pure.View hiding (one,two,lookup,reverse,Width,Equal)
 
 import Pure.Lifted hiding (lookup)
 import Pure.Data.JSV
@@ -35,7 +35,7 @@ multiProp val key
 widthProp :: Width -> Txt -> Bool -> Txt
 widthProp val widthClass canEqual
     | isNil val = ""
-    | canEqual && val == equal = "equal width"
+    | canEqual && val == Equal = "equal width"
     | otherwise = toTxt val <>> widthClass
 
 newtype Width = Width Txt deriving (Eq)
@@ -46,39 +46,23 @@ instance Cond Width where
     isNil _          = False
 instance ToTxt Width where toTxt (Width w) = w
 
-equal = Width "equal"
-one = Width "one"
-_1 = one
-two = Width "two"
-_2 = two
-three = Width "three"
-_3 = three
-four = Width "four"
-_4 = four
-five = Width "five"
-_5 = five
-six = Width "six"
-_6 = six
-seven = Width "seven"
-_7 = seven
-eight = Width "eight"
-_8 = eight
-nine = Width "nine"
-_9 = nine
-ten = Width "ten"
-_10 = ten
-eleven = Width "eleven"
-_11 = eleven
-twelve = Width "twelve"
-_12 = twelve
-thirteen = Width "thirteen"
-_13 = thirteen
-fourteen = Width "fourteen"
-_14 = fourteen
-fifteen = Width "fifteen"
-_15 = fifteen
-sixteen = Width "sixteen"
-_16 = sixteen
+pattern Equal = Width "equal"
+pattern One = Width "one"
+pattern Two = Width "two"
+pattern Three = Width "three"
+pattern Four = Width "four"
+pattern Five = Width "five"
+pattern Six = Width "six"
+pattern Seven = Width "seven"
+pattern Eight = Width "eight"
+pattern Nine = Width "nine"
+pattern Ten = Width "ten"
+pattern Eleven = Width "eleven"
+pattern Twelve = Width "twelve"
+pattern Thirteen = Width "thirteen"
+pattern Fourteen = Width "fourteen"
+pattern Fifteen = Width "fifteen"
+pattern Sixteen = Width "sixteen"
 
 only :: [a] -> a
 only [a] = a

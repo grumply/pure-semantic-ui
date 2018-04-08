@@ -8,16 +8,18 @@ import Prelude hiding (error)
 
 import Semantic.Utils
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Disabled
-import Semantic.Properties.Error
-import Semantic.Properties.Inline
-import Semantic.Properties.Required
-import Semantic.Properties.Type
-import Semantic.Properties.Widths
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasDisabledProp(..), pattern Disabled
+  , HasErrorProp(..), pattern Error
+  , HasInlineProp(..), pattern Inline
+  , HasRequiredProp(..), pattern Required
+  , HasTypeProp(..), pattern Type
+  , HasWidthsProp(..), pattern Widths
+  )
 
 data FormField ms = FormField_
     { as :: [Feature ms] -> [View ms] -> View ms

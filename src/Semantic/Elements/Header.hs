@@ -12,20 +12,22 @@ import Semantic.Elements.Image
 import Semantic.Elements.Header.HeaderContent as Export
 import Semantic.Elements.Header.HeaderSubheader as Export
 
-import Semantic.Properties.As
-import Semantic.Properties.Attached
-import Semantic.Properties.Attributes
-import Semantic.Properties.Block
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Color
-import Semantic.Properties.Disabled
-import Semantic.Properties.Dividing
-import Semantic.Properties.Floated
-import Semantic.Properties.Inverted
-import Semantic.Properties.Size
-import Semantic.Properties.Sub
-import Semantic.Properties.TextAlign
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttachedProp(..), pattern Attached
+  , HasAttributesProp(..), pattern Attributes
+  , HasBlockProp(..), pattern Block
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasColorProp(..), pattern Color
+  , HasDisabledProp(..), pattern Disabled
+  , HasDividingProp(..), pattern Dividing
+  , HasFloatedProp(..), pattern Floated
+  , HasInvertedProp(..), pattern Inverted
+  , HasSizeProp(..), pattern Size
+  , HasSubProp(..), pattern Sub
+  , HasTextAlignProp(..), pattern TextAlign
+  )
 
 data Header ms = Header_
     { as :: [Feature ms] -> [View ms] -> View ms 

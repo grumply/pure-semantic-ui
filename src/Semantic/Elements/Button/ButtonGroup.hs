@@ -8,26 +8,28 @@ import Semantic.Utils
 
 import Semantic.Elements.Icon
 
-import Semantic.Properties.As
-import Semantic.Properties.Attached
-import Semantic.Properties.Attributes
-import Semantic.Properties.Basic
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Color
-import Semantic.Properties.Compact
-import Semantic.Properties.Floated
-import Semantic.Properties.Fluid
-import Semantic.Properties.Inverted
-import Semantic.Properties.Labeled
-import Semantic.Properties.Negative
-import Semantic.Properties.Positive
-import Semantic.Properties.Primary
-import Semantic.Properties.Secondary
-import Semantic.Properties.Size
-import Semantic.Properties.Toggle
-import Semantic.Properties.Vertical
-import Semantic.Properties.Widths
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttachedProp(..), pattern Attached
+  , HasAttributesProp(..), pattern Attributes
+  , HasBasicProp(..), pattern Basic
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasColorProp(..), pattern Color
+  , HasCompactProp(..), pattern Compact
+  , HasFloatedProp(..), pattern Floated
+  , HasFluidProp(..), pattern Fluid
+  , HasInvertedProp(..), pattern Inverted
+  , HasLabeledProp(..), pattern Labeled
+  , HasNegativeProp(..), pattern Negative
+  , HasPositiveProp(..), pattern Positive
+  , HasPrimaryProp(..), pattern Primary
+  , HasSecondaryProp(..), pattern Secondary
+  , HasSizeProp(..), pattern Size
+  , HasToggleProp(..), pattern Toggle
+  , HasVerticalProp(..), pattern Vertical
+  , HasWidthsProp(..), pattern Widths
+  )
 
 data ButtonGroup ms = ButtonGroup_
     { as :: [Feature ms] -> [View ms] -> View ms

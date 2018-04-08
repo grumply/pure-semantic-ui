@@ -8,16 +8,22 @@ import Semantic.Utils
 import Semantic.Collections.Breadcrumb.BreadcrumbDivider as Export
 import Semantic.Collections.Breadcrumb.BreadcrumbSection as Export
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Size
+import Semantic.Properties ((!))
+
+import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
+
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasSizeProp(..), pattern Size
+  )
+
+import Semantic.Properties (HasRefProp(..),pattern Ref,HasActiveProp(..),pattern Active)
 
 import qualified Data.List as List
 import Data.Function ((&))
-import Semantic.Properties.Active
-import Semantic.Properties.Ref
 
 data Breadcrumb ms = Breadcrumb_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -89,8 +95,8 @@ instance HasSizeProp (Breadcrumb ms) where
 --       ]
 --
 breadcrumbs :: Bool -> [View ms] -> [([View ms],Txt)] -> Breadcrumb ms
-breadcrumbs activateLast divider = (def !) 
-    . List.intersperse (BreadcrumbDivider $ def ! divider) 
+breadcrumbs activateLast divider = (def !)
+    . List.intersperse (BreadcrumbDivider $ def ! divider)
     . crumbs
   where
       crumb :: ([View ms],Txt) -> BreadcrumbSection ms

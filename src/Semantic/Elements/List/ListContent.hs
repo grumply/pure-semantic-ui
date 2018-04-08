@@ -5,12 +5,14 @@ import Pure.View hiding (verticalAlign)
 
 import Semantic.Utils
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Floated
-import Semantic.Properties.VerticalAlign
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasFloatedProp(..), pattern Floated
+  , HasVerticalAlignProp(..), pattern VerticalAlign
+  )
 
 data ListContent ms = ListContent_
     { as :: [Feature ms] -> [View ms] -> View ms

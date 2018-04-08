@@ -8,24 +8,25 @@ import Semantic.Utils
 
 import Semantic.Modules.Rating.RatingIcon
 
-import Semantic.Properties.Active
-import Semantic.Properties.Index
-import Semantic.Properties.OnClick
-import Semantic.Properties.OnMouseEnter
-import Semantic.Properties.Selected
-
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Clearable
-import Semantic.Properties.CurrentRating
-import Semantic.Properties.DefaultRating
-import Semantic.Properties.Disabled
-import Semantic.Properties.IsIcon
-import Semantic.Properties.MaxRating
-import Semantic.Properties.OnRate
-import Semantic.Properties.Size
+import Semantic.Properties as Properties
+  ( HasActiveProp(..), pattern Active
+  , HasIndexProp(..), pattern Index
+  , HasOnClickProp(..), pattern OnClick
+  , HasOnMouseEnterProp(..), pattern OnMouseEnter
+  , HasSelectedProp(..), pattern Selected
+  , HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasClearableProp(..), pattern Clearable
+  , HasCurrentRatingProp(..), pattern CurrentRating
+  , HasDefaultRatingProp(..), pattern DefaultRating
+  , HasDisabledProp(..), pattern Disabled
+  , HasIsIconProp(..), pattern IsIcon
+  , HasMaxRatingProp(..), pattern MaxRating
+  , HasOnRateProp(..), pattern OnRate
+  , HasSizeProp(..), pattern Size
+  )
 
 import Semantic.Modules.Rating.RatingIcon as Export
 

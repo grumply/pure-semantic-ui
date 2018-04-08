@@ -5,15 +5,17 @@ import Pure.View hiding (color,horizontal,widths)
 
 import Semantic.Utils
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Color
-import Semantic.Properties.Horizontal
-import Semantic.Properties.Inverted
-import Semantic.Properties.Size
-import Semantic.Properties.Widths
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasColorProp(..), pattern Color
+  , HasHorizontalProp(..), pattern Horizontal
+  , HasInvertedProp(..), pattern Inverted
+  , HasSizeProp(..), pattern Size
+  , HasWidthsProp(..), pattern Widths
+  )
 
 data StatisticGroup ms = StatisticGroup_
     { as :: [Feature ms] -> [View ms] -> View ms

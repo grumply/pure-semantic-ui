@@ -5,13 +5,15 @@ import Pure.View hiding (unit)
 
 import Semantic.Utils
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Centered
-import Semantic.Properties.Test
-import Semantic.Properties.Unit
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasCenteredProp(..), pattern Centered
+  , HasTestProp(..), pattern Test
+  , HasUnitProp(..), pattern Unit
+  )
 
 data Advertisement ms = Advertisement_
     { as :: [Feature ms] -> [View ms] -> View ms

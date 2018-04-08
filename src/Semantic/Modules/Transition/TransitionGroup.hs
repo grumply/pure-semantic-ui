@@ -1,11 +1,6 @@
 {-# LANGUAGE UndecidableInstances #-}
 module Semantic.Modules.Transition.TransitionGroup where
 
--- Dependency hierarchy is reversed here. TransitionGroup depends upon Transition for 
--- component inspection so Transition cannot export TransitionGroup. The solution
--- is to either import Transition and Transition.TransitionGroup or to import
--- Semantic or more specifically Semantic.Modules to get both of them.
-
 import Data.Maybe (isJust,fromJust,fromMaybe)
 import GHC.Generics as G
 import Pure.View hiding (animation,lookup,visible)
@@ -14,12 +9,15 @@ import Semantic.Utils
 
 import Semantic.Modules.Transition
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Animation
-import Semantic.Properties.AnimationDuration
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasAnimationProp(..), pattern Animation
+  , HasAnimationDurationProp(..), pattern AnimationDuration
+  , AnimationDuration(..)
+  )
 
 data TransitionGroup ms = TransitionGroup_
     { as :: [Feature ms] -> [(Int,View ms)] -> View ms
@@ -31,10 +29,10 @@ data TransitionGroup ms = TransitionGroup_
     } deriving (Generic)
 
 instance Default (TransitionGroup ms) where
-    def = (G.to gdef :: TransitionGroup ms) 
+    def = (G.to gdef :: TransitionGroup ms)
         { as = list Div
         , animation = "fade"
-        , duration = Uniform 500 
+        , duration = Uniform 500
         }
 
 pattern TransitionGroup :: VC ms => TransitionGroup ms -> View ms
@@ -49,7 +47,7 @@ instance VC ms => Pure TransitionGroup ms where
         Component "Semantic.Modules.Transition.TransitionGroup" tg $ \self ->
             let
                 handleOnHide key _ =
-                    void $ setState self $ \_ TGS {..} -> 
+                    void $ setState self $ \_ TGS {..} ->
                         TGS { buffer = filter ((/= key) . fst) buffer, .. }
 
                 wrapChild anim dur vis tom (key,child) =
@@ -71,7 +69,7 @@ instance VC ms => Pure TransitionGroup ms where
             in def
                 { construct = do
                     tg@TransitionGroup_ {..} <- getProps self
-                    return TGS 
+                    return TGS
                         { buffer = map (wrapChild animation duration True False) children
                         }
 
@@ -82,7 +80,7 @@ instance VC ms => Pure TransitionGroup ms where
                             hasNext   = isJust (lookup k cs)
                             leaving   = fromMaybe False (fromTransition prevChild (not . visible))
                             entering  = hasNext && (not hasPrev || leaving)
-                            exiting   = not hasNext && hasPrev && not leaving 
+                            exiting   = not hasNext && hasPrev && not leaving
 
                         in if | entering  -> wrapChild anim dur True True (k,c)
                               | exiting   -> (k,hide (fromJust prevChild))
@@ -91,7 +89,7 @@ instance VC ms => Pure TransitionGroup ms where
 
                     , ..
                     }
-                    
+
                 , renderer = \TransitionGroup_ {..} TGS {..} -> as attributes buffer
                 }
 

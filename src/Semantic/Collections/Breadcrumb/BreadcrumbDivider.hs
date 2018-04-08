@@ -1,20 +1,28 @@
-module Semantic.Collections.Breadcrumb.BreadcrumbDivider where
+module Semantic.Collections.Breadcrumb.BreadcrumbDivider
+  ( module Properties
+  , module Tools
+  , BreadcrumbDivider(..), pattern BreadcrumbDivider
+  ) where
 
 import GHC.Generics as G
 import Pure.View hiding (name)
 
 import Semantic.Utils
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
+import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
+
+import Semantic.Properties as Properties
+  ( HasAsProp(..)         , pattern As
+  , HasAttributesProp(..) , pattern Attributes
+  , HasChildrenProp(..)   , pattern Children
+  , HasClassesProp(..)    , pattern Classes
+  )
 
 data BreadcrumbDivider ms = BreadcrumbDivider_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms] 
-    , children :: [View ms]
-    , classes :: [Txt]
+    { as         :: [Feature ms] -> [View ms] -> View ms
+    , attributes :: [Feature ms]
+    , children   :: [View ms]
+    , classes    :: [Txt]
     } deriving (Generic)
 
 instance Default (BreadcrumbDivider ms) where

@@ -7,25 +7,28 @@ import Pure.Lifted (Node)
 
 import Semantic.Utils
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Disabled
-import Semantic.Properties.Fitted
-import Semantic.Properties.IsChecked
-import Semantic.Properties.Name
-import Semantic.Properties.OnChange
-import Semantic.Properties.OnClick
-import Semantic.Properties.OnMouseDown
-import Semantic.Properties.WithRef
-import Semantic.Properties.IsRadio
-import Semantic.Properties.ReadOnly
-import Semantic.Properties.Slider
-import Semantic.Properties.TabIndex
-import Semantic.Properties.Toggle
-import Semantic.Properties.Type
-import Semantic.Properties.Value
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasDisabledProp(..), pattern Disabled
+  , HasFittedProp(..), pattern Fitted
+  , HasIsCheckedProp(..), pattern IsChecked
+  , HasNameProp(..), pattern Name
+  , HasOnChangeProp(..), pattern OnChange
+  , HasOnClickProp(..), pattern OnClick
+  , HasOnMouseDownProp(..), pattern OnMouseDown
+  , HasWithRefProp(..), pattern WithRef
+  , HasIsRadioProp(..), pattern IsRadio
+  , HasReadOnlyProp(..), pattern ReadOnly
+  , HasSliderProp(..), pattern Slider
+  , HasTabIndexProp(..), pattern TabIndex
+  , HasToggleProp(..), pattern Toggle
+  , HasTypeProp(..), pattern Type
+  , HasValueProp(..), pattern Value
+  , Checked(..)
+  )
 
 data Checkbox ms = Checkbox_
     { as :: [Feature ms] -> [View ms] -> View ms

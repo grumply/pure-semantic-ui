@@ -10,24 +10,25 @@ import Semantic.Utils
 
 import Semantic.Addons.Portal
 
-import Semantic.Properties.CloseOnEscape
-import Semantic.Properties.CloseOnDocumentClick
-import Semantic.Properties.OpenOnTriggerClick
-import Semantic.Properties.OnMount
-import Semantic.Properties.OnUnmount
-import Semantic.Properties.Open
-
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Active
-import Semantic.Properties.Disabled
-import Semantic.Properties.OnClick
-import Semantic.Properties.OnClickOutside
-import Semantic.Properties.Inverted
-import Semantic.Properties.Page
-import Semantic.Properties.Simple
+import Semantic.Properties as Properties
+  ( HasCloseOnEscapeProp(..), pattern CloseOnEscape, pattern NoCloseOnEscape
+  , HasCloseOnDocumentClickProp(..), pattern CloseOnDocumentClick, pattern NoCloseOnDocumentClick
+  , HasOpenOnTriggerClickProp(..), pattern OpenOnTriggerClick, pattern NoOpenOnTriggerClick
+  , HasOnMountProp(..), pattern OnMount
+  , HasOnUnmountProp(..), pattern OnUnmount
+  , HasOpenProp(..), pattern Open
+  , HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasActiveProp(..), pattern Active
+  , HasDisabledProp(..), pattern Disabled
+  , HasOnClickProp(..), pattern OnClick
+  , HasOnClickOutsideProp(..), pattern OnClickOutside
+  , HasInvertedProp(..), pattern Inverted
+  , HasPageProp(..), pattern Page
+  , HasSimpleProp(..), pattern Simple
+  )
 
 import Semantic.Modules.Dimmer.DimmerDimmable as Export
 

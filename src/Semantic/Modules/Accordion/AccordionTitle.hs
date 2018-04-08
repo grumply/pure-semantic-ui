@@ -5,13 +5,15 @@ import Pure.View hiding (active,onClick)
 
 import Semantic.Utils
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Active
-import Semantic.Properties.Index
-import Semantic.Properties.OnClick
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasActiveProp(..), pattern Active
+  , HasIndexProp(..), pattern Index
+  , HasOnClickProp(..), pattern OnClick
+  )
 
 data AccordionTitle ms = AccordionTitle_
     { as :: [Feature ms] -> [View ms] -> View ms

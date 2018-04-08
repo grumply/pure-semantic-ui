@@ -6,12 +6,14 @@ import qualified Pure.View as HTML
 
 import Semantic.Utils
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.IsImage
-import Semantic.Properties.Scrolling
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasIsImageProp(..), pattern IsImage
+  , HasScrollingProp(..), pattern Scrolling
+  )
 
 data ModalContent ms = ModalContent_
     { as :: [Feature ms] -> [View ms] -> View ms

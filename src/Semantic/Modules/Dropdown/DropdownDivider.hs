@@ -5,9 +5,11 @@ import Pure.View
 
 import Semantic.Utils
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Classes
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasClassesProp(..), pattern Classes
+  )
 
 data DropdownDivider ms = DropdownDivider_ 
     { as :: [Feature ms] -> [View ms] -> View ms

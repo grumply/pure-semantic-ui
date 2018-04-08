@@ -5,24 +5,26 @@ import Pure.View hiding (name,textAlign,verticalAlign)
 
 import Semantic.Utils
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Celled
-import Semantic.Properties.Centered
-import Semantic.Properties.Columns
-import Semantic.Properties.IsContainer
-import Semantic.Properties.Divided
-import Semantic.Properties.Doubling
-import Semantic.Properties.Inverted
-import Semantic.Properties.Padded
-import Semantic.Properties.Relaxed
-import Semantic.Properties.Reversed
-import Semantic.Properties.Stackable
-import Semantic.Properties.Stretched
-import Semantic.Properties.TextAlign
-import Semantic.Properties.VerticalAlign
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasCelledProp(..), pattern Celled
+  , HasCenteredProp(..), pattern Centered
+  , HasColumnsProp(..), pattern Columns
+  , HasIsContainerProp(..), pattern IsContainer
+  , HasDividedProp(..), pattern Divided
+  , HasDoublingProp(..), pattern Doubling
+  , HasInvertedProp(..), pattern Inverted
+  , HasPaddedProp(..), pattern Padded
+  , HasRelaxedProp(..), pattern Relaxed
+  , HasReversedProp(..), pattern Reversed
+  , HasStackableProp(..), pattern Stackable
+  , HasStretchedProp(..), pattern Stretched
+  , HasTextAlignProp(..), pattern TextAlign
+  , HasVerticalAlignProp(..), pattern VerticalAlign
+  )
 
 import Semantic.Collections.Grid.GridColumn as Export
 import Semantic.Collections.Grid.GridRow as Export

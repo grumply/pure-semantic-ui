@@ -12,29 +12,30 @@ import Semantic.Utils
 
 import qualified Semantic.Addons.Portal as Portal
 
-import Semantic.Properties.CloseOnDocumentClick
-import Semantic.Properties.CloseOnRootNodeClick
-import Semantic.Properties.OpenOnTriggerClick
-import Semantic.Properties.OnClose
-import Semantic.Properties.OnMount
-import Semantic.Properties.OnOpen
-import Semantic.Properties.OnUnmount
-import Semantic.Properties.Open
-import Semantic.Properties.Trigger
-import Semantic.Properties.MountNode
-
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Basic
-import Semantic.Properties.CloseOnDimmerClick
-import Semantic.Properties.DefaultOpen
-import Semantic.Properties.DimmerType
-import Semantic.Properties.Scrollable
-import Semantic.Properties.Size
-import Semantic.Properties.Styles
-import Semantic.Properties.WithPortal
+import Semantic.Properties as Properties
+  ( HasCloseOnDocumentClickProp(..), pattern CloseOnDocumentClick
+  , HasCloseOnRootNodeClickProp(..), pattern CloseOnRootNodeClick
+  , HasOpenOnTriggerClickProp(..), pattern OpenOnTriggerClick
+  , HasOnCloseProp(..), pattern OnClose
+  , HasOnMountProp(..), pattern OnMount
+  , HasOnOpenProp(..), pattern OnOpen
+  , HasOnUnmountProp(..), pattern OnUnmount
+  , HasOpenProp(..), pattern Open
+  , HasTriggerProp(..), pattern Trigger
+  , HasMountNodeProp(..), pattern MountNode
+  , HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasBasicProp(..), pattern Basic
+  , HasCloseOnDimmerClickProp(..), pattern CloseOnDimmerClick
+  , HasDefaultOpenProp(..), pattern DefaultOpen
+  , HasDimmerTypeProp(..), pattern DimmerType
+  , HasScrollableProp(..), pattern Scrollable
+  , HasSizeProp(..), pattern Size
+  , HasStylesProp(..), pattern Styles
+  , HasWithPortalProp(..), pattern WithPortal
+  )
 
 import Semantic.Modules.Modal.ModalActions as Export
 import Semantic.Modules.Modal.ModalContent as Export

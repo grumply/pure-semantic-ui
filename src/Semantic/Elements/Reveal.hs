@@ -5,13 +5,15 @@ import Pure.View hiding (disabled)
 
 import Semantic.Utils
 
-import Semantic.Properties.Animated
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Disabled
-import Semantic.Properties.Instant
+import Semantic.Properties as Properties
+  ( HasAnimatedProp(..), pattern Animated
+  , HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasDisabledProp(..), pattern Disabled
+  , HasInstantProp(..), pattern Instant
+  )
 
 data Reveal ms = Reveal_
     { as :: [Feature ms] -> [View ms] -> View ms

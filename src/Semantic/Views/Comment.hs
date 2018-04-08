@@ -5,11 +5,13 @@ import Pure.View
 
 import Semantic.Utils
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Collapsed
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasCollapsedProp(..), pattern Collapsed
+  )
 
 import Semantic.Views.Comment.CommentAction as Export
 import Semantic.Views.Comment.CommentActions as Export

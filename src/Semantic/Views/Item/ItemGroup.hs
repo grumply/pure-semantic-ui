@@ -5,14 +5,16 @@ import Pure.View
 
 import Semantic.Utils
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Divided
-import Semantic.Properties.Link
-import Semantic.Properties.Relaxed
-import Semantic.Properties.Unstackable
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasDividedProp(..), pattern Divided
+  , HasLinkProp(..), pattern Link
+  , HasRelaxedProp(..), pattern Relaxed
+  , HasUnstackableProp(..), pattern Unstackable
+  )
 
 data ItemGroup ms = ItemGroup_
     { as :: [Feature ms] -> [View ms] -> View ms

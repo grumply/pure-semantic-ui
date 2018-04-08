@@ -5,12 +5,14 @@ import Pure.View hiding (textAlign)
 
 import Semantic.Utils
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Extra
-import Semantic.Properties.TextAlign
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasExtraProp(..), pattern Extra
+  , HasTextAlignProp(..), pattern TextAlign
+  )
 
 data CardContent ms = CardContent_
     { as :: [Feature ms] -> [View ms] -> View ms

@@ -5,16 +5,18 @@ import Pure.View hiding (color,disabled,horizontal,textAlign,vertical)
 
 import Semantic.Utils
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Compact
-import Semantic.Properties.Horizontal
-import Semantic.Properties.Piled
-import Semantic.Properties.Raised
-import Semantic.Properties.Size
-import Semantic.Properties.Stacked
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasCompactProp(..), pattern Compact
+  , HasHorizontalProp(..), pattern Horizontal
+  , HasPiledProp(..), pattern Piled
+  , HasRaisedProp(..), pattern Raised
+  , HasSizeProp(..), pattern Size
+  , HasStackedProp(..), pattern Stacked
+  )
 
 data SegmentGroup ms = SegmentGroup_
     { as :: [Feature ms] -> [View ms] -> View ms

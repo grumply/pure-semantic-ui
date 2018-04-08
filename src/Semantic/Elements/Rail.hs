@@ -5,16 +5,18 @@ import Pure.View hiding (position,verticalAlign)
 
 import Semantic.Utils
 
-import Semantic.Properties.As
-import Semantic.Properties.Attached
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Close
-import Semantic.Properties.Dividing
-import Semantic.Properties.Internal
-import Semantic.Properties.Position
-import Semantic.Properties.Size
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttachedProp(..), pattern Attached
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasCloseProp(..), pattern Close
+  , HasDividingProp(..), pattern Dividing
+  , HasInternalProp(..), pattern Internal
+  , HasPositionProp(..), pattern Position
+  , HasSizeProp(..), pattern Size
+  )
 
 data Rail ms = Rail_
     { as :: [Feature ms] -> [View ms] -> View ms

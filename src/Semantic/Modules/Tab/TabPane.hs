@@ -7,14 +7,15 @@ import Semantic.Utils
 
 import Semantic.Elements.Segment
 
-import Semantic.Properties.Attached
-
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Active
-import Semantic.Properties.Loading
+import Semantic.Properties as Properties
+  ( HasAttachedProp(..), pattern Attached
+  , HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasActiveProp(..), pattern Active
+  , HasLoadingProp(..), pattern Loading
+  )
 
 data TabPane ms = TabPane_
     { as :: [Feature ms] -> [View ms] -> View ms

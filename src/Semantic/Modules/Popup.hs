@@ -17,38 +17,39 @@ import Semantic.Modules.Popup.PopupHeader as Export
 
 import Semantic.Addons.Portal hiding (PS)
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Basic
-import Semantic.Properties.Flowing
-import Semantic.Properties.HideOnScroll
-import Semantic.Properties.Hoverable
-import Semantic.Properties.Inverted
-import Semantic.Properties.Offset
-import Semantic.Properties.Position
-import Semantic.Properties.Size
-import Semantic.Properties.Styles
-import Semantic.Properties.TriggerOn
-import Semantic.Properties.Wide
-import Semantic.Properties.WithPortal
-
-import Semantic.Properties.OnMount
-import Semantic.Properties.OnUnmount
-import Semantic.Properties.OnOpen
-import Semantic.Properties.OnClose
-import Semantic.Properties.Trigger
-import Semantic.Properties.CloseOnPortalMouseLeave
-import Semantic.Properties.CloseOnTriggerBlur
-import Semantic.Properties.CloseOnTriggerClick
-import Semantic.Properties.CloseOnTriggerMouseLeave
-import Semantic.Properties.CloseOnDocumentClick
-import Semantic.Properties.OpenOnTriggerClick
-import Semantic.Properties.OpenOnTriggerFocus
-import Semantic.Properties.OpenOnTriggerMouseEnter
-import Semantic.Properties.MouseEnterDelay
-import Semantic.Properties.MouseLeaveDelay
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasBasicProp(..), pattern Basic
+  , HasFlowingProp(..), pattern Flowing
+  , HasHideOnScrollProp(..), pattern HideOnScroll
+  , HasHoverableProp(..), pattern Hoverable
+  , HasInvertedProp(..), pattern Inverted
+  , HasOffsetProp(..), pattern Offset
+  , HasPositionProp(..), pattern Position
+  , HasSizeProp(..), pattern Size
+  , HasStylesProp(..), pattern Styles
+  , HasTriggerOnProp(..), pattern TriggerOn
+  , HasWideProp(..), pattern Wide
+  , HasWithPortalProp(..), pattern WithPortal
+  , HasOnMountProp(..), pattern OnMount
+  , HasOnUnmountProp(..), pattern OnUnmount
+  , HasOnOpenProp(..), pattern OnOpen
+  , HasOnCloseProp(..), pattern OnClose
+  , HasTriggerProp(..), pattern Trigger
+  , HasCloseOnPortalMouseLeaveProp(..), pattern CloseOnPortalMouseLeave
+  , HasCloseOnTriggerBlurProp(..), pattern CloseOnTriggerBlur
+  , HasCloseOnTriggerClickProp(..), pattern CloseOnTriggerClick
+  , HasCloseOnTriggerMouseLeaveProp(..), pattern CloseOnTriggerMouseLeave
+  , HasCloseOnDocumentClickProp(..), pattern CloseOnDocumentClick
+  , HasOpenOnTriggerClickProp(..), pattern OpenOnTriggerClick
+  , HasOpenOnTriggerFocusProp(..), pattern OpenOnTriggerFocus
+  , HasOpenOnTriggerMouseEnterProp(..), pattern OpenOnTriggerMouseEnter
+  , HasMouseEnterDelayProp(..), pattern MouseEnterDelay
+  , HasMouseLeaveDelayProp(..), pattern MouseLeaveDelay
+  )
 
 positions = 
     [ "top left"

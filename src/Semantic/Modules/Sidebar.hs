@@ -7,16 +7,17 @@ import Pure.View hiding (animation,direction,visible,width)
 
 import Semantic.Utils
 
-import Semantic.Properties.AnimationDuration
-
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Animation
-import Semantic.Properties.Direction
-import Semantic.Properties.Visible
-import Semantic.Properties.Width
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasAnimationProp(..), pattern Animation
+  , HasDirectionProp(..), pattern Direction
+  , HasVisibleProp(..), pattern Visible
+  , HasWidthProp(..), pattern Width
+  , HasAnimationDurationProp(..), pattern AnimationDuration, AnimationDuration(..)
+  )
 
 import Semantic.Modules.Sidebar.SidebarPusher as Export
 import Semantic.Modules.Sidebar.SidebarPushable as Export

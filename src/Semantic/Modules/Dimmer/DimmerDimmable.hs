@@ -5,12 +5,14 @@ import Pure.View
 
 import Semantic.Utils
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Blurring
-import Semantic.Properties.Dimmed
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasBlurringProp(..), pattern Blurring
+  , HasDimmedProp(..), pattern Dimmed
+  )
 
 data DimmerDimmable ms = DimmerDimmable_
     { as :: [Feature ms] -> [View ms] -> View ms

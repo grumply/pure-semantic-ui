@@ -5,20 +5,22 @@ import Pure.View hiding (onFocus,onBlur)
 
 import Semantic.Utils
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Aligned
-import Semantic.Properties.Category
-import Semantic.Properties.Fluid
-import Semantic.Properties.Focus
-import Semantic.Properties.Loading
-import Semantic.Properties.OnBlur
-import Semantic.Properties.OnFocus
-import Semantic.Properties.OnMouseDown
-import Semantic.Properties.Open
-import Semantic.Properties.Size
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasAlignedProp(..), pattern Aligned
+  , HasCategoryProp(..), pattern Category
+  , HasFluidProp(..), pattern Fluid
+  , HasFocusProp(..), pattern Focus
+  , HasLoadingProp(..), pattern Loading
+  , HasOnBlurProp(..), pattern OnBlur
+  , HasOnFocusProp(..), pattern OnFocus
+  , HasOnMouseDownProp(..), pattern OnMouseDown
+  , HasOpenProp(..), pattern Open
+  , HasSizeProp(..), pattern Size
+  )
 
 import Semantic.Modules.Search.SearchCategory as Export
 import Semantic.Modules.Search.SearchResult as Export

@@ -5,19 +5,21 @@ import Pure.View hiding (color,textAlign,verticalAlign)
 
 import Semantic.Utils hiding (only)
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Centered
-import Semantic.Properties.Color
-import Semantic.Properties.Columns
-import Semantic.Properties.Divided
-import Semantic.Properties.Only
-import Semantic.Properties.Reversed
-import Semantic.Properties.Stretched
-import Semantic.Properties.TextAlign
-import Semantic.Properties.VerticalAlign
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasCenteredProp(..), pattern Centered
+  , HasColorProp(..), pattern Color
+  , HasColumnsProp(..), pattern Columns
+  , HasDividedProp(..), pattern Divided
+  , HasOnlyProp(..), pattern Only
+  , HasReversedProp(..), pattern Reversed
+  , HasStretchedProp(..), pattern Stretched
+  , HasTextAlignProp(..), pattern TextAlign
+  , HasVerticalAlignProp(..), pattern VerticalAlign
+  )
 
 data GridRow ms = GridRow_
     { as :: [Feature ms] -> [View ms] -> View ms

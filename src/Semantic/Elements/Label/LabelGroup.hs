@@ -5,14 +5,16 @@ import Pure.View as View hiding (color)
 
 import Semantic.Utils
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Circular
-import Semantic.Properties.Classes
-import Semantic.Properties.Color
-import Semantic.Properties.Size
-import Semantic.Properties.Tag
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasCircularProp(..), pattern Circular
+  , HasClassesProp(..), pattern Classes
+  , HasColorProp(..), pattern Color
+  , HasSizeProp(..), pattern Size
+  , HasTagProp(..), pattern Tag
+  )
 
 data LabelGroup ms = LabelGroup_ 
     { as :: [Feature ms] -> [View ms] -> View ms

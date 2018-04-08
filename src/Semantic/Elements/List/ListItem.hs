@@ -6,14 +6,16 @@ import qualified Pure.View as HTML
 
 import Semantic.Utils
 
-import Semantic.Properties.Active
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Disabled
-import Semantic.Properties.OnClick
-import Semantic.Properties.Value
+import Semantic.Properties as Properties
+  ( HasActiveProp(..), pattern Active
+  , HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasDisabledProp(..), pattern Disabled
+  , HasOnClickProp(..), pattern OnClick
+  , HasValueProp(..), pattern Value
+  )
 
 data ListItem ms = ListItem_ 
     { as :: [Feature ms] -> [View ms] -> View ms

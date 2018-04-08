@@ -5,18 +5,20 @@ import Pure.View hiding (vertical,widths)
 
 import Semantic.Utils
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Attached
-import Semantic.Properties.Fluid
-import Semantic.Properties.Ordered
-import Semantic.Properties.Size
-import Semantic.Properties.Stackable
-import Semantic.Properties.Unstackable
-import Semantic.Properties.Vertical
-import Semantic.Properties.Widths
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasAttachedProp(..), pattern Attached
+  , HasFluidProp(..), pattern Fluid
+  , HasOrderedProp(..), pattern Ordered
+  , HasSizeProp(..), pattern Size
+  , HasStackableProp(..), pattern Stackable
+  , HasUnstackableProp(..), pattern Unstackable
+  , HasVerticalProp(..), pattern Vertical
+  , HasWidthsProp(..), pattern Widths
+  )
 
 data StepGroup ms = StepGroup_ 
     { as :: [Feature ms] -> [View ms] -> View ms

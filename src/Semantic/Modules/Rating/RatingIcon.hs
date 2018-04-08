@@ -6,15 +6,17 @@ import Pure.View hiding (active,onClick,onKeyUp,Selected)
 
 import Semantic.Utils
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Classes
-import Semantic.Properties.Active
-import Semantic.Properties.Index
-import Semantic.Properties.OnClick
-import Semantic.Properties.OnKeyUp
-import Semantic.Properties.OnMouseEnter
-import Semantic.Properties.Selected
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasClassesProp(..), pattern Classes
+  , HasActiveProp(..), pattern Active
+  , HasIndexProp(..), pattern Index
+  , HasOnClickProp(..), pattern OnClick
+  , HasOnKeyUpProp(..), pattern OnKeyUp
+  , HasOnMouseEnterProp(..), pattern OnMouseEnter
+  , HasSelectedProp(..), pattern Selected
+  )
 
 data RatingIcon ms = RatingIcon_
     { as :: [Feature ms] -> [View ms] -> View ms

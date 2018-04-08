@@ -6,25 +6,27 @@ import Pure.View hiding (active,color,disabled)
 
 import Semantic.Utils
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Active
-import Semantic.Properties.Attached
-import Semantic.Properties.AutoSuccess
-import Semantic.Properties.Color
-import Semantic.Properties.Disabled
-import Semantic.Properties.Error
-import Semantic.Properties.Indicating
-import Semantic.Properties.Inverted
-import Semantic.Properties.Percent
-import Semantic.Properties.Precision
-import Semantic.Properties.Size
-import Semantic.Properties.Success
-import Semantic.Properties.Total
-import Semantic.Properties.Value
-import Semantic.Properties.Warning
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasActiveProp(..), pattern Active
+  , HasAttachedProp(..), pattern Attached
+  , HasAutoSuccessProp(..), pattern AutoSuccess
+  , HasColorProp(..), pattern Color
+  , HasDisabledProp(..), pattern Disabled
+  , HasErrorProp(..), pattern Error
+  , HasIndicatingProp(..), pattern Indicating
+  , HasInvertedProp(..), pattern Inverted
+  , HasPercentProp(..), pattern Percent
+  , HasPrecisionProp(..), pattern Precision
+  , HasSizeProp(..), pattern Size
+  , HasSuccessProp(..), pattern Success
+  , HasTotalProp(..), pattern Total
+  , HasValueProp(..), pattern Value
+  , HasWarningProp(..), pattern Warning
+  )
 
 import Prelude hiding (error)
 

@@ -1,5 +1,9 @@
 {-# LANGUAGE UndecidableInstances #-}
-module Semantic.Addons.TextArea where
+module Semantic.Addons.TextArea
+  ( module Properties
+  , module Tools
+  , TextArea(..), pattern TextArea
+  ) where
 
 import Data.IORef
 import GHC.Generics as G
@@ -13,28 +17,32 @@ import Text.Read (readMaybe)
 import Semantic.Utils
 import qualified Semantic.Utils as Utils
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Classes
-import Semantic.Properties.AutoHeight
-import Semantic.Properties.OnChange
-import Semantic.Properties.OnInput
-import Semantic.Properties.Rows
-import Semantic.Properties.Styles
-import Semantic.Properties.Value
-import Semantic.Properties.Focus
+import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
+
+import Semantic.Properties as Properties
+  ( HasAsProp(..)         , pattern As
+  , HasAttributesProp(..) , pattern Attributes
+  , HasClassesProp(..)    , pattern Classes
+  , HasAutoHeightProp(..) , pattern AutoHeight
+  , HasOnChangeProp(..)   , pattern OnChange
+  , HasOnInputProp(..)    , pattern OnInput
+  , HasRowsProp(..)       , pattern Rows
+  , HasStylesProp(..)     , pattern Styles
+  , HasValueProp(..)      , pattern Value
+  , HasFocusProp(..)      , pattern Focus
+  )
 
 data TextArea ms = TextArea_
-    { as :: [Feature ms] -> [View ms] -> View ms
+    { as         :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]
-    , classes :: [Txt]
+    , classes    :: [Txt]
     , autoHeight :: Bool
-    , onChange :: Txt -> Ef ms IO ()
-    , onInput :: Txt -> Ef ms IO ()
-    , rows :: Int
-    , styles :: [(Txt,Txt)]
-    , value :: Txt
-    , focus :: Bool
+    , onChange   :: Txt -> Ef ms IO ()
+    , onInput    :: Txt -> Ef ms IO ()
+    , rows       :: Int
+    , styles     :: [(Txt,Txt)]
+    , value      :: Txt
+    , focus      :: Bool
     } deriving (Generic)
 
 instance Default (TextArea ms) where
@@ -48,7 +56,7 @@ data TextAreaState = TAS
     }
 
 instance VC ms => Pure TextArea ms where
-    render ta = 
+    render ta =
         Component "Semantic.Addons.TextArea" ta $ \self ->
             let
                 computedTextAreaStyles :: Element -> IO (Maybe (Double,Double,Double))
@@ -65,7 +73,7 @@ instance VC ms => Pure TextArea ms where
                     TAS {..} <- getState self
                     mr <- liftIO (readIORef ref)
                     for_ mr $ \(Element -> r) -> do
-                        removeStyle r height 
+                        removeStyle r height
                         removeStyle r "resize"
 
                 updateHeight = do
@@ -116,13 +124,13 @@ instance VC ms => Pure TextArea ms where
                 , updated = \oldprops oldstate _ -> do
                     props <- getProps self
 
-                    (not (autoHeight props) && autoHeight oldprops) 
+                    (not (autoHeight props) && autoHeight oldprops)
                         # removeAutoHeightStyles
 
-                    ((autoHeight props && not (autoHeight oldprops)) || value oldprops /= value props) 
+                    ((autoHeight props && not (autoHeight oldprops)) || value oldprops /= value props)
                         # updateHeight
 
-                , renderer = \TextArea_ {..} TAS {..} -> 
+                , renderer = \TextArea_ {..} TAS {..} ->
                     as
                         ( HTML.onInputChange handleChange
                         : HTML.onInput handleInput
@@ -143,7 +151,7 @@ instance HasAsProp (TextArea ms) where
 
 instance HasAttributesProp (TextArea ms) where
     type Attribute (TextArea ms) = Feature ms
-    getAttributes = attributes 
+    getAttributes = attributes
     setAttributes cs ta = ta { attributes = cs }
 
 instance HasClassesProp (TextArea ms) where

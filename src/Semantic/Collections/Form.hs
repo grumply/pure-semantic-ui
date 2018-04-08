@@ -7,21 +7,23 @@ import qualified Pure.View as HTML
 import Semantic.Utils
 import Prelude hiding (error)
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Action
-import Semantic.Properties.Error
-import Semantic.Properties.Inverted
-import Semantic.Properties.Loading
-import Semantic.Properties.OnSubmit
-import Semantic.Properties.Reply
-import Semantic.Properties.Size
-import Semantic.Properties.Success
-import Semantic.Properties.Unstackable
-import Semantic.Properties.Warning
-import Semantic.Properties.Widths
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasActionProp(..), pattern Action
+  , HasErrorProp(..), pattern Error
+  , HasInvertedProp(..), pattern Inverted
+  , HasLoadingProp(..), pattern Loading
+  , HasOnSubmitProp(..), pattern OnSubmit
+  , HasReplyProp(..), pattern Reply
+  , HasSizeProp(..), pattern Size
+  , HasSuccessProp(..), pattern Success
+  , HasUnstackableProp(..), pattern Unstackable
+  , HasWarningProp(..), pattern Warning
+  , HasWidthsProp(..), pattern Widths
+  )
 
 import Semantic.Collections.Form.FormField as Export
 import Semantic.Collections.Form.FormGroup as Export

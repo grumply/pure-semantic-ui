@@ -1,5 +1,11 @@
 {-# LANGUAGE UndecidableInstances #-}
-module Semantic.Addons.Confirm where
+module Semantic.Addons.Confirm
+  ( module Properties
+  , module Tools
+  , module Button
+  , module Modal
+  , Confirm(..), pattern Confirm
+  ) where
 
 import Control.Arrow ((&&&))
 import GHC.Generics as G
@@ -9,41 +15,43 @@ import Semantic.Utils
 
 import Semantic.Elements.Button as Button
 
-import Semantic.Modules.Modal
+import Semantic.Modules.Modal as Modal
 
-import Semantic.Properties.OnClick
-import Semantic.Properties.OnClose
-import Semantic.Properties.Primary
-import Semantic.Properties.Size
+import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
 
-import Semantic.Properties.Children
-
-import Semantic.Properties.Open
-import Semantic.Properties.OnCancel
-import Semantic.Properties.OnConfirm
-import Semantic.Properties.CancelButton
-import Semantic.Properties.ConfirmButton
-import Semantic.Properties.WithModal
+import Semantic.Properties as Properties
+  ( HasOnClickProp(..)       , pattern OnClick
+  , HasOnCloseProp(..)       , pattern OnClose
+  , HasPrimaryProp(..)       , pattern Primary
+  , HasSizeProp(..)          , pattern Size
+  , HasChildrenProp(..)      , pattern Children
+  , HasOpenProp(..)          , pattern Open
+  , HasOnCancelProp(..)      , pattern OnCancel
+  , HasOnConfirmProp(..)     , pattern OnConfirm
+  , HasCancelButtonProp(..)  , pattern CancelButton
+  , HasConfirmButtonProp(..) , pattern ConfirmButton
+  , HasWithModalProp(..)     , pattern WithModal
+  )
 
 data Confirm ms = Confirm_
-    { cancelButton :: Button ms
+    { cancelButton  :: Button ms
     , confirmButton :: Button ms
-    , header :: ModalHeader ms
-    , content :: ModalContent ms
-    , onCancel :: Ef ms IO ()
-    , onConfirm :: Ef ms IO ()
-    , open :: Bool
-    , withModal :: Modal ms -> Modal ms
+    , header        :: ModalHeader ms
+    , content       :: ModalContent ms
+    , onCancel      :: Ef ms IO ()
+    , onConfirm     :: Ef ms IO ()
+    , open          :: Bool
+    , withModal     :: Modal ms -> Modal ms
     } deriving (Generic)
 
 instance Default (Confirm ms) where
-    def = (G.to gdef) 
+    def = (G.to gdef)
         { cancelButton  = def & Children [ "Cancel" ]
         , confirmButton = def & Children [ "OK" ]
         , content       = def & Children [ "Are you sure?" ]
         , withModal     = id
         }
-    
+
 pattern Confirm :: VC ms => Confirm ms -> View ms
 pattern Confirm c = View c
 
@@ -55,12 +63,12 @@ instance VC ms => Pure Confirm ms where
             handleConfirm = do
                 Button.onClick confirmButton
                 onConfirm
-        in Modal $ withModal $ def & Size "small" & OnClose onCancel & Children 
-            [ ModalHeader header 
+        in Modal $ withModal $ def & Size "small" & OnClose onCancel & Children
+            [ ModalHeader header
             , ModalContent content
             , ModalActions $ def & Children
                 [ Button $ cancelButton & OnClick handleCancel
-                , Button $ confirmButton & Primary & OnClick handleConfirm 
+                , Button $ confirmButton & Primary & OnClick handleConfirm
                 ]
             ]
 

@@ -13,24 +13,26 @@ import Semantic.Elements.List.ListIcon as Export
 import Semantic.Elements.List.ListItem as Export
 import Semantic.Elements.List.ListList as Export
 
-import Semantic.Properties.Animated
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Bulleted
-import Semantic.Properties.Celled
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Divided
-import Semantic.Properties.Floated
-import Semantic.Properties.Horizontal
-import Semantic.Properties.Inverted
-import Semantic.Properties.Link
-import Semantic.Properties.OnClick
-import Semantic.Properties.Ordered
-import Semantic.Properties.Relaxed
-import Semantic.Properties.Selection
-import Semantic.Properties.Size
-import Semantic.Properties.VerticalAlign
+import Semantic.Properties as Properties
+  ( HasAnimatedProp(..), pattern Animated
+  , HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasBulletedProp(..), pattern Bulleted
+  , HasCelledProp(..), pattern Celled
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasDividedProp(..), pattern Divided
+  , HasFloatedProp(..), pattern Floated
+  , HasHorizontalProp(..), pattern Horizontal
+  , HasInvertedProp(..), pattern Inverted
+  , HasLinkProp(..), pattern Link
+  , HasOnClickProp(..), pattern OnClick
+  , HasOrderedProp(..), pattern Ordered
+  , HasRelaxedProp(..), pattern Relaxed
+  , HasSelectionProp(..), pattern Selection
+  , HasSizeProp(..), pattern Size
+  , HasVerticalAlignProp(..), pattern VerticalAlign
+  )
 
 data List ms = List_
     { as :: [Feature ms] -> [View ms] -> View ms

@@ -7,25 +7,27 @@ import Semantic.Utils
 
 import Semantic.Elements.Image.ImageGroup as Export
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Avatar
-import Semantic.Properties.Bordered
-import Semantic.Properties.Centered
-import Semantic.Properties.Children
-import Semantic.Properties.Circular
-import Semantic.Properties.Classes
-import Semantic.Properties.Disabled
-import Semantic.Properties.Floated
-import Semantic.Properties.Fluid
-import Semantic.Properties.Hidden
-import Semantic.Properties.Inline
-import Semantic.Properties.Rounded
-import Semantic.Properties.Size
-import Semantic.Properties.Spaced
-import Semantic.Properties.UI
-import Semantic.Properties.VerticalAlign
-import Semantic.Properties.Wrapped
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasAvatarProp(..), pattern Avatar
+  , HasBorderedProp(..), pattern Bordered
+  , HasCenteredProp(..), pattern Centered
+  , HasChildrenProp(..), pattern Children
+  , HasCircularProp(..), pattern Circular
+  , HasClassesProp(..), pattern Classes
+  , HasDisabledProp(..), pattern Disabled
+  , HasFloatedProp(..), pattern Floated
+  , HasFluidProp(..), pattern Fluid
+  , HasHiddenProp(..), pattern Hidden
+  , HasInlineProp(..), pattern Inline
+  , HasRoundedProp(..), pattern Rounded
+  , HasSizeProp(..), pattern Size
+  , HasSpacedProp(..), pattern Spaced
+  , HasUIProp(..), pattern UI
+  , HasVerticalAlignProp(..), pattern VerticalAlign
+  , HasWrappedProp(..), pattern Wrapped
+  )
 
 data Image ms = Image_
     { as :: [Feature ms] -> [View ms] -> View ms

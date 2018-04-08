@@ -5,17 +5,19 @@ import Pure.View hiding (active,completed,disabled,onClick)
 
 import Semantic.Utils
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Active
-import Semantic.Properties.Completed
-import Semantic.Properties.Disabled
-import Semantic.Properties.Ref
-import Semantic.Properties.Link
-import Semantic.Properties.OnClick
-import Semantic.Properties.Ordered
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasActiveProp(..), pattern Active
+  , HasCompletedProp(..), pattern Completed
+  , HasDisabledProp(..), pattern Disabled
+  , HasRefProp(..), pattern Ref
+  , HasLinkProp(..), pattern Link
+  , HasOnClickProp(..), pattern OnClick
+  , HasOrderedProp(..), pattern Ordered
+  )
 
 import Semantic.Elements.Step.StepContent as Export
 import Semantic.Elements.Step.StepDescription as Export

@@ -5,17 +5,19 @@ import Pure.View as View hiding (hidden,horizontal,vertical)
 
 import Semantic.Utils
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Clearing
-import Semantic.Properties.Fitted
-import Semantic.Properties.Hidden
-import Semantic.Properties.Horizontal
-import Semantic.Properties.Inverted
-import Semantic.Properties.Section
-import Semantic.Properties.Vertical
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasClearingProp(..), pattern Clearing
+  , HasFittedProp(..), pattern Fitted
+  , HasHiddenProp(..), pattern Hidden
+  , HasHorizontalProp(..), pattern Horizontal
+  , HasInvertedProp(..), pattern Inverted
+  , HasSectionProp(..), pattern Section
+  , HasVerticalProp(..), pattern Vertical
+  )
 
 data Divider ms = Divider_
     { as :: [Feature ms] -> [View ms] -> View ms

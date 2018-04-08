@@ -5,10 +5,12 @@ import Pure.View hiding (name)
 
 import Semantic.Utils
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Classes
-import Semantic.Properties.Name
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasClassesProp(..), pattern Classes
+  , HasNameProp(..), pattern Name
+  )
 
 data Flag ms = Flag_
     { as :: [Feature ms] -> [View ms] -> View ms

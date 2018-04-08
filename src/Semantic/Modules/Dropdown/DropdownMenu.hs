@@ -5,11 +5,13 @@ import Pure.View
 
 import Semantic.Utils
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Scrolling
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasScrollingProp(..), pattern Scrolling
+  )
 
 data DropdownMenu ms = DropdownMenu_ 
     { as :: [Feature ms] -> [View ms] -> View ms

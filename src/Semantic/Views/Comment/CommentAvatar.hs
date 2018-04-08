@@ -6,10 +6,12 @@ import qualified Pure.View as HTML
 
 import Semantic.Utils
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Classes
-import Semantic.Properties.Src
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasClassesProp(..), pattern Classes
+  , HasSrcProp(..), pattern Src
+  )
 
 data CommentAvatar ms = CommentAvatar_
     { as :: [Feature ms] -> [View ms] -> View ms

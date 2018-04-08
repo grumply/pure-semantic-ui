@@ -1,28 +1,36 @@
-module Semantic.Collections.Breadcrumb.BreadcrumbSection where
+module Semantic.Collections.Breadcrumb.BreadcrumbSection
+  ( module Properties
+  , module Tools
+  , BreadcrumbSection(..), pattern BreadcrumbSection
+  ) where
 
 import GHC.Generics as G
 import Pure.View hiding (active,name,onClick)
 
 import Semantic.Utils
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Active
-import Semantic.Properties.Ref
-import Semantic.Properties.Link
-import Semantic.Properties.OnClick
+import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
+
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasActiveProp(..), pattern Active
+  , HasRefProp(..), pattern Ref
+  , HasLinkProp(..), pattern Link
+  , HasOnClickProp(..), pattern OnClick
+  )
 
 data BreadcrumbSection ms = BreadcrumbSection_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms] 
-    , children :: [View ms]
-    , classes :: [Txt]
-    , active :: Bool
-    , ref :: Feature ms
-    , link :: Bool
-    , onClick :: Ef ms IO ()
+    { as         :: [Feature ms] -> [View ms] -> View ms
+    , attributes :: [Feature ms]
+    , children   :: [View ms]
+    , classes    :: [Txt]
+    , active     :: Bool
+    , ref        :: Feature ms
+    , link       :: Bool
+    , onClick    :: Ef ms IO ()
     } deriving (Generic)
 
 instance Default (BreadcrumbSection ms) where
@@ -35,7 +43,7 @@ instance Pure BreadcrumbSection ms where
     render BreadcrumbSection_ {..} =
         let
             e = link ? A $ ref ? A $ as
-            cs = 
+            cs =
                 ( active # "active"
                 : "section"
                 : classes

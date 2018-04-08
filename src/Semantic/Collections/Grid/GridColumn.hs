@@ -5,22 +5,24 @@ import Pure.View hiding (color,textAlign,verticalAlign,width)
 
 import Semantic.Utils hiding (only)
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Color
-import Semantic.Properties.Floated
-import Semantic.Properties.OnComputer
-import Semantic.Properties.OnLargeScreen
-import Semantic.Properties.Only
-import Semantic.Properties.OnMobile
-import Semantic.Properties.OnTablet
-import Semantic.Properties.OnWidescreen
-import Semantic.Properties.Stretched
-import Semantic.Properties.TextAlign
-import Semantic.Properties.VerticalAlign
-import Semantic.Properties.Width
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasColorProp(..), pattern Color
+  , HasFloatedProp(..), pattern Floated
+  , HasOnComputerProp(..), pattern OnComputer
+  , HasOnLargeScreenProp(..), pattern OnLargeScreen
+  , HasOnlyProp(..), pattern Only
+  , HasOnMobileProp(..), pattern OnMobile
+  , HasOnTabletProp(..), pattern OnTablet
+  , HasOnWidescreenProp(..), pattern OnWidescreen
+  , HasStretchedProp(..), pattern Stretched
+  , HasTextAlignProp(..), pattern TextAlign
+  , HasVerticalAlignProp(..), pattern VerticalAlign
+  , HasWidthProp(..), pattern Width
+  )
 
 data GridColumn ms = GridColumn_
     { as :: [Feature ms] -> [View ms] -> View ms

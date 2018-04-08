@@ -5,12 +5,14 @@ import Pure.View hiding (textAlign)
 
 import Semantic.Utils
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Fluid
-import Semantic.Properties.TextAlign
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasFluidProp(..), pattern Fluid
+  , HasTextAlignProp(..), pattern TextAlign
+  )
 
 data Container ms = Container_
   { as :: [Feature ms] -> [View ms] -> View ms

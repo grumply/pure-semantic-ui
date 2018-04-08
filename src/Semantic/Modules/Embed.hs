@@ -10,21 +10,22 @@ import Semantic.Utils hiding (id)
 
 import Semantic.Elements.Icon
 
-import Semantic.Properties.Name
-
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Active
-import Semantic.Properties.AspectRatio
-import Semantic.Properties.Autoplay
-import Semantic.Properties.Branded
-import Semantic.Properties.Color
-import Semantic.Properties.DefaultActive
-import Semantic.Properties.OnClick
-import Semantic.Properties.Placeholder
-import Semantic.Properties.URL
+import Semantic.Properties as Properties
+  ( HasNameProp(..), pattern Name
+  , HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasActiveProp(..), pattern Active
+  , HasAspectRatioProp(..), pattern AspectRatio
+  , HasAutoplayProp(..), pattern Autoplay
+  , HasBrandedProp(..), pattern Branded
+  , HasColorProp(..), pattern Color
+  , HasDefaultActiveProp(..), pattern DefaultActive
+  , HasOnClickProp(..), pattern OnClick
+  , HasPlaceholderProp(..), pattern Placeholder
+  , HasURLProp(..), pattern URL
+  )
 
 import Prelude hiding (id)
 import qualified Prelude

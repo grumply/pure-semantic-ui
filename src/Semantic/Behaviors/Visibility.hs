@@ -1,65 +1,74 @@
-module Semantic.Behaviors.Visibility where
+module Semantic.Behaviors.Visibility
+  ( module Properties
+  , module Tools
+  , Passed(..), Calculations(..)
+  , Visibility(..), pattern Visibility
+  ) where
 
 import Data.Coerce
 import Data.IORef
 import GHC.Generics as G
-import Pure.View hiding (offset)
+import Pure.View hiding (offset,Visibility)
 import Pure.Lifted
 import Pure.DOM (addAnimation)
 
 import Semantic.Utils
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Context
-import Semantic.Properties.Continuous
-import Semantic.Properties.FireOnMount
-import Semantic.Properties.Offset
-import Semantic.Properties.OnBottomPassed
-import Semantic.Properties.OnBottomPassedReverse
-import Semantic.Properties.OnBottomVisible
-import Semantic.Properties.OnBottomVisibleReverse
-import Semantic.Properties.Once
-import Semantic.Properties.OnPassed
-import Semantic.Properties.OnPassing
-import Semantic.Properties.OnPassingReverse
-import Semantic.Properties.OnOffScreen
-import Semantic.Properties.OnOnScreen
-import Semantic.Properties.OnTopPassed
-import Semantic.Properties.OnTopPassedReverse
-import Semantic.Properties.OnTopVisible
-import Semantic.Properties.OnTopVisibleReverse
-import Semantic.Properties.OnUpdate
+import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
+
+import Semantic.Properties as Properties
+  ( HasAsProp(..)                     , pattern As
+  , HasAttributesProp(..)             , pattern Attributes
+  , HasChildrenProp(..)               , pattern Children
+  , HasClassesProp(..)                , pattern Classes
+  , HasContextProp(..)                , pattern Context
+  , HasContinuousProp(..)             , pattern Continuous
+  , HasFireOnMountProp(..)            , pattern FireOnMount
+  , HasOffsetProp(..)                 , pattern Offset
+  , HasOnBottomPassedProp(..)         , pattern OnBottomPassed
+  , HasOnBottomPassedReverseProp(..)  , pattern OnBottomPassedReverse
+  , HasOnBottomVisibleProp(..)        , pattern OnBottomVisible
+  , HasOnBottomVisibleReverseProp(..) , pattern OnBottomVisibleReverse
+  , HasOnceProp(..)                   , pattern Once
+  , HasOnPassedProp(..)               , pattern OnPassed
+  , HasOnPassingProp(..)              , pattern OnPassing
+  , HasOnPassingReverseProp(..)       , pattern OnPassingReverse
+  , HasOnOffScreenProp(..)            , pattern OnOffScreen
+  , HasOnOnScreenProp(..)             , pattern OnOnScreen
+  , HasOnTopPassedProp(..)            , pattern OnTopPassed
+  , HasOnTopPassedReverseProp(..)     , pattern OnTopPassedReverse
+  , HasOnTopVisibleProp(..)           , pattern OnTopVisible
+  , HasOnTopVisibleReverseProp(..)    , pattern OnTopVisibleReverse
+  , HasOnUpdateProp(..)               , pattern OnUpdate
+  )
 
 data Passed = PixelsPassed Double | PercentPassed Double
     deriving (Generic,Default,Ord,Eq)
 
 data Visibility ms = Visibility_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
-    , context :: Maybe JSV
-    , continuous :: Bool
-    , fireOnMount :: Bool
-    , offset :: (Double,Double)
-    , onBottomPassed :: Maybe (Calculations -> Ef ms IO ())
-    , onBottomPassedReverse :: Maybe (Calculations -> Ef ms IO ())
-    , onBottomVisible :: Maybe (Calculations -> Ef ms IO ())
+    { as                     :: [Feature ms] -> [View ms] -> View ms
+    , attributes             :: [Feature ms]
+    , children               :: [View ms]
+    , classes                :: [Txt]
+    , context                :: Maybe JSV
+    , continuous             :: Bool
+    , fireOnMount            :: Bool
+    , offset                 :: (Double,Double)
+    , onBottomPassed         :: Maybe (Calculations -> Ef ms IO ())
+    , onBottomPassedReverse  :: Maybe (Calculations -> Ef ms IO ())
+    , onBottomVisible        :: Maybe (Calculations -> Ef ms IO ())
     , onBottomVisibleReverse :: Maybe (Calculations -> Ef ms IO ())
-    , once :: Bool
-    , onOffScreen :: Maybe (Calculations -> Ef ms IO ())
-    , onOnScreen :: Maybe (Calculations -> Ef ms IO ())
-    , onPassed :: [(Calculations -> Ef ms IO (),Passed)]
-    , onPassing :: Maybe (Calculations -> Ef ms IO ())
-    , onPassingReverse :: Maybe (Calculations -> Ef ms IO ())
-    , onTopPassed :: Maybe (Calculations -> Ef ms IO ())
-    , onTopPassedReverse :: Maybe (Calculations -> Ef ms IO ())
-    , onTopVisible :: Maybe (Calculations -> Ef ms IO ())
-    , onTopVisibleReverse :: Maybe (Calculations -> Ef ms IO ())
-    , onUpdate :: Maybe (Calculations -> Ef ms IO ())
+    , once                   :: Bool
+    , onOffScreen            :: Maybe (Calculations -> Ef ms IO ())
+    , onOnScreen             :: Maybe (Calculations -> Ef ms IO ())
+    , onPassed               :: [(Calculations -> Ef ms IO (),Passed)]
+    , onPassing              :: Maybe (Calculations -> Ef ms IO ())
+    , onPassingReverse       :: Maybe (Calculations -> Ef ms IO ())
+    , onTopPassed            :: Maybe (Calculations -> Ef ms IO ())
+    , onTopPassedReverse     :: Maybe (Calculations -> Ef ms IO ())
+    , onTopVisible           :: Maybe (Calculations -> Ef ms IO ())
+    , onTopVisibleReverse    :: Maybe (Calculations -> Ef ms IO ())
+    , onUpdate               :: Maybe (Calculations -> Ef ms IO ())
     } deriving (Generic)
 
 instance Default (Visibility ms) where
@@ -70,12 +79,12 @@ pattern Visibility v = View v
 
 data VisibilityState = VS
     { oldCalculations :: IORef Calculations
-    , calculations :: IORef Calculations
-    , verticalOffset :: IORef Int
-    , handlers :: IORef VisibilityHandlers
-    , fired :: IORef [Txt]
-    , ticking :: IORef Bool
-    , ref :: IORef (Maybe JSV)
+    , calculations    :: IORef Calculations
+    , verticalOffset  :: IORef Int
+    , handlers        :: IORef VisibilityHandlers
+    , fired           :: IORef [Txt]
+    , ticking         :: IORef Bool
+    , ref             :: IORef (Maybe JSV)
     }
 
 data VisibilityHandlers = VH
@@ -85,7 +94,7 @@ data VisibilityHandlers = VH
 
 data Direction = Down | Up
     deriving (Generic,Default,Eq,Ord,Show)
-instance ToTxt Direction where 
+instance ToTxt Direction where
     toTxt Up = "up"
     toTxt _  = "down"
 instance FromTxt Direction where
@@ -93,26 +102,26 @@ instance FromTxt Direction where
     fromTxt _    = Down
 
 data Calculations = Calculations
-    { direction :: Direction
-    , height :: Double
-    , width :: Double
-    , top :: Double
-    , bottom :: Double
+    { direction        :: Direction
+    , height           :: Double
+    , width            :: Double
+    , top              :: Double
+    , bottom           :: Double
     , percentagePassed :: Double
-    , pixelsPassed :: Double
-    , bottomPassed :: Bool
-    , bottomVisible :: Bool
-    , fits :: Bool
-    , passing :: Bool
-    , offScreen :: Bool
-    , onScreen :: Bool
-    , topPassed :: Bool
-    , topVisible :: Bool
+    , pixelsPassed     :: Double
+    , bottomPassed     :: Bool
+    , bottomVisible    :: Bool
+    , fits             :: Bool
+    , passing          :: Bool
+    , offScreen        :: Bool
+    , onScreen         :: Bool
+    , topPassed        :: Bool
+    , topVisible       :: Bool
     } deriving (Generic,Default)
 
 instance Pure Visibility ms where
     render v =
-        Component "Semantic.Behaviors.Visibility" v $ \self -> 
+        Component "Semantic.Behaviors.Visibility" v $ \self ->
             let
                 handleRef (Node n) = do
                     VS {..} <- getState self
@@ -129,7 +138,7 @@ instance Pure Visibility ms where
 
                     unless (not continuous && name `elem` fs) $ do
                       parent self (callback cs)
-                      writeIORef fired (name:fs) 
+                      writeIORef fired (name:fs)
 
                 fire callback name value rev = do
                     Visibility_ {..} <- getProps self
@@ -140,7 +149,7 @@ instance Pure Visibility ms where
 
                     let matchesDirection  =               value cs /= rev
                         executionPossible = continuous || value cs /= value oldcs
-                        
+
                     when (matchesDirection && executionPossible) (execute callback name)
 
                     unless once $ modifyIORef fired (filter (/= name))
@@ -178,7 +187,7 @@ instance Pure Visibility ms where
 
                     cs <- readIORef calculations
 
-                    for_ onUpdate $ \ou -> 
+                    for_ onUpdate $ \ou ->
                         parent self (ou cs)
 
                     fireOnPassed
@@ -236,10 +245,10 @@ instance Pure Visibility ms where
                     return Calculations {..}
 
             in def
-                { construct = VS <$> newIORef def 
-                                 <*> newIORef def 
-                                 <*> newIORef def 
-                                 <*> newIORef def 
+                { construct = VS <$> newIORef def
+                                 <*> newIORef def
+                                 <*> newIORef def
+                                 <*> newIORef def
                                  <*> newIORef def
                                  <*> newIORef def
                                  <*> newIORef def
@@ -266,9 +275,9 @@ instance Pure Visibility ms where
                     resizeHandler
                     scrollHandler
 
-                , renderer = \Visibility_ {..} _ -> 
-                    as 
-                        ( mergeClasses $ ClassList classes 
+                , renderer = \Visibility_ {..} _ ->
+                    as
+                        ( mergeClasses $ ClassList classes
                         : HostRef handleRef
                         : attributes
                         )
@@ -379,7 +388,7 @@ instance HasOnTopVisibleProp (Visibility ms) where
 
 instance HasOnTopVisibleReverseProp (Visibility ms) where
     type OnTopVisibleReverseProp (Visibility ms) = Maybe (Calculations -> Ef ms IO ())
-    getOnTopVisibleReverse = onTopVisibleReverse 
+    getOnTopVisibleReverse = onTopVisibleReverse
     setOnTopVisibleReverse otvr v = v { onTopVisibleReverse = otvr }
 
 instance HasOnUpdateProp (Visibility ms) where

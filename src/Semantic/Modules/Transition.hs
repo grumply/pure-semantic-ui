@@ -8,17 +8,20 @@ import Pure.View hiding (animation,onComplete,visible)
 
 import Semantic.Utils
 
-import Semantic.Properties.Children
-import Semantic.Properties.Animation
-import Semantic.Properties.AnimationDuration
-import Semantic.Properties.Visible
-import Semantic.Properties.MountOnShow
-import Semantic.Properties.OnComplete
-import Semantic.Properties.OnHide
-import Semantic.Properties.OnShow
-import Semantic.Properties.OnStart
-import Semantic.Properties.TransitionOnMount
-import Semantic.Properties.UnmountOnHide
+import Semantic.Properties as Properties
+  ( HasChildrenProp(..), pattern Children
+  , HasAnimationProp(..), pattern Animation
+  , HasAnimationDurationProp(..), pattern AnimationDuration
+  , HasVisibleProp(..), pattern Visible
+  , HasMountOnShowProp(..), pattern MountOnShow
+  , HasOnCompleteProp(..), pattern OnComplete
+  , HasOnHideProp(..), pattern OnHide
+  , HasOnShowProp(..), pattern OnShow
+  , HasOnStartProp(..), pattern OnStart
+  , HasTransitionOnMountProp(..), pattern TransitionOnMount
+  , HasUnmountOnHideProp(..), pattern UnmountOnHide
+  , AnimationDuration(..)
+  )
 
 data TransitionStatus = Unmounted | Entered | Entering | Exited | Exiting
     deriving (Generic,Default,Ord,Eq)

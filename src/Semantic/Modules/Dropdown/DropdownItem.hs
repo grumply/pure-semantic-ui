@@ -5,14 +5,16 @@ import Pure.View hiding (disabled,onClick)
 
 import Semantic.Utils
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Active
-import Semantic.Properties.Disabled
-import Semantic.Properties.OnClick
-import Semantic.Properties.Selected
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasActiveProp(..), pattern Active
+  , HasDisabledProp(..), pattern Disabled
+  , HasOnClickProp(..), pattern OnClick
+  , HasSelectedProp(..), pattern Selected
+  )
 
 data DropdownItem ms = DropdownItem_
     { as :: [Feature ms] -> [View ms] -> View ms

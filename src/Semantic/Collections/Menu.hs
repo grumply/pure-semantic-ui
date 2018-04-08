@@ -6,29 +6,31 @@ import Pure.View hiding (active,color,fixed,onClick,text,vertical,widths)
 
 import Semantic.Utils
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Attached
-import Semantic.Properties.Borderless
-import Semantic.Properties.Color
-import Semantic.Properties.Compact
-import Semantic.Properties.Fixed
-import Semantic.Properties.Floated
-import Semantic.Properties.Fluid
-import Semantic.Properties.Inverted
-import Semantic.Properties.IsIcon
-import Semantic.Properties.IsText
-import Semantic.Properties.OnClick
-import Semantic.Properties.Pagination
-import Semantic.Properties.Pointing
-import Semantic.Properties.Secondary
-import Semantic.Properties.Size
-import Semantic.Properties.Stackable
-import Semantic.Properties.Tabular
-import Semantic.Properties.Vertical
-import Semantic.Properties.Widths
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasAttachedProp(..), pattern Attached
+  , HasBorderlessProp(..), pattern Borderless
+  , HasColorProp(..), pattern Color
+  , HasCompactProp(..), pattern Compact
+  , HasFixedProp(..), pattern Fixed
+  , HasFloatedProp(..), pattern Floated
+  , HasFluidProp(..), pattern Fluid
+  , HasInvertedProp(..), pattern Inverted
+  , HasIsIconProp(..), pattern IsIcon
+  , HasIsTextProp(..), pattern IsText
+  , HasOnClickProp(..), pattern OnClick
+  , HasPaginationProp(..), pattern Pagination
+  , HasPointingProp(..), pattern Pointing
+  , HasSecondaryProp(..), pattern Secondary
+  , HasSizeProp(..), pattern Size
+  , HasStackableProp(..), pattern Stackable
+  , HasTabularProp(..), pattern Tabular
+  , HasVerticalProp(..), pattern Vertical
+  , HasWidthsProp(..), pattern Widths
+  )
 
 import Semantic.Collections.Menu.MenuHeader as Export
 import Semantic.Collections.Menu.MenuItem as Export

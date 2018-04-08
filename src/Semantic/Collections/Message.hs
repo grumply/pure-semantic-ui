@@ -6,26 +6,28 @@ import Pure.View hiding (color,hidden,visible,Name)
 import Semantic.Utils
 
 import Semantic.Elements.Icon
-import Semantic.Properties.Name
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Attached
-import Semantic.Properties.Color
-import Semantic.Properties.Compact
-import Semantic.Properties.Error
-import Semantic.Properties.Floating
-import Semantic.Properties.Hidden
-import Semantic.Properties.Info
-import Semantic.Properties.Negative
-import Semantic.Properties.OnDismiss
-import Semantic.Properties.Positive
-import Semantic.Properties.Size
-import Semantic.Properties.Success
-import Semantic.Properties.Visible
-import Semantic.Properties.Warning
+import Semantic.Properties as Properties
+  ( HasNameProp(..), pattern Name
+  , HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasAttachedProp(..), pattern Attached
+  , HasColorProp(..), pattern Color
+  , HasCompactProp(..), pattern Compact
+  , HasErrorProp(..), pattern Error
+  , HasFloatingProp(..), pattern Floating
+  , HasHiddenProp(..), pattern Hidden
+  , HasInfoProp(..), pattern Info
+  , HasNegativeProp(..), pattern Negative
+  , HasOnDismissProp(..), pattern OnDismiss
+  , HasPositiveProp(..), pattern Positive
+  , HasSizeProp(..), pattern Size
+  , HasSuccessProp(..), pattern Success
+  , HasVisibleProp(..), pattern Visible
+  , HasWarningProp(..), pattern Warning
+  )
 
 import Prelude hiding (error)
 

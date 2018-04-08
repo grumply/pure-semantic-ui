@@ -5,13 +5,15 @@ import Pure.View hiding (styled)
 
 import Semantic.Utils
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Fluid
-import Semantic.Properties.Inverted
-import Semantic.Properties.Styled
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasFluidProp(..), pattern Fluid
+  , HasInvertedProp(..), pattern Inverted
+  , HasStyledProp(..), pattern Styled
+  )
 
 import Semantic.Modules.Accordion.AccordionAccordion as Export
 import Semantic.Modules.Accordion.AccordionContent as Export 

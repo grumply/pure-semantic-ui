@@ -5,17 +5,19 @@ import Pure.View hiding (color,onClick)
 
 import Semantic.Utils
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Centered
-import Semantic.Properties.Color
-import Semantic.Properties.Fluid
-import Semantic.Properties.Ref
-import Semantic.Properties.Link
-import Semantic.Properties.OnClick
-import Semantic.Properties.Raised
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasCenteredProp(..), pattern Centered
+  , HasColorProp(..), pattern Color
+  , HasFluidProp(..), pattern Fluid
+  , HasRefProp(..), pattern Ref
+  , HasLinkProp(..), pattern Link
+  , HasOnClickProp(..), pattern OnClick
+  , HasRaisedProp(..), pattern Raised
+  )
 
 import Semantic.Views.Card.CardContent as Export
 import Semantic.Views.Card.CardDescription as Export

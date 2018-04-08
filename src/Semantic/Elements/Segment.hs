@@ -7,29 +7,31 @@ import Semantic.Utils
 
 import Semantic.Elements.Segment.SegmentGroup as Export
 
-import Semantic.Properties.As
-import Semantic.Properties.Attached
-import Semantic.Properties.Attributes
-import Semantic.Properties.Basic
-import Semantic.Properties.Children
-import Semantic.Properties.Circular
-import Semantic.Properties.Classes
-import Semantic.Properties.Clearing
-import Semantic.Properties.Color
-import Semantic.Properties.Compact
-import Semantic.Properties.Disabled
-import Semantic.Properties.Floated
-import Semantic.Properties.Inverted
-import Semantic.Properties.Loading
-import Semantic.Properties.Padded
-import Semantic.Properties.Piled
-import Semantic.Properties.Raised
-import Semantic.Properties.Secondary
-import Semantic.Properties.Size
-import Semantic.Properties.Stacked
-import Semantic.Properties.Tertiary
-import Semantic.Properties.TextAlign
-import Semantic.Properties.Vertical
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttachedProp(..), pattern Attached
+  , HasAttributesProp(..), pattern Attributes
+  , HasBasicProp(..), pattern Basic
+  , HasChildrenProp(..), pattern Children
+  , HasCircularProp(..), pattern Circular
+  , HasClassesProp(..), pattern Classes
+  , HasClearingProp(..), pattern Clearing
+  , HasColorProp(..), pattern Color
+  , HasCompactProp(..), pattern Compact
+  , HasDisabledProp(..), pattern Disabled
+  , HasFloatedProp(..), pattern Floated
+  , HasInvertedProp(..), pattern Inverted
+  , HasLoadingProp(..), pattern Loading
+  , HasPaddedProp(..), pattern Padded
+  , HasPiledProp(..), pattern Piled
+  , HasRaisedProp(..), pattern Raised
+  , HasSecondaryProp(..), pattern Secondary
+  , HasSizeProp(..), pattern Size
+  , HasStackedProp(..), pattern Stacked
+  , HasTertiaryProp(..), pattern Tertiary
+  , HasTextAlignProp(..), pattern TextAlign
+  , HasVerticalProp(..), pattern Vertical
+  )
 
 data Segment ms = Segment_
     { as :: [Feature ms] -> [View ms] -> View ms

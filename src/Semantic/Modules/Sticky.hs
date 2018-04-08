@@ -10,20 +10,22 @@ import Pure.DOM (addAnimation)
 
 import Semantic.Utils hiding (body)
 
-import Semantic.Properties.As
-import Semantic.Properties.Attributes
-import Semantic.Properties.Children
-import Semantic.Properties.Classes
-import Semantic.Properties.Active
-import Semantic.Properties.BottomOffset
-import Semantic.Properties.Context
-import Semantic.Properties.Offset
-import Semantic.Properties.OnBottom
-import Semantic.Properties.OnStick
-import Semantic.Properties.OnTop
-import Semantic.Properties.OnUnstick
-import Semantic.Properties.Pushing
-import Semantic.Properties.ScrollContext
+import Semantic.Properties as Properties
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
+  , HasActiveProp(..), pattern Active
+  , HasBottomOffsetProp(..), pattern BottomOffset
+  , HasContextProp(..), pattern Context
+  , HasOffsetProp(..), pattern Offset
+  , HasOnBottomProp(..), pattern OnBottom
+  , HasOnStickProp(..), pattern OnStick
+  , HasOnTopProp(..), pattern OnTop
+  , HasOnUnstickProp(..), pattern OnUnstick
+  , HasPushingProp(..), pattern Pushing
+  , HasScrollContextProp(..), pattern ScrollContext
+  )
 
 data Sticky ms = Sticky_
     { as :: [Feature ms] -> [View ms] -> View ms
