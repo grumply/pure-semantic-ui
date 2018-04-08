@@ -1,7 +1,7 @@
-module Semantic.Collections.Form (module Semantic.Collections.Form, module Export) where
+module Semantic.Collections.Form where
 
 import GHC.Generics as G
-import Pure.View hiding (name,onSubmit,widths,Form)
+import Pure.View hiding (name,onSubmit,widths,Form,inline,disabled)
 import qualified Pure.View as HTML
 
 import Semantic.Utils
@@ -23,10 +23,13 @@ import Semantic.Properties as Properties
   , HasUnstackableProp(..), pattern Unstackable
   , HasWarningProp(..), pattern Warning
   , HasWidthsProp(..), pattern Widths
+  , HasGroupedProp(..), pattern Grouped
+  , HasInlineProp(..), pattern Inline
+  , HasDisabledProp(..), pattern Disabled
+  , HasErrorProp(..), pattern Error
+  , HasRequiredProp(..), pattern Required
+  , HasTypeProp(..), pattern Type
   )
-
-import Semantic.Collections.Form.FormField as Export
-import Semantic.Collections.Form.FormGroup as Export
 
 data Form ms = Form_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -55,7 +58,7 @@ pattern Form f = View f
 instance Pure Form ms where
     render Form_ {..} =
         let
-            cs = 
+            cs =
                 ( "ui"
                 : size
                 : error # "error"
@@ -141,3 +144,156 @@ instance HasWarningProp (Form ms) where
 instance HasWidthsProp (Form ms) where
     getWidths = widths
     setWidths w f = f { widths = w }
+
+data Field ms = Field_
+    { as :: [Feature ms] -> [View ms] -> View ms
+    , attributes :: [Feature ms]
+    , children :: [View ms]
+    , classes :: [Txt]
+    , disabled :: Bool
+    , error :: Bool
+    , inline :: Bool
+    , required :: Bool
+    , _type :: Txt
+    , widths :: Width
+    } deriving (Generic)
+
+instance Default (Field ms) where
+    def = (G.to gdef) { as = Div }
+
+pattern Field :: Field ms -> View ms
+pattern Field ff = View ff
+
+instance Pure Field ms where
+    render Field_ {..} =
+        let
+            cs =
+                ( disabled # "disabled"
+                : error # "error"
+                : inline # "inline"
+                : required # "required"
+                : widthProp widths "wide" def
+                : "field"
+                : classes
+                )
+        in
+            as
+                ( mergeClasses $ ClassList cs
+                : attributes
+                )
+                children
+
+instance HasAsProp (Field ms) where
+    type AsProp (Field ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs a ff = ff { as = a }
+
+instance HasAttributesProp (Field ms) where
+    type Attribute (Field ms) = Feature ms
+    getAttributes = attributes
+    setAttributes as ff = ff { attributes = as }
+
+instance HasChildrenProp (Field ms) where
+    type Child (Field ms) = View ms
+    getChildren = children
+    setChildren cs ff = ff { children = cs }
+
+instance HasClassesProp (Field ms) where
+    getClasses = classes
+    setClasses cs ff = ff { classes = cs }
+
+instance HasDisabledProp (Field ms) where
+    getDisabled = disabled
+    setDisabled d ff = ff { disabled = d }
+
+instance HasErrorProp (Field ms) where
+    getError = error
+    setError e ff = ff { error = e }
+
+instance HasInlineProp (Field ms) where
+    type InlineProp (Field ms) = Bool
+    getInline = inline
+    setInline i ff = ff { inline = i }
+
+instance HasRequiredProp (Field ms) where
+    getRequired = required
+    setRequired r ff = ff { required = r }
+
+instance HasTypeProp (Field ms) where
+    getType = _type
+    setType t ff = ff { _type = t }
+
+instance HasWidthsProp (Field ms) where
+    getWidths = widths
+    setWidths w ff = ff { widths = w }
+
+data Group ms = Group_
+    { as :: [Feature ms] -> [View ms] -> View ms
+    , attributes :: [Feature ms]
+    , children :: [View ms]
+    , classes :: [Txt]
+    , grouped :: Bool
+    , inline :: Bool
+    , unstackable :: Bool
+    , widths :: Width
+    } deriving (Generic)
+
+instance Default (Group ms) where
+    def = (G.to gdef) { as = Div }
+
+pattern Group :: Group ms -> View ms
+pattern Group fg = View fg
+
+instance Pure Group ms where
+    render Group_ {..} =
+        let
+            cs =
+                ( grouped # "grouped"
+                : inline # "inline"
+                : unstackable # "unstackable"
+                : widthProp widths def True
+                : "fields"
+                : classes
+                )
+        in
+            as
+                ( mergeClasses $ ClassList cs
+                : attributes
+                )
+                children
+
+instance HasAsProp (Group ms) where
+    type AsProp (Group ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs a fg = fg { as = a }
+
+instance HasAttributesProp (Group ms) where
+    type Attribute (Group ms) = Feature ms
+    getAttributes = attributes
+    setAttributes as fg = fg { attributes = as }
+
+instance HasChildrenProp (Group ms) where
+    type Child (Group ms) = View ms
+    getChildren = children
+    setChildren cs fg = fg { children = cs }
+
+instance HasClassesProp (Group ms) where
+    getClasses = classes
+    setClasses cs fg = fg { classes = cs }
+
+instance HasGroupedProp (Group ms) where
+    getGrouped = grouped
+    setGrouped g fg = fg { grouped = g }
+
+instance HasInlineProp (Group ms) where
+    type InlineProp (Group ms) = Bool
+    getInline = inline
+    setInline i fg = fg { inline = i }
+
+instance HasUnstackableProp (Group ms) where
+    getUnstackable = unstackable
+    setUnstackable u fg = fg { unstackable = u }
+
+instance HasWidthsProp (Group ms) where
+    getWidths = widths
+    setWidths w fg = fg { widths = w }

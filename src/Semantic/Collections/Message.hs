@@ -1,4 +1,4 @@
-module Semantic.Collections.Message (module Semantic.Collections.Message, module Export) where
+module Semantic.Collections.Message (module Semantic.Collections.Message) where
 
 import GHC.Generics as G
 import Pure.View hiding (color,hidden,visible,Name)
@@ -30,11 +30,6 @@ import Semantic.Properties as Properties
   )
 
 import Prelude hiding (error)
-
-import Semantic.Collections.Message.MessageContent as Export
-import Semantic.Collections.Message.MessageHeader as Export
-import Semantic.Collections.Message.MessageItem as Export
-import Semantic.Collections.Message.MessageList as Export
 
 data Message ms = Message_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -85,7 +80,7 @@ instance Pure Message ms where
                 : success # "success"
                 : visible # "visible"
                 : warning # "warning"
-                : may (<>> "attached") attached 
+                : may (<>> "attached") attached
                 : "message"
                 : classes
                 )
@@ -172,3 +167,188 @@ instance HasVisibleProp (Message ms) where
 instance HasWarningProp (Message ms) where
     getWarning = warning
     setWarning w m = m { warning = w }
+
+data Content ms = Content_
+    { as :: [Feature ms] -> [View ms] -> View ms
+    , attributes :: [Feature ms]
+    , children :: [View ms]
+    , classes :: [Txt]
+    } deriving (Generic)
+
+instance Default (Content ms) where
+    def = (G.to gdef) { as = Div }
+
+pattern Content :: Content ms -> View ms
+pattern Content mc = View mc
+
+instance Pure Content ms where
+    render Content_ {..} =
+        let
+            cs =
+                ( "content"
+                : classes
+                )
+        in
+            as
+                ( mergeClasses $ ClassList cs
+                : attributes
+                )
+                children
+
+instance HasAsProp (Content ms) where
+    type AsProp (Content ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs a mc = mc { as = a }
+
+instance HasAttributesProp (Content ms) where
+    type Attribute (Content ms) = Feature ms
+    getAttributes = attributes
+    setAttributes as mc = mc { attributes = as }
+
+instance HasChildrenProp (Content ms) where
+    type Child (Content ms) = View ms
+    getChildren = children
+    setChildren cs mc = mc { children = cs }
+
+instance HasClassesProp (Content ms) where
+    getClasses = classes
+    setClasses cs mc = mc { classes = cs }
+
+data Header ms = Header_
+    { as :: [Feature ms] -> [View ms] -> View ms
+    , attributes :: [Feature ms]
+    , children :: [View ms]
+    , classes :: [Txt]
+    } deriving (Generic)
+
+instance Default (Header ms) where
+    def = (G.to gdef) { as = Div }
+
+pattern Header :: Header ms -> View ms
+pattern Header mh = View mh
+
+instance Pure Header ms where
+    render Header_ {..} =
+        let
+            cs =
+                ( "header"
+                : classes
+                )
+        in
+            as
+                ( mergeClasses $ ClassList cs
+                : attributes
+                )
+                children
+
+instance HasAsProp (Header ms) where
+    type AsProp (Header ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs a mh = mh { as = a }
+
+instance HasAttributesProp (Header ms) where
+    type Attribute (Header ms) = Feature ms
+    getAttributes = attributes
+    setAttributes as mh = mh { attributes = as }
+
+instance HasChildrenProp (Header ms) where
+    type Child (Header ms) = View ms
+    getChildren = children
+    setChildren cs mh = mh { children = cs }
+
+instance HasClassesProp (Header ms) where
+    getClasses = classes
+    setClasses cs mh = mh { classes = cs }
+
+data Item ms = Item_
+    { as :: [Feature ms] -> [View ms] -> View ms
+    , attributes :: [Feature ms]
+    , children :: [View ms]
+    , classes :: [Txt]
+    } deriving (Generic)
+
+instance Default (Item ms) where
+    def = (G.to gdef) { as = Li }
+
+pattern Item :: Item ms -> View ms
+pattern Item mi = View mi
+
+instance Pure Item ms where
+    render Item_ {..} =
+        let
+            cs =
+                ( "content"
+                : classes
+                )
+        in
+            as
+                ( mergeClasses $ ClassList cs
+                : attributes
+                )
+                children
+
+instance HasAsProp (Item ms) where
+    type AsProp (Item ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs a mi = mi { as = a }
+
+instance HasAttributesProp (Item ms) where
+    type Attribute (Item ms) = Feature ms
+    getAttributes = attributes
+    setAttributes as mi = mi { attributes = as }
+
+instance HasChildrenProp (Item ms) where
+    type Child (Item ms) = View ms
+    getChildren = children
+    setChildren cs mi = mi { children = cs }
+
+instance HasClassesProp (Item ms) where
+    getClasses = classes
+    setClasses cs mi = mi { classes = cs }
+
+data List ms = List_
+    { as :: [Feature ms] -> [View ms] -> View ms
+    , attributes :: [Feature ms]
+    , children :: [View ms]
+    , classes :: [Txt]
+    } deriving (Generic)
+
+instance Default (List ms) where
+    def = (G.to gdef) { as = Ul }
+
+pattern List :: List ms -> View ms
+pattern List ml = View ml
+
+instance Pure List ms where
+    render List_ {..} =
+        let
+            cs =
+                ( "list"
+                : classes
+                )
+        in
+            as
+                ( mergeClasses $ ClassList cs
+                : attributes
+                )
+                children
+
+instance HasAsProp (List ms) where
+    type AsProp (List ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs a ml = ml { as = a }
+
+instance HasAttributesProp (List ms) where
+    type Attribute (List ms) = Feature ms
+    getAttributes = attributes
+    setAttributes as ml = ml { attributes = as }
+
+instance HasChildrenProp (List ms) where
+    type Child (List ms) = View ms
+    getChildren = children
+    setChildren cs ml = ml { children = cs }
+
+instance HasClassesProp (List ms) where
+    getClasses = classes
+    setClasses cs ml = ml { classes = cs }
+

@@ -1,11 +1,9 @@
-module Semantic.Elements.Image (module Semantic.Elements.Image, module Export) where
+module Semantic.Elements.Image where
 
 import GHC.Generics as G
 import Pure.View as View hiding (disabled,hidden,inline,verticalAlign)
 
 import Semantic.Utils
-
-import Semantic.Elements.Image.ImageGroup as Export
 
 import Semantic.Properties as Properties
   ( HasAsProp(..), pattern As
@@ -164,3 +162,51 @@ instance HasVerticalAlignProp (Image ms) where
 instance HasWrappedProp (Image ms) where
     getWrapped = wrapped
     setWrapped w i = i { wrapped = w }
+
+data Group ms = Group_
+    { as :: [Feature ms] -> [View ms] -> View ms
+    , attributes :: [Feature ms]
+    , children :: [View ms]
+    , classes :: [Txt]
+    , size :: Txt
+    } deriving (Generic)
+
+instance Default (Group ms) where
+    def = (G.to gdef) { as = Div }
+
+pattern Group :: Group ms -> View ms
+pattern Group ig = View ig
+
+instance Pure Group ms where
+    render Group_ {..} =
+        let
+            cs =
+                ( "ui"
+                : size
+                : classes
+                ) ++ [ "images" ]
+        in 
+            as (mergeClasses $ ClassList cs : attributes) children
+
+instance HasAsProp (Group ms) where
+    type AsProp (Group ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs f ig = ig { as = f }
+
+instance HasAttributesProp (Group ms) where
+    type Attribute (Group ms) = Feature ms
+    getAttributes = attributes 
+    setAttributes cs ig = ig { attributes = cs }
+
+instance HasChildrenProp (Group ms) where
+    type Child (Group ms) = View ms
+    getChildren = children
+    setChildren cs ig = ig { children = cs }
+
+instance HasClassesProp (Group ms) where
+    getClasses = classes
+    setClasses cs ig = ig { classes = cs }
+
+instance HasSizeProp (Group ms) where
+    getSize = size
+    setSize s ig = ig { size = s }

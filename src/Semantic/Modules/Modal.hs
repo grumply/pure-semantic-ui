@@ -1,5 +1,5 @@
 {-# LANGUAGE UndecidableInstances #-}
-module Semantic.Modules.Modal (module Semantic.Modules.Modal, module Export) where
+module Semantic.Modules.Modal where
 
 import Data.IORef
 import Data.Maybe
@@ -35,12 +35,9 @@ import Semantic.Properties as Properties
   , HasSizeProp(..), pattern Size
   , HasStylesProp(..), pattern Styles
   , HasWithPortalProp(..), pattern WithPortal
+  , HasIsImageProp(..), pattern IsImage
+  , HasScrollingProp(..), pattern Scrolling
   )
-
-import Semantic.Modules.Modal.ModalActions as Export
-import Semantic.Modules.Modal.ModalContent as Export
-import Semantic.Modules.Modal.ModalDescription as Export
-import Semantic.Modules.Modal.ModalHeader as Export
 
 data Modal ms = Modal_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -310,3 +307,192 @@ instance HasTriggerProp (Modal ms) where
     type TriggerProp (Modal ms) = View ms
     getTrigger = trigger
     setTrigger t m = m { trigger = t }
+
+data Actions ms = Actions_
+    { as :: [Feature ms] -> [View ms] -> View ms
+    , attributes :: [Feature ms]
+    , children :: [View ms]
+    , classes :: [Txt]
+    } deriving (Generic)
+
+instance Default (Actions ms) where
+    def = (G.to gdef) { as = Div }
+
+pattern Actions :: Actions ms -> View ms
+pattern Actions ma = View ma
+
+instance Pure Actions ms where
+    render Actions_ {..} =
+        as
+            ( ClassList ( "actions" : classes )
+            : attributes
+            )
+            children
+
+instance HasAsProp (Actions ms) where
+    type AsProp (Actions ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs f ma = ma { as = f }
+
+instance HasAttributesProp (Actions ms) where
+    type Attribute (Actions ms) = Feature ms
+    getAttributes = attributes
+    setAttributes cs ma = ma { attributes = cs }
+
+instance HasChildrenProp (Actions ms) where
+    type Child (Actions ms) = View ms
+    getChildren = children
+    setChildren cs ma = ma { children = cs }
+
+instance HasClassesProp (Actions ms) where
+    getClasses = classes
+    setClasses cs ma = ma { classes = cs }
+
+data Content ms = Content_
+    { as :: [Feature ms] -> [View ms] -> View ms
+    , attributes :: [Feature ms]
+    , children :: [View ms]
+    , classes :: [Txt]
+    , image :: Bool
+    , scrolling :: Bool
+    } deriving (Generic)
+
+instance Default (Content ms) where
+    def = (G.to gdef) { as = Div }
+
+pattern Content :: Content ms -> View ms
+pattern Content mc = View mc
+
+instance Pure Content ms where
+    render Content_ {..} =
+        let
+            cs = classes ++
+                [ image # "image"
+                , scrolling # "scrolling"
+                , "content"
+                ]
+
+        in
+            as
+                ( mergeClasses $ ClassList cs
+                : attributes
+                )
+                children
+
+instance HasAsProp (Content ms) where
+    type AsProp (Content ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs f mc = mc { as = f }
+
+instance HasAttributesProp (Content ms) where
+    type Attribute (Content ms) = Feature ms
+    getAttributes = attributes
+    setAttributes cs mc = mc { attributes = cs }
+
+instance HasChildrenProp (Content ms) where
+    type Child (Content ms) = View ms
+    getChildren = children
+    setChildren cs mc = mc { children = cs }
+
+instance HasClassesProp (Content ms) where
+    getClasses = classes
+    setClasses cs mc = mc { classes = cs }
+
+instance HasIsImageProp (Content ms) where
+    getIsImage = image
+    setIsImage ii mc = mc { image = ii }
+
+instance HasScrollingProp (Content ms) where
+    getScrolling = scrolling
+    setScrolling s mc = mc { scrolling = s }
+
+data Description ms = Description_
+    { as :: [Feature ms] -> [View ms] -> View ms
+    , attributes :: [Feature ms]
+    , children :: [View ms]
+    , classes :: [Txt]
+    } deriving (Generic)
+
+instance Default (Description ms) where
+    def = (G.to gdef) { as = Div }
+
+pattern Description :: Description ms -> View ms
+pattern Description md = View md
+
+instance Pure Description ms where
+    render Description_ {..} =
+        let
+            cs =
+                ( "description"
+                : classes
+                )
+
+        in
+            as
+                ( mergeClasses $ ClassList cs
+                : attributes
+                )
+                children
+
+instance HasAsProp (Description ms) where
+    type AsProp (Description ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs f md = md { as = f }
+
+instance HasAttributesProp (Description ms) where
+    type Attribute (Description ms) = Feature ms
+    getAttributes = attributes
+    setAttributes cs md = md { attributes = cs }
+
+instance HasChildrenProp (Description ms) where
+    type Child (Description ms) = View ms
+    getChildren = children
+    setChildren cs md = md { children = cs }
+
+instance HasClassesProp (Description ms) where
+    getClasses = classes
+    setClasses cs md = md { classes = cs }
+
+data Header ms = Header_
+    { as :: [Feature ms] -> [View ms] -> View ms
+    , attributes :: [Feature ms]
+    , children :: [View ms]
+    , classes :: [Txt]
+    } deriving (Generic)
+
+instance Default (Header ms) where
+    def = (G.to gdef) { as = Div }
+
+pattern Header :: Header ms -> View ms
+pattern Header mh = View mh
+
+instance Pure Header ms where
+    render Header_ {..} =
+        let
+            cs = classes <> [ "header" ]
+
+        in
+            as
+                ( mergeClasses $ ClassList cs
+                : attributes
+                )
+                children
+
+instance HasAsProp (Header ms) where
+    type AsProp (Header ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs f mh = mh { as = f }
+
+instance HasAttributesProp (Header ms) where
+    type Attribute (Header ms) = Feature ms
+    getAttributes = attributes
+    setAttributes cs mh = mh { attributes = cs }
+
+instance HasChildrenProp (Header ms) where
+    type Child (Header ms) = View ms
+    getChildren = children
+    setChildren cs mh = mh { children = cs }
+
+instance HasClassesProp (Header ms) where
+    getClasses = classes
+    setClasses cs mh = mh { classes = cs }

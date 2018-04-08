@@ -1,4 +1,4 @@
-module Semantic.Modules.Sidebar (module Semantic.Modules.Sidebar, module Export) where
+module Semantic.Modules.Sidebar where
 
 import Control.Concurrent
 import Data.IORef
@@ -17,10 +17,8 @@ import Semantic.Properties as Properties
   , HasVisibleProp(..), pattern Visible
   , HasWidthProp(..), pattern Width
   , HasAnimationDurationProp(..), pattern AnimationDuration, AnimationDuration(..)
+  , HasDimmedProp(..), pattern Dimmed
   )
-
-import Semantic.Modules.Sidebar.SidebarPusher as Export
-import Semantic.Modules.Sidebar.SidebarPushable as Export
 
 data Sidebar ms = Sidebar_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -35,9 +33,9 @@ data Sidebar ms = Sidebar_
     } deriving (Generic)
 
 instance Default (Sidebar ms) where
-    def = (G.to gdef) 
+    def = (G.to gdef)
         { as = Div
-        , direction = "left" 
+        , direction = "left"
         , duration = Uniform 500
         }
 
@@ -85,9 +83,9 @@ instance Pure Sidebar ms where
                             : classes
                             )
                     in
-                        as 
+                        as
                             ( mergeClasses $ ClassList cs
-                            : attributes 
+                            : attributes
                             )
                             children
                 }
@@ -99,7 +97,7 @@ instance HasAsProp (Sidebar ms) where
 
 instance HasAttributesProp (Sidebar ms) where
     type Attribute (Sidebar ms) = Feature ms
-    getAttributes = attributes 
+    getAttributes = attributes
     setAttributes cs sb = sb { attributes = cs }
 
 instance HasChildrenProp (Sidebar ms) where
@@ -131,3 +129,101 @@ instance HasWidthProp (Sidebar ms) where
     type WidthProp (Sidebar ms) = Txt
     getWidth = width
     setWidth w sb = sb { width = w }
+
+data Pushable ms = Pushable_
+    { as :: [Feature ms] -> [View ms] -> View ms
+    , attributes :: [Feature ms]
+    , children :: [View ms]
+    , classes :: [Txt]
+    } deriving (Generic)
+
+instance Default (Pushable ms) where
+    def = (G.to gdef) { as = Div }
+
+pattern Pushable :: Pushable ms -> View ms
+pattern Pushable sp = View sp
+
+instance Pure Pushable ms where
+    render Pushable_ {..} =
+        let
+            cs =
+                ( "pushable"
+                : classes
+                )
+        in
+            as
+                ( mergeClasses $ ClassList cs
+                : attributes
+                )
+                children
+
+instance HasAsProp (Pushable ms) where
+    type AsProp (Pushable ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs a sp = sp { as = a }
+
+instance HasAttributesProp (Pushable ms) where
+    type Attribute (Pushable ms) = Feature ms
+    getAttributes = attributes
+    setAttributes as sp = sp { attributes = as }
+
+instance HasChildrenProp (Pushable ms) where
+    type Child (Pushable ms) = View ms
+    getChildren = children
+    setChildren cs sp = sp { children = cs }
+
+instance HasClassesProp (Pushable ms) where
+    getClasses = classes
+    setClasses cs sp = sp { classes = cs }
+
+data Pusher ms = Pusher_
+    { as :: [Feature ms] -> [View ms] -> View ms
+    , attributes :: [Feature ms]
+    , children :: [View ms]
+    , classes :: [Txt]
+    , dimmed :: Bool
+    } deriving (Generic)
+
+instance Default (Pusher ms) where
+    def = (G.to gdef) { as = Div }
+
+pattern Pusher :: Pusher ms -> View ms
+pattern Pusher sp = View sp
+
+instance Pure Pusher ms where
+    render Pusher_ {..} =
+        let
+            cs =
+                ( "pusher"
+                : dimmed # "dimmed"
+                : classes
+                )
+        in
+            as
+                ( mergeClasses $ ClassList cs
+                : attributes
+                )
+                children
+
+instance HasAsProp (Pusher ms) where
+    type AsProp (Pusher ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs a sp = sp { as = a }
+
+instance HasAttributesProp (Pusher ms) where
+    type Attribute (Pusher ms) = Feature ms
+    getAttributes = attributes
+    setAttributes as sp = sp { attributes = as }
+
+instance HasChildrenProp (Pusher ms) where
+    type Child (Pusher ms) = View ms
+    getChildren = children
+    setChildren cs sp = sp { children = cs }
+
+instance HasClassesProp (Pusher ms) where
+    getClasses = classes
+    setClasses cs sp = sp { classes = cs }
+
+instance HasDimmedProp (Pusher ms) where
+    getDimmed = dimmed
+    setDimmed d sp = sp { dimmed = d }

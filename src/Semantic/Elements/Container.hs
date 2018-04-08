@@ -47,7 +47,7 @@ setTextContainer c =
 
 instance Pure Container ms where
     render Container_ {..} =
-        let cs = 
+        let cs =
               ( "ui"
               : text # "text"
               : fluid # "fluid"
@@ -64,7 +64,7 @@ instance HasAsProp (Container ms) where
 
 instance HasAttributesProp (Container ms) where
     type Attribute (Container ms) = Feature ms
-    getAttributes = attributes 
+    getAttributes = attributes
     setAttributes cs c = c { attributes = cs }
 
 instance HasChildrenProp (Container ms) where

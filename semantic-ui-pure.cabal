@@ -45,156 +45,55 @@ library
     -- END EXTENSIONS
 
   exposed-modules:
-    Semantic
-    Semantic.Addons
     Semantic.Addons.Confirm
     Semantic.Addons.Portal
     Semantic.Addons.Proxy
     Semantic.Addons.Responsive
     Semantic.Addons.TextArea
     Semantic.Addons.TransitionablePortal
-    Semantic.Behaviors
     Semantic.Behaviors.Visibility
-    Semantic.Collections
     Semantic.Collections.Breadcrumb
-    Semantic.Collections.Breadcrumb.BreadcrumbDivider
-    Semantic.Collections.Breadcrumb.BreadcrumbSection
     Semantic.Collections.Form
-    Semantic.Collections.Form.FormField
-    Semantic.Collections.Form.FormGroup
     Semantic.Collections.Grid
-    Semantic.Collections.Grid.GridColumn
-    Semantic.Collections.Grid.GridRow
     Semantic.Collections.Menu
-    Semantic.Collections.Menu.MenuHeader
-    Semantic.Collections.Menu.MenuItem
-    Semantic.Collections.Menu.MenuMenu
     Semantic.Collections.Message
-    Semantic.Collections.Message.MessageContent
-    Semantic.Collections.Message.MessageHeader
-    Semantic.Collections.Message.MessageItem
-    Semantic.Collections.Message.MessageList
     Semantic.Collections.Table
-    Semantic.Collections.Table.TableBody
-    Semantic.Collections.Table.TableCell
-    Semantic.Collections.Table.TableFooter
-    Semantic.Collections.Table.TableHeader
-    Semantic.Collections.Table.TableHeaderCell
-    Semantic.Collections.Table.TableRow
-    Semantic.Elements
     Semantic.Elements.Button
-    Semantic.Elements.Button.ButtonContent
-    Semantic.Elements.Button.ButtonGroup
-    Semantic.Elements.Button.ButtonOr
     Semantic.Elements.Container
     Semantic.Elements.Divider
     Semantic.Elements.Flag
     Semantic.Elements.Header
-    Semantic.Elements.Header.HeaderContent
-    Semantic.Elements.Header.HeaderSubheader
     Semantic.Elements.Icon
-    Semantic.Elements.Icon.IconGroup
     Semantic.Elements.Image
-    Semantic.Elements.Image.ImageGroup
     Semantic.Elements.Input
-    Semantic.Elements.KeyedList
     Semantic.Elements.Label
-    Semantic.Elements.Label.LabelDetail
-    Semantic.Elements.Label.LabelGroup
     Semantic.Elements.List
-    Semantic.Elements.List.ListContent
-    Semantic.Elements.List.ListDescription
-    Semantic.Elements.List.ListHeader
-    Semantic.Elements.List.ListIcon
-    Semantic.Elements.List.ListItem
-    Semantic.Elements.List.ListList
     Semantic.Elements.Loader
     Semantic.Elements.Rail
     Semantic.Elements.Reveal
     Semantic.Elements.Segment
-    Semantic.Elements.Segment.SegmentGroup
     Semantic.Elements.Step
-    Semantic.Elements.Step.StepContent
-    Semantic.Elements.Step.StepDescription
-    Semantic.Elements.Step.StepGroup
-    Semantic.Elements.Step.StepTitle
     Semantic.Modules.Accordion
-    Semantic.Modules.Accordion.AccordionAccordion
-    Semantic.Modules.Accordion.AccordionContent
-    Semantic.Modules.Accordion.AccordionTitle
     Semantic.Modules.Checkbox
     Semantic.Modules.Dimmer
-    Semantic.Modules.Dimmer.DimmerDimmable
     Semantic.Modules.Dropdown
-    Semantic.Modules.Dropdown.DropdownDivider
-    Semantic.Modules.Dropdown.DropdownHeader
-    Semantic.Modules.Dropdown.DropdownItem
-    Semantic.Modules.Dropdown.DropdownMenu
-    Semantic.Modules.Dropdown.DropdownSearchInput
     Semantic.Modules.Embed
     Semantic.Modules.Modal
-    Semantic.Modules.Modal.ModalActions
-    Semantic.Modules.Modal.ModalContent
-    Semantic.Modules.Modal.ModalDescription
-    Semantic.Modules.Modal.ModalHeader
     Semantic.Modules.Popup
-    Semantic.Modules.Popup.PopupContent
-    Semantic.Modules.Popup.PopupHeader
     Semantic.Modules.Progress
     Semantic.Modules.Rating
-    Semantic.Modules.Rating.RatingIcon
     Semantic.Modules.Search
-    Semantic.Modules.Search.SearchCategory
-    Semantic.Modules.Search.SearchResult
-    Semantic.Modules.Search.SearchResults
     Semantic.Modules.Sidebar
-    Semantic.Modules.Sidebar.SidebarPushable
-    Semantic.Modules.Sidebar.SidebarPusher
     Semantic.Modules.Sticky
     Semantic.Modules.Tab
-    Semantic.Modules.Tab.TabPane
     Semantic.Modules.Transition
-    Semantic.Modules.Transition.TransitionGroup
     Semantic.Properties
     Semantic.Utils
-    Semantic.Views
     Semantic.Views.Advertisement
     Semantic.Views.Card
-    Semantic.Views.Card.CardContent
-    Semantic.Views.Card.CardDescription
-    Semantic.Views.Card.CardGroup
-    Semantic.Views.Card.CardHeader
-    Semantic.Views.Card.CardMeta
     Semantic.Views.Comment
-    Semantic.Views.Comment.CommentAction
-    Semantic.Views.Comment.CommentActions
-    Semantic.Views.Comment.CommentAuthor
-    Semantic.Views.Comment.CommentAvatar
-    Semantic.Views.Comment.CommentContent
-    Semantic.Views.Comment.CommentGroup
-    Semantic.Views.Comment.CommentMetadata
-    Semantic.Views.Comment.CommentText
     Semantic.Views.Feed
-    Semantic.Views.Feed.FeedContent
-    Semantic.Views.Feed.FeedDate
-    Semantic.Views.Feed.FeedEvent
-    Semantic.Views.Feed.FeedExtra
-    Semantic.Views.Feed.FeedLabel
-    Semantic.Views.Feed.FeedLike
-    Semantic.Views.Feed.FeedMeta
-    Semantic.Views.Feed.FeedSummary
-    Semantic.Views.Feed.FeedUser
     Semantic.Views.Item
-    Semantic.Views.Item.ItemContent
-    Semantic.Views.Item.ItemDescription
-    Semantic.Views.Item.ItemExtra
-    Semantic.Views.Item.ItemGroup
-    Semantic.Views.Item.ItemHeader
-    Semantic.Views.Item.ItemImage
-    Semantic.Views.Item.ItemMeta
     Semantic.Views.Statistic
-    Semantic.Views.Statistic.StatisticGroup
-    Semantic.Views.Statistic.StatisticLabel
-    Semantic.Views.Statistic.StatisticValue
 
   default-language: Haskell2010

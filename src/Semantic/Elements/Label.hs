@@ -1,4 +1,4 @@
-module Semantic.Elements.Label (module Semantic.Elements.Label, module Export) where
+module Semantic.Elements.Label where
 
 import GHC.Generics as G
 import Pure.View as View hiding (active,color,empty,horizontal,onClick)
@@ -6,10 +6,7 @@ import qualified Pure.View as HTML
 
 import Semantic.Utils
 
-import Semantic.Elements.Label.LabelDetail as Export
-import Semantic.Elements.Label.LabelGroup as Export
-
-import Semantic.Elements.Image
+import Semantic.Elements.Image (Image(..))
 
 import Semantic.Properties as Properties
   ( HasActiveProp(..), pattern Active
@@ -72,7 +69,7 @@ instance Pure Label ms where
 
             hasImage =
                 foldPures (\(Image_ {}) -> const True) False children
-            
+
             cs =
                 ( "ui"
                 : color
@@ -93,7 +90,7 @@ instance Pure Label ms where
                 : classes
                 )
         in
-            as 
+            as
                 ( mergeClasses $ ClassList cs
                 : onClick # HTML.onClick onClick
                 : attributes
@@ -103,7 +100,7 @@ instance Pure Label ms where
 instance HasActiveProp (Label ms) where
     getActive = active
     setActive a l = l { active = a }
-            
+
 instance HasAsProp (Label ms) where
     type AsProp (Label ms) = [Feature ms] -> [View ms] -> View ms
     getAs = as
@@ -116,7 +113,7 @@ instance HasAttachedProp (Label ms) where
 
 instance HasAttributesProp (Label ms) where
     type Attribute (Label ms) = Feature ms
-    getAttributes = attributes 
+    getAttributes = attributes
     setAttributes cs l = l { attributes = cs }
 
 instance HasBasicProp (Label ms) where
@@ -177,3 +174,114 @@ instance HasSizeProp (Label ms) where
 instance HasTagProp (Label ms) where
     getTag = tag
     setTag t l = l { tag = t }
+
+data Detail ms = Detail_
+    { as :: [Feature ms] -> [View ms] -> View ms
+    , attributes :: [Feature ms]
+    , children :: [View ms]
+    , classes :: [Txt]
+    } deriving (Generic)
+
+instance Default (Detail ms) where
+    def = G.to gdef
+
+pattern Detail :: Detail ms -> View ms
+pattern Detail ld = View ld
+
+instance Pure Detail ms where
+    render Detail_ {..} =
+        as
+            ( ClassList ("detail" : classes)
+            : attributes
+            )
+            children
+
+instance HasAsProp (Detail ms) where
+    type AsProp (Detail ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs f ld = ld { as = f }
+
+instance HasAttributesProp (Detail ms) where
+    type Attribute (Detail ms) = Feature ms
+    getAttributes = attributes
+    setAttributes cs ld = ld { attributes = cs }
+
+instance HasChildrenProp (Detail ms) where
+    type Child (Detail ms) = View ms
+    getChildren = children
+    setChildren cs ld = ld { children = cs }
+
+instance HasClassesProp (Detail ms) where
+    getClasses = classes
+    setClasses cs ld = ld { classes = cs }
+
+data Group ms = Group_
+    { as :: [Feature ms] -> [View ms] -> View ms
+    , attributes :: [Feature ms]
+    , children :: [View ms]
+    , circular :: Bool
+    , classes :: [Txt]
+    , color :: Txt
+    , size :: Txt
+    , tag :: Bool
+    } deriving (Generic)
+
+instance Default (Group ms) where
+    def = (G.to gdef) { as = Div }
+
+pattern Group :: Group ms -> View ms
+pattern Group lg = View lg
+
+instance Pure Group ms where
+    render Group_ {..} =
+        let
+            cs =
+                ( "ui"
+                : color
+                : size
+                : circular # "circular"
+                : tag # "tag"
+                : "labels"
+                : classes
+                )
+        in
+            as
+                ( mergeClasses $ ClassList cs
+                : attributes
+                )
+                children
+
+instance HasAsProp (Group ms) where
+    type AsProp (Group ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs f lg = lg { as = f }
+
+instance HasAttributesProp (Group ms) where
+    type Attribute (Group ms) = Feature ms
+    getAttributes = attributes
+    setAttributes cs lg = lg { attributes = cs }
+
+instance HasChildrenProp (Group ms) where
+    type Child (Group ms) = View ms
+    getChildren = children
+    setChildren cs lg = lg { children = cs }
+
+instance HasCircularProp (Group ms) where
+    getCircular = circular
+    setCircular c lg = lg { circular = c }
+
+instance HasClassesProp (Group ms) where
+    getClasses = classes
+    setClasses cs lg = lg { classes = cs }
+
+instance HasColorProp (Group ms) where
+    getColor = color
+    setColor c lg = lg { color = c }
+
+instance HasSizeProp (Group ms) where
+    getSize = size
+    setSize s lg = lg { size = s }
+
+instance HasTagProp (Group ms) where
+    getTag = tag
+    setTag t lg = lg { tag = t }

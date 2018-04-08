@@ -1,11 +1,9 @@
-module Semantic.Elements.Segment (module Semantic.Elements.Segment, module Export) where
+module Semantic.Elements.Segment where
 
 import GHC.Generics as G
-import Pure.View hiding (color,disabled,textAlign,vertical)
+import Pure.View hiding (color,disabled,textAlign,vertical,horizontal)
 
 import Semantic.Utils
-
-import Semantic.Elements.Segment.SegmentGroup as Export
 
 import Semantic.Properties as Properties
   ( HasAsProp(..), pattern As
@@ -31,6 +29,7 @@ import Semantic.Properties as Properties
   , HasTertiaryProp(..), pattern Tertiary
   , HasTextAlignProp(..), pattern TextAlign
   , HasVerticalProp(..), pattern Vertical
+  , HasHorizontalProp(..), pattern Horizontal
   )
 
 data Segment ms = Segment_
@@ -194,3 +193,86 @@ instance HasTextAlignProp (Segment ms) where
 instance HasVerticalProp (Segment ms) where
     getVertical = vertical
     setVertical v s = s { vertical = v }
+
+data Group ms = Group_
+    { as :: [Feature ms] -> [View ms] -> View ms
+    , attributes :: [Feature ms]
+    , children :: [View ms]
+    , classes :: [Txt]
+    , compact :: Bool
+    , horizontal :: Bool
+    , piled :: Bool
+    , raised :: Bool
+    , size :: Txt
+    , stacked :: Bool
+    } deriving (Generic)
+
+instance Default (Group ms) where
+    def = (G.to gdef) { as = Div }
+
+pattern Group :: Group ms -> View ms
+pattern Group sg = View sg
+
+instance Pure Group ms where
+    render Group_ {..} =
+        let
+            cs =
+                ( "ui"
+                : size
+                : compact # "compact"
+                : horizontal # "horizontal"
+                : piled # "piled"
+                : raised # "raised"
+                : stacked # "stacked"
+                : "segments"
+                : classes
+                )
+        in
+            as
+                ( mergeClasses $ ClassList cs
+                : attributes
+                )
+                children
+
+instance HasAsProp (Group ms) where
+    type AsProp (Group ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs a sg = sg { as = a }
+
+instance HasAttributesProp (Group ms) where
+    type Attribute (Group ms) = Feature ms
+    getAttributes = attributes
+    setAttributes as sg = sg { attributes = as }
+
+instance HasChildrenProp (Group ms) where
+    type Child (Group ms) = View ms
+    getChildren = children
+    setChildren cs sg = sg { children = cs }
+
+instance HasClassesProp (Group ms) where
+    getClasses = classes
+    setClasses cs sg = sg { classes = cs }
+
+instance HasCompactProp (Group ms) where
+    getCompact = compact
+    setCompact c sg = sg { compact = c }
+
+instance HasHorizontalProp (Group ms) where
+    getHorizontal = horizontal
+    setHorizontal h sg = sg { horizontal = h }
+
+instance HasPiledProp (Group ms) where
+    getPiled = piled
+    setPiled p sg = sg { piled = p }
+
+instance HasRaisedProp (Group ms) where
+    getRaised = raised
+    setRaised r sg = sg { raised = r }
+
+instance HasSizeProp (Group ms) where
+    getSize = size
+    setSize s sg = sg { size = s }
+
+instance HasStackedProp (Group ms) where
+    getStacked = stacked
+    setStacked s sg = sg { stacked = s }

@@ -1,7 +1,8 @@
-module Semantic.Modules.Search (module Semantic.Modules.Search, module Export) where
+module Semantic.Modules.Search where
 
+import Control.Arrow ((&&&))
 import GHC.Generics as G
-import Pure.View hiding (onFocus,onBlur)
+import Pure.View hiding (onFocus,onBlur,name,active,Result,onClick)
 
 import Semantic.Utils
 
@@ -20,16 +21,16 @@ import Semantic.Properties as Properties
   , HasOnMouseDownProp(..), pattern OnMouseDown
   , HasOpenProp(..), pattern Open
   , HasSizeProp(..), pattern Size
+  , HasActiveProp(..), pattern Active
+  , HasNameProp(..), pattern Name
+  , HasResultsProp(..), pattern Results
+  , HasOnClickProp(..), pattern OnClick
   )
-
-import Semantic.Modules.Search.SearchCategory as Export
-import Semantic.Modules.Search.SearchResult as Export
-import Semantic.Modules.Search.SearchResults as Export
 
 {-
 Approaching this differently than Semantic-UI-React. Instead of managing
 everything internally, I want this to be a pure component that is maximally
-extensible so that customized managed search components can be built on top 
+extensible so that customized managed search components can be built on top
 of it without too much work. The Semantic-UI-React/search component should
 be implementable with this approach with this pure component as a core.
 
@@ -91,7 +92,7 @@ instance HasAsProp (Search ms) where
 
 instance HasAttributesProp (Search ms) where
     type Attribute (Search ms) = Feature ms
-    getAttributes = attributes 
+    getAttributes = attributes
     setAttributes cs s = s { attributes = cs }
 
 instance HasChildrenProp (Search ms) where
@@ -145,3 +146,181 @@ instance HasOpenProp (Search ms) where
 instance HasSizeProp (Search ms) where
     getSize = size
     setSize sz s = s { size = sz }
+
+data Category result ms = Category_
+    { as :: [Feature ms] -> [View ms] -> View ms
+    , attributes :: [Feature ms]
+    , children :: [View ms]
+    , classes :: [Txt]
+    , active :: Bool
+    , name :: Txt
+    , results :: [result]
+    , renderCategory :: Category result ms -> [View ms]
+    } deriving (Generic)
+
+instance Default (Category result ms) where
+    def = (G.to gdef)
+        { as = Div
+        , renderCategory = fromTxt . name
+        }
+
+pattern Category :: Typeable result => Category result ms -> View ms
+pattern Category sc = View sc
+
+instance Typeable result => Pure (Category result) ms where
+    render sc@Category_ {..} =
+        let
+            cs =
+                ( active # "active"
+                : "category"
+                : classes
+                )
+        in
+            as
+                ( mergeClasses $ ClassList cs
+                : attributes
+                )
+                ( Div [ ClassList [ "name" ] ] (renderCategory sc)
+                : children
+                )
+
+instance HasAsProp (Category result ms) where
+    type AsProp (Category result ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs f sc = sc { as = f }
+
+instance HasAttributesProp (Category result ms) where
+    type Attribute (Category result ms) = Feature ms
+    getAttributes = attributes
+    setAttributes cs sc = sc { attributes = cs }
+
+instance HasChildrenProp (Category result ms) where
+    type Child (Category result ms) = View ms
+    getChildren = children
+    setChildren cs sc = sc { children = cs }
+
+instance HasClassesProp (Category result ms) where
+    getClasses = classes
+    setClasses cs sc = sc { classes = cs }
+
+instance HasActiveProp (Category result ms) where
+    getActive = active
+    setActive a sc = sc { active = a }
+
+instance HasNameProp (Category result ms) where
+    getName = name
+    setName n sc = sc { name = n }
+
+instance HasResultsProp (Category result ms) where
+    type ResultsProp (Category result ms) = [result]
+    getResults = results
+    setResults rs sc = sc { results = rs }
+
+pattern RenderCategory :: (Category result ms -> [View ms]) -> Category result ms -> Category result ms
+pattern RenderCategory rsc sc <- (renderCategory &&& id -> (rsc,sc)) where
+    RenderCategory rsc sc = sc { renderCategory = rsc }
+
+data Result ms = Result_
+    { as :: [Feature ms] -> [View ms] -> View ms
+    , attributes :: [Feature ms]
+    , children :: [View ms]
+    , classes :: [Txt]
+    , active :: Bool
+    , onClick :: Ef ms IO ()
+    } deriving (Generic)
+
+instance Default (Result ms) where
+    def = (G.to gdef) { as = Div }
+
+pattern Result :: Result ms -> View ms
+pattern Result sr = View sr
+
+instance Pure Result ms where
+    render sr@Result_ {..} =
+        let
+            cs =
+                ( active # "active"
+                : "result"
+                : classes
+                )
+        in
+            as
+                ( mergeClasses $ ClassList cs 
+                : onClick # On "click" def (\_ -> return $ Just onClick)
+                : attributes
+                )
+                children
+
+instance HasAsProp (Result ms) where
+    type AsProp (Result ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs f sr = sr { as = f }
+
+instance HasAttributesProp (Result ms) where
+    type Attribute (Result ms) = Feature ms
+    getAttributes = attributes 
+    setAttributes cs sr = sr { attributes = cs }
+
+instance HasChildrenProp (Result ms) where
+    type Child (Result ms) = View ms
+    getChildren = children
+    setChildren cs sr = sr { children = cs }
+
+instance HasClassesProp (Result ms) where
+    getClasses = classes
+    setClasses cs sr = sr { classes = cs }
+
+instance HasActiveProp (Result ms) where
+    getActive = active
+    setActive a sr = sr { active = a }
+
+instance HasOnClickProp (Result ms) where
+    type OnClickProp (Result ms) = Ef ms IO ()
+    getOnClick = onClick
+    setOnClick oc sr = sr { onClick = oc }
+
+data Results ms = Results_ 
+    { as :: [Feature ms] -> [View ms] -> View ms
+    , attributes :: [Feature ms] 
+    , children :: [View ms]
+    , classes :: [Txt]
+    } deriving (Generic)
+
+instance Default (Results ms) where
+    def = (G.to gdef) { as = Div }
+
+pattern Results :: Results ms -> View ms
+pattern Results sr = View sr
+
+instance Pure Results ms where
+    render Results_ {..} =
+        let
+            cs = 
+                ( "results transition"
+                : classes
+                )
+        in
+            as
+                ( mergeClasses $ ClassList cs
+                : attributes
+                )
+                children
+
+instance HasAsProp (Results ms) where
+    type AsProp (Results ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs f sr = sr { as = f }
+
+instance HasAttributesProp (Results ms) where
+    type Attribute (Results ms) = Feature ms
+    getAttributes = attributes 
+    setAttributes cs sr = sr { attributes = cs }
+
+instance HasChildrenProp (Results ms) where
+    type Child (Results ms) = View ms
+    getChildren = children
+    setChildren cs sr = sr { children = cs }
+
+instance HasClassesProp (Results ms) where
+    getClasses = classes
+    setClasses cs sr = sr { classes = cs }

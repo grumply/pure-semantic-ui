@@ -1,7 +1,9 @@
-module Semantic.Modules.Dropdown (module Semantic.Modules.Dropdown, module Export) where
+module Semantic.Modules.Dropdown where
 
 import GHC.Generics as G
+import Pure.Lifted (JSV,Node(..),(.#))
 import Pure.View hiding (button,disabled,inline,onBlur,onClick,onFocus,simple)
+import qualified Pure.View as HTML
 
 import Semantic.Utils
 
@@ -35,20 +37,20 @@ import Semantic.Properties as Properties
   , HasScrollingProp(..), pattern Scrolling
   , HasTabIndexProp(..), pattern TabIndex
   , HasUpwardProp(..), pattern Upward
+  , HasActiveProp(..), pattern Active
+  , HasSelectedProp(..), pattern Selected
+  , HasInputRefProp(..), pattern InputRef
+  , HasTabIndexProp(..), pattern TabIndex
+  , HasTypeProp(..), pattern Type
+  , HasValueProp(..), pattern Value
   )
-
-import Semantic.Modules.Dropdown.DropdownDivider as Export
-import Semantic.Modules.Dropdown.DropdownHeader as Export
-import Semantic.Modules.Dropdown.DropdownItem as Export
-import Semantic.Modules.Dropdown.DropdownMenu as Export
-import Semantic.Modules.Dropdown.DropdownSearchInput as Export
 
 import Prelude hiding (error)
 
 {-
 Approaching this differently than Semantic-UI-React. Instead of managing
 everything internally, I want this to be a pure component that is maximally
-extensible so that customized dropdown components can be built on top 
+extensible so that customized dropdown components can be built on top
 of it without too much work. The Semantic-UI-React/dropdown component should
 be implementable with this approach with this pure component as a core.
 
@@ -99,7 +101,7 @@ pattern Select d = View (Selection d)
 
 instance Pure Dropdown ms where
     render Dropdown_ {..} =
-        let 
+        let
             cs =
                 ( "ui"
                 : open # "active visible"
@@ -143,7 +145,7 @@ instance HasAsProp (Dropdown ms) where
 
 instance HasAttributesProp (Dropdown ms) where
     type Attribute (Dropdown ms) = Feature ms
-    getAttributes = attributes 
+    getAttributes = attributes
     setAttributes cs dd = dd { attributes = cs }
 
 instance HasChildrenProp (Dropdown ms) where
@@ -260,3 +262,277 @@ instance HasTabIndexProp (Dropdown ms) where
 instance HasUpwardProp (Dropdown ms) where
     getUpward = upward
     setUpward u dd = dd { upward = u }
+
+data Divider ms = Divider_
+    { as :: [Feature ms] -> [View ms] -> View ms
+    , attributes :: [Feature ms]
+    , classes :: [Txt]
+    } deriving (Generic)
+
+instance Default (Divider ms) where
+    def = (G.to gdef) { as = Div }
+
+pattern Divider :: Divider ms -> View ms
+pattern Divider dd = View dd
+
+instance Pure Divider ms where
+    render Divider_ {..} =
+        let
+            cs =
+                ( "divider"
+                : classes
+                )
+        in
+            as
+                ( mergeClasses $ ClassList cs
+                : attributes
+                )
+                []
+
+instance HasAsProp (Divider ms) where
+    type AsProp (Divider ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs f dd = dd { as = f }
+
+instance HasAttributesProp (Divider ms) where
+    type Attribute (Divider ms) = Feature ms
+    getAttributes = attributes
+    setAttributes cs dd = dd { attributes = cs }
+
+instance HasClassesProp (Divider ms) where
+    getClasses = classes
+    setClasses cs dd = dd { classes = cs }
+
+data Header ms = Header_
+    { as :: [Feature ms] -> [View ms] -> View ms
+    , attributes :: [Feature ms]
+    , children :: [View ms]
+    , classes :: [Txt]
+    } deriving (Generic)
+
+instance Default (Header ms) where
+    def = (G.to gdef) { as = Div }
+
+pattern Header :: Header ms -> View ms
+pattern Header dh = View dh
+
+instance Pure Header ms where
+    render Header_ {..} =
+        let
+            cs =
+                ( "header"
+                : classes
+                )
+        in
+            as
+                ( mergeClasses $ ClassList cs
+                : attributes
+                )
+                children
+
+instance HasAsProp (Header ms) where
+    type AsProp (Header ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs f dh = dh { as = f }
+
+instance HasAttributesProp (Header ms) where
+    type Attribute (Header ms) = Feature ms
+    getAttributes = attributes
+    setAttributes cs dh = dh { attributes = cs }
+
+instance HasChildrenProp (Header ms) where
+    type Child (Header ms) = View ms
+    getChildren = children
+    setChildren cs dh = dh { children = cs }
+
+instance HasClassesProp (Header ms) where
+    getClasses = classes
+    setClasses cs dh = dh { classes = cs }
+
+data Item ms = Item_
+    { as :: [Feature ms] -> [View ms] -> View ms
+    , attributes :: [Feature ms]
+    , children :: [View ms]
+    , classes :: [Txt]
+    , active :: Bool
+    , disabled :: Bool
+    , onClick :: Ef ms IO ()
+    , selected :: Bool
+    } deriving (Generic)
+
+instance Default (Item ms) where
+    def = (G.to gdef) { as = Div }
+
+pattern Item :: Item ms -> View ms
+pattern Item di = View di
+
+instance Pure (Item ) ms where
+    render di@Item_ {..} =
+        let
+            cs =
+                ( active # "active"
+                : disabled # "disabled"
+                : selected # "selected"
+                : "item"
+                : classes
+                )
+        in
+            as
+                ( mergeClasses $ ClassList cs
+                : onClick # On "click" def (\_ -> return $ Just onClick)
+                : Role "option"
+                : attributes
+                )
+                children
+
+instance HasAsProp (Item ms) where
+    type AsProp (Item ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs f di = di { as = f }
+
+instance HasAttributesProp (Item ms) where
+    type Attribute (Item ms) = Feature ms
+    getAttributes = attributes
+    setAttributes cs di = di { attributes = cs }
+
+instance HasChildrenProp (Item ms) where
+    type Child (Item ms) = View ms
+    getChildren = children
+    setChildren cs di = di { children = cs }
+
+instance HasClassesProp (Item ms) where
+    getClasses = classes
+    setClasses cs di = di { classes = cs }
+
+instance HasDisabledProp (Item ms) where
+    getDisabled = disabled
+    setDisabled d di = di { disabled = d }
+
+instance HasOnClickProp (Item ms) where
+    type OnClickProp (Item ms) = Ef ms IO ()
+    getOnClick = onClick
+    setOnClick oc di = di { onClick = oc }
+
+instance HasSelectedProp (Item ms) where
+    getSelected = selected
+    setSelected s di = di { selected = s }
+
+data Menu ms = Menu_
+    { as :: [Feature ms] -> [View ms] -> View ms
+    , attributes :: [Feature ms]
+    , children :: [View ms]
+    , classes :: [Txt]
+    , scrolling :: Bool
+    } deriving (Generic)
+
+instance Default (Menu ms) where
+    def = (G.to gdef) { as = Div }
+
+pattern Menu :: Menu ms -> View ms
+pattern Menu dm = View dm
+
+instance Pure Menu ms where
+    render Menu_ {..} =
+        let
+            cs =
+                ( scrolling # "scrolling"
+                : "menu transition"
+                : classes
+                )
+        in
+            as
+                ( mergeClasses $ ClassList cs
+                : attributes
+                )
+                children
+
+instance HasAsProp (Menu ms) where
+    type AsProp (Menu ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs f dm = dm { as = f }
+
+instance HasAttributesProp (Menu ms) where
+    type Attribute (Menu ms) = Feature ms
+    getAttributes = attributes
+    setAttributes cs dm = dm { attributes = cs }
+
+instance HasChildrenProp (Menu ms) where
+    type Child (Menu ms) = View ms
+    getChildren = children
+    setChildren cs dm = dm { children = cs }
+
+instance HasClassesProp (Menu ms) where
+    getClasses = classes
+    setClasses cs dm = dm { classes = cs }
+
+instance HasScrollingProp (Menu ms) where
+    getScrolling = scrolling
+    setScrolling s dm = dm { scrolling = s }
+
+data SearchInput ms = SearchInput_
+    { attributes :: [Feature ms]
+    , classes :: [Txt]
+    , inputRef :: JSV -> Ef ms IO ()
+    , onChange :: Txt -> Ef ms IO ()
+    , tabIndex :: Maybe Int
+    , _type :: Txt
+    , value :: Txt
+    } deriving (Generic)
+
+instance Default (SearchInput ms) where
+    def = (G.to gdef) { _type = "text" }
+
+pattern SearchInput :: SearchInput ms -> View ms
+pattern SearchInput dh = View dh
+
+instance Pure SearchInput ms where
+    render SearchInput_ {..} =
+        let
+            handleChange = return . fmap onChange . ((.# "target") >=> (.# "value")) . evtObj
+
+            cs =
+                ( "search"
+                : classes
+                )
+        in
+            Input
+                ( HTML.Value value
+                : On "change" def handleChange
+                : HostRef (\(Node n) -> return . Just $ inputRef n)
+                : may Tabindex tabIndex
+                : HTML.Type _type
+                : Attribute "autoComplete" "off"
+                : mergeClasses (ClassList cs : attributes)
+                )
+                []
+
+instance HasAttributesProp (SearchInput ms) where
+    type Attribute (SearchInput ms) = Feature ms
+    getAttributes = attributes
+    setAttributes cs dsi = dsi { attributes = cs }
+
+instance HasClassesProp (SearchInput ms) where
+    getClasses = classes
+    setClasses cs dsi = dsi { classes = cs }
+
+instance HasInputRefProp (SearchInput ms) where
+    type InputRefProp (SearchInput ms) = JSV -> Ef ms IO ()
+    getInputRef = inputRef
+    setInputRef ir dsi = dsi { inputRef = ir }
+
+instance HasOnChangeProp (SearchInput ms) where
+    type OnChangeProp (SearchInput ms) = Txt -> Ef ms IO ()
+    getOnChange = onChange
+    setOnChange oc dsi = dsi { onChange = oc }
+
+instance HasTabIndexProp (SearchInput ms) where
+    getTabIndex = tabIndex
+    setTabIndex ti dsi = dsi { tabIndex = ti }
+
+instance HasTypeProp (SearchInput ms) where
+    getType = _type
+    setType t dsi = dsi { _type = t }
+
+instance HasValueProp (SearchInput ms) where
+    getValue = value
+    setValue v dsi = dsi { value = v }

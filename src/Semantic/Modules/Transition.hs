@@ -1,15 +1,19 @@
+{-# LANGUAGE UndecidableInstances #-}
 module Semantic.Modules.Transition where
 
 import Control.Concurrent
 import Data.IORef
 import Data.Maybe
 import GHC.Generics as G
-import Pure.View hiding (animation,onComplete,visible)
+import Pure.View hiding (animation,onComplete,visible,lookup)
 
 import Semantic.Utils
 
 import Semantic.Properties as Properties
-  ( HasChildrenProp(..), pattern Children
+  ( HasAsProp(..), pattern As
+  , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
+  , HasClassesProp(..), pattern Classes
   , HasAnimationProp(..), pattern Animation
   , HasAnimationDurationProp(..), pattern AnimationDuration
   , HasVisibleProp(..), pattern Visible
@@ -257,3 +261,104 @@ instance HasTransitionOnMountProp (Transition ms) where
 instance HasUnmountOnHideProp (Transition ms) where
     getUnmountOnHide = unmountOnHide
     setUnmountOnHide uoh t = t { unmountOnHide = uoh }
+
+data Group ms = Group_
+    { as :: [Feature ms] -> [(Int,View ms)] -> View ms
+    , attributes :: [Feature ms]
+    , children :: [(Int,View ms)]
+    , classes :: [Txt]
+    , animation :: Txt
+    , duration :: AnimationDuration
+    } deriving (Generic)
+
+instance Default (Group ms) where
+    def = (G.to gdef :: Group ms)
+        { as = list Div
+        , animation = "fade"
+        , duration = Uniform 500
+        }
+
+pattern Group :: VC ms => Group ms -> View ms
+pattern Group tg = View tg
+
+data GroupState ms = TGS
+    { buffer :: [(Int,View ms)]
+    }
+
+instance VC ms => Pure Group ms where
+    render tg =
+        Component "Semantic.Modules.Transition.Group" tg $ \self ->
+            let
+                handleOnHide key _ =
+                    void $ setState self $ \_ TGS {..} ->
+                        TGS { buffer = filter ((/= key) . fst) buffer, .. }
+
+                wrapChild anim dur vis tom (key,child) =
+                    (key,Transition def
+                        { animation = anim
+                        , duration = dur
+                        , transitionOnMount = tom
+                        , visible = vis
+                        , onHide = handleOnHide key
+                        , children = [ child ]
+                        }
+                    )
+
+                hide (View Transition_ {..}) = View Transition_ { visible = False, .. }
+
+                fromTransition (Just (View t@Transition_ {})) f = Just (f t)
+                fromTransition _ _ = Nothing
+
+            in def
+                { construct = do
+                    tg@Group_ {..} <- getProps self
+                    return TGS
+                        { buffer = map (wrapChild animation duration True False) children
+                        }
+
+                , receiveProps = \Group_ { animation = anim, duration = dur, children = cs } TGS {..} -> return TGS
+                    { buffer = flip map (mergeMappings buffer cs) $ \(k,c) ->
+                        let prevChild = lookup k buffer
+                            hasPrev   = isJust prevChild
+                            hasNext   = isJust (lookup k cs)
+                            leaving   = fromMaybe False (fromTransition prevChild (not . visible))
+                            entering  = hasNext && (not hasPrev || leaving)
+                            exiting   = not hasNext && hasPrev && not leaving
+
+                        in if | entering  -> wrapChild anim dur True True (k,c)
+                              | exiting   -> (k,hide (fromJust prevChild))
+                              | otherwise -> fromJust $ fromTransition prevChild $ \Transition_ {..} ->
+                                                 wrapChild anim dur visible transitionOnMount (k,c)
+
+                    , ..
+                    }
+
+                , renderer = \Group_ {..} TGS {..} -> as attributes buffer
+                }
+
+instance HasAsProp (Group ms) where
+    type AsProp (Group ms) = [Feature ms] -> [(Int,View ms)] -> View ms
+    getAs = as
+    setAs a tg = tg { as = a }
+
+instance HasAttributesProp (Group ms) where
+    type Attribute (Group ms) = Feature ms
+    getAttributes = attributes
+    setAttributes as tg = tg { attributes = as }
+
+instance HasChildrenProp (Group ms) where
+    type Child (Group ms) = (Int,View ms)
+    getChildren = children
+    setChildren cs tg = tg { children = cs }
+
+instance HasClassesProp (Group ms) where
+    getClasses = classes
+    setClasses cs tg = tg { classes = cs }
+
+instance HasAnimationProp (Group ms) where
+    getAnimation = animation
+    setAnimation a tg = tg { animation = a }
+
+instance HasAnimationDurationProp (Group ms) where
+    getAnimationDuration = duration
+    setAnimationDuration d tg = tg { duration = d }

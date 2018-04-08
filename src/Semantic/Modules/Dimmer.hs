@@ -1,5 +1,5 @@
 {-# LANGUAGE UndecidableInstances #-}
-module Semantic.Modules.Dimmer (module Semantic.Modules.Dimmer, module Export) where
+module Semantic.Modules.Dimmer where
 
 import Data.IORef
 import GHC.Generics as G
@@ -28,9 +28,9 @@ import Semantic.Properties as Properties
   , HasInvertedProp(..), pattern Inverted
   , HasPageProp(..), pattern Page
   , HasSimpleProp(..), pattern Simple
+  , HasBlurringProp(..), pattern Blurring
+  , HasDimmedProp(..), pattern Dimmed
   )
-
-import Semantic.Modules.Dimmer.DimmerDimmable as Export
 
 data Dimmer ms = Dimmer_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -85,7 +85,7 @@ instance VC ms => Pure Dimmer ms where
                     { construct = do
                         centerRef <- newIORef Nothing
                         return centerRef
-                    , renderer = \Dimmer_ {..} _ -> 
+                    , renderer = \Dimmer_ {..} _ ->
                         let cs =
                                 ( "ui"
                                 : active # "active transition visible"
@@ -97,29 +97,29 @@ instance VC ms => Pure Dimmer ms where
                                 : classes
                                 )
 
-                            dimmer = 
-                                as 
+                            dimmer =
+                                as
                                     ( mergeClasses $ ClassList cs
                                     : On "click" def (return . Just . handleClick)
                                     : attributes
                                     )
                                     ( children # [
-                                        Div [ ClassList [ "content" ] ] 
-                                            [ Div [ ClassList [ "center" ], HostRef handleCenterRef ] 
+                                        Div [ ClassList [ "content" ] ]
+                                            [ Div [ ClassList [ "center" ], HostRef handleCenterRef ]
                                                 children
-                                            ] 
+                                            ]
                                         ]
                                     )
 
                         in if page
-                            then Portal $ def 
-                                    & NoCloseOnEscape & NoCloseOnDocumentClick & NoOpenOnTriggerClick 
-                                    & OnMount handlePortalMount & OnUnmount handlePortalUnmount 
+                            then Portal $ def
+                                    & NoCloseOnEscape & NoCloseOnDocumentClick & NoOpenOnTriggerClick
+                                    & OnMount handlePortalMount & OnUnmount handlePortalUnmount
                                     & Open active
                                     & Children [ dimmer ]
                             else dimmer
                     }
- 
+
 instance HasAsProp (Dimmer ms) where
     type AsProp (Dimmer ms) = [Feature ms] -> [View ms] -> View ms
     getAs = as
@@ -168,3 +168,61 @@ instance HasPageProp (Dimmer ms) where
 instance HasSimpleProp (Dimmer ms) where
     getSimple = simple
     setSimple s d = d { simple = s }
+
+data Dimmable ms = Dimmable_
+    { as :: [Feature ms] -> [View ms] -> View ms
+    , attributes :: [Feature ms]
+    , children :: [View ms]
+    , classes :: [Txt]
+    , blurring :: Bool
+    , dimmed :: Bool
+    } deriving (Generic)
+
+instance Default (Dimmable ms) where
+    def = (G.to gdef) { as = Div }
+
+pattern Dimmable :: Dimmable ms -> View ms
+pattern Dimmable dd = View dd
+
+instance Pure Dimmable ms where
+    render Dimmable_ {..} =
+        let
+            cs =
+                ( blurring # "blurring"
+                : dimmed # "dimmed"
+                : "dimmable"
+                : classes
+                )
+        in
+            as
+                ( mergeClasses $ ClassList cs
+                : attributes
+                )
+                children
+
+instance HasAsProp (Dimmable ms) where
+    type AsProp (Dimmable ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs a dd = dd { as = a }
+
+instance HasAttributesProp (Dimmable ms) where
+    type Attribute (Dimmable ms) = Feature ms
+    getAttributes = attributes
+    setAttributes as dd = dd { attributes = as }
+
+instance HasChildrenProp (Dimmable ms) where
+    type Child (Dimmable ms) = View ms
+    getChildren = children
+    setChildren cs dd = dd { children = cs }
+
+instance HasClassesProp (Dimmable ms) where
+    getClasses = classes
+    setClasses cs dd = dd { classes = cs }
+
+instance HasBlurringProp (Dimmable ms) where
+    getBlurring = blurring
+    setBlurring b dd = dd { blurring = b }
+
+instance HasDimmedProp (Dimmable ms) where
+    getDimmed = dimmed
+    setDimmed d dd = dd { dimmed = d }

@@ -1,12 +1,15 @@
-module Semantic.Collections.Breadcrumb (module Semantic.Collections.Breadcrumb, module Export) where
+module Semantic.Collections.Breadcrumb
+  ( module Properties
+  , module Tools
+  , Breadcrumb(..), pattern Breadcrumb
+  , Divider(..), pattern Divider
+  , Section(..), pattern Section
+  ) where
 
 import GHC.Generics as G
-import Pure.View hiding ((!),Ref,name)
+import Pure.View hiding ((!),Ref,name,active,onClick,Section)
 
 import Semantic.Utils
-
-import Semantic.Collections.Breadcrumb.BreadcrumbDivider as Export
-import Semantic.Collections.Breadcrumb.BreadcrumbSection as Export
 
 import Semantic.Properties ((!))
 
@@ -18,6 +21,10 @@ import Semantic.Properties as Properties
   , HasChildrenProp(..), pattern Children
   , HasClassesProp(..), pattern Classes
   , HasSizeProp(..), pattern Size
+  , HasActiveProp(..), pattern Active
+  , HasRefProp(..), pattern Ref
+  , HasLinkProp(..), pattern Link
+  , HasOnClickProp(..), pattern OnClick
   )
 
 import Semantic.Properties (HasRefProp(..),pattern Ref,HasActiveProp(..),pattern Active)
@@ -49,7 +56,7 @@ instance Pure Breadcrumb ms where
                 : classes
                 )
         in
-            as 
+            as
                 ( mergeClasses $ ClassList cs
                 : attributes
                 )
@@ -78,31 +85,120 @@ instance HasSizeProp (Breadcrumb ms) where
     getSize = size
     setSize sz bc = bc { size = sz }
 
--- | Shorthand for producing a breadcrumb trail from a list of crumbs and links.
---
--- > breadcrumbs nil [("Home","/store"),("Sweets","/store/sweets")]
--- 
--- Produces: 
---
---   (def :: Breadcrumb ms) & Children 
---       [ BreadcrumbSection $ def 
---            |> Lref "/store" 
---            |> Children [ "Store" ]
---       , BreadcrumbDivider def
---       , BreadcrumbSection $ def 
---            |> Lref "/sweets" 
---            |> Children [ "Sweets" ]
---       ]
---
-breadcrumbs :: Bool -> [View ms] -> [([View ms],Txt)] -> Breadcrumb ms
-breadcrumbs activateLast divider = (def !)
-    . List.intersperse (BreadcrumbDivider $ def ! divider)
-    . crumbs
-  where
-      crumb :: ([View ms],Txt) -> BreadcrumbSection ms
-      crumb (bc,l)  = def ! bc & (l ? Ref (Lref l) $ id)
+data Divider ms = Divider_
+    { as         :: [Feature ms] -> [View ms] -> View ms
+    , attributes :: [Feature ms]
+    , children   :: [View ms]
+    , classes    :: [Txt]
+    } deriving (Generic)
 
-      crumbs []     = nil
-      crumbs [x]    = [ BreadcrumbSection $ Active activateLast (crumb x) ]
-      crumbs (x:xs) = BreadcrumbSection (crumb x) : crumbs xs
+instance Default (Divider ms) where
+    def = (G.to gdef) { as = Div }
 
+pattern Divider :: Divider ms -> View ms
+pattern Divider bcd = View bcd
+
+instance Pure Divider ms where
+    render Divider_ {..} =
+        let
+            cs =
+                ( "divider"
+                : classes
+                )
+        in
+            as
+                ( mergeClasses $ ClassList cs
+                : attributes
+                )
+                (children ? children $ "/")
+
+instance HasAsProp (Divider ms) where
+    type AsProp (Divider ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs a bcd = bcd { as = a }
+
+instance HasAttributesProp (Divider ms) where
+    type Attribute (Divider ms) = Feature ms
+    getAttributes = attributes
+    setAttributes as bcd = bcd { attributes = as }
+
+instance HasChildrenProp (Divider ms) where
+    type Child (Divider ms) = View ms
+    getChildren = children
+    setChildren cs bcd = bcd { children = cs }
+
+instance HasClassesProp (Divider ms) where
+    getClasses = classes
+    setClasses cs bcd = bcd { classes = cs }
+
+data Section ms = Section_
+    { as         :: [Feature ms] -> [View ms] -> View ms
+    , attributes :: [Feature ms]
+    , children   :: [View ms]
+    , classes    :: [Txt]
+    , active     :: Bool
+    , ref        :: Feature ms
+    , link       :: Bool
+    , onClick    :: Ef ms IO ()
+    } deriving (Generic)
+
+instance Default (Section ms) where
+    def = (G.to gdef) { as = Div }
+
+pattern Section :: Section ms -> View ms
+pattern Section bcs = View bcs
+
+instance Pure Section ms where
+    render Section_ {..} =
+        let
+            e = link ? A $ ref ? A $ as
+            cs =
+                ( active # "active"
+                : "section"
+                : classes
+                )
+        in
+            e
+                ( mergeClasses $ ClassList cs
+                : ref
+                : onClick # (On "click" def (\_ -> return $ Just onClick))
+                : attributes
+                )
+                children
+
+instance HasAsProp (Section ms) where
+    type AsProp (Section ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs a bcs = bcs { as = a }
+
+instance HasAttributesProp (Section ms) where
+    type Attribute (Section ms) = Feature ms
+    getAttributes = attributes
+    setAttributes as bcs = bcs { attributes = as }
+
+instance HasChildrenProp (Section ms) where
+    type Child (Section ms) = View ms
+    getChildren = children
+    setChildren cs bcs = bcs { children = cs }
+
+instance HasClassesProp (Section ms) where
+    getClasses = classes
+    setClasses cs bcs = bcs { classes = cs }
+
+instance HasActiveProp (Section ms) where
+    getActive = active
+    setActive a bcs = bcs { active = a }
+
+instance HasRefProp (Section ms) where
+    type RefProp (Section ms) = Feature ms
+    getRef = ref
+    setRef r bcs = bcs { ref = r }
+
+instance HasLinkProp (Section ms) where
+    getLink = link
+    setLink l bcs = bcs { link = l }
+
+instance HasOnClickProp (Section ms) where
+    type OnClickProp (Section ms) = Ef ms IO ()
+    getOnClick = onClick
+    setOnClick oc bcs = bcs { onClick = oc }

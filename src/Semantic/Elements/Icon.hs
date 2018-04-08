@@ -1,15 +1,14 @@
-module Semantic.Elements.Icon (module Semantic.Elements.Icon, module Export) where
+module Semantic.Elements.Icon where
 
 import GHC.Generics as G
 import Pure.View as View hiding (color,disabled,name)
 
 import Semantic.Utils
 
-import Semantic.Elements.Icon.IconGroup as Export
-
 import Semantic.Properties as Properties
   ( HasAsProp(..), pattern As
   , HasAttributesProp(..), pattern Attributes
+  , HasChildrenProp(..), pattern Children
   , HasBorderedProp(..), pattern Bordered
   , HasCircularProp(..), pattern Circular
   , HasClassesProp(..), pattern Classes
@@ -86,7 +85,7 @@ instance HasAsProp (Icon ms) where
 
 instance HasAttributesProp (Icon ms) where
     type Attribute (Icon ms) = Feature ms
-    getAttributes = attributes 
+    getAttributes = attributes
     setAttributes cs i = i { attributes = cs }
 
 instance HasBorderedProp (Icon ms) where
@@ -145,3 +144,50 @@ instance HasRotatedProp (Icon ms) where
 instance HasSizeProp (Icon ms) where
     getSize = size
     setSize s i = i { size = s }
+
+data Group ms = Group_
+    { as :: [Feature ms] -> [View ms] -> View ms
+    , children :: [View ms]
+    , classes :: [Txt]
+    , attributes :: [Feature ms]
+    , size :: Txt
+    } deriving (Generic)
+
+instance Default (Group ms) where
+    def = (G.to gdef) { as = I }
+
+pattern Group :: Group ms -> View ms
+pattern Group ig = View ig
+
+instance Pure Group ms where
+    render Group_ {..} =
+        let
+            cs =
+                ( size
+                : "icons"
+                : classes
+                )
+        in as (mergeClasses $ ClassList cs : attributes) children
+
+instance HasAsProp (Group ms) where
+    type AsProp (Group ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs f ig = ig { as = f }
+
+instance HasAttributesProp (Group ms) where
+    type Attribute (Group ms) = Feature ms
+    getAttributes = attributes
+    setAttributes cs ig = ig { attributes = cs }
+
+instance HasChildrenProp (Group ms) where
+    type Child (Group ms) = View ms
+    getChildren = children
+    setChildren cs ig = ig { children = cs }
+
+instance HasClassesProp (Group ms) where
+    getClasses = classes
+    setClasses cs ig = ig { classes = cs }
+
+instance HasSizeProp (Group ms) where
+    getSize = size
+    setSize s ig = ig { size = s }

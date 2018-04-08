@@ -1,4 +1,4 @@
-module Semantic.Elements.Header (module Semantic.Elements.Header, module Export) where
+module Semantic.Elements.Header where
 
 import GHC.Generics as G
 import Pure.View hiding (block,color,disabled,textAlign,Header)
@@ -8,9 +8,6 @@ import Semantic.Utils
 
 import Semantic.Elements.Icon
 import Semantic.Elements.Image
-
-import Semantic.Elements.Header.HeaderContent as Export
-import Semantic.Elements.Header.HeaderSubheader as Export
 
 import Semantic.Properties as Properties
   ( HasAsProp(..), pattern As
@@ -30,7 +27,7 @@ import Semantic.Properties as Properties
   )
 
 data Header ms = Header_
-    { as :: [Feature ms] -> [View ms] -> View ms 
+    { as :: [Feature ms] -> [View ms] -> View ms
     , attached :: Maybe Txt
     , attributes :: [Feature ms]
     , block :: Bool
@@ -93,7 +90,7 @@ instance HasAttachedProp (Header ms) where
 
 instance HasAttributesProp (Header ms) where
     type Attribute (Header ms) = Feature ms
-    getAttributes = attributes 
+    getAttributes = attributes
     setAttributes cs h = h { attributes = cs }
 
 instance HasBlockProp (Header ms) where
@@ -140,3 +137,83 @@ instance HasSubProp (Header ms) where
 instance HasTextAlignProp (Header ms) where
     getTextAlign = textAlign
     setTextAlign ta h = h { textAlign = ta }
+
+data Content ms = Content_
+    { as :: [Feature ms] -> [View ms] -> View ms
+    , attributes :: [Feature ms]
+    , children :: [View ms]
+    , classes :: [Txt]
+    } deriving (Generic)
+
+instance Default (Content ms) where
+    def = (G.to gdef) { as = Div }
+
+pattern Content :: Content ms -> View ms
+pattern Content hc = View hc
+
+instance Pure Content ms where
+    render Content_ {..} =
+        as
+            ( ClassList ( "content" : classes)
+            : attributes
+            )
+            children
+
+instance HasAsProp (Content ms) where
+    type AsProp (Content ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs f hc = hc { as = f }
+
+instance HasAttributesProp (Content ms) where
+    type Attribute (Content ms) = Feature ms
+    getAttributes = attributes
+    setAttributes cs hc = hc { attributes = cs }
+
+instance HasChildrenProp (Content ms) where
+    type Child (Content ms) = View ms
+    getChildren = children
+    setChildren cs hc = hc { children = cs }
+
+instance HasClassesProp (Content ms) where
+    getClasses = classes
+    setClasses cs hc = hc { classes = cs }
+
+data Subheader ms = Subheader_
+    { as :: [Feature ms] -> [View ms] -> View ms
+    , attributes :: [Feature ms]
+    , children :: [View ms]
+    , classes :: [Txt]
+    } deriving (Generic)
+
+instance Default (Subheader ms) where
+    def = (G.to gdef) { as = Div }
+
+pattern Subheader :: Subheader ms -> View ms
+pattern Subheader hs = View hs
+
+instance Pure Subheader ms where
+    render Subheader_ {..} =
+        as
+            ( ClassList ( "sub" : "header" : classes )
+            : attributes
+            )
+            children
+
+instance HasAsProp (Subheader ms) where
+    type AsProp (Subheader ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs f hs = hs { as = f }
+
+instance HasAttributesProp (Subheader ms) where
+    type Attribute (Subheader ms) = Feature ms
+    getAttributes = attributes
+    setAttributes cs hs = hs { attributes = cs }
+
+instance HasChildrenProp (Subheader ms) where
+    type Child (Subheader ms) = View ms
+    getChildren = children
+    setChildren cs hs = hs { children = cs }
+
+instance HasClassesProp (Subheader ms) where
+    getClasses = classes
+    setClasses cs hs = hs { classes = cs }

@@ -1,8 +1,8 @@
 {-# LANGUAGE UndecidableInstances #-}
-module Semantic.Collections.Menu (module Semantic.Collections.Menu, module Export) where
+module Semantic.Collections.Menu where
 
 import GHC.Generics as G
-import Pure.View hiding (active,color,fixed,onClick,text,vertical,widths)
+import Pure.View hiding (active,color,fixed,onClick,text,vertical,widths,position,disabled)
 
 import Semantic.Utils
 
@@ -30,11 +30,16 @@ import Semantic.Properties as Properties
   , HasTabularProp(..), pattern Tabular
   , HasVerticalProp(..), pattern Vertical
   , HasWidthsProp(..), pattern Widths
+  , HasActiveProp(..), pattern Active
+  , HasDisabledProp(..), pattern Disabled
+  , HasFittedProp(..), pattern Fitted
+  , HasIndexProp(..), pattern Index
+  , HasIsHeaderProp(..), pattern IsHeader
+  , HasLinkProp(..), pattern Link
+  , HasPositionProp(..), pattern Position
   )
 
-import Semantic.Collections.Menu.MenuHeader as Export
-import Semantic.Collections.Menu.MenuItem as Export
-import Semantic.Collections.Menu.MenuMenu as Export
+import Semantic.Elements.Icon
 
 data Menu ms = Menu_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -50,7 +55,7 @@ data Menu ms = Menu_
     , fluid :: Bool
     , icon :: Maybe Txt
     , inverted :: Bool
-    , onItemClick :: MenuItem ms -> Ef ms IO ()
+    , onItemClick :: Item ms -> Ef ms IO ()
     , pagination :: Bool
     , pointing :: Bool
     , secondary :: Bool
@@ -70,10 +75,10 @@ pattern Menu m = View m
 
 instance VC ms => Pure Menu ms where
     render Menu_ {..} =
-        let 
-            children' = 
-                mapPures (\mi@(MenuItem_ {}) -> mi { onClick = onClick mi >> onItemClick mi }) children
-            
+        let
+            children' =
+                mapPures (\mi@(Item_ {}) -> mi { onClick = onClick mi >> onItemClick mi }) children
+
             cs =
                 ( "ui"
                 : color
@@ -96,9 +101,9 @@ instance VC ms => Pure Menu ms where
                 : widthProp widths "item" def
                 : "menu"
                 : classes
-                ) 
+                )
         in
-            as 
+            as
                 ( mergeClasses $ ClassList cs
                 : attributes
                 )
@@ -162,7 +167,7 @@ instance HasInvertedProp (Menu ms) where
     setInverted i m = m { inverted = i }
 
 instance HasOnClickProp (Menu ms) where
-    type OnClickProp (Menu ms) = MenuItem ms -> Ef ms IO ()
+    type OnClickProp (Menu ms) = Item ms -> Ef ms IO ()
     getOnClick = onItemClick
     setOnClick oc m = m { onItemClick = oc }
 
@@ -203,3 +208,211 @@ instance HasVerticalProp (Menu ms) where
 instance HasWidthsProp (Menu ms) where
     getWidths = widths
     setWidths w m = m { widths = w }
+data Header ms = Header_
+    { as :: [Feature ms] -> [View ms] -> View ms
+    , attributes :: [Feature ms]
+    , children :: [View ms]
+    , classes :: [Txt]
+    } deriving (Generic)
+
+instance Default (Header ms) where
+    def = (G.to gdef) { as = Div }
+
+pattern Header :: Header ms -> View ms
+pattern Header mh = View mh
+
+instance Pure Header ms where
+    render Header_ {..} =
+        let
+            cs =
+                ( "header"
+                : classes
+                )
+        in
+            as
+                ( mergeClasses $ ClassList cs
+                : attributes
+                )
+                children
+
+instance HasAsProp (Header ms) where
+    type AsProp (Header ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs a mh = mh { as = a }
+
+instance HasAttributesProp (Header ms) where
+    type Attribute (Header ms) = Feature ms
+    getAttributes = attributes
+    setAttributes as mh = mh { attributes = as }
+
+instance HasChildrenProp (Header ms) where
+    type Child (Header ms) = View ms
+    getChildren = children
+    setChildren cs mh = mh { children = cs }
+
+instance HasClassesProp (Header ms) where
+    getClasses = classes
+    setClasses cs mh = mh { classes = cs }
+
+data Item ms = Item_
+    { as :: [Feature ms] -> [View ms] -> View ms
+    , attributes :: [Feature ms]
+    , children :: [View ms]
+    , classes :: [Txt]
+    , active :: Bool
+    , color :: Txt
+    , disabled :: Bool
+    , fitted :: Maybe Txt
+    , header :: Bool
+    , index :: Int
+    , link :: Bool
+    , onClick :: Ef ms IO ()
+    , position :: Txt
+    } deriving (Generic)
+
+instance Default (Item ms) where
+    def = (G.to gdef) { as = Div }
+
+pattern Item :: Item ms -> View ms
+pattern Item mi = View mi
+
+instance Pure Item ms where
+    render Item_ {..} =
+        let
+            e = onClick ? A $ as
+
+            icon =
+                case children of
+                    [ Icon i ] -> True
+                    _          -> False
+
+            cs =
+                ( color
+                : position
+                : active # "active"
+                : disabled # "disabled"
+                : icon # "icon"
+                : header # "header"
+                : link # "link"
+                : may ("fitted" <<>>) fitted
+                : "item"
+                : classes
+                )
+
+        in
+            e
+                ( mergeClasses $ ClassList cs
+                : onClick # (On "click" def (\_ -> return $ Just onClick))
+                : attributes
+                )
+                children
+
+instance HasAsProp (Item ms) where
+    type AsProp (Item ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs a mi = mi { as = a }
+
+instance HasAttributesProp (Item ms) where
+    type Attribute (Item ms) = Feature ms
+    getAttributes = attributes
+    setAttributes as mi = mi { attributes = as }
+
+instance HasChildrenProp (Item ms) where
+    type Child (Item ms) = View ms
+    getChildren = children
+    setChildren cs mi = mi { children = cs }
+
+instance HasClassesProp (Item ms) where
+    getClasses = classes
+    setClasses cs mi = mi { classes = cs }
+
+instance HasActiveProp (Item ms) where
+    getActive = active
+    setActive a mi = mi { active = a }
+
+instance HasColorProp (Item ms) where
+    getColor = color
+    setColor c mi = mi { color = c }
+
+instance HasDisabledProp (Item ms) where
+    getDisabled = disabled
+    setDisabled d mi = mi { disabled = d }
+
+instance HasFittedProp (Item ms) where
+    type FittedProp (Item ms) = Maybe Txt
+    getFitted = fitted
+    setFitted f mi = mi { fitted = f }
+
+instance HasIsHeaderProp (Item ms) where
+    getIsHeader = header
+    setIsHeader h mi = mi { header = h }
+
+instance HasIndexProp (Item ms) where
+    getIndex = index
+    setIndex i mi = mi { index = i }
+
+instance HasLinkProp (Item ms) where
+    getLink = link
+    setLink l mi = mi { link = l }
+
+instance HasOnClickProp (Item ms) where
+    type OnClickProp (Item ms) = Ef ms IO ()
+    getOnClick = onClick
+    setOnClick oc mi = mi { onClick = oc }
+
+instance HasPositionProp (Item ms) where
+    getPosition = position
+    setPosition p mi = mi { position = p }
+
+
+data Submenu ms = Submenu_
+    { as :: [Feature ms] -> [View ms] -> View ms
+    , attributes :: [Feature ms]
+    , children :: [View ms]
+    , classes :: [Txt]
+    , position :: Txt
+    } deriving (Generic)
+
+instance Default (Submenu ms) where
+    def = (G.to gdef) { as = Div }
+
+pattern Submenu :: Submenu ms -> View ms
+pattern Submenu mm = View mm
+
+instance Pure Submenu ms where
+    render Submenu_ {..} =
+        let
+            cs =
+                ( position
+                : "menu"
+                : classes
+                )
+        in
+            as
+                ( mergeClasses $ ClassList cs
+                : attributes
+                )
+                children
+
+instance HasAsProp (Submenu ms) where
+    type AsProp (Submenu ms) = [Feature ms] -> [View ms] -> View ms
+    getAs = as
+    setAs a mm = mm { as = a }
+
+instance HasAttributesProp (Submenu ms) where
+    type Attribute (Submenu ms) = Feature ms
+    getAttributes = attributes
+    setAttributes as mm = mm { attributes = as }
+
+instance HasChildrenProp (Submenu ms) where
+    type Child (Submenu ms) = View ms
+    getChildren = children
+    setChildren cs mm = mm { children = cs }
+
+instance HasClassesProp (Submenu ms) where
+    getClasses = classes
+    setClasses cs mm = mm { classes = cs }
+
+instance HasPositionProp (Submenu ms) where
+    getPosition = position
+    setPosition p mm = mm { position = p }
