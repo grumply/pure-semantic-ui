@@ -1,9 +1,15 @@
-module Semantic.Elements.Reveal where
+module Semantic.Elements.Reveal
+  ( module Properties
+  , module Tools
+  , Reveal(..), pattern Reveal
+  ) where
 
 import GHC.Generics as G
 import Pure.View hiding (disabled)
 
 import Semantic.Utils
+
+import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
   ( HasAnimatedProp(..), pattern Animated
@@ -63,7 +69,7 @@ instance HasAsProp (Reveal ms) where
 
 instance HasAttributesProp (Reveal ms) where
     type Attribute (Reveal ms) = Feature ms
-    getAttributes = attributes 
+    getAttributes = attributes
     setAttributes cs r = r { attributes = cs }
 
 instance HasChildrenProp (Reveal ms) where

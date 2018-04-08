@@ -1,4 +1,10 @@
-module Semantic.Collections.Form where
+module Semantic.Collections.Form
+  ( module Properties
+  , module Tools
+  , Form(..), pattern Form
+  , Field(..), pattern Field
+  , Group(..), pattern Group
+  ) where
 
 import GHC.Generics as G
 import Pure.View hiding (name,onSubmit,widths,Form,inline,disabled)
@@ -6,6 +12,8 @@ import qualified Pure.View as HTML
 
 import Semantic.Utils
 import Prelude hiding (error)
+
+import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
   ( HasAsProp(..), pattern As

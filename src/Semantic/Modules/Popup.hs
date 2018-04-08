@@ -1,5 +1,11 @@
 {-# LANGUAGE UndecidableInstances #-}
-module Semantic.Modules.Popup where
+module Semantic.Modules.Popup
+  ( module Properties
+  , module Tools
+  , Popup(..), pattern Popup
+  , Content(..), pattern Content
+  , Header(..), pattern Header
+  ) where
 
 import Control.Arrow ((&&&))
 import Control.Concurrent
@@ -7,12 +13,14 @@ import Data.IORef
 import Data.Maybe
 import GHC.Generics as G
 import Pure.Data.Txt (isInfixOf)
-import Pure.View hiding (position,offset,round,trigger,OnClose)
+import Pure.View hiding (position,offset,round,trigger,OnClose,Content,Header)
 import Pure.Lifted (JSV,Node(..),Element(..),(.#),window,IsJSV(..))
 
 import Semantic.Utils hiding (on)
 
 import Semantic.Addons.Portal hiding (PS)
+
+import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
   ( HasAsProp(..), pattern As

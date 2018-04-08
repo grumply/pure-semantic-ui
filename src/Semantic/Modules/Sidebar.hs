@@ -1,4 +1,10 @@
-module Semantic.Modules.Sidebar where
+module Semantic.Modules.Sidebar
+  ( module Properties
+  , module Tools
+  , Sidebar(..), pattern Sidebar
+  , Pushable(..), pattern Pushable
+  , Pusher(..), pattern Pusher
+  ) where
 
 import Control.Concurrent
 import Data.IORef
@@ -6,6 +12,8 @@ import GHC.Generics as G
 import Pure.View hiding (animation,direction,visible,width)
 
 import Semantic.Utils
+
+import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
   ( HasAsProp(..), pattern As

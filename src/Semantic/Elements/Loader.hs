@@ -1,9 +1,15 @@
-module Semantic.Elements.Loader where
+module Semantic.Elements.Loader
+  ( module Properties
+  , module Tools
+  , Loader(..), pattern Loader
+  ) where
 
 import GHC.Generics as G
 import Pure.View hiding (active,disabled,inline,verticalAlign)
 
 import Semantic.Utils
+
+import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
   ( HasActiveProp(..), pattern Active
@@ -18,7 +24,7 @@ import Semantic.Properties as Properties
   , HasSizeProp(..), pattern Size
   )
 
-data Loader ms = Loader_ 
+data Loader ms = Loader_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]
     , children :: [View ms]
@@ -70,7 +76,7 @@ instance HasAsProp (Loader ms) where
 
 instance HasAttributesProp (Loader ms) where
     type Attribute (Loader ms) = Feature ms
-    getAttributes = attributes 
+    getAttributes = attributes
     setAttributes cs l = l { attributes = cs }
 
 instance HasChildrenProp (Loader ms) where

@@ -1,9 +1,19 @@
-module Semantic.Elements.Step where
+module Semantic.Elements.Step
+  ( module Properties
+  , module Tools
+  , Step(..), pattern Step
+  , Content(..), pattern Content
+  , Description(..), pattern Description
+  , Group(..), pattern Group
+  , Title(..), pattern Title
+  ) where
 
 import GHC.Generics as G
-import Pure.View hiding (active,completed,disabled,onClick,vertical,widths)
+import Pure.View hiding (active,completed,disabled,onClick,vertical,widths,Content,Title,Description,Step)
 
 import Semantic.Utils
+
+import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
   ( HasAsProp(..), pattern As

@@ -1,10 +1,22 @@
-module Semantic.Collections.Table where
+module Semantic.Collections.Table
+  ( module Properties
+  , module Tools
+  , Table(..), pattern Table
+  , Body(..), pattern Body
+  , Cell(..), pattern Cell
+  , Footer(..), pattern Footer
+  , Header(..), pattern Header
+  , HeaderCell(..), pattern HeaderCell
+  , Row(..), pattern Row
+  ) where
 
 import GHC.Generics as G
-import Pure.View hiding (color,fixed,textAlign,verticalAlign,Table,disabled,active,width)
+import Pure.View hiding (color,fixed,textAlign,verticalAlign,Table,Body,Header,Footer,disabled,active,width)
 import qualified Pure.View as HTML
 
 import Semantic.Utils
+
+import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
   ( HasAsProp(..), pattern As
@@ -262,6 +274,7 @@ instance HasChildrenProp (Body ms) where
 instance HasClassesProp (Body ms) where
     getClasses = classes
     setClasses cs tb = tb { classes = cs }
+
 data Cell ms = Cell_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]

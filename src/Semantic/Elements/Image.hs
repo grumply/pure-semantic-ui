@@ -1,9 +1,16 @@
-module Semantic.Elements.Image where
+module Semantic.Elements.Image
+  ( module Properties
+  , module Tools
+  , Image(..), pattern Image
+  , Group(..), pattern Group
+  ) where
 
 import GHC.Generics as G
 import Pure.View as View hiding (disabled,hidden,inline,verticalAlign)
 
 import Semantic.Utils
+
+import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
   ( HasAsProp(..), pattern As
@@ -94,7 +101,7 @@ instance HasAsProp (Image ms) where
 
 instance HasAttributesProp (Image ms) where
     type Attribute (Image ms) = Feature ms
-    getAttributes = attributes 
+    getAttributes = attributes
     setAttributes cs i = i { attributes = cs }
 
 instance HasBorderedProp (Image ms) where
@@ -185,7 +192,7 @@ instance Pure Group ms where
                 : size
                 : classes
                 ) ++ [ "images" ]
-        in 
+        in
             as (mergeClasses $ ClassList cs : attributes) children
 
 instance HasAsProp (Group ms) where
@@ -195,7 +202,7 @@ instance HasAsProp (Group ms) where
 
 instance HasAttributesProp (Group ms) where
     type Attribute (Group ms) = Feature ms
-    getAttributes = attributes 
+    getAttributes = attributes
     setAttributes cs ig = ig { attributes = cs }
 
 instance HasChildrenProp (Group ms) where

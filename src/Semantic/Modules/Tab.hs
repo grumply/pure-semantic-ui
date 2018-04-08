@@ -1,9 +1,16 @@
-module Semantic.Modules.Tab where
+module Semantic.Modules.Tab
+  ( module Properties
+  , module Tools
+  , Tab(..), pattern Tab
+  , Pane(..), pattern Pane
+  ) where
 
 import GHC.Generics as G
-import Pure.View hiding (active)
+import Pure.View hiding (active,Tab)
 
 import Semantic.Utils
+
+import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
   ( HasAsProp(..), pattern As

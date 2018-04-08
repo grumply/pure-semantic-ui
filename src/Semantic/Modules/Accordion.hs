@@ -1,9 +1,18 @@
-module Semantic.Modules.Accordion where
+module Semantic.Modules.Accordion
+  ( module Properties
+  , module Tools
+  , Accordion(..), pattern Accordion
+  , Subaccordion(..), pattern Subaccordion
+  , Content(..), pattern Content
+  , Title(..), pattern Title
+  ) where
 
 import GHC.Generics as G
-import Pure.View hiding (styled,onClick,active)
+import Pure.View hiding (styled,onClick,active,Content,Title)
 
 import Semantic.Utils
+
+import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
   ( HasAsProp(..), pattern As

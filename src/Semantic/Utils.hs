@@ -40,7 +40,7 @@ widthProp val widthClass canEqual
 
 newtype Width = Width Txt deriving (Eq)
 instance Default Width where def = Width ""
-instance Cond Width where 
+instance Cond Width where
     nil = Width ""
     isNil (Width "") = True
     isNil _          = False
@@ -83,7 +83,7 @@ oneEq l r x = if l == x then Just l else if r == x then Just r else Nothing
 (#!?) :: (Cond x, Default a, Cond a) => Maybe x -> a -> a
 (#!?) x y = may (#! y) x
 
-(<>>) x y = 
+(<>>) x y =
   case (notNil x, notNil y) of
     (True,True) -> x <<>> y
     (True,_) -> x
@@ -102,7 +102,7 @@ extractInputAttrs = foldr go ([],[])
         go x ~(inputAttrs,otherAttrs) =
             let isInputAttr =
                     case x of
-                        On ev _ f -> ev `elem` 
+                        On ev _ f -> ev `elem`
                             ["keydown","keypress","keyup","focus","blur","change","input","click","contextmenu"
                             ,"drag","dragend","dragenter","dragexit","dragleave","dragover","dragstart","drop"
                             ,"mousedown","mouseenter","mouseleave","mousemove","mouseout","mouseover","mouseup"
@@ -112,7 +112,7 @@ extractInputAttrs = foldr go ([],[])
                             ,"id","list","max","maxlength","min","minlength","multiple","name","pattern","placeholder"
                             ,"readonly","required","step","type","value"]
                         _ -> False
-            in if isInputAttr 
+            in if isInputAttr
                    then (x:inputAttrs,otherAttrs)
                    else (inputAttrs,x:otherAttrs)
 
@@ -135,10 +135,10 @@ foreign import javascript unsafe
 #endif
 
 contains :: MonadIO c => JSV -> JSV -> c Bool
-contains node target = 
+contains node target =
 #ifdef __GHCJS__
     liftIO $ contains_js node target
-#else 
+#else
     return True -- hmm?
 #endif
 
@@ -217,7 +217,7 @@ updateStylesAndClasses s c = clone (go False False)
 cloneWithProps :: forall ms. View ms -> [Feature ms] -> View ms
 cloneWithProps v fs = clone (++ fs) v
 
-directionalTransitions = 
+directionalTransitions =
     [ "scale"
     , "fade", "fade up", "fade down", "fade left", "fade right"
     , "horizontal flip", "vertical flip"
@@ -234,7 +234,7 @@ foreign import javascript unsafe
 #endif
 
 pageYOffset :: MonadIO c => c Int
-pageYOffset = 
+pageYOffset =
 #ifdef __GHCJS__
     liftIO pageYOffset_js
 #else
@@ -247,7 +247,7 @@ foreign import javascript unsafe
 #endif
 
 pageXOffset :: MonadIO c => c Int
-pageXOffset = 
+pageXOffset =
 #ifdef __GHCJS__
     liftIO pageXOffset_js
 #else
@@ -323,7 +323,7 @@ computedStyles node = do
 #endif
 
 #ifdef __GHCJS__
-foreign import javascript unsafe 
+foreign import javascript unsafe
     "window.innerHeight" innerHeight_js :: IO Int
 #endif
 
@@ -336,7 +336,7 @@ innerHeight =
 #endif
 
 #ifdef __GHCJS__
-foreign import javascript unsafe 
+foreign import javascript unsafe
     "$r = window.innerWidth" innerWidth_js :: IO Int
 #endif
 
@@ -357,8 +357,8 @@ mergeMappings prev next = runST $ do
     pendingKeys     <- newSTRef []
 
     let swap ref ys = do
-            xs <- readSTRef ref 
-            writeSTRef ref ys 
+            xs <- readSTRef ref
+            writeSTRef ref ys
             return xs
 
     for_ prev $ \(prevKey,_) -> do
@@ -367,7 +367,7 @@ mergeMappings prev next = runST $ do
                 pks <- swap pendingKeys []
                 modifySTRef nextKeysPending ((prevKey,reverse pks):)
 
-            Nothing -> 
+            Nothing ->
                 modifySTRef pendingKeys (prevKey:)
 
     let value k = fromJust (lookup k next <|> lookup k prev)
@@ -375,7 +375,7 @@ mergeMappings prev next = runST $ do
 
     nkps <- readSTRef nextKeysPending
     for_ next $ \(nextKey,_) -> do
-        for_ (lookup nextKey nkps) 
+        for_ (lookup nextKey nkps)
             (traverse_ addChildMapping)
         addChildMapping nextKey
 
@@ -392,12 +392,12 @@ mergeMappings' prev next = reverse result
     where
         value k = lookup k next <|> lookup k prev
 
-        result = foldr mergePending childMapping leftovers 
+        result = foldr mergePending childMapping leftovers
           where
             mergePending k@(value -> Just v) = ((k,v):)
             mergePending _ = id
 
-        childMapping = foldl' mergeNext [] next 
+        childMapping = foldl' mergeNext [] next
           where
             addChildMapping k = maybe id ((:) . (k,)) (value k)
             mergeNext childMapping (k,v) = addChildMapping k $
@@ -405,7 +405,7 @@ mergeMappings' prev next = reverse result
                     Nothing -> childMapping
                     Just ks -> foldl' (flip addChildMapping) childMapping ks
 
-        (pending,leftovers) = foldl' mergePrev ([],[]) prev 
+        (pending,leftovers) = foldl' mergePrev ([],[]) prev
           where
             mergePrev (nkp,pks) (k@(flip lookup next -> Nothing),_) = (nkp,k:pks)
             mergePrev (nkp,[]) (k,_)  = (nkp,[])

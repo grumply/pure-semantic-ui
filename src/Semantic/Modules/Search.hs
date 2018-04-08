@@ -1,10 +1,19 @@
-module Semantic.Modules.Search where
+module Semantic.Modules.Search
+  ( module Properties
+  , module Tools
+  , Search(..), pattern Search
+  , Categorized(..), pattern Categorized
+  , Result(..), pattern Result
+  , Results(..), pattern Results
+  ) where
 
 import Control.Arrow ((&&&))
 import GHC.Generics as G
 import Pure.View hiding (onFocus,onBlur,name,active,Result,onClick)
 
 import Semantic.Utils
+
+import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
   ( HasAsProp(..), pattern As
@@ -23,7 +32,6 @@ import Semantic.Properties as Properties
   , HasSizeProp(..), pattern Size
   , HasActiveProp(..), pattern Active
   , HasNameProp(..), pattern Name
-  , HasResultsProp(..), pattern Results
   , HasOnClickProp(..), pattern OnClick
   )
 
@@ -147,28 +155,25 @@ instance HasSizeProp (Search ms) where
     getSize = size
     setSize sz s = s { size = sz }
 
-data Category result ms = Category_
+data Categorized ms = Categorized_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]
     , children :: [View ms]
     , classes :: [Txt]
     , active :: Bool
     , name :: Txt
-    , results :: [result]
-    , renderCategory :: Category result ms -> [View ms]
     } deriving (Generic)
 
-instance Default (Category result ms) where
+instance Default (Categorized ms) where
     def = (G.to gdef)
         { as = Div
-        , renderCategory = fromTxt . name
         }
 
-pattern Category :: Typeable result => Category result ms -> View ms
-pattern Category sc = View sc
+pattern Categorized :: Categorized ms -> View ms
+pattern Categorized sc = View sc
 
-instance Typeable result => Pure (Category result) ms where
-    render sc@Category_ {..} =
+instance Pure Categorized ms where
+    render sc@Categorized_ {..} =
         let
             cs =
                 ( active # "active"
@@ -180,45 +185,34 @@ instance Typeable result => Pure (Category result) ms where
                 ( mergeClasses $ ClassList cs
                 : attributes
                 )
-                ( Div [ ClassList [ "name" ] ] (renderCategory sc)
-                : children
-                )
+                children
 
-instance HasAsProp (Category result ms) where
-    type AsProp (Category result ms) = [Feature ms] -> [View ms] -> View ms
+instance HasAsProp (Categorized ms) where
+    type AsProp (Categorized ms) = [Feature ms] -> [View ms] -> View ms
     getAs = as
     setAs f sc = sc { as = f }
 
-instance HasAttributesProp (Category result ms) where
-    type Attribute (Category result ms) = Feature ms
+instance HasAttributesProp (Categorized ms) where
+    type Attribute (Categorized ms) = Feature ms
     getAttributes = attributes
     setAttributes cs sc = sc { attributes = cs }
 
-instance HasChildrenProp (Category result ms) where
-    type Child (Category result ms) = View ms
+instance HasChildrenProp (Categorized ms) where
+    type Child (Categorized ms) = View ms
     getChildren = children
     setChildren cs sc = sc { children = cs }
 
-instance HasClassesProp (Category result ms) where
+instance HasClassesProp (Categorized ms) where
     getClasses = classes
     setClasses cs sc = sc { classes = cs }
 
-instance HasActiveProp (Category result ms) where
+instance HasActiveProp (Categorized ms) where
     getActive = active
     setActive a sc = sc { active = a }
 
-instance HasNameProp (Category result ms) where
+instance HasNameProp (Categorized ms) where
     getName = name
     setName n sc = sc { name = n }
-
-instance HasResultsProp (Category result ms) where
-    type ResultsProp (Category result ms) = [result]
-    getResults = results
-    setResults rs sc = sc { results = rs }
-
-pattern RenderCategory :: (Category result ms -> [View ms]) -> Category result ms -> Category result ms
-pattern RenderCategory rsc sc <- (renderCategory &&& id -> (rsc,sc)) where
-    RenderCategory rsc sc = sc { renderCategory = rsc }
 
 data Result ms = Result_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -245,7 +239,7 @@ instance Pure Result ms where
                 )
         in
             as
-                ( mergeClasses $ ClassList cs 
+                ( mergeClasses $ ClassList cs
                 : onClick # On "click" def (\_ -> return $ Just onClick)
                 : attributes
                 )
@@ -258,7 +252,7 @@ instance HasAsProp (Result ms) where
 
 instance HasAttributesProp (Result ms) where
     type Attribute (Result ms) = Feature ms
-    getAttributes = attributes 
+    getAttributes = attributes
     setAttributes cs sr = sr { attributes = cs }
 
 instance HasChildrenProp (Result ms) where
@@ -279,9 +273,9 @@ instance HasOnClickProp (Result ms) where
     getOnClick = onClick
     setOnClick oc sr = sr { onClick = oc }
 
-data Results ms = Results_ 
+data Results ms = Results_
     { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms] 
+    , attributes :: [Feature ms]
     , children :: [View ms]
     , classes :: [Txt]
     } deriving (Generic)
@@ -295,7 +289,7 @@ pattern Results sr = View sr
 instance Pure Results ms where
     render Results_ {..} =
         let
-            cs = 
+            cs =
                 ( "results transition"
                 : classes
                 )
@@ -313,7 +307,7 @@ instance HasAsProp (Results ms) where
 
 instance HasAttributesProp (Results ms) where
     type Attribute (Results ms) = Feature ms
-    getAttributes = attributes 
+    getAttributes = attributes
     setAttributes cs sr = sr { attributes = cs }
 
 instance HasChildrenProp (Results ms) where

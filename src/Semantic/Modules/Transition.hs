@@ -1,5 +1,11 @@
 {-# LANGUAGE UndecidableInstances #-}
-module Semantic.Modules.Transition where
+module Semantic.Modules.Transition
+  ( module Properties
+  , module Tools
+  , Transition(..), pattern Transition
+  , Group(..), pattern Group
+  , TransitionStatus(..)
+  ) where
 
 import Control.Concurrent
 import Data.IORef
@@ -8,6 +14,8 @@ import GHC.Generics as G
 import Pure.View hiding (animation,onComplete,visible,lookup)
 
 import Semantic.Utils
+
+import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
   ( HasAsProp(..), pattern As

@@ -1,13 +1,22 @@
-module Semantic.Elements.Button where
+module Semantic.Elements.Button
+  ( module Properties
+  , module Tools
+  , Button(..), pattern Button
+  , Content(..), pattern Content
+  , Group(..), pattern Group
+  , Or(..), pattern Or
+  ) where
 
 import GHC.Generics as G
-import Pure.View hiding (active,color,disabled,onClick,Button,Disabled,Label,Or,widths,hidden,vertical,visible)
+import Pure.View hiding (active,color,disabled,onClick,Button,Disabled,Label,Or,widths,hidden,vertical,visible,Content)
 import qualified Pure.View as HTML
 
 import Semantic.Utils
 
-import Semantic.Elements.Icon hiding (Group(..))
-import Semantic.Elements.Label hiding (Group(..))
+import Semantic.Elements.Icon hiding (Group(..), pattern Group)
+import Semantic.Elements.Label hiding (Group(..), pattern Group)
+
+import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
   ( HasActiveProp(..), pattern Active

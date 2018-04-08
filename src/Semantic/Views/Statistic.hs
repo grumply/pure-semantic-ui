@@ -1,9 +1,18 @@
-module Semantic.Views.Statistic where
+module Semantic.Views.Statistic
+  ( module Properties
+  , module Tools
+  , Statistic(..), pattern Statistic
+  , Group(..), pattern Group
+  , Label(..), pattern Label
+  , Value(..), pattern Value
+  ) where
 
 import GHC.Generics as G
-import Pure.View hiding (color,horizontal,widths,text,Value)
+import Pure.View hiding (color,horizontal,widths,text,Value,Label)
 
 import Semantic.Utils
+
+import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
   ( HasAsProp(..), pattern As

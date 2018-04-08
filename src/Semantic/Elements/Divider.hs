@@ -1,9 +1,15 @@
-module Semantic.Elements.Divider where
+module Semantic.Elements.Divider
+  ( module Properties
+  , module Tools
+  , Divider(..), pattern Divider
+  ) where
 
 import GHC.Generics as G
 import Pure.View as View hiding (hidden,horizontal,vertical)
 
 import Semantic.Utils
+
+import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
   ( HasAsProp(..), pattern As
@@ -68,7 +74,7 @@ instance HasAsProp (Divider ms) where
 
 instance HasAttributesProp (Divider ms) where
     type Attribute (Divider ms) = Feature ms
-    getAttributes = attributes 
+    getAttributes = attributes
     setAttributes cs d = d { attributes = cs }
 
 instance HasChildrenProp (Divider ms) where

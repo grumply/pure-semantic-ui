@@ -1,5 +1,10 @@
 {-# LANGUAGE UndecidableInstances #-}
-module Semantic.Modules.Dimmer where
+module Semantic.Modules.Dimmer
+  ( module Properties
+  , module Tools
+  , Dimmer(..), pattern Dimmer
+  , Dimmable(..), pattern Dimmable
+  ) where
 
 import Data.IORef
 import GHC.Generics as G
@@ -9,6 +14,8 @@ import Pure.Lifted (Node(..))
 import Semantic.Utils
 
 import Semantic.Addons.Portal
+
+import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
   ( HasCloseOnEscapeProp(..), pattern CloseOnEscape, pattern NoCloseOnEscape

@@ -1,16 +1,26 @@
 {-# LANGUAGE UndecidableInstances #-}
-module Semantic.Modules.Modal where
+module Semantic.Modules.Modal
+  ( module Properties
+  , module Tools
+  , Modal(..), pattern Modal
+  , Actions(..), pattern Actions
+  , Content(..), pattern Content
+  , Description(..), pattern Description
+  , Header(..), pattern Header
+  ) where
 
 import Data.IORef
 import Data.Maybe
 import GHC.Generics as G
-import Pure.View hiding (active,round,addClass,trigger,OnClose)
+import Pure.View hiding (active,round,addClass,trigger,OnClose,Content,Description,Header)
 import Pure.DOM (addAnimation)
 import Pure.Lifted (body,IsJSV(..),JSV,Node(..),Element(..))
 
 import Semantic.Utils
 
 import qualified Semantic.Addons.Portal as Portal
+
+import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
   ( HasCloseOnDocumentClickProp(..), pattern CloseOnDocumentClick

@@ -1,13 +1,21 @@
-module Semantic.Elements.Header where
+module Semantic.Elements.Header
+  ( module Properties
+  , module Tools
+  , Header(..), pattern Header
+  , Content(..), pattern Content
+  , Subheader(..), pattern Subheader
+  ) where
 
 import GHC.Generics as G
-import Pure.View hiding (block,color,disabled,textAlign,Header)
+import Pure.View hiding (block,color,disabled,textAlign,Header,Content)
 import qualified Pure.View as HTML
 
 import Semantic.Utils
 
 import Semantic.Elements.Icon
 import Semantic.Elements.Image
+
+import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
   ( HasAsProp(..), pattern As

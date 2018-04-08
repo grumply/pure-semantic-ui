@@ -1,10 +1,19 @@
 {-# LANGUAGE UndecidableInstances #-}
-module Semantic.Collections.Menu where
+module Semantic.Collections.Menu
+  ( module Properties
+  , module Tools
+  , Menu(..), pattern Menu
+  , Header(..), pattern Header
+  , Item(..), pattern Item
+  , Submenu (..), pattern Submenu
+  ) where
 
 import GHC.Generics as G
-import Pure.View hiding (active,color,fixed,onClick,text,vertical,widths,position,disabled)
+import Pure.View hiding (active,color,fixed,onClick,text,vertical,widths,position,disabled,Menu,Header)
 
 import Semantic.Utils
+
+import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
   ( HasAsProp(..), pattern As

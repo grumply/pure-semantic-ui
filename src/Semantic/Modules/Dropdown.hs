@@ -1,11 +1,22 @@
-module Semantic.Modules.Dropdown where
+module Semantic.Modules.Dropdown
+  ( module Properties
+  , module Tools
+  , Dropdown(..), pattern Dropdown
+  , Divider(..), pattern Divider
+  , Header(..), pattern Header
+  , Item(..), pattern Item
+  , Menu(..), pattern Menu
+  , SearchInput, pattern SearchInput
+  ) where
 
 import GHC.Generics as G
 import Pure.Lifted (JSV,Node(..),(.#))
-import Pure.View hiding (button,disabled,inline,onBlur,onClick,onFocus,simple)
+import Pure.View hiding (button,disabled,inline,onBlur,onClick,onFocus,simple,Header,Menu)
 import qualified Pure.View as HTML
 
 import Semantic.Utils
+
+import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
   ( HasAsProp(..), pattern As

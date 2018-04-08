@@ -1,10 +1,17 @@
 {-# LANGUAGE UndecidableInstances #-}
-module Semantic.Modules.Rating where
+module Semantic.Modules.Rating
+  ( module Properties
+  , module Tools
+  , Rating(..), pattern Rating
+  , Icon(..), pattern Icon
+  ) where
 
 import GHC.Generics as G
 import Pure.View hiding (disabled,OnClick,OnMouseEnter,Selected,onKeyUp,onClick,active)
 
 import Semantic.Utils
+
+import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
   ( HasActiveProp(..), pattern Active

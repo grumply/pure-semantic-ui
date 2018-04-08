@@ -1,9 +1,16 @@
-module Semantic.Elements.Icon where
+module Semantic.Elements.Icon
+  ( module Properties
+  , module Tools
+  , Icon(..), pattern Icon
+  , Group(..), pattern Group
+  ) where
 
 import GHC.Generics as G
 import Pure.View as View hiding (color,disabled,name)
 
 import Semantic.Utils
+
+import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
   ( HasAsProp(..), pattern As

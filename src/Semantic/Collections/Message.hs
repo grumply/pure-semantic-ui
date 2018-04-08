@@ -1,11 +1,21 @@
-module Semantic.Collections.Message (module Semantic.Collections.Message) where
+module Semantic.Collections.Message
+  ( module Properties
+  , module Tools
+  , Message(..), pattern Message
+  , Content(..), pattern Content
+  , Header(..), pattern Header
+  , Item(..), pattern Item
+  , List(..), pattern List
+  ) where
 
 import GHC.Generics as G
-import Pure.View hiding (color,hidden,visible,Name)
+import Pure.View hiding (color,hidden,visible,Name,Content,Header)
 
 import Semantic.Utils
 
 import Semantic.Elements.Icon
+
+import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
   ( HasNameProp(..), pattern Name

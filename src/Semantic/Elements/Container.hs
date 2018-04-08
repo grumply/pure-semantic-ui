@@ -1,9 +1,15 @@
-module Semantic.Elements.Container where
+module Semantic.Elements.Container
+  ( module Properties
+  , module Tools
+  , Container(..), pattern Container, pattern TextContainer
+  ) where
 
 import GHC.Generics as G
 import Pure.View hiding (textAlign)
 
 import Semantic.Utils
+
+import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
   ( HasAsProp(..), pattern As

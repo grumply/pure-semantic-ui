@@ -1,9 +1,15 @@
-module Semantic.Views.Advertisement where
+module Semantic.Views.Advertisement
+  ( module Properties
+  , module Tools
+  , Advertisement(..), pattern Advertisement
+  ) where
 
 import GHC.Generics as G
 import Pure.View hiding (unit)
 
 import Semantic.Utils
+
+import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
   ( HasAsProp(..), pattern As

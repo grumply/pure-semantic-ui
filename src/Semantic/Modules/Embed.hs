@@ -1,14 +1,20 @@
 {-# LANGUAGE UndecidableInstances #-}
-module Semantic.Modules.Embed where
+module Semantic.Modules.Embed
+  ( module Properties
+  , module Tools
+  , Embed(..), pattern Embed
+  ) where
 
 import Control.Arrow ((&&&))
 import GHC.Generics as G
-import Pure.View hiding (active,onClick,url,color,Name,Width)
+import Pure.View hiding (active,onClick,url,color,Name,Width,Embed)
 import Pure.Route (encodeURI)
 
 import Semantic.Utils hiding (id)
 
 import Semantic.Elements.Icon
+
+import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
   ( HasNameProp(..), pattern Name
@@ -54,8 +60,8 @@ data Embed ms = Embed_
     } deriving (Generic)
 
 instance Default (Embed ms) where
-    def = (G.to gdef) 
-        { as = Div 
+    def = (G.to gdef)
+        { as = Div
         , icon = def & Name "video play"
         , hd = True
         , color = "#444444"
@@ -67,7 +73,7 @@ pattern Embed e = View e
 instance VC ms => Pure Embed ms where
     render e =
         Component "Semantic.Modules.Embed" e $ \self ->
-            let 
+            let
                 handleClick = do
                     Embed_ {..} <- getProps self
                     isActive <- getState self
@@ -79,7 +85,7 @@ instance VC ms => Pure Embed ms where
                     Embed_ {..} <- getProps self
                     return defaultActive
 
-                , renderer = \Embed_ {..} isActive -> 
+                , renderer = \Embed_ {..} isActive ->
                     let
                         cs =
                             ( "ui"
@@ -103,11 +109,11 @@ instance VC ms => Pure Embed ms where
                             , Attribute "width" "100%"
                             ]
 
-                        src = 
+                        src =
                             case source of
-                                Just YouTube -> 
-                                    mconcat 
-                                        [ "//www.youtube.com/embed/" <> id 
+                                Just YouTube ->
+                                    mconcat
+                                        [ "//www.youtube.com/embed/" <> id
                                         , "?autohide=true"
                                         , "&amp;autoplay=" <> (autoplay ? "true" $ "false")
                                         , "&amp;color=" <> (encodeURI color)
@@ -141,7 +147,7 @@ instance VC ms => Pure Embed ms where
                             , placeholder # Img [ ClassList [ "placeholder" ], Src placeholder ]  [ ]
                             , active #
                                 Div [ ClassList [ "embed" ] ]
-                                    $ children 
+                                    $ children
                                         ? children
                                         $ [ Iframe (defaultIframeAttributes ++ iframe) [] ]
                             ]

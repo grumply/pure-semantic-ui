@@ -1,10 +1,16 @@
-module Semantic.Modules.Progress where
+module Semantic.Modules.Progress
+  ( module Properties
+  , module Tools
+  , Progress(..), pattern Progress
+  ) where
 
 import Data.Maybe
 import GHC.Generics as G
-import Pure.View hiding (active,color,disabled)
+import Pure.View hiding (active,color,disabled,Progress)
 
 import Semantic.Utils
+
+import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
   ( HasAsProp(..), pattern As
@@ -32,7 +38,7 @@ import Prelude hiding (error)
 
 data Progress ms = Progress_
     { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms] 
+    , attributes :: [Feature ms]
     , children :: [View ms]
     , classes :: [Txt]
     , active :: Bool
@@ -43,7 +49,7 @@ data Progress ms = Progress_
     , error :: Bool
     , indicating :: Bool
     , inverted :: Bool
-    , percent :: Maybe Double 
+    , percent :: Maybe Double
     , precision :: Int
     , size :: Txt
     , success :: Bool
@@ -63,14 +69,14 @@ instance Pure Progress ms where
         let
             decimals p x = (fromInteger $ Prelude.round $ x * (10^p)) / (10.0^^p)
 
-            totalPercent = 
-                total 
-                    ? (fromIntegral value / fromIntegral total * 100) 
+            totalPercent =
+                total
+                    ? (fromIntegral value / fromIntegral total * 100)
                     $ 100
-                    
+
             isAutoSuccess = autoSuccess && (percent ? (percent >= Just 100) $ (value >= total))
 
-            getPercent = (precision ? decimals precision $ id) 
+            getPercent = (precision ? decimals precision $ id)
                 (max 0 (min 100 (fromMaybe totalPercent percent)))
 
             cs =
@@ -95,8 +101,8 @@ instance Pure Progress ms where
                 )
                 [ Div [ ClassList [ "bar" ]
                       , StyleList [(width,per getPercent)]
-                      ] 
-                      [ Div [ ClassList [ "progress" ] ] 
+                      ]
+                      [ Div [ ClassList [ "progress" ] ]
                             [ fromTxt $ maybe (int value <> "/" <> int total) per percent ]
                       ]
                 , Div [ ClassList [ "label" ] ] children
@@ -110,7 +116,7 @@ instance HasAsProp (Progress ms) where
 
 instance HasAttributesProp (Progress ms) where
     type Attribute (Progress ms) = Feature ms
-    getAttributes = attributes 
+    getAttributes = attributes
     setAttributes cs p = p { attributes = cs }
 
 instance HasChildrenProp (Progress ms) where
@@ -182,4 +188,4 @@ instance HasValueProp (Progress ms) where
 
 instance HasWarningProp (Progress ms) where
     getWarning = warning
-    setWarning w p = p { warning = w } 
+    setWarning w p = p { warning = w }

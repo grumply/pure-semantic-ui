@@ -1,9 +1,20 @@
-module Semantic.Views.Card where
+module Semantic.Views.Card
+  ( module Properties
+  , module Tools
+  , Card(..), pattern Card
+  , Content(..), pattern Content
+  , Description(..), pattern Description
+  , Group(..), pattern Group
+  , Header(..), pattern Header
+  , Meta(..), pattern Meta
+  ) where
 
 import GHC.Generics as G hiding (Meta)
-import Pure.View hiding (color,onClick,textAlign)
+import Pure.View hiding (color,onClick,textAlign,Content,Header,Meta,Description)
 
 import Semantic.Utils
+
+import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
   ( HasAsProp(..), pattern As
@@ -310,7 +321,7 @@ instance Default (Header ms) where
     def = (G.to gdef) { as = Div }
 
 pattern Header :: Header ms -> View ms
-pattern Header ch = View ch 
+pattern Header ch = View ch
 
 instance Pure Header ms where
     render Header_ {..} =

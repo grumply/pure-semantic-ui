@@ -1,9 +1,15 @@
-module Semantic.Elements.Flag where
+module Semantic.Elements.Flag
+  ( module Properties
+  , module Tools
+  , Flag(..), pattern Flag
+  ) where
 
 import GHC.Generics as G
 import Pure.View hiding (name)
 
 import Semantic.Utils
+
+import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
   ( HasAsProp(..), pattern As

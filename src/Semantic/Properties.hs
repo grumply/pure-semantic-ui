@@ -89,9 +89,9 @@ pattern As as a <- (getAs &&& id -> (as,a)) where
 instance HasAsProp (View ms) where
     type AsProp (View ms) = [Feature ms] -> [View ms] -> View ms
 
-    -- Note: For Managed, Component, Text, Null, and Raw views, this 
+    -- Note: For Managed, Component, Text, Null, and Raw views, this
     -- method just extracts a reinjector that ignores its arguments.
-    -- For keyed nodes, KHTML and KSVG, this method will create a 
+    -- For keyed nodes, KHTML and KSVG, this method will create a
     -- `Constructor (View ms)` that adds indexes with (zip [0..]).
     getAs v =
         case v of
@@ -239,7 +239,7 @@ pattern Bulleted a <- (getBulleted &&& id -> (True,a)) where
     Bulleted a = setBulleted True a
 
 class HasCancelButtonProp a where
-    type CancelButtonProp a 
+    type CancelButtonProp a
     getCancelButton :: a -> CancelButtonProp a
     setCancelButton :: CancelButtonProp a -> a -> a
 
@@ -450,7 +450,7 @@ pattern Completed b a <- (getCompleted &&& id -> (b,a)) where
     Completed b a = setCompleted b a
 
 class HasConfirmButtonProp a where
-    type ConfirmButtonProp a 
+    type ConfirmButtonProp a
     getConfirmButton :: a -> ConfirmButtonProp a
     setConfirmButton :: ConfirmButtonProp a -> a -> a
 
@@ -1126,7 +1126,7 @@ pattern Once a <- (getOnce &&& id -> (True,a)) where
 
 class HasOnChangeProp a where
     type OnChangeProp a
-    getOnChange :: a -> OnChangeProp a 
+    getOnChange :: a -> OnChangeProp a
     setOnChange :: OnChangeProp a -> a -> a
 
 pattern OnChange :: HasOnChangeProp a => OnChangeProp a -> a -> a
@@ -1215,7 +1215,7 @@ pattern OnHide oh a <- (getOnHide &&& id -> (oh,a)) where
 
 class HasOnInputProp a where
     type OnInputProp a
-    getOnInput :: a -> OnInputProp a 
+    getOnInput :: a -> OnInputProp a
     setOnInput :: OnInputProp a -> a -> a
 
 pattern OnInput :: HasOnInputProp a => OnInputProp a -> a -> a
@@ -1224,7 +1224,7 @@ pattern OnInput f a <- (getOnInput &&& id -> (f,a)) where
 
 class HasOnKeyUpProp a where
     type OnKeyUpProp a
-    getOnKeyUp :: a -> OnKeyUpProp a 
+    getOnKeyUp :: a -> OnKeyUpProp a
     setOnKeyUp :: OnKeyUpProp a -> a -> a
 
 pattern OnKeyUp :: HasOnKeyUpProp a => OnKeyUpProp a -> a -> a
@@ -1275,7 +1275,7 @@ pattern OnMouseDown omd a <- (getOnMouseDown &&& id -> (omd,a)) where
 
 class HasOnMouseEnterProp a where
     type OnMouseEnterProp a
-    getOnMouseEnter :: a -> OnMouseEnterProp a 
+    getOnMouseEnter :: a -> OnMouseEnterProp a
     setOnMouseEnter :: OnMouseEnterProp a -> a -> a
 
 pattern OnMouseEnter :: HasOnMouseEnterProp a => OnMouseEnterProp a -> a -> a
@@ -1678,18 +1678,9 @@ pattern Required :: HasRequiredProp a => a -> a
 pattern Required a <- (getRequired &&& id -> (True,a)) where
     Required a = setRequired True a
 
-class HasResultsProp a where
-    type ResultsProp a
-    getResults :: a -> ResultsProp a
-    setResults :: ResultsProp a -> a -> a
-
-pattern Results :: HasResultsProp a => ResultsProp a -> a -> a
-pattern Results rs a <- (getResults &&& id -> (rs,a)) where
-    Results rs a = setResults rs a
-
 class HasReversedProp a where
     type ReversedProp a
-    getReversed :: a -> ReversedProp a 
+    getReversed :: a -> ReversedProp a
     setReversed :: ReversedProp a -> a -> a
 
 pattern Reversed :: HasReversedProp a => ReversedProp a -> a -> a

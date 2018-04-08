@@ -1,4 +1,8 @@
-module Semantic.Elements.Input where
+module Semantic.Elements.Input
+  ( module Properties
+  , module Tools
+  , Input(..), pattern Input
+  ) where
 
 import GHC.Generics as G
 import Pure.View as View hiding (disabled,focused,transparent,Disabled,Button,Label,Input,Type)
@@ -9,6 +13,8 @@ import Semantic.Utils
 import Semantic.Elements.Button
 import Semantic.Elements.Icon
 import Semantic.Elements.Label
+
+import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
   ( HasAsProp(..), pattern As

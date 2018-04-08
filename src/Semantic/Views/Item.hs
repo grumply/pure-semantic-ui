@@ -1,9 +1,22 @@
-module Semantic.Views.Item where
+module Semantic.Views.Item
+  ( module Properties
+  , module Tools
+  , Item(..), pattern Item
+  , Content(..), pattern Content
+  , Description(..), pattern Description
+  , Extra(..), pattern Extra
+  , Group(..), pattern Group
+  , Header(..), pattern Header
+  , Image(..), pattern Image
+  , Meta(..), pattern Meta
+  ) where
 
 import GHC.Generics as G hiding (Meta)
-import Pure.View hiding (verticalAlign,disabled,inline,hidden)
+import Pure.View hiding (verticalAlign,disabled,inline,hidden,Content,Description,Header,Meta)
 
 import Semantic.Utils
+
+import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
   ( HasAsProp(..), pattern As
@@ -404,7 +417,7 @@ instance HasAsProp (Image ms) where
 
 instance HasAttributesProp (Image ms) where
     type Attribute (Image ms) = Feature ms
-    getAttributes = attributes 
+    getAttributes = attributes
     setAttributes cs i = i { attributes = cs }
 
 instance HasBorderedProp (Image ms) where

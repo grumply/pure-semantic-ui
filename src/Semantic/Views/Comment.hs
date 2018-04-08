@@ -1,10 +1,24 @@
-module Semantic.Views.Comment where
+module Semantic.Views.Comment
+  ( module Properties
+  , module Tools
+  , Comment(..), pattern Comment
+  , Action(..), pattern Action
+  , Actions(..), pattern Actions
+  , Author(..), pattern Author
+  , Avatar(..), pattern Avatar
+  , Content(..), pattern Content
+  , Group(..), pattern Group
+  , Metadata(..), pattern Metadata
+  , Text(..), pattern Text
+  ) where
 
 import GHC.Generics as G
-import Pure.View hiding (Action,active)
+import Pure.View hiding (Action,active,Content,Text)
 import qualified Pure.View as HTML
 
 import Semantic.Utils
+
+import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
   ( HasAsProp(..), pattern As
@@ -239,7 +253,7 @@ instance Pure Avatar ms where
                 ( mergeClasses $ ClassList cs
                 : attributes
                 )
-                [Img [ HTML.Src src ] []] 
+                [Img [ HTML.Src src ] []]
 
 instance HasAsProp (Avatar ms) where
     type AsProp (Avatar ms) = [Feature ms] -> [View ms] -> View ms
@@ -433,7 +447,7 @@ instance Default (Text ms) where
     def = (G.to gdef) { as = A }
 
 pattern Text :: Text ms -> View ms
-pattern Text ct = View ct 
+pattern Text ct = View ct
 
 instance Pure Text ms where
     render Text_ {..} =

@@ -1,4 +1,8 @@
-module Semantic.Modules.Checkbox where
+module Semantic.Modules.Checkbox
+  ( module Properties
+  , module Tools
+  , Checkbox(..), pattern Checkbox
+  ) where
 
 import GHC.Generics as G
 import Pure.View hiding (disabled,name,onClick,Checked,Name,Type,Value)
@@ -6,6 +10,8 @@ import qualified Pure.View as HTML
 import Pure.Lifted (Node)
 
 import Semantic.Utils
+
+import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
   ( HasAsProp(..), pattern As
@@ -73,7 +79,7 @@ instance Pure Checkbox ms where
                 : (checked == Checked) # "checked"
                 : disabled # "disabled"
                 : (checked == Indeterminate) # "indeterminate"
-                : fitted # "fitted" 
+                : fitted # "fitted"
                 : radio # "radio"
                 : readOnly # "read-only"
                 : slider # "slider"

@@ -1,12 +1,20 @@
-module Semantic.Elements.Label where
+module Semantic.Elements.Label
+  ( module Properties
+  , module Tools
+  , Label(..), pattern Label
+  , Detail(..), pattern Detail
+  , Group(..), pattern Group
+  ) where
 
 import GHC.Generics as G
-import Pure.View as View hiding (active,color,empty,horizontal,onClick)
+import Pure.View as View hiding (active,color,empty,horizontal,onClick,Label)
 import qualified Pure.View as HTML
 
 import Semantic.Utils
 
 import Semantic.Elements.Image (Image(..))
+
+import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
   ( HasActiveProp(..), pattern Active

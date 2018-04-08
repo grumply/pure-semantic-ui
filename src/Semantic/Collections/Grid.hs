@@ -1,9 +1,17 @@
-module Semantic.Collections.Grid where
+module Semantic.Collections.Grid
+  ( module Properties
+  , module Tools
+  , Grid(..), pattern Grid
+  , Column(..), pattern Column
+  , Row(..), pattern Row
+  ) where
 
 import GHC.Generics as G
 import Pure.View hiding (name,textAlign,verticalAlign,color,width)
 
 import Semantic.Utils hiding (only)
+
+import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
   ( HasAsProp(..), pattern As
@@ -172,6 +180,7 @@ instance HasTextAlignProp (Grid ms) where
 instance HasVerticalAlignProp (Grid ms) where
     getVerticalAlign = verticalAlign
     setVerticalAlign v g = g { verticalAlign = v }
+
 data Column ms = Column_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]

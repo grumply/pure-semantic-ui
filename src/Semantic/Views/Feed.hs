@@ -1,11 +1,25 @@
-module Semantic.Views.Feed where
+module Semantic.Views.Feed
+  ( module Properties
+  , module Tools
+  , Feed(..), pattern Feed
+  , Content(..), pattern Content
+  , Date(..), pattern Date
+  , Event(..), pattern Event
+  , Extra(..), pattern Extra
+  , Label(..), pattern Label
+  , Like(..), pattern Like
+  , Meta(..), pattern Meta
+  , User(..), pattern User
+  ) where
 
 import GHC.Generics as G hiding (Meta)
-import Pure.View hiding (text,Event)
+import Pure.View hiding (text,Event,Meta,Label,Content)
 
 import Semantic.Utils
 
 import Semantic.Elements.Image (Image(..))
+
+import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
   ( HasAsProp(..), pattern As

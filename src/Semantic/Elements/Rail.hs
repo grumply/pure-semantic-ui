@@ -1,9 +1,15 @@
-module Semantic.Elements.Rail where
+module Semantic.Elements.Rail
+  ( module Properties
+  , module Tools
+  , Rail(..), pattern Rail
+  ) where
 
 import GHC.Generics as G
 import Pure.View hiding (position,verticalAlign)
 
 import Semantic.Utils
+
+import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
   ( HasAsProp(..), pattern As
@@ -70,7 +76,7 @@ instance HasAttachedProp (Rail ms) where
 
 instance HasAttributesProp (Rail ms) where
     type Attribute (Rail ms) = Feature ms
-    getAttributes = attributes 
+    getAttributes = attributes
     setAttributes cs r = r { attributes = cs }
 
 instance HasChildrenProp (Rail ms) where

@@ -1,11 +1,24 @@
 {-# LANGUAGE UndecidableInstances #-}
-module Semantic.Elements.List where
+module Semantic.Elements.List
+  ( module Properties
+  , module Tools
+  , List(..), pattern List
+  , Content(..), pattern Content
+  , Description(..), pattern Description
+  , Header(..), pattern Header
+  , Icon(..), pattern Icon
+  , Item(..), pattern Item
+  , Sublist(..), pattern Sublist
+  , Keyed(..), pattern Keyed
+  ) where
 
 import GHC.Generics as G
-import Pure.View hiding (horizontal,onClick,verticalAlign,disabled,active,color,name)
+import Pure.View hiding (horizontal,onClick,verticalAlign,disabled,active,color,name,Content,Description,Header)
 import qualified Pure.View as HTML
 
 import Semantic.Utils
+
+import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
   ( HasAnimatedProp(..), pattern Animated

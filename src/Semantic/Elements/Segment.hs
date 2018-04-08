@@ -1,9 +1,16 @@
-module Semantic.Elements.Segment where
+module Semantic.Elements.Segment
+  ( module Properties
+  , module Tools
+  , Segment(..), pattern Segment
+  , Group(..), pattern Group
+  ) where
 
 import GHC.Generics as G
 import Pure.View hiding (color,disabled,textAlign,vertical,horizontal)
 
 import Semantic.Utils
+
+import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
   ( HasAsProp(..), pattern As
