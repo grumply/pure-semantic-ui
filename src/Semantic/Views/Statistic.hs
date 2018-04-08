@@ -1,7 +1,7 @@
 module Semantic.Views.Statistic where
 
 import GHC.Generics as G
-import Pure.View hiding (color,horizontal,widths,text)
+import Pure.View hiding (color,horizontal,widths,text,Value)
 
 import Semantic.Utils
 
@@ -96,7 +96,7 @@ instance HasSizeProp (Statistic ms) where
     getSize = size
     setSize sz s = s { size = sz }
 
-data StatisticGroup ms = StatisticGroup_
+data Group ms = Group_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]
     , children :: [View ms]
@@ -108,14 +108,14 @@ data StatisticGroup ms = StatisticGroup_
     , widths :: Width
     } deriving (Generic)
 
-instance Default (StatisticGroup ms) where
+instance Default (Group ms) where
     def = (G.to gdef) { as = Div }
 
-pattern StatisticGroup :: StatisticGroup ms -> View ms
-pattern StatisticGroup sg = View sg
+pattern Group :: Group ms -> View ms
+pattern Group sg = View sg
 
-instance Pure StatisticGroup ms where
-    render StatisticGroup_ {..} =
+instance Pure Group ms where
+    render Group_ {..} =
         let
             cs =
                 ( "ui"
@@ -134,60 +134,60 @@ instance Pure StatisticGroup ms where
                 )
                 children
 
-instance HasAsProp (StatisticGroup ms) where
-    type AsProp (StatisticGroup ms) = [Feature ms] -> [View ms] -> View ms
+instance HasAsProp (Group ms) where
+    type AsProp (Group ms) = [Feature ms] -> [View ms] -> View ms
     getAs = as
     setAs a sg = sg { as = a }
 
-instance HasAttributesProp (StatisticGroup ms) where
-    type Attribute (StatisticGroup ms) = Feature ms
+instance HasAttributesProp (Group ms) where
+    type Attribute (Group ms) = Feature ms
     getAttributes = attributes
     setAttributes as sg = sg { attributes = as }
 
-instance HasChildrenProp (StatisticGroup ms) where
-    type Child (StatisticGroup ms) = View ms
+instance HasChildrenProp (Group ms) where
+    type Child (Group ms) = View ms
     getChildren = children
     setChildren cs sg = sg { children = cs }
 
-instance HasClassesProp (StatisticGroup ms) where
+instance HasClassesProp (Group ms) where
     getClasses = classes
     setClasses cs sg = sg { classes = cs }
 
-instance HasColorProp (StatisticGroup ms) where
+instance HasColorProp (Group ms) where
     getColor = color
     setColor c s = s { color = c }
 
-instance HasHorizontalProp (StatisticGroup ms) where
+instance HasHorizontalProp (Group ms) where
     getHorizontal = horizontal
     setHorizontal h s = s { horizontal = h }
 
-instance HasInvertedProp (StatisticGroup ms) where
+instance HasInvertedProp (Group ms) where
     getInverted = inverted
     setInverted i s = s { inverted = i }
 
-instance HasSizeProp (StatisticGroup ms) where
+instance HasSizeProp (Group ms) where
     getSize = size
     setSize sz s = s { size = sz }
 
-instance HasWidthsProp (StatisticGroup ms) where
+instance HasWidthsProp (Group ms) where
     getWidths = widths
     setWidths w s = s { widths = w }
 
-data StatisticLabel ms = StatisticLabel_
+data Label ms = Label_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]
     , children :: [View ms]
     , classes :: [Txt]
     } deriving (Generic)
 
-instance Default (StatisticLabel ms) where
+instance Default (Label ms) where
     def = (G.to gdef) { as = Div }
 
-pattern StatisticLabel :: StatisticLabel ms -> View ms
-pattern StatisticLabel sl = View sl
+pattern Label :: Label ms -> View ms
+pattern Label sl = View sl
 
-instance Pure StatisticLabel ms where
-    render StatisticLabel_ {..} =
+instance Pure Label ms where
+    render Label_ {..} =
         let
             cs =
                 ( "label"
@@ -200,26 +200,26 @@ instance Pure StatisticLabel ms where
                 )
                 children
 
-instance HasAsProp (StatisticLabel ms) where
-    type AsProp (StatisticLabel ms) = [Feature ms] -> [View ms] -> View ms
+instance HasAsProp (Label ms) where
+    type AsProp (Label ms) = [Feature ms] -> [View ms] -> View ms
     getAs = as
     setAs a sl = sl { as = a }
 
-instance HasAttributesProp (StatisticLabel ms) where
-    type Attribute (StatisticLabel ms) = Feature ms
+instance HasAttributesProp (Label ms) where
+    type Attribute (Label ms) = Feature ms
     getAttributes = attributes
     setAttributes as sl = sl { attributes = as }
 
-instance HasChildrenProp (StatisticLabel ms) where
-    type Child (StatisticLabel ms) = View ms
+instance HasChildrenProp (Label ms) where
+    type Child (Label ms) = View ms
     getChildren = children
     setChildren cs sl = sl { children = cs }
 
-instance HasClassesProp (StatisticLabel ms) where
+instance HasClassesProp (Label ms) where
     getClasses = classes
     setClasses cs sl = sl { classes = cs }
 
-data StatisticValue ms = StatisticValue_
+data Value ms = Value_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]
     , children :: [View ms]
@@ -227,14 +227,14 @@ data StatisticValue ms = StatisticValue_
     , text :: Bool
     } deriving (Generic)
 
-instance Default (StatisticValue ms) where
+instance Default (Value ms) where
     def = (G.to gdef) { as = Div }
 
-pattern StatisticValue :: StatisticValue ms -> View ms
-pattern StatisticValue sv = View sv
+pattern Value :: Value ms -> View ms
+pattern Value sv = View sv
 
-instance Pure StatisticValue ms where
-    render StatisticValue_ {..} =
+instance Pure Value ms where
+    render Value_ {..} =
         let
             cs =
                 ( text # "text"
@@ -248,25 +248,25 @@ instance Pure StatisticValue ms where
                 )
                 children
 
-instance HasAsProp (StatisticValue ms) where
-    type AsProp (StatisticValue ms) = [Feature ms] -> [View ms] -> View ms
+instance HasAsProp (Value ms) where
+    type AsProp (Value ms) = [Feature ms] -> [View ms] -> View ms
     getAs = as
     setAs a sv = sv { as = a }
 
-instance HasAttributesProp (StatisticValue ms) where
-    type Attribute (StatisticValue ms) = Feature ms
+instance HasAttributesProp (Value ms) where
+    type Attribute (Value ms) = Feature ms
     getAttributes = attributes
     setAttributes as sv = sv { attributes = as }
 
-instance HasChildrenProp (StatisticValue ms) where
-    type Child (StatisticValue ms) = View ms
+instance HasChildrenProp (Value ms) where
+    type Child (Value ms) = View ms
     getChildren = children
     setChildren cs sv = sv { children = cs }
 
-instance HasClassesProp (StatisticValue ms) where
+instance HasClassesProp (Value ms) where
     getClasses = classes
     setClasses cs sv = sv { classes = cs }
 
-instance HasIsTextProp (StatisticValue ms) where
+instance HasIsTextProp (Value ms) where
     getIsText = text
     setIsText it sv = sv { text = it }
