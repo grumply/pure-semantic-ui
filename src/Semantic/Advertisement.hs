@@ -21,7 +21,7 @@ import Semantic.Properties as Properties
   , pattern Unit, Unit(..)
   )
 
-import Data.Function as Tool ((&))
+import Data.Function as Tools ((&))
 import Pure.Data.Default as Tools
 
 data Advertisement ms = Advertisement_

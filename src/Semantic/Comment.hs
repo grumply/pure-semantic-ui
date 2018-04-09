@@ -33,7 +33,7 @@ import Semantic.Properties as Properties
   , pattern Src, Src(..)
   )
 
-import Data.Function as Tool ((&))
+import Data.Function as Tools ((&))
 import Pure.Data.Default as Tools
 
 data Comment ms = Comment_

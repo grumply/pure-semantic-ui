@@ -35,7 +35,7 @@ import Semantic.Properties as Properties
   , pattern Stackable, Stackable(..)
   )
 
-import Data.Function as Tool ((&))
+import Data.Function as Tools ((&))
 import Pure.Data.Default as Tools
 
 data Card ms = Card_

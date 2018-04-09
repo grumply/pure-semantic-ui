@@ -28,7 +28,7 @@ import Semantic.Properties as Properties
   , pattern IsText, IsText(..)
   )
 
-import Data.Function as Tool ((&))
+import Data.Function as Tools ((&))
 import Pure.Data.Default as Tools
 
 data Statistic ms = Statistic_
