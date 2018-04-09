@@ -8,38 +8,38 @@ module Semantic.Behaviors.Visibility
 import Data.Coerce
 import Data.IORef
 import GHC.Generics as G
-import Pure.View hiding (offset,Visibility)
-import Pure.Lifted
+import Pure.View hiding (offset,Visibility,Offset)
+import Pure.Lifted hiding (Offset)
 import Pure.DOM (addAnimation)
 
 import Semantic.Utils
 
-import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
-  ( HasAsProp(..)                     , pattern As
-  , HasAttributesProp(..)             , pattern Attributes
-  , HasChildrenProp(..)               , pattern Children
-  , HasClassesProp(..)                , pattern Classes
-  , HasContextProp(..)                , pattern Context
-  , HasContinuousProp(..)             , pattern Continuous
-  , HasFireOnMountProp(..)            , pattern FireOnMount
-  , HasOffsetProp(..)                 , pattern Offset
-  , HasOnBottomPassedProp(..)         , pattern OnBottomPassed
-  , HasOnBottomPassedReverseProp(..)  , pattern OnBottomPassedReverse
-  , HasOnBottomVisibleProp(..)        , pattern OnBottomVisible
-  , HasOnBottomVisibleReverseProp(..) , pattern OnBottomVisibleReverse
-  , HasOnceProp(..)                   , pattern Once
-  , HasOnPassedProp(..)               , pattern OnPassed
-  , HasOnPassingProp(..)              , pattern OnPassing
-  , HasOnPassingReverseProp(..)       , pattern OnPassingReverse
-  , HasOnOffScreenProp(..)            , pattern OnOffScreen
-  , HasOnOnScreenProp(..)             , pattern OnOnScreen
-  , HasOnTopPassedProp(..)            , pattern OnTopPassed
-  , HasOnTopPassedReverseProp(..)     , pattern OnTopPassedReverse
-  , HasOnTopVisibleProp(..)           , pattern OnTopVisible
-  , HasOnTopVisibleReverseProp(..)    , pattern OnTopVisibleReverse
-  , HasOnUpdateProp(..)               , pattern OnUpdate
+  ( pattern As, As(..)
+  , pattern Attributes, Attributes(..)
+  , pattern Children, Children(..)
+  , pattern Classes, Classes(..)
+  , pattern Context, Context(..)
+  , pattern Continuous, Continuous(..)
+  , pattern FireOnMount, FireOnMount(..)
+  , pattern Offset, Offset(..)
+  , pattern OnBottomPassed, OnBottomPassed(..)
+  , pattern OnBottomPassedReverse, OnBottomPassedReverse(..)
+  , pattern OnBottomVisible, OnBottomVisible(..)
+  , pattern OnBottomVisibleReverse, OnBottomVisibleReverse(..)
+  , pattern Once, Once(..)
+  , pattern OnPassed, OnPassed(..)
+  , pattern OnPassing, OnPassing(..)
+  , pattern OnPassingReverse, OnPassingReverse(..)
+  , pattern OnOffScreen, OnOffScreen(..)
+  , pattern OnOnScreen, OnOnScreen(..)
+  , pattern OnTopPassed, OnTopPassed(..)
+  , pattern OnTopPassedReverse, OnTopPassedReverse(..)
+  , pattern OnTopVisible, OnTopVisible(..)
+  , pattern OnTopVisibleReverse, OnTopVisibleReverse(..)
+  , pattern OnUpdate, OnUpdate(..)
   )
 
 data Passed = PixelsPassed Double | PercentPassed Double
@@ -285,113 +285,117 @@ instance Pure Visibility ms where
 
                 }
 
-instance HasAsProp (Visibility ms) where
-    type AsProp (Visibility ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a v = v { as = a }
+instance HasProp As (Visibility ms) where
+    type Prop As (Visibility ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a v = v { as = a }
 
-instance HasAttributesProp (Visibility ms) where
-    type Attribute (Visibility ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as v = v { attributes = as }
+instance HasProp Attributes (Visibility ms) where
+    type Prop Attributes (Visibility ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as v = v { attributes = as }
 
-instance HasChildrenProp (Visibility ms) where
-    type Child (Visibility ms) = View ms
-    getChildren = children
-    setChildren cs v = v { children = cs }
+instance HasProp Children (Visibility ms) where
+    type Prop Children (Visibility ms) = [View ms]
+    getProp _ = children
+    setProp _ cs v = v { children = cs }
 
-instance HasClassesProp (Visibility ms) where
-    getClasses = classes
-    setClasses cs v = v { classes = cs }
+instance HasProp Classes (Visibility ms) where
+    type Prop Classes (Visibility ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs v = v { classes = cs }
 
-instance HasContextProp (Visibility ms) where
-    type ContextProp (Visibility ms) = Maybe JSV
-    getContext = context
-    setContext c v = v { context = c }
+instance HasProp Context (Visibility ms) where
+    type Prop Context (Visibility ms) = Maybe JSV
+    getProp _ = context
+    setProp _ c v = v { context = c }
 
-instance HasContinuousProp (Visibility ms) where
-    getContinuous = continuous
-    setContinuous c v = v { continuous = c }
+instance HasProp Continuous (Visibility ms) where
+    type Prop Continuous (Visibility ms) = Bool
+    getProp _ = continuous
+    setProp _ c v = v { continuous = c }
 
-instance HasFireOnMountProp (Visibility ms) where
-    getFireOnMount = fireOnMount
-    setFireOnMount fom v = v { fireOnMount = fom }
+instance HasProp FireOnMount (Visibility ms) where
+    type Prop FireOnMount (Visibility ms) = Bool
+    getProp _ = fireOnMount
+    setProp _ fom v = v { fireOnMount = fom }
 
-instance HasOnBottomPassedProp (Visibility ms) where
-    type OnBottomPassedProp (Visibility ms) = Maybe (Calculations -> Ef ms IO ())
-    getOnBottomPassed = onBottomPassed
-    setOnBottomPassed obp v = v { onBottomPassed = obp }
+instance HasProp OnBottomPassed (Visibility ms) where
+    type Prop OnBottomPassed (Visibility ms) = Maybe (Calculations -> Ef ms IO ())
+    getProp _ = onBottomPassed
+    setProp _ obp v = v { onBottomPassed = obp }
 
-instance HasOnBottomPassedReverseProp (Visibility ms) where
-    type OnBottomPassedReverseProp (Visibility ms) = Maybe (Calculations -> Ef ms IO ())
-    getOnBottomPassedReverse = onBottomPassedReverse
-    setOnBottomPassedReverse obpr v = v { onBottomPassedReverse = obpr }
+instance HasProp OnBottomPassedReverse (Visibility ms) where
+    type Prop OnBottomPassedReverse (Visibility ms) = Maybe (Calculations -> Ef ms IO ())
+    getProp _ = onBottomPassedReverse
+    setProp _ obpr v = v { onBottomPassedReverse = obpr }
 
-instance HasOnBottomVisibleProp (Visibility ms) where
-    type OnBottomVisibleProp (Visibility ms) = Maybe (Calculations -> Ef ms IO ())
-    getOnBottomVisible = onBottomVisible
-    setOnBottomVisible obv v = v { onBottomVisible = obv }
+instance HasProp OnBottomVisible (Visibility ms) where
+    type Prop OnBottomVisible (Visibility ms) = Maybe (Calculations -> Ef ms IO ())
+    getProp _ = onBottomVisible
+    setProp _ obv v = v { onBottomVisible = obv }
 
-instance HasOnBottomVisibleReverseProp (Visibility ms) where
-    type OnBottomVisibleReverseProp (Visibility ms) = Maybe (Calculations -> Ef ms IO ())
-    getOnBottomVisibleReverse = onBottomVisibleReverse
-    setOnBottomVisibleReverse obvr v = v { onBottomVisibleReverse = obvr }
+instance HasProp OnBottomVisibleReverse (Visibility ms) where
+    type Prop OnBottomVisibleReverse (Visibility ms) = Maybe (Calculations -> Ef ms IO ())
+    getProp _ = onBottomVisibleReverse
+    setProp _ obvr v = v { onBottomVisibleReverse = obvr }
 
-instance HasOffsetProp (Visibility ms) where
-    type OffsetProp (Visibility ms) = (Double,Double)
-    getOffset = offset
-    setOffset o v = v { offset = o }
+instance HasProp Offset (Visibility ms) where
+    type Prop Offset (Visibility ms) = (Double,Double)
+    getProp _ = offset
+    setProp _ o v = v { offset = o }
 
-instance HasOnceProp (Visibility ms) where
-    getOnce = once
-    setOnce o v = v { once = o }
+instance HasProp Once (Visibility ms) where
+    type Prop Once (Visibility ms) = Bool
+    getProp _ = once
+    setProp _ o v = v { once = o }
 
-instance HasOnPassedProp (Visibility ms) where
-    type OnPassedProp (Visibility ms) = [(Calculations -> Ef ms IO (),Passed)]
-    getOnPassed = onPassed
-    setOnPassed op v = v { onPassed = op }
+instance HasProp OnPassed (Visibility ms) where
+    type Prop OnPassed (Visibility ms) = [(Calculations -> Ef ms IO (),Passed)]
+    getProp _ = onPassed
+    setProp _ op v = v { onPassed = op }
 
-instance HasOnPassingProp (Visibility ms) where
-    type OnPassingProp (Visibility ms) = Maybe (Calculations -> Ef ms IO ())
-    getOnPassing = onPassing
-    setOnPassing op v = v { onPassing = op }
+instance HasProp OnPassing (Visibility ms) where
+    type Prop OnPassing (Visibility ms) = Maybe (Calculations -> Ef ms IO ())
+    getProp _ = onPassing
+    setProp _ op v = v { onPassing = op }
 
-instance HasOnPassingReverseProp (Visibility ms) where
-    type OnPassingReverseProp (Visibility ms) = Maybe (Calculations -> Ef ms IO ())
-    getOnPassingReverse = onPassingReverse
-    setOnPassingReverse opr v = v { onPassingReverse = opr }
+instance HasProp OnPassingReverse (Visibility ms) where
+    type Prop OnPassingReverse (Visibility ms) = Maybe (Calculations -> Ef ms IO ())
+    getProp _ = onPassingReverse
+    setProp _ opr v = v { onPassingReverse = opr }
 
-instance HasOnOffScreenProp (Visibility ms) where
-    type OnOffScreenProp (Visibility ms) = Maybe (Calculations -> Ef ms IO ())
-    getOnOffScreen = onOffScreen
-    setOnOffScreen oos v = v { onOffScreen = oos }
+instance HasProp OnOffScreen (Visibility ms) where
+    type Prop OnOffScreen (Visibility ms) = Maybe (Calculations -> Ef ms IO ())
+    getProp _ = onOffScreen
+    setProp _ oos v = v { onOffScreen = oos }
 
-instance HasOnOnScreenProp (Visibility ms) where
-    type OnOnScreenProp (Visibility ms) = Maybe (Calculations -> Ef ms IO ())
-    getOnOnScreen = onOnScreen
-    setOnOnScreen oos v = v { onOnScreen = oos }
+instance HasProp OnOnScreen (Visibility ms) where
+    type Prop OnOnScreen (Visibility ms) = Maybe (Calculations -> Ef ms IO ())
+    getProp _ = onOnScreen
+    setProp _ oos v = v { onOnScreen = oos }
 
-instance HasOnTopPassedProp (Visibility ms) where
-    type OnTopPassedProp (Visibility ms) = Maybe (Calculations -> Ef ms IO ())
-    getOnTopPassed = onTopPassed
-    setOnTopPassed otp v = v { onTopPassed = otp }
+instance HasProp OnTopPassed (Visibility ms) where
+    type Prop OnTopPassed (Visibility ms) = Maybe (Calculations -> Ef ms IO ())
+    getProp _ = onTopPassed
+    setProp _ otp v = v { onTopPassed = otp }
 
-instance HasOnTopPassedReverseProp (Visibility ms) where
-    type OnTopPassedReverseProp (Visibility ms) = Maybe (Calculations -> Ef ms IO ())
-    getOnTopPassedReverse = onTopPassedReverse
-    setOnTopPassedReverse otpr v = v { onTopPassedReverse = otpr }
+instance HasProp OnTopPassedReverse (Visibility ms) where
+    type Prop OnTopPassedReverse (Visibility ms) = Maybe (Calculations -> Ef ms IO ())
+    getProp _ = onTopPassedReverse
+    setProp _ otpr v = v { onTopPassedReverse = otpr }
 
-instance HasOnTopVisibleProp (Visibility ms) where
-    type OnTopVisibleProp (Visibility ms) = Maybe (Calculations -> Ef ms IO ())
-    getOnTopVisible = onTopVisible
-    setOnTopVisible otv v = v { onTopVisible = otv }
+instance HasProp OnTopVisible (Visibility ms) where
+    type Prop OnTopVisible (Visibility ms) = Maybe (Calculations -> Ef ms IO ())
+    getProp _ = onTopVisible
+    setProp _ otv v = v { onTopVisible = otv }
 
-instance HasOnTopVisibleReverseProp (Visibility ms) where
-    type OnTopVisibleReverseProp (Visibility ms) = Maybe (Calculations -> Ef ms IO ())
-    getOnTopVisibleReverse = onTopVisibleReverse
-    setOnTopVisibleReverse otvr v = v { onTopVisibleReverse = otvr }
+instance HasProp OnTopVisibleReverse (Visibility ms) where
+    type Prop OnTopVisibleReverse (Visibility ms) = Maybe (Calculations -> Ef ms IO ())
+    getProp _ = onTopVisibleReverse
+    setProp _ otvr v = v { onTopVisibleReverse = otvr }
 
-instance HasOnUpdateProp (Visibility ms) where
-    type OnUpdateProp (Visibility ms) = Maybe (Calculations -> Ef ms IO ())
-    getOnUpdate = onUpdate
-    setOnUpdate ou v = v { onUpdate = ou }
+instance HasProp OnUpdate (Visibility ms) where
+    type Prop OnUpdate (Visibility ms) = Maybe (Calculations -> Ef ms IO ())
+    getProp _ = onUpdate
+    setProp _ ou v = v { onUpdate = ou }

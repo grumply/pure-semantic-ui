@@ -9,19 +9,19 @@ import Pure.View hiding (active,disabled,inline,verticalAlign)
 
 import Semantic.Utils
 
-import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
-  ( HasActiveProp(..), pattern Active
-  , HasAsProp(..), pattern As
-  , HasAttributesProp(..), pattern Attributes
-  , HasChildrenProp(..), pattern Children
-  , HasClassesProp(..), pattern Classes
-  , HasDisabledProp(..), pattern Disabled
-  , HasInlineProp(..), pattern Inline
-  , HasInvertedProp(..), pattern Inverted
-  , HasIsIndeterminateProp(..), pattern IsIndeterminate
-  , HasSizeProp(..), pattern Size
+  ( pattern Active, Active(..)
+  , pattern As, As(..)
+  , pattern Attributes, Attributes(..)
+  , pattern Children, Children(..)
+  , pattern Classes, Classes(..)
+  , pattern Disabled, Disabled(..)
+  , pattern Inline, Inline(..)
+  , pattern Inverted, Inverted(..)
+  , pattern IsIndeterminate, IsIndeterminate(..)
+  , pattern Size, Size(..)
   )
 
 data Loader ms = Loader_
@@ -65,46 +65,52 @@ instance Pure Loader ms where
                 )
                 children
 
-instance HasActiveProp (Loader ms) where
-    getActive = active
-    setActive a l = l { active = a }
+instance HasProp Active (Loader ms) where
+    type Prop Active (Loader ms) = Bool
+    getProp _ = active
+    setProp _ a l = l { active = a }
 
-instance HasAsProp (Loader ms) where
-    type AsProp (Loader ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs f l = l { as = f }
+instance HasProp As (Loader ms) where
+    type Prop As (Loader ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ f l = l { as = f }
 
-instance HasAttributesProp (Loader ms) where
-    type Attribute (Loader ms) = Feature ms
-    getAttributes = attributes
-    setAttributes cs l = l { attributes = cs }
+instance HasProp Attributes (Loader ms) where
+    type Prop Attributes (Loader ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ cs l = l { attributes = cs }
 
-instance HasChildrenProp (Loader ms) where
-    type Child (Loader ms) = View ms
-    getChildren = children
-    setChildren cs l = l { children = cs }
+instance HasProp Children (Loader ms) where
+    type Prop Children (Loader ms) = [View ms]
+    getProp _ = children
+    setProp _ cs l = l { children = cs }
 
-instance HasClassesProp (Loader ms) where
-    getClasses = classes
-    setClasses cs l = l { classes = cs }
+instance HasProp Classes (Loader ms) where
+    type Prop Classes (Loader ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs l = l { classes = cs }
 
-instance HasDisabledProp (Loader ms) where
-    getDisabled = disabled
-    setDisabled d l = l { disabled = d }
+instance HasProp Disabled (Loader ms) where
+    type Prop Disabled (Loader ms) = Bool
+    getProp _ = disabled
+    setProp _ d l = l { disabled = d }
 
-instance HasInlineProp (Loader ms) where
-    type InlineProp (Loader ms) = Maybe Txt
-    getInline = inline
-    setInline i l = l { inline = i }
+instance HasProp Inline (Loader ms) where
+    type Prop Inline (Loader ms) = Maybe Txt
+    getProp _ = inline
+    setProp _ i l = l { inline = i }
 
-instance HasIsIndeterminateProp (Loader ms) where
-    getIsIndeterminate = indeterminate
-    setIsIndeterminate i l = l { indeterminate = i }
+instance HasProp IsIndeterminate (Loader ms) where
+    type Prop IsIndeterminate (Loader ms) = Bool
+    getProp _ = indeterminate
+    setProp _ i l = l { indeterminate = i }
 
-instance HasInvertedProp (Loader ms) where
-    getInverted = inverted
-    setInverted i l = l { inverted = i }
+instance HasProp Inverted (Loader ms) where
+    type Prop Inverted (Loader ms) = Bool
+    getProp _ = inverted
+    setProp _ i l = l { inverted = i }
 
-instance HasSizeProp (Loader ms) where
-    getSize = size
-    setSize s l = l { size = s }
+instance HasProp Size (Loader ms) where
+    type Prop Size (Loader ms) = Txt
+    getProp _ = size
+    setProp _ s l = l { size = s }

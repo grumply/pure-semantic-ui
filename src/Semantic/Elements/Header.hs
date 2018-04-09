@@ -15,23 +15,23 @@ import Semantic.Utils
 import Semantic.Elements.Icon
 import Semantic.Elements.Image
 
-import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
-  ( HasAsProp(..), pattern As
-  , HasAttachedProp(..), pattern Attached
-  , HasAttributesProp(..), pattern Attributes
-  , HasBlockProp(..), pattern Block
-  , HasChildrenProp(..), pattern Children
-  , HasClassesProp(..), pattern Classes
-  , HasColorProp(..), pattern Color
-  , HasDisabledProp(..), pattern Disabled
-  , HasDividingProp(..), pattern Dividing
-  , HasFloatedProp(..), pattern Floated
-  , HasInvertedProp(..), pattern Inverted
-  , HasSizeProp(..), pattern Size
-  , HasSubProp(..), pattern Sub
-  , HasTextAlignProp(..), pattern TextAlign
+  ( pattern As, As(..)
+  , pattern Attached, Attached(..)
+  , pattern Attributes, Attributes(..)
+  , pattern Block, Block(..)
+  , pattern Children, Children(..)
+  , pattern Classes, Classes(..)
+  , pattern Color, Color(..)
+  , pattern Disabled, Disabled(..)
+  , pattern Dividing, Dividing(..)
+  , pattern Floated, Floated(..)
+  , pattern Inverted, Inverted(..)
+  , pattern Size, Size(..)
+  , pattern Sub, Sub(..)
+  , pattern TextAlign, TextAlign(..)
   )
 
 data Header ms = Header_
@@ -86,65 +86,75 @@ instance Pure Header ms where
                )
                children
 
-instance HasAsProp (Header ms) where
-    type AsProp (Header ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs f h = h { as = f }
+instance HasProp As (Header ms) where
+    type Prop As (Header ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ f h = h { as = f }
 
-instance HasAttachedProp (Header ms) where
-    type AttachedProp (Header ms) = Maybe Txt
-    getAttached = attached
-    setAttached attach h = h { attached = attach }
+instance HasProp Attached (Header ms) where
+    type Prop Attached (Header ms) = Maybe Txt
+    getProp _ = attached
+    setProp _ attach h = h { attached = attach }
 
-instance HasAttributesProp (Header ms) where
-    type Attribute (Header ms) = Feature ms
-    getAttributes = attributes
-    setAttributes cs h = h { attributes = cs }
+instance HasProp Attributes (Header ms) where
+    type Prop Attributes (Header ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ cs h = h { attributes = cs }
 
-instance HasBlockProp (Header ms) where
-    getBlock = block
-    setBlock b h = h { block = b }
+instance HasProp Block (Header ms) where
+    type Prop Block (Header ms) = Bool
+    getProp _ = block
+    setProp _ b h = h { block = b }
 
-instance HasChildrenProp (Header ms) where
-    type Child (Header ms) = View ms
-    getChildren = children
-    setChildren cs h = h { children = cs }
+instance HasProp Children (Header ms) where
+    type Prop Children (Header ms) = [View ms]
+    getProp _ = children
+    setProp _ cs h = h { children = cs }
 
-instance HasClassesProp (Header ms) where
-    getClasses = classes
-    setClasses cs h = h { classes = cs }
+instance HasProp Classes (Header ms) where
+    type Prop Classes (Header ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs h = h { classes = cs }
 
-instance HasColorProp (Header ms) where
-    getColor = color
-    setColor c h = h { color = c }
+instance HasProp Color (Header ms) where
+    type Prop Color (Header ms) = Txt
+    getProp _ = color
+    setProp _ c h = h { color = c }
 
-instance HasDisabledProp (Header ms) where
-    getDisabled = disabled
-    setDisabled d h = h { disabled = d }
+instance HasProp Disabled (Header ms) where
+    type Prop Disabled (Header ms) = Bool
+    getProp _ = disabled
+    setProp _ d h = h { disabled = d }
 
-instance HasDividingProp (Header ms) where
-    getDividing = dividing
-    setDividing d h = h { dividing = d }
+instance HasProp Dividing (Header ms) where
+    type Prop Dividing (Header ms) = Bool
+    getProp _ = dividing
+    setProp _ d h = h { dividing = d }
 
-instance HasFloatedProp (Header ms) where
-    getFloated = floated
-    setFloated f h = h { floated = f }
+instance HasProp Floated (Header ms) where
+    type Prop Floated (Header ms) = Txt
+    getProp _ = floated
+    setProp _ f h = h { floated = f }
 
-instance HasInvertedProp (Header ms) where
-    getInverted = inverted
-    setInverted i h = h { inverted = i }
+instance HasProp Inverted (Header ms) where
+    type Prop Inverted (Header ms) = Bool
+    getProp _ = inverted
+    setProp _ i h = h { inverted = i }
 
-instance HasSizeProp (Header ms) where
-    getSize = size
-    setSize s h = h { size = s }
+instance HasProp Size (Header ms) where
+    type Prop Size (Header ms) = Txt
+    getProp _ = size
+    setProp _ s h = h { size = s }
 
-instance HasSubProp (Header ms) where
-    getSub = sub
-    setSub s h = h { sub = s }
+instance HasProp Sub (Header ms) where
+    type Prop Sub (Header ms) = Bool
+    getProp _ = sub
+    setProp _ s h = h { sub = s }
 
-instance HasTextAlignProp (Header ms) where
-    getTextAlign = textAlign
-    setTextAlign ta h = h { textAlign = ta }
+instance HasProp TextAlign (Header ms) where
+    type Prop TextAlign (Header ms) = Txt
+    getProp _ = textAlign
+    setProp _ ta h = h { textAlign = ta }
 
 data Content ms = Content_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -167,24 +177,25 @@ instance Pure Content ms where
             )
             children
 
-instance HasAsProp (Content ms) where
-    type AsProp (Content ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs f hc = hc { as = f }
+instance HasProp As (Content ms) where
+    type Prop As (Content ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ f hc = hc { as = f }
 
-instance HasAttributesProp (Content ms) where
-    type Attribute (Content ms) = Feature ms
-    getAttributes = attributes
-    setAttributes cs hc = hc { attributes = cs }
+instance HasProp Attributes (Content ms) where
+    type Prop Attributes (Content ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ cs hc = hc { attributes = cs }
 
-instance HasChildrenProp (Content ms) where
-    type Child (Content ms) = View ms
-    getChildren = children
-    setChildren cs hc = hc { children = cs }
+instance HasProp Children (Content ms) where
+    type Prop Children (Content ms) = [View ms]
+    getProp _ = children
+    setProp _ cs hc = hc { children = cs }
 
-instance HasClassesProp (Content ms) where
-    getClasses = classes
-    setClasses cs hc = hc { classes = cs }
+instance HasProp Classes (Content ms) where
+    type Prop Classes (Content ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs hc = hc { classes = cs }
 
 data Subheader ms = Subheader_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -207,21 +218,22 @@ instance Pure Subheader ms where
             )
             children
 
-instance HasAsProp (Subheader ms) where
-    type AsProp (Subheader ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs f hs = hs { as = f }
+instance HasProp As (Subheader ms) where
+    type Prop As (Subheader ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ f hs = hs { as = f }
 
-instance HasAttributesProp (Subheader ms) where
-    type Attribute (Subheader ms) = Feature ms
-    getAttributes = attributes
-    setAttributes cs hs = hs { attributes = cs }
+instance HasProp Attributes (Subheader ms) where
+    type Prop Attributes (Subheader ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ cs hs = hs { attributes = cs }
 
-instance HasChildrenProp (Subheader ms) where
-    type Child (Subheader ms) = View ms
-    getChildren = children
-    setChildren cs hs = hs { children = cs }
+instance HasProp Children (Subheader ms) where
+    type Prop Children (Subheader ms) = [View ms]
+    getProp _ = children
+    setProp _ cs hs = hs { children = cs }
 
-instance HasClassesProp (Subheader ms) where
-    getClasses = classes
-    setClasses cs hs = hs { classes = cs }
+instance HasProp Classes (Subheader ms) where
+    type Prop Classes (Subheader ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs hs = hs { classes = cs }

@@ -9,32 +9,32 @@ module Semantic.Elements.Step
   ) where
 
 import GHC.Generics as G
-import Pure.View hiding (active,completed,disabled,onClick,vertical,widths,Content,Title,Description,Step)
+import Pure.View hiding (active,completed,disabled,onClick,vertical,widths,Content,Title,Description,Step,Ref)
 
 import Semantic.Utils
 
-import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
-  ( HasAsProp(..), pattern As
-  , HasAttributesProp(..), pattern Attributes
-  , HasChildrenProp(..), pattern Children
-  , HasClassesProp(..), pattern Classes
-  , HasActiveProp(..), pattern Active
-  , HasCompletedProp(..), pattern Completed
-  , HasDisabledProp(..), pattern Disabled
-  , HasRefProp(..), pattern Ref
-  , HasLinkProp(..), pattern Link
-  , HasOnClickProp(..), pattern OnClick
-  , HasOrderedProp(..), pattern Ordered
-  , HasAttachedProp(..), pattern Attached
-  , HasFluidProp(..), pattern Fluid
-  , HasOrderedProp(..), pattern Ordered
-  , HasSizeProp(..), pattern Size
-  , HasStackableProp(..), pattern Stackable
-  , HasUnstackableProp(..), pattern Unstackable
-  , HasVerticalProp(..), pattern Vertical
-  , HasWidthsProp(..), pattern Widths
+  ( pattern As, As(..)
+  , pattern Attributes, Attributes(..)
+  , pattern Children, Children(..)
+  , pattern Classes, Classes(..)
+  , pattern Active, Active(..)
+  , pattern Completed, Completed(..)
+  , pattern Disabled, Disabled(..)
+  , pattern Ref, Ref(..)
+  , pattern Link, Link(..)
+  , pattern OnClick, OnClick(..)
+  , pattern Ordered, Ordered(..)
+  , pattern Attached, Attached(..)
+  , pattern Fluid, Fluid(..)
+  , pattern Ordered, Ordered(..)
+  , pattern Size, Size(..)
+  , pattern Stackable, Stackable(..)
+  , pattern Unstackable, Unstackable(..)
+  , pattern Vertical, Vertical(..)
+  , pattern Widths, Widths(..)
   )
 
 data Step ms = Step_
@@ -79,54 +79,60 @@ instance Pure Step ms where
                 )
                 children
 
-instance HasAsProp (Step ms) where
-    type AsProp (Step ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a s = s { as = a }
+instance HasProp As (Step ms) where
+    type Prop As (Step ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a s = s { as = a }
 
-instance HasAttributesProp (Step ms) where
-    type Attribute (Step ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as s = s { attributes = as }
+instance HasProp Attributes (Step ms) where
+    type Prop Attributes (Step ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as s = s { attributes = as }
 
-instance HasChildrenProp (Step ms) where
-    type Child (Step ms) = View ms
-    getChildren = children
-    setChildren cs s = s { children = cs }
+instance HasProp Children (Step ms) where
+    type Prop Children (Step ms) = [View ms]
+    getProp _ = children
+    setProp _ cs s = s { children = cs }
 
-instance HasClassesProp (Step ms) where
-    getClasses = classes
-    setClasses cs s = s { classes = cs }
+instance HasProp Classes (Step ms) where
+    type Prop Classes (Step ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs s = s { classes = cs }
 
-instance HasActiveProp (Step ms) where
-    getActive = active
-    setActive a s = s { active = a }
+instance HasProp Active (Step ms) where
+    type Prop Active (Step ms) = Bool
+    getProp _ = active
+    setProp _ a s = s { active = a }
 
-instance HasCompletedProp (Step ms) where
-    getCompleted = completed
-    setCompleted c s = s { completed = c }
+instance HasProp Completed (Step ms) where
+    type Prop Completed (Step ms) = Bool
+    getProp _ = completed
+    setProp _ c s = s { completed = c }
 
-instance HasDisabledProp (Step ms) where
-    getDisabled = disabled
-    setDisabled d s = s { disabled = d }
+instance HasProp Disabled (Step ms) where
+    type Prop Disabled (Step ms) = Bool
+    getProp _ = disabled
+    setProp _ d s = s { disabled = d }
 
-instance HasRefProp (Step ms) where
-    type RefProp (Step ms) = Feature ms
-    getRef = ref
-    setRef r s = s { ref = r }
+instance HasProp Ref (Step ms) where
+    type Prop Ref (Step ms) = Feature ms
+    getProp _ = ref
+    setProp _ r s = s { ref = r }
 
-instance HasLinkProp (Step ms) where
-    getLink = link
-    setLink l s = s { link = l }
+instance HasProp Link (Step ms) where
+    type Prop Link (Step ms) = Bool
+    getProp _ = link
+    setProp _ l s = s { link = l }
 
-instance HasOnClickProp (Step ms) where
-    type OnClickProp (Step ms) = Ef ms IO ()
-    getOnClick = onClick
-    setOnClick oc s = s { onClick = oc }
+instance HasProp OnClick (Step ms) where
+    type Prop OnClick (Step ms) = Ef ms IO ()
+    getProp _ = onClick
+    setProp _ oc s = s { onClick = oc }
 
-instance HasOrderedProp (Step ms) where
-    getOrdered = ordered
-    setOrdered o s = s { ordered = o }
+instance HasProp Ordered (Step ms) where
+    type Prop Ordered (Step ms) = Bool
+    getProp _ = ordered
+    setProp _ o s = s { ordered = o }
 
 data Content ms = Content_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -155,24 +161,25 @@ instance Pure Content ms where
                 )
                 children
 
-instance HasAsProp (Content ms) where
-    type AsProp (Content ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a sc = sc { as = a }
+instance HasProp As (Content ms) where
+    type Prop As (Content ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a sc = sc { as = a }
 
-instance HasAttributesProp (Content ms) where
-    type Attribute (Content ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as sc = sc { attributes = as }
+instance HasProp Attributes (Content ms) where
+    type Prop Attributes (Content ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as sc = sc { attributes = as }
 
-instance HasChildrenProp (Content ms) where
-    type Child (Content ms) = View ms
-    getChildren = children
-    setChildren cs sc = sc { children = cs }
+instance HasProp Children (Content ms) where
+    type Prop Children (Content ms) = [View ms]
+    getProp _ = children
+    setProp _ cs sc = sc { children = cs }
 
-instance HasClassesProp (Content ms) where
-    getClasses = classes
-    setClasses cs sc = sc { classes = cs }
+instance HasProp Classes (Content ms) where
+    type Prop Classes (Content ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs sc = sc { classes = cs }
 
 data Description ms = Description_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -201,24 +208,25 @@ instance Pure Description ms where
                 )
                 children
 
-instance HasAsProp (Description ms) where
-    type AsProp (Description ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a sd = sd { as = a }
+instance HasProp As (Description ms) where
+    type Prop As (Description ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a sd = sd { as = a }
 
-instance HasAttributesProp (Description ms) where
-    type Attribute (Description ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as sd = sd { attributes = as }
+instance HasProp Attributes (Description ms) where
+    type Prop Attributes (Description ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as sd = sd { attributes = as }
 
-instance HasChildrenProp (Description ms) where
-    type Child (Description ms) = View ms
-    getChildren = children
-    setChildren cs sd = sd { children = cs }
+instance HasProp Children (Description ms) where
+    type Prop Children (Description ms) = [View ms]
+    getProp _ = children
+    setProp _ cs sd = sd { children = cs }
 
-instance HasClassesProp (Description ms) where
-    getClasses = classes
-    setClasses cs sd = sd { classes = cs }
+instance HasProp Classes (Description ms) where
+    type Prop Classes (Description ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs sd = sd { classes = cs }
 
 data Group ms = Group_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -232,7 +240,7 @@ data Group ms = Group_
     , stackable :: Txt
     , unstackable :: Bool
     , vertical :: Bool
-    , widths :: Width
+    , widths :: Txt
     } deriving (Generic)
 
 instance Default (Group ms) where
@@ -264,57 +272,65 @@ instance Pure Group ms where
                 )
                 children
 
-instance HasAsProp (Group ms) where
-    type AsProp (Group ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a sg = sg { as = a }
+instance HasProp As (Group ms) where
+    type Prop As (Group ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a sg = sg { as = a }
 
-instance HasAttributesProp (Group ms) where
-    type Attribute (Group ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as sg = sg { attributes = as }
+instance HasProp Attributes (Group ms) where
+    type Prop Attributes (Group ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as sg = sg { attributes = as }
 
-instance HasChildrenProp (Group ms) where
-    type Child (Group ms) = View ms
-    getChildren = children
-    setChildren cs sg = sg { children = cs }
+instance HasProp Children (Group ms) where
+    type Prop Children (Group ms) = [View ms]
+    getProp _ = children
+    setProp _ cs sg = sg { children = cs }
 
-instance HasClassesProp (Group ms) where
-    getClasses = classes
-    setClasses cs sg = sg { classes = cs }
+instance HasProp Classes (Group ms) where
+    type Prop Classes (Group ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs sg = sg { classes = cs }
 
-instance HasAttachedProp (Group ms) where
-    type AttachedProp (Group ms) = Maybe Txt
-    getAttached = attached
-    setAttached a sg = sg { attached = a }
+instance HasProp Attached (Group ms) where
+    type Prop Attached (Group ms) = Maybe Txt
+    getProp _ = attached
+    setProp _ a sg = sg { attached = a }
 
-instance HasFluidProp (Group ms) where
-    getFluid = fluid
-    setFluid f sg = sg { fluid = f }
+instance HasProp Fluid (Group ms) where
+    type Prop Fluid (Group ms) = Bool
+    getProp _ = fluid
+    setProp _ f sg = sg { fluid = f }
 
-instance HasOrderedProp (Group ms) where
-    getOrdered = ordered
-    setOrdered o sg = sg { ordered = o }
+instance HasProp Ordered (Group ms) where
+    type Prop Ordered (Group ms) = Bool
+    getProp _ = ordered
+    setProp _ o sg = sg { ordered = o }
 
-instance HasSizeProp (Group ms) where
-    getSize = size
-    setSize s sg = sg { size = s }
+instance HasProp Size (Group ms) where
+    type Prop Size (Group ms) = Txt
+    getProp _ = size
+    setProp _ s sg = sg { size = s }
 
-instance HasStackableProp (Group ms) where
-    getStackable = stackable
-    setStackable s sg = sg { stackable = s }
+instance HasProp Stackable (Group ms) where
+    type Prop Stackable (Group ms) = Txt
+    getProp _ = stackable
+    setProp _ s sg = sg { stackable = s }
 
-instance HasUnstackableProp (Group ms) where
-    getUnstackable = unstackable
-    setUnstackable u sg = sg { unstackable = u }
+instance HasProp Unstackable (Group ms) where
+    type Prop Unstackable (Group ms) = Bool
+    getProp _ = unstackable
+    setProp _ u sg = sg { unstackable = u }
 
-instance HasVerticalProp (Group ms) where
-    getVertical = vertical
-    setVertical v sg = sg { vertical = v }
+instance HasProp Vertical (Group ms) where
+    type Prop Vertical (Group ms) = Bool
+    getProp _ = vertical
+    setProp _ v sg = sg { vertical = v }
 
-instance HasWidthsProp (Group ms) where
-    getWidths = widths
-    setWidths w sg = sg { widths = w }
+instance HasProp Widths (Group ms) where
+    type Prop Widths (Group ms) = Txt
+    getProp _ = widths
+    setProp _ w sg = sg { widths = w }
 
 data Title ms = Title_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -343,22 +359,23 @@ instance Pure Title ms where
                 )
                 children
 
-instance HasAsProp (Title ms) where
-    type AsProp (Title ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a st = st { as = a }
+instance HasProp As (Title ms) where
+    type Prop As (Title ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a st = st { as = a }
 
-instance HasAttributesProp (Title ms) where
-    type Attribute (Title ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as st = st { attributes = as }
+instance HasProp Attributes (Title ms) where
+    type Prop Attributes (Title ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as st = st { attributes = as }
 
-instance HasChildrenProp (Title ms) where
-    type Child (Title ms) = View ms
-    getChildren = children
-    setChildren cs st = st { children = cs }
+instance HasProp Children (Title ms) where
+    type Prop Children (Title ms) = [View ms]
+    getProp _ = children
+    setProp _ cs st = st { children = cs }
 
-instance HasClassesProp (Title ms) where
-    getClasses = classes
-    setClasses cs st = st { classes = cs }
+instance HasProp Classes (Title ms) where
+    type Prop Classes (Title ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs st = st { classes = cs }
 

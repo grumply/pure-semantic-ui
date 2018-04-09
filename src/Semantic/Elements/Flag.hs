@@ -9,13 +9,13 @@ import Pure.View hiding (name)
 
 import Semantic.Utils
 
-import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
-  ( HasAsProp(..), pattern As
-  , HasAttributesProp(..), pattern Attributes
-  , HasClassesProp(..), pattern Classes
-  , HasNameProp(..), pattern Name
+  ( pattern As, As(..)
+  , pattern Attributes, Attributes(..)
+  , pattern Classes, Classes(..)
+  , pattern Name, Name(..)
   )
 
 data Flag ms = Flag_
@@ -46,20 +46,22 @@ instance Pure Flag ms where
                 )
                 []
 
-instance HasAsProp (Flag ms) where
-    type AsProp (Flag ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a f = f { as = a }
+instance HasProp As (Flag ms) where
+    type Prop As (Flag ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a f = f { as = a }
 
-instance HasAttributesProp (Flag ms) where
-    type Attribute (Flag ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as f = f { attributes = as }
+instance HasProp Attributes (Flag ms) where
+    type Prop Attributes (Flag ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as f = f { attributes = as }
 
-instance HasClassesProp (Flag ms) where
-    getClasses = classes
-    setClasses cs f = f { classes = cs }
+instance HasProp Classes (Flag ms) where
+    type Prop Classes (Flag ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs f = f { classes = cs }
 
-instance HasNameProp (Flag ms) where
-    getName = name
-    setName n f = f { name = n }
+instance HasProp Name (Flag ms) where
+    type Prop Name (Flag ms) = Txt
+    getProp _ = name
+    setProp _ n f = f { name = n }

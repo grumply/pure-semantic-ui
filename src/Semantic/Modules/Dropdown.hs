@@ -11,52 +11,52 @@ module Semantic.Modules.Dropdown
 
 import GHC.Generics as G
 import Pure.Lifted (JSV,Node(..),(.#))
-import Pure.View hiding (button,disabled,inline,onBlur,onClick,onFocus,simple,Header,Menu)
+import Pure.View hiding (button,disabled,inline,onBlur,onClick,onFocus,simple,Header,Menu,active,Value)
 import qualified Pure.View as HTML
 
 import Semantic.Utils
 
-import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
-  ( HasAsProp(..), pattern As
-  , HasAttributesProp(..), pattern Attributes
-  , HasChildrenProp(..), pattern Children
-  , HasClassesProp(..), pattern Classes
-  , HasBasicProp(..), pattern Basic
-  , HasIsButtonProp(..), pattern IsButton
-  , HasCompactProp(..), pattern Compact
-  , HasDisabledProp(..), pattern Disabled
-  , HasErrorProp(..), pattern Error
-  , HasFluidProp(..), pattern Fluid
-  , HasFloatingProp(..), pattern Floating
-  , HasInlineProp(..), pattern Inline
-  , HasLabeledProp(..), pattern Labeled
-  , HasLoadingProp(..), pattern Loading
-  , HasIsItemProp(..), pattern IsItem
-  , HasMultipleProp(..), pattern Multiple
-  , HasOnBlurProp(..), pattern OnBlur
-  , HasOnChangeProp(..), pattern OnChange
-  , HasOnClickProp(..), pattern OnClick
-  , HasOnFocusProp(..), pattern OnFocus
-  , HasOnMouseDownProp(..), pattern OnMouseDown
-  , HasOpenProp(..), pattern Open
-  , HasPointingProp(..), pattern Pointing
-  , HasIsSearchProp(..), pattern IsSearch
-  , HasSelectionProp(..), pattern Selection
-  , HasSimpleProp(..), pattern Simple
-  , HasScrollingProp(..), pattern Scrolling
-  , HasTabIndexProp(..), pattern TabIndex
-  , HasUpwardProp(..), pattern Upward
-  , HasActiveProp(..), pattern Active
-  , HasSelectedProp(..), pattern Selected
-  , HasInputRefProp(..), pattern InputRef
-  , HasTabIndexProp(..), pattern TabIndex
-  , HasTypeProp(..), pattern Type
-  , HasValueProp(..), pattern Value
+  ( pattern As, As(..)
+  , pattern Attributes, Attributes(..)
+  , pattern Children, Children(..)
+  , pattern Classes, Classes(..)
+  , pattern Basic, Basic(..)
+  , pattern IsButton, IsButton(..)
+  , pattern Compact, Compact(..)
+  , pattern Disabled, Disabled(..)
+  , pattern Error, Error(..)
+  , pattern Fluid, Fluid(..)
+  , pattern Floating, Floating(..)
+  , pattern Inline, Inline(..)
+  , pattern Labeled, Labeled(..)
+  , pattern Loading, Loading(..)
+  , pattern IsItem, IsItem(..)
+  , pattern Multiple, Multiple(..)
+  , pattern OnBlur, OnBlur(..)
+  , pattern OnChange, OnChange(..)
+  , pattern OnClick, OnClick(..)
+  , pattern OnFocus, OnFocus(..)
+  , pattern OnMouseDown, OnMouseDown(..)
+  , pattern Open, Open(..)
+  , pattern Pointing, Pointing(..)
+  , pattern IsSearch, IsSearch(..)
+  , pattern Selection, Selection(..)
+  , pattern Simple, Simple(..)
+  , pattern Scrolling, Scrolling(..)
+  , pattern TabIndex, TabIndex(..)
+  , pattern Upward, Upward(..)
+  , pattern Active, Active(..)
+  , pattern Selected, Selected(..)
+  , pattern InputRef, InputRef(..)
+  , pattern TabIndex, TabIndex(..)
+  , pattern Type, Type(..)
+  , pattern Value, Value(..)
   )
 
-import Prelude hiding (error)
+import Prelude hiding (error,Floating)
 
 {-
 Approaching this differently than Semantic-UI-React. Instead of managing
@@ -107,9 +107,6 @@ instance Default (Dropdown ms) where
 pattern Dropdown :: Dropdown ms -> View ms
 pattern Dropdown d = View d
 
-pattern Select :: Dropdown ms -> View ms
-pattern Select d = View (Selection d)
-
 instance Pure Dropdown ms where
     render Dropdown_ {..} =
         let
@@ -149,130 +146,150 @@ instance Pure Dropdown ms where
                 )
                 children
 
-instance HasAsProp (Dropdown ms) where
-    type AsProp (Dropdown ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs f dd = dd { as = f }
+instance HasProp As (Dropdown ms) where
+    type Prop As (Dropdown ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ f dd = dd { as = f }
 
-instance HasAttributesProp (Dropdown ms) where
-    type Attribute (Dropdown ms) = Feature ms
-    getAttributes = attributes
-    setAttributes cs dd = dd { attributes = cs }
+instance HasProp Attributes (Dropdown ms) where
+    type Prop Attributes (Dropdown ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ cs dd = dd { attributes = cs }
 
-instance HasChildrenProp (Dropdown ms) where
-    type Child (Dropdown ms) = View ms
-    getChildren = children
-    setChildren cs dd = dd { children = cs }
+instance HasProp Children (Dropdown ms) where
+    type Prop Children (Dropdown ms) = [View ms]
+    getProp _ = children
+    setProp _ cs dd = dd { children = cs }
 
-instance HasClassesProp (Dropdown ms) where
-    getClasses = classes
-    setClasses cs dd = dd { classes = cs }
+instance HasProp Classes (Dropdown ms) where
+    type Prop Classes (Dropdown ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs dd = dd { classes = cs }
 
-instance HasBasicProp (Dropdown ms) where
-    getBasic = basic
-    setBasic b dd = dd { basic = b }
+instance HasProp Basic (Dropdown ms) where
+    type Prop Basic (Dropdown ms) = Bool
+    getProp _ = basic
+    setProp _ b dd = dd { basic = b }
 
-instance HasIsButtonProp (Dropdown ms) where
-    getIsButton = button
-    setIsButton b dd = dd { button = b }
+instance HasProp IsButton (Dropdown ms) where
+    type Prop IsButton (Dropdown ms) = Bool
+    getProp _ = button
+    setProp _ b dd = dd { button = b }
 
-instance HasCompactProp (Dropdown ms) where
-    getCompact = compact
-    setCompact c dd = dd { compact = c }
+instance HasProp Compact (Dropdown ms) where
+    type Prop Compact (Dropdown ms) = Bool
+    getProp _ = compact
+    setProp _ c dd = dd { compact = c }
 
-instance HasDisabledProp (Dropdown ms) where
-    getDisabled = disabled
-    setDisabled d dd = dd { disabled = d }
+instance HasProp Disabled (Dropdown ms) where
+    type Prop Disabled (Dropdown ms) = Bool
+    getProp _ = disabled
+    setProp _ d dd = dd { disabled = d }
 
-instance HasErrorProp (Dropdown ms) where
-    getError = error
-    setError e dd = dd { error = e }
+instance HasProp Error (Dropdown ms) where
+    type Prop Error (Dropdown ms) = Bool
+    getProp _ = error
+    setProp _ e dd = dd { error = e }
 
-instance HasFluidProp (Dropdown ms) where
-    getFluid = fluid
-    setFluid f dd = dd { fluid = f }
+instance HasProp Fluid (Dropdown ms) where
+    type Prop Fluid (Dropdown ms) = Bool
+    getProp _ = fluid
+    setProp _ f dd = dd { fluid = f }
 
-instance HasFloatingProp (Dropdown ms) where
-    getFloating = floating
-    setFloating f dd = dd { floating = f }
+instance HasProp Floating (Dropdown ms) where
+    type Prop Floating (Dropdown ms) = Bool
+    getProp _ = floating
+    setProp _ f dd = dd { floating = f }
 
-instance HasInlineProp (Dropdown ms) where
-    type InlineProp (Dropdown ms) = Bool
-    getInline = inline
-    setInline i dd = dd { inline = i }
+instance HasProp Inline (Dropdown ms) where
+    type Prop Inline (Dropdown ms) = Bool
+    getProp _ = inline
+    setProp _ i dd = dd { inline = i }
 
-instance HasLabeledProp (Dropdown ms) where
-    getLabeled = labeled
-    setLabeled l dd = dd { labeled = l }
+instance HasProp Labeled (Dropdown ms) where
+    type Prop Labeled (Dropdown ms) = Bool
+    getProp _ = labeled
+    setProp _ l dd = dd { labeled = l }
 
-instance HasLoadingProp (Dropdown ms) where
-    getLoading = loading
-    setLoading l dd = dd { loading = l }
+instance HasProp Loading (Dropdown ms) where
+    type Prop Loading (Dropdown ms) = Bool
+    getProp _ = loading
+    setProp _ l dd = dd { loading = l }
 
-instance HasIsItemProp (Dropdown ms) where
-    getIsItem = item
-    setIsItem i dd = dd { item = i }
+instance HasProp IsItem (Dropdown ms) where
+    type Prop IsItem (Dropdown ms) = Bool
+    getProp _ = item
+    setProp _ i dd = dd { item = i }
 
-instance HasMultipleProp (Dropdown ms) where
-    getMultiple = multiple
-    setMultiple m dd = dd { multiple = m }
+instance HasProp Multiple (Dropdown ms) where
+    type Prop Multiple (Dropdown ms) = Bool
+    getProp _ = multiple
+    setProp _ m dd = dd { multiple = m }
 
-instance HasOnBlurProp (Dropdown ms) where
-    type OnBlurProp (Dropdown ms) = Ef ms IO ()
-    getOnBlur = onBlur
-    setOnBlur ob dd = dd { onBlur = ob }
+instance HasProp OnBlur (Dropdown ms) where
+    type Prop OnBlur (Dropdown ms) = Ef ms IO ()
+    getProp _ = onBlur
+    setProp _ ob dd = dd { onBlur = ob }
 
-instance HasOnChangeProp (Dropdown ms) where
-    type OnChangeProp (Dropdown ms) = Ef ms IO ()
-    getOnChange = onChange
-    setOnChange oc dd = dd { onChange = oc }
+instance HasProp OnChange (Dropdown ms) where
+    type Prop OnChange (Dropdown ms) = Ef ms IO ()
+    getProp _ = onChange
+    setProp _ oc dd = dd { onChange = oc }
 
-instance HasOnClickProp (Dropdown ms) where
-    type OnClickProp (Dropdown ms) = Ef ms IO ()
-    getOnClick = onClick
-    setOnClick oc dd = dd { onClick = oc }
+instance HasProp OnClick (Dropdown ms) where
+    type Prop OnClick (Dropdown ms) = Ef ms IO ()
+    getProp _ = onClick
+    setProp _ oc dd = dd { onClick = oc }
 
-instance HasOnFocusProp (Dropdown ms) where
-    type OnFocusProp (Dropdown ms) = Ef ms IO ()
-    getOnFocus = onFocus
-    setOnFocus onf dd = dd { onFocus = onf }
+instance HasProp OnFocus (Dropdown ms) where
+    type Prop OnFocus (Dropdown ms) = Ef ms IO ()
+    getProp _ = onFocus
+    setProp _ onf dd = dd { onFocus = onf }
 
-instance HasOnMouseDownProp (Dropdown ms) where
-    type OnMouseDownProp (Dropdown ms) = Ef ms IO ()
-    getOnMouseDown = onMouseDown
-    setOnMouseDown omd dd = dd { onMouseDown = omd }
+instance HasProp OnMouseDown (Dropdown ms) where
+    type Prop OnMouseDown (Dropdown ms) = Ef ms IO ()
+    getProp _ = onMouseDown
+    setProp _ omd dd = dd { onMouseDown = omd }
 
-instance HasOpenProp (Dropdown ms) where
-    getOpen = open
-    setOpen o dd = dd { open = o }
+instance HasProp Open (Dropdown ms) where
+    type Prop Open (Dropdown ms) = Bool
+    getProp _ = open
+    setProp _ o dd = dd { open = o }
 
-instance HasPointingProp (Dropdown ms) where
-    getPointing = pointing
-    setPointing p dd = dd { pointing = p }
+instance HasProp Pointing (Dropdown ms) where
+    type Prop Pointing (Dropdown ms) = Maybe Txt
+    getProp _ = pointing
+    setProp _ p dd = dd { pointing = p }
 
-instance HasIsSearchProp (Dropdown ms) where
-    getIsSearch = search
-    setIsSearch is dd = dd { search = is }
+instance HasProp IsSearch (Dropdown ms) where
+    type Prop IsSearch (Dropdown ms) = Bool
+    getProp _ = search
+    setProp _ is dd = dd { search = is }
 
-instance HasSelectionProp (Dropdown ms) where
-    getSelection = selection
-    setSelection s dd = dd { selection = s }
+instance HasProp Selection (Dropdown ms) where
+    type Prop Selection (Dropdown ms) = Bool
+    getProp _ = selection
+    setProp _ s dd = dd { selection = s }
 
-instance HasSimpleProp (Dropdown ms) where
-    getSimple = simple
-    setSimple s dd = dd { simple = s }
+instance HasProp Simple (Dropdown ms) where
+    type Prop Simple (Dropdown ms) = Bool
+    getProp _ = simple
+    setProp _ s dd = dd { simple = s }
 
-instance HasScrollingProp (Dropdown ms) where
-    getScrolling = scrolling
-    setScrolling s dd = dd { scrolling = s }
+instance HasProp Scrolling (Dropdown ms) where
+    type Prop Scrolling (Dropdown ms) = Bool
+    getProp _ = scrolling
+    setProp _ s dd = dd { scrolling = s }
 
-instance HasTabIndexProp (Dropdown ms) where
-    getTabIndex = tabIndex
-    setTabIndex ti dd = dd { tabIndex = ti }
+instance HasProp TabIndex (Dropdown ms) where
+    type Prop TabIndex (Dropdown ms) = Maybe Int
+    getProp _ = tabIndex
+    setProp _ ti dd = dd { tabIndex = ti }
 
-instance HasUpwardProp (Dropdown ms) where
-    getUpward = upward
-    setUpward u dd = dd { upward = u }
+instance HasProp Upward (Dropdown ms) where
+    type Prop Upward (Dropdown ms) = Bool
+    getProp _ = upward
+    setProp _ u dd = dd { upward = u }
 
 data Divider ms = Divider_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -300,19 +317,20 @@ instance Pure Divider ms where
                 )
                 []
 
-instance HasAsProp (Divider ms) where
-    type AsProp (Divider ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs f dd = dd { as = f }
+instance HasProp As (Divider ms) where
+    type Prop As (Divider ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ f dd = dd { as = f }
 
-instance HasAttributesProp (Divider ms) where
-    type Attribute (Divider ms) = Feature ms
-    getAttributes = attributes
-    setAttributes cs dd = dd { attributes = cs }
+instance HasProp Attributes (Divider ms) where
+    type Prop Attributes (Divider ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ cs dd = dd { attributes = cs }
 
-instance HasClassesProp (Divider ms) where
-    getClasses = classes
-    setClasses cs dd = dd { classes = cs }
+instance HasProp Classes (Divider ms) where
+    type Prop Classes (Divider ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs dd = dd { classes = cs }
 
 data Header ms = Header_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -341,24 +359,25 @@ instance Pure Header ms where
                 )
                 children
 
-instance HasAsProp (Header ms) where
-    type AsProp (Header ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs f dh = dh { as = f }
+instance HasProp As (Header ms) where
+    type Prop As (Header ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ f dh = dh { as = f }
 
-instance HasAttributesProp (Header ms) where
-    type Attribute (Header ms) = Feature ms
-    getAttributes = attributes
-    setAttributes cs dh = dh { attributes = cs }
+instance HasProp Attributes (Header ms) where
+    type Prop Attributes (Header ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ cs dh = dh { attributes = cs }
 
-instance HasChildrenProp (Header ms) where
-    type Child (Header ms) = View ms
-    getChildren = children
-    setChildren cs dh = dh { children = cs }
+instance HasProp Children (Header ms) where
+    type Prop Children (Header ms) = [View ms]
+    getProp _ = children
+    setProp _ cs dh = dh { children = cs }
 
-instance HasClassesProp (Header ms) where
-    getClasses = classes
-    setClasses cs dh = dh { classes = cs }
+instance HasProp Classes (Header ms) where
+    type Prop Classes (Header ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs dh = dh { classes = cs }
 
 data Item ms = Item_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -396,37 +415,45 @@ instance Pure (Item ) ms where
                 )
                 children
 
-instance HasAsProp (Item ms) where
-    type AsProp (Item ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs f di = di { as = f }
+instance HasProp Active (Item ms) where
+    type Prop Active (Item ms) = Bool
+    getProp _ = active
+    setProp _ a di = di { active = a }
 
-instance HasAttributesProp (Item ms) where
-    type Attribute (Item ms) = Feature ms
-    getAttributes = attributes
-    setAttributes cs di = di { attributes = cs }
+instance HasProp As (Item ms) where
+    type Prop As (Item ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ f di = di { as = f }
 
-instance HasChildrenProp (Item ms) where
-    type Child (Item ms) = View ms
-    getChildren = children
-    setChildren cs di = di { children = cs }
+instance HasProp Attributes (Item ms) where
+    type Prop Attributes (Item ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ cs di = di { attributes = cs }
 
-instance HasClassesProp (Item ms) where
-    getClasses = classes
-    setClasses cs di = di { classes = cs }
+instance HasProp Children (Item ms) where
+    type Prop Children (Item ms) = [View ms]
+    getProp _ = children
+    setProp _ cs di = di { children = cs }
 
-instance HasDisabledProp (Item ms) where
-    getDisabled = disabled
-    setDisabled d di = di { disabled = d }
+instance HasProp Classes (Item ms) where
+    type Prop Classes (Item ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs di = di { classes = cs }
 
-instance HasOnClickProp (Item ms) where
-    type OnClickProp (Item ms) = Ef ms IO ()
-    getOnClick = onClick
-    setOnClick oc di = di { onClick = oc }
+instance HasProp Disabled (Item ms) where
+    type Prop Disabled (Item ms) = Bool
+    getProp _ = disabled
+    setProp _ d di = di { disabled = d }
 
-instance HasSelectedProp (Item ms) where
-    getSelected = selected
-    setSelected s di = di { selected = s }
+instance HasProp OnClick (Item ms) where
+    type Prop OnClick (Item ms) = Ef ms IO ()
+    getProp _ = onClick
+    setProp _ oc di = di { onClick = oc }
+
+instance HasProp Selected (Item ms) where
+    type Prop Selected (Item ms) = Bool
+    getProp _ = selected
+    setProp _ s di = di { selected = s }
 
 data Menu ms = Menu_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -457,28 +484,30 @@ instance Pure Menu ms where
                 )
                 children
 
-instance HasAsProp (Menu ms) where
-    type AsProp (Menu ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs f dm = dm { as = f }
+instance HasProp As (Menu ms) where
+    type Prop As (Menu ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ f dm = dm { as = f }
 
-instance HasAttributesProp (Menu ms) where
-    type Attribute (Menu ms) = Feature ms
-    getAttributes = attributes
-    setAttributes cs dm = dm { attributes = cs }
+instance HasProp Attributes (Menu ms) where
+    type Prop Attributes (Menu ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ cs dm = dm { attributes = cs }
 
-instance HasChildrenProp (Menu ms) where
-    type Child (Menu ms) = View ms
-    getChildren = children
-    setChildren cs dm = dm { children = cs }
+instance HasProp Children (Menu ms) where
+    type Prop Children (Menu ms) = [View ms]
+    getProp _ = children
+    setProp _ cs dm = dm { children = cs }
 
-instance HasClassesProp (Menu ms) where
-    getClasses = classes
-    setClasses cs dm = dm { classes = cs }
+instance HasProp Classes (Menu ms) where
+    type Prop Classes (Menu ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs dm = dm { classes = cs }
 
-instance HasScrollingProp (Menu ms) where
-    getScrolling = scrolling
-    setScrolling s dm = dm { scrolling = s }
+instance HasProp Scrolling (Menu ms) where
+    type Prop Scrolling (Menu ms) = Bool
+    getProp _ = scrolling
+    setProp _ s dm = dm { scrolling = s }
 
 data SearchInput ms = SearchInput_
     { attributes :: [Feature ms]
@@ -517,33 +546,37 @@ instance Pure SearchInput ms where
                 )
                 []
 
-instance HasAttributesProp (SearchInput ms) where
-    type Attribute (SearchInput ms) = Feature ms
-    getAttributes = attributes
-    setAttributes cs dsi = dsi { attributes = cs }
+instance HasProp Attributes (SearchInput ms) where
+    type Prop Attributes (SearchInput ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ cs dsi = dsi { attributes = cs }
 
-instance HasClassesProp (SearchInput ms) where
-    getClasses = classes
-    setClasses cs dsi = dsi { classes = cs }
+instance HasProp Classes (SearchInput ms) where
+    type Prop Classes (SearchInput ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs dsi = dsi { classes = cs }
 
-instance HasInputRefProp (SearchInput ms) where
-    type InputRefProp (SearchInput ms) = JSV -> Ef ms IO ()
-    getInputRef = inputRef
-    setInputRef ir dsi = dsi { inputRef = ir }
+instance HasProp InputRef (SearchInput ms) where
+    type Prop InputRef (SearchInput ms) = JSV -> Ef ms IO ()
+    getProp _ = inputRef
+    setProp _ ir dsi = dsi { inputRef = ir }
 
-instance HasOnChangeProp (SearchInput ms) where
-    type OnChangeProp (SearchInput ms) = Txt -> Ef ms IO ()
-    getOnChange = onChange
-    setOnChange oc dsi = dsi { onChange = oc }
+instance HasProp OnChange (SearchInput ms) where
+    type Prop OnChange (SearchInput ms) = Txt -> Ef ms IO ()
+    getProp _ = onChange
+    setProp _ oc dsi = dsi { onChange = oc }
 
-instance HasTabIndexProp (SearchInput ms) where
-    getTabIndex = tabIndex
-    setTabIndex ti dsi = dsi { tabIndex = ti }
+instance HasProp TabIndex (SearchInput ms) where
+    type Prop TabIndex (SearchInput ms) = Maybe Int
+    getProp _ = tabIndex
+    setProp _ ti dsi = dsi { tabIndex = ti }
 
-instance HasTypeProp (SearchInput ms) where
-    getType = _type
-    setType t dsi = dsi { _type = t }
+instance HasProp Type (SearchInput ms) where
+    type Prop Type (SearchInput ms) = Txt
+    getProp _ = _type
+    setProp _ t dsi = dsi { _type = t }
 
-instance HasValueProp (SearchInput ms) where
-    getValue = value
-    setValue v dsi = dsi { value = v }
+instance HasProp Value (SearchInput ms) where
+    type Prop Value (SearchInput ms) = Txt
+    getProp _ = value
+    setProp _ v dsi = dsi { value = v }

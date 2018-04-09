@@ -11,28 +11,28 @@ import Pure.Lifted (Node)
 
 import Semantic.Utils
 
-import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
-  ( HasAsProp(..), pattern As
-  , HasAttributesProp(..), pattern Attributes
-  , HasChildrenProp(..), pattern Children
-  , HasClassesProp(..), pattern Classes
-  , HasDisabledProp(..), pattern Disabled
-  , HasFittedProp(..), pattern Fitted
-  , HasIsCheckedProp(..), pattern IsChecked
-  , HasNameProp(..), pattern Name
-  , HasOnChangeProp(..), pattern OnChange
-  , HasOnClickProp(..), pattern OnClick
-  , HasOnMouseDownProp(..), pattern OnMouseDown
-  , HasWithRefProp(..), pattern WithRef
-  , HasIsRadioProp(..), pattern IsRadio
-  , HasReadOnlyProp(..), pattern ReadOnly
-  , HasSliderProp(..), pattern Slider
-  , HasTabIndexProp(..), pattern TabIndex
-  , HasToggleProp(..), pattern Toggle
-  , HasTypeProp(..), pattern Type
-  , HasValueProp(..), pattern Value
+  ( pattern As, As(..)
+  , pattern Attributes, Attributes(..)
+  , pattern Children, Children(..)
+  , pattern Classes, Classes(..)
+  , pattern Disabled, Disabled(..)
+  , pattern Fitted, Fitted(..)
+  , pattern Checked, Checked(..)
+  , pattern Name, Name(..)
+  , pattern OnChange, OnChange(..)
+  , pattern OnClick, OnClick(..)
+  , pattern OnMouseDown, OnMouseDown(..)
+  , pattern WithRef, WithRef(..)
+  , pattern IsRadio, IsRadio(..)
+  , pattern ReadOnly, ReadOnly(..)
+  , pattern Slider, Slider(..)
+  , pattern TabIndex, TabIndex(..)
+  , pattern Toggle, Toggle(..)
+  , pattern Type, Type(..)
+  , pattern Value, Value(..)
   , Checked(..)
   )
 
@@ -41,7 +41,7 @@ data Checkbox ms = Checkbox_
     , attributes :: [Feature ms]
     , children :: [View ms]
     , classes :: [Txt]
-    , checked :: Checked
+    , checked :: Maybe Bool
     , disabled :: Bool
     , fitted :: Bool
     , name :: Txt
@@ -65,20 +65,20 @@ pattern Checkbox :: Checkbox ms -> View ms
 pattern Checkbox c = View c
 
 pattern Radio :: Checkbox ms -> View ms
-pattern Radio r = View (Type "radio" (IsRadio r))
+pattern Radio r = View (Type "radio" (IsRadio True r))
 
-renderChecked Checked = HTML.Checked True
-renderChecked Indeterminate = HTML.Checked False
-renderChecked Unchecked = nil
+renderChecked Nothing = HTML.Checked False
+renderChecked (Just True) = HTML.Checked True
+renderChecked (Just False) = nil
 
 instance Pure Checkbox ms where
     render cb@Checkbox_ {..} =
         let
             cs =
                 ( "ui"
-                : (checked == Checked) # "checked"
+                : (checked == Just True) # "checked"
                 : disabled # "disabled"
-                : (checked == Indeterminate) # "indeterminate"
+                : (checked == Nothing) # "indeterminate"
                 : fitted # "fitted"
                 : radio # "radio"
                 : readOnly # "read-only"
@@ -110,86 +110,98 @@ instance Pure Checkbox ms where
                 : children
                 )
 
-instance HasAsProp (Checkbox ms) where
-    type AsProp (Checkbox ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a cb = cb { as = a }
+instance HasProp As (Checkbox ms) where
+    type Prop As (Checkbox ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a cb = cb { as = a }
 
-instance HasAttributesProp (Checkbox ms) where
-    type Attribute (Checkbox ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as cb = cb { attributes = as }
+instance HasProp Attributes (Checkbox ms) where
+    type Prop Attributes (Checkbox ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as cb = cb { attributes = as }
 
-instance HasChildrenProp (Checkbox ms) where
-    type Child (Checkbox ms) = View ms
-    getChildren = children
-    setChildren cs cb = cb { children = cs }
+instance HasProp Children (Checkbox ms) where
+    type Prop Children (Checkbox ms) = [View ms]
+    getProp _ = children
+    setProp _ cs cb = cb { children = cs }
 
-instance HasClassesProp (Checkbox ms) where
-    getClasses = classes
-    setClasses cs cb = cb { classes = cs }
+instance HasProp Classes (Checkbox ms) where
+    type Prop Classes (Checkbox ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs cb = cb { classes = cs }
 
-instance HasDisabledProp (Checkbox ms) where
-    getDisabled = disabled
-    setDisabled d cb = cb { disabled = d }
+instance HasProp Disabled (Checkbox ms) where
+    type Prop Disabled (Checkbox ms) = Bool
+    getProp _ = disabled
+    setProp _ d cb = cb { disabled = d }
 
-instance HasFittedProp (Checkbox ms) where
-    getFitted = fitted
-    setFitted f cb = cb { fitted = f }
+instance HasProp Fitted (Checkbox ms) where
+    type Prop Fitted (Checkbox ms) = Bool
+    getProp _ = fitted
+    setProp _ f cb = cb { fitted = f }
 
-instance HasIsCheckedProp (Checkbox ms) where
-    getIsChecked = checked
-    setIsChecked c cb = cb { checked = c }
+instance HasProp Checked (Checkbox ms) where
+    type Prop Checked (Checkbox ms) = Maybe Bool
+    getProp _ = checked
+    setProp _ c cb = cb { checked = c }
 
-instance HasNameProp (Checkbox ms) where
-    getName = name
-    setName n cb = cb { name = n }
+instance HasProp Name (Checkbox ms) where
+    type Prop Name (Checkbox ms) = Txt
+    getProp _ = name
+    setProp _ n cb = cb { name = n }
 
-instance HasOnChangeProp (Checkbox ms) where
-    type OnChangeProp (Checkbox ms) = Checkbox ms -> Ef ms IO ()
-    getOnChange = onChange
-    setOnChange oc cb = cb { onChange = oc }
+instance HasProp OnChange (Checkbox ms) where
+    type Prop OnChange (Checkbox ms) = Checkbox ms -> Ef ms IO ()
+    getProp _ = onChange
+    setProp _ oc cb = cb { onChange = oc }
 
-instance HasOnClickProp (Checkbox ms) where
-    type OnClickProp (Checkbox ms) = Checkbox ms -> Ef ms IO ()
-    getOnClick = onClick
-    setOnClick oc cb = cb { onClick = oc }
+instance HasProp OnClick (Checkbox ms) where
+    type Prop OnClick (Checkbox ms) = Checkbox ms -> Ef ms IO ()
+    getProp _ = onClick
+    setProp _ oc cb = cb { onClick = oc }
 
-instance HasOnMouseDownProp (Checkbox ms) where
-    type OnMouseDownProp (Checkbox ms) = Checkbox ms -> Ef ms IO ()
-    getOnMouseDown = onMouseDown
-    setOnMouseDown omd cb = cb { onMouseDown = omd }
+instance HasProp OnMouseDown (Checkbox ms) where
+    type Prop OnMouseDown (Checkbox ms) = Checkbox ms -> Ef ms IO ()
+    getProp _ = onMouseDown
+    setProp _ omd cb = cb { onMouseDown = omd }
 
-instance HasWithRefProp (Checkbox ms) where
-    type WithRefProp (Checkbox ms) = Node -> Ef ms IO ()
-    getWithRef = withRef
-    setWithRef wr cb = cb { withRef = wr }
+instance HasProp WithRef (Checkbox ms) where
+    type Prop WithRef (Checkbox ms) = Node -> Ef ms IO ()
+    getProp _ = withRef
+    setProp _ wr cb = cb { withRef = wr }
 
-instance HasIsRadioProp (Checkbox ms) where
-    getIsRadio = radio
-    setIsRadio r cb = cb { radio = r }
+instance HasProp IsRadio (Checkbox ms) where
+    type Prop IsRadio (Checkbox ms) = Bool
+    getProp _ = radio
+    setProp _ r cb = cb { radio = r }
 
-instance HasReadOnlyProp (Checkbox ms) where
-    getReadOnly = readOnly
-    setReadOnly ro cb = cb { readOnly = ro }
+instance HasProp ReadOnly (Checkbox ms) where
+    type Prop ReadOnly (Checkbox ms) = Bool
+    getProp _ = readOnly
+    setProp _ ro cb = cb { readOnly = ro }
 
-instance HasSliderProp (Checkbox ms) where
-    getSlider = slider
-    setSlider s cb = cb { slider = s }
+instance HasProp Slider (Checkbox ms) where
+    type Prop Slider (Checkbox ms) = Bool
+    getProp _ = slider
+    setProp _ s cb = cb { slider = s }
 
-instance HasTabIndexProp (Checkbox ms) where
-    getTabIndex = tabIndex
-    setTabIndex ti cb = cb { tabIndex = ti }
+instance HasProp TabIndex (Checkbox ms) where
+    type Prop TabIndex (Checkbox ms) = Maybe Int
+    getProp _ = tabIndex
+    setProp _ ti cb = cb { tabIndex = ti }
 
-instance HasToggleProp (Checkbox ms) where
-    getToggle = toggle
-    setToggle t cb = cb { toggle = t }
+instance HasProp Toggle (Checkbox ms) where
+    type Prop Toggle (Checkbox ms) = Bool
+    getProp _ = toggle
+    setProp _ t cb = cb { toggle = t }
 
-instance HasTypeProp (Checkbox ms) where
-    getType = _type
-    setType t cb = cb { _type = t }
+instance HasProp Type (Checkbox ms) where
+    type Prop Type (Checkbox ms) = Txt
+    getProp _ = _type
+    setProp _ t cb = cb { _type = t }
 
-instance HasValueProp (Checkbox ms) where
-    getValue = value
-    setValue v cb = cb { value = v }
+instance HasProp Value (Checkbox ms) where
+    type Prop Value (Checkbox ms) = Txt
+    getProp _ = value
+    setProp _ v cb = cb { value = v }
 

@@ -6,32 +6,32 @@ module Semantic.Modules.Progress
 
 import Data.Maybe
 import GHC.Generics as G
-import Pure.View hiding (active,color,disabled,Progress)
+import Pure.View hiding (active,color,disabled,Progress,Value)
 
 import Semantic.Utils
 
-import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
-  ( HasAsProp(..), pattern As
-  , HasAttributesProp(..), pattern Attributes
-  , HasChildrenProp(..), pattern Children
-  , HasClassesProp(..), pattern Classes
-  , HasActiveProp(..), pattern Active
-  , HasAttachedProp(..), pattern Attached
-  , HasAutoSuccessProp(..), pattern AutoSuccess
-  , HasColorProp(..), pattern Color
-  , HasDisabledProp(..), pattern Disabled
-  , HasErrorProp(..), pattern Error
-  , HasIndicatingProp(..), pattern Indicating
-  , HasInvertedProp(..), pattern Inverted
-  , HasPercentProp(..), pattern Percent
-  , HasPrecisionProp(..), pattern Precision
-  , HasSizeProp(..), pattern Size
-  , HasSuccessProp(..), pattern Success
-  , HasTotalProp(..), pattern Total
-  , HasValueProp(..), pattern Value
-  , HasWarningProp(..), pattern Warning
+  ( pattern As, As(..)
+  , pattern Attributes, Attributes(..)
+  , pattern Children, Children(..)
+  , pattern Classes, Classes(..)
+  , pattern Active, Active(..)
+  , pattern Attached, Attached(..)
+  , pattern AutoSuccess, AutoSuccess(..)
+  , pattern Color, Color(..)
+  , pattern Disabled, Disabled(..)
+  , pattern Error, Error(..)
+  , pattern Indicating, Indicating(..)
+  , pattern Inverted, Inverted(..)
+  , pattern Percent, Percent(..)
+  , pattern Precision, Precision(..)
+  , pattern Size, Size(..)
+  , pattern Success, Success(..)
+  , pattern Total, Total(..)
+  , pattern Value, Value(..)
+  , pattern Warning, Warning(..)
   )
 
 import Prelude hiding (error)
@@ -109,83 +109,97 @@ instance Pure Progress ms where
                 ]
 
 
-instance HasAsProp (Progress ms) where
-    type AsProp (Progress ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs f p = p { as = f }
+instance HasProp As (Progress ms) where
+    type Prop As (Progress ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ f p = p { as = f }
 
-instance HasAttributesProp (Progress ms) where
-    type Attribute (Progress ms) = Feature ms
-    getAttributes = attributes
-    setAttributes cs p = p { attributes = cs }
+instance HasProp Attributes (Progress ms) where
+    type Prop Attributes (Progress ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ cs p = p { attributes = cs }
 
-instance HasChildrenProp (Progress ms) where
-    type Child (Progress ms) = View ms
-    getChildren = children
-    setChildren cs p = p { children = cs }
+instance HasProp Children (Progress ms) where
+    type Prop Children (Progress ms) = [View ms]
+    getProp _ = children
+    setProp _ cs p = p { children = cs }
 
-instance HasClassesProp (Progress ms) where
-    getClasses = classes
-    setClasses cs p = p { classes = cs }
+instance HasProp Classes (Progress ms) where
+    type Prop Classes (Progress ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs p = p { classes = cs }
 
-instance HasActiveProp (Progress ms) where
-    getActive = active
-    setActive a p = p { active = a }
+instance HasProp Active (Progress ms) where
+    type Prop Active (Progress ms) = Bool
+    getProp _ = active
+    setProp _ a p = p { active = a }
 
-instance HasAttachedProp (Progress ms) where
-    type AttachedProp (Progress ms) = Txt
-    getAttached = attached
-    setAttached a p = p { attached = a }
+instance HasProp Attached (Progress ms) where
+    type Prop Attached (Progress ms) = Txt
+    getProp _ = attached
+    setProp _ a p = p { attached = a }
 
-instance HasAutoSuccessProp (Progress ms) where
-    getAutoSuccess = autoSuccess
-    setAutoSuccess as p = p { autoSuccess = as }
+instance HasProp AutoSuccess (Progress ms) where
+    type Prop AutoSuccess (Progress ms) = Bool
+    getProp _ = autoSuccess
+    setProp _ as p = p { autoSuccess = as }
 
-instance HasColorProp (Progress ms) where
-    getColor = color
-    setColor c p = p { color = c }
+instance HasProp Color (Progress ms) where
+    type Prop Color (Progress ms) = Txt
+    getProp _ = color
+    setProp _ c p = p { color = c }
 
-instance HasDisabledProp (Progress ms) where
-    getDisabled = disabled
-    setDisabled d p = p { disabled = d }
+instance HasProp Disabled (Progress ms) where
+    type Prop Disabled (Progress ms) = Bool
+    getProp _ = disabled
+    setProp _ d p = p { disabled = d }
 
-instance HasErrorProp (Progress ms) where
-    getError = error
-    setError e p = p { error = e }
+instance HasProp Error (Progress ms) where
+    type Prop Error (Progress ms) = Bool
+    getProp _ = error
+    setProp _ e p = p { error = e }
 
-instance HasIndicatingProp (Progress ms) where
-    getIndicating = indicating
-    setIndicating i p = p { indicating = i }
+instance HasProp Indicating (Progress ms) where
+    type Prop Indicating (Progress ms) = Bool
+    getProp _ = indicating
+    setProp _ i p = p { indicating = i }
 
-instance HasInvertedProp (Progress ms) where
-    getInverted = inverted
-    setInverted i p = p { inverted = i }
+instance HasProp Inverted (Progress ms) where
+    type Prop Inverted (Progress ms) = Bool
+    getProp _ = inverted
+    setProp _ i p = p { inverted = i }
 
-instance HasPercentProp (Progress ms) where
-    getPercent = percent
-    setPercent per p = p { percent = per }
+instance HasProp Percent (Progress ms) where
+    type Prop Percent (Progress ms) = Maybe Double
+    getProp _ = percent
+    setProp _ per p = p { percent = per }
 
-instance HasPrecisionProp (Progress ms) where
-    getPrecision = precision
-    setPrecision pre p = p { precision = pre }
+instance HasProp Precision (Progress ms) where
+    type Prop Precision (Progress ms) = Int
+    getProp _ = precision
+    setProp _ pre p = p { precision = pre }
 
-instance HasSizeProp (Progress ms) where
-    getSize = size
-    setSize s p = p { size = s }
+instance HasProp Size (Progress ms) where
+    type Prop Size (Progress ms) = Txt
+    getProp _ = size
+    setProp _ s p = p { size = s }
 
-instance HasSuccessProp (Progress ms) where
-    getSuccess = success
-    setSuccess s p = p { success = s }
+instance HasProp Success (Progress ms) where
+    type Prop Success (Progress ms) = Bool
+    getProp _ = success
+    setProp _ s p = p { success = s }
 
-instance HasTotalProp (Progress ms) where
-    getTotal = total
-    setTotal t p = p { total = t}
+instance HasProp Total (Progress ms) where
+    type Prop Total (Progress ms) = Int
+    getProp _ = total
+    setProp _ t p = p { total = t}
 
-instance HasValueProp (Progress ms) where
-    type ValueProp (Progress ms) = Int
-    getValue = value
-    setValue v p = p { value = v }
+instance HasProp Value (Progress ms) where
+    type Prop Value (Progress ms) = Int
+    getProp _ = value
+    setProp _ v p = p { value = v }
 
-instance HasWarningProp (Progress ms) where
-    getWarning = warning
-    setWarning w p = p { warning = w }
+instance HasProp Warning (Progress ms) where
+    type Prop Warning (Progress ms) = Bool
+    getProp _ = warning
+    setProp _ w p = p { warning = w }

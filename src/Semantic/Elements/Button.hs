@@ -16,41 +16,41 @@ import Semantic.Utils
 import Semantic.Elements.Icon hiding (Group(..), pattern Group)
 import Semantic.Elements.Label hiding (Group(..), pattern Group)
 
-import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
-  ( HasActiveProp(..), pattern Active
-  , HasAnimatedProp(..), pattern Animated
-  , HasAsProp(..), pattern As
-  , HasAttachedProp(..), pattern Attached
-  , HasAttributesProp(..), pattern Attributes
-  , HasBasicProp(..), pattern Basic
-  , HasChildrenProp(..), pattern Children
-  , HasCircularProp(..), pattern Circular
-  , HasClassesProp(..), pattern Classes
-  , HasColorProp(..), pattern Color
-  , HasCompactProp(..), pattern Compact
-  , HasDisabledProp(..), pattern Disabled
-  , HasFloatedProp(..), pattern Floated
-  , HasFluidProp(..), pattern Fluid
-  , HasFocusProp(..), pattern Focus
-  , HasInvertedProp(..), pattern Inverted
-  , HasLabelPositionProp(..), pattern LabelPosition
-  , HasLoadingProp(..), pattern Loading
-  , HasNegativeProp(..), pattern Negative
-  , HasOnClickProp(..), pattern OnClick
-  , HasPositiveProp(..), pattern Positive
-  , HasPrimaryProp(..), pattern Primary
-  , HasSecondaryProp(..), pattern Secondary
-  , HasSizeProp(..), pattern Size
-  , HasTabIndexProp(..), pattern TabIndex
-  , HasToggleProp(..), pattern Toggle
-  , HasHiddenProp(..), pattern Hidden
-  , HasVisibleProp(..), pattern Visible
-  , HasLabeledProp(..), pattern Labeled
-  , HasVerticalProp(..), pattern Vertical
-  , HasWidthsProp(..), pattern Widths
-  , HasLocalizeProp(..), pattern Localize
+  ( pattern Active, Active(..)
+  , pattern Animated, Animated(..)
+  , pattern As, As(..)
+  , pattern Attached, Attached(..)
+  , pattern Attributes, Attributes(..)
+  , pattern Basic, Basic(..)
+  , pattern Children, Children(..)
+  , pattern Circular, Circular(..)
+  , pattern Classes, Classes(..)
+  , pattern Color, Color(..)
+  , pattern Compact, Compact(..)
+  , pattern Disabled, Disabled(..)
+  , pattern Floated, Floated(..)
+  , pattern Fluid, Fluid(..)
+  , pattern Focus, Focus(..)
+  , pattern Inverted, Inverted(..)
+  , pattern LabelPosition, LabelPosition(..)
+  , pattern Loading, Loading(..)
+  , pattern Negative, Negative(..)
+  , pattern OnClick, OnClick(..)
+  , pattern Positive, Positive(..)
+  , pattern Primary, Primary(..)
+  , pattern Secondary, Secondary(..)
+  , pattern Size, Size(..)
+  , pattern TabIndex, TabIndex(..)
+  , pattern Toggle, Toggle(..)
+  , pattern Hidden, Hidden(..)
+  , pattern Visible, Visible(..)
+  , pattern Labeled, Labeled(..)
+  , pattern Vertical, Vertical(..)
+  , pattern Widths, Widths(..)
+  , pattern Localize, Localize(..)
   )
 
 data Button ms = Button_
@@ -176,115 +176,135 @@ instance Pure Button ms where
                       )
                       children
 
-instance HasAnimatedProp (Button ms) where
-    type AnimatedProp (Button ms) = Maybe Txt
-    getAnimated b = animated b
-    setAnimated anim b = b { animated = anim }
+instance HasProp Animated (Button ms) where
+    type Prop Animated (Button ms) = Maybe Txt
+    getProp _ b = animated b
+    setProp _ anim b = b { animated = anim }
 
-instance HasActiveProp (Button ms) where
-    getActive = active
-    setActive a b = b { active = a }
+instance HasProp Active (Button ms) where
+    type Prop Active (Button ms) = Bool
+    getProp _ = active
+    setProp _ a b = b { active = a }
 
-instance HasAsProp (Button ms) where
-    type AsProp (Button ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs f b = b { as = f }
+instance HasProp As (Button ms) where
+    type Prop As (Button ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ f b = b { as = f }
 
-instance HasAttachedProp (Button ms) where
-    type AttachedProp (Button ms) = Maybe Txt
-    getAttached = attached
-    setAttached attach b = b { attached = attach }
+instance HasProp Attached (Button ms) where
+    type Prop Attached (Button ms) = Maybe Txt
+    getProp _ = attached
+    setProp _ attach b = b { attached = attach }
 
-instance HasAttributesProp (Button ms) where
-    type Attribute (Button ms) = Feature ms
-    getAttributes = attributes
-    setAttributes cs b = b { attributes = cs }
+instance HasProp Attributes (Button ms) where
+    type Prop Attributes (Button ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ cs b = b { attributes = cs }
 
-instance HasBasicProp (Button ms) where
-    getBasic = basic
-    setBasic bsc b = b { basic = bsc }
+instance HasProp Basic (Button ms) where
+    type Prop Basic (Button ms) = Bool
+    getProp _ = basic
+    setProp _ bsc b = b { basic = bsc }
 
-instance HasChildrenProp (Button ms) where
-    type Child (Button ms) = View ms
-    getChildren = children
-    setChildren cs b = b { children = cs }
+instance HasProp Children (Button ms) where
+    type Prop Children (Button ms) = [View ms]
+    getProp _ = children
+    setProp _ cs b = b { children = cs }
 
-instance HasCircularProp (Button ms) where
-    getCircular = circular
-    setCircular c b = b { circular = c }
+instance HasProp Circular (Button ms) where
+    type Prop Circular (Button ms) = Bool
+    getProp _ = circular
+    setProp _ c b = b { circular = c }
 
-instance HasClassesProp (Button ms) where
-    getClasses = classes
-    setClasses cs b = b { classes = cs }
+instance HasProp Classes (Button ms) where
+    type Prop Classes (Button ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs b = b { classes = cs }
 
-instance HasColorProp (Button ms) where
-    getColor = color
-    setColor c b = b { color = c }
+instance HasProp Color (Button ms) where
+    type Prop Color (Button ms) = Txt
+    getProp _ = color
+    setProp _ c b = b { color = c }
 
-instance HasCompactProp (Button ms) where
-    getCompact = compact
-    setCompact c b = b { compact = c }
+instance HasProp Compact (Button ms) where
+    type Prop Compact (Button ms) = Bool
+    getProp _ = compact
+    setProp _ c b = b { compact = c }
 
-instance HasDisabledProp (Button ms) where
-    getDisabled = disabled
-    setDisabled d b = b { disabled = d }
+instance HasProp Disabled (Button ms) where
+    type Prop Disabled (Button ms) = Bool
+    getProp _ = disabled
+    setProp _ d b = b { disabled = d }
 
-instance HasFloatedProp (Button ms) where
-    getFloated = floated
-    setFloated f b = b { floated = f }
+instance HasProp Floated (Button ms) where
+    type Prop Floated (Button ms) = Txt
+    getProp _ = floated
+    setProp _ f b = b { floated = f }
 
-instance HasFluidProp (Button ms) where
-    getFluid = fluid
-    setFluid f b = b { fluid = f }
+instance HasProp Fluid (Button ms) where
+    type Prop Fluid (Button ms) = Bool
+    getProp _ = fluid
+    setProp _ f b = b { fluid = f }
 
-instance HasFocusProp (Button ms) where
-    getFocus = focus
-    setFocus f b = b { focus = f }
+instance HasProp Focus (Button ms) where
+    type Prop Focus (Button ms) = Bool
+    getProp _ = focus
+    setProp _ f b = b { focus = f }
 
-instance HasOnClickProp (Button ms) where
-    type OnClickProp (Button ms) = Ef ms IO ()
-    getOnClick = onClick
-    setOnClick f b = b { onClick = f }
+instance HasProp OnClick (Button ms) where
+    type Prop OnClick (Button ms) = Ef ms IO ()
+    getProp _ = onClick
+    setProp _ f b = b { onClick = f }
 
-instance HasInvertedProp (Button ms) where
-    getInverted = inverted
-    setInverted i b = b { inverted = i }
+instance HasProp Inverted (Button ms) where
+    type Prop Inverted (Button ms) = Bool
+    getProp _ = inverted
+    setProp _ i b = b { inverted = i }
 
-instance HasLabelPositionProp (Button ms) where
-    getLabelPosition = labelPosition
-    setLabelPosition lp b = b { labelPosition = lp }
+instance HasProp LabelPosition (Button ms) where
+    type Prop LabelPosition (Button ms) = Txt
+    getProp _ = labelPosition
+    setProp _ lp b = b { labelPosition = lp }
 
-instance HasLoadingProp (Button ms) where
-    getLoading = loading
-    setLoading l b = b { loading = l }
+instance HasProp Loading (Button ms) where
+    type Prop Loading (Button ms) = Bool
+    getProp _ = loading
+    setProp _ l b = b { loading = l }
 
-instance HasNegativeProp (Button ms) where
-    getNegative = negative
-    setNegative n b = b { negative = n }
+instance HasProp Negative (Button ms) where
+    type Prop Negative (Button ms) = Bool
+    getProp _ = negative
+    setProp _ n b = b { negative = n }
 
-instance HasPositiveProp (Button ms) where
-    getPositive = positive
-    setPositive p b = b { positive = p }
+instance HasProp Positive (Button ms) where
+    type Prop Positive (Button ms) = Bool
+    getProp _ = positive
+    setProp _ p b = b { positive = p }
 
-instance HasPrimaryProp (Button ms) where
-    getPrimary = primary
-    setPrimary p b = b { primary = p }
+instance HasProp Primary (Button ms) where
+    type Prop Primary (Button ms) = Bool
+    getProp _ = primary
+    setProp _ p b = b { primary = p }
 
-instance HasSecondaryProp (Button ms) where
-    getSecondary = secondary
-    setSecondary s b = b { secondary = s }
+instance HasProp Secondary (Button ms) where
+    type Prop Secondary (Button ms) = Bool
+    getProp _ = secondary
+    setProp _ s b = b { secondary = s }
 
-instance HasSizeProp (Button ms) where
-    getSize = size
-    setSize s b = b { size = s }
+instance HasProp Size (Button ms) where
+    type Prop Size (Button ms) = Txt
+    getProp _ = size
+    setProp _ s b = b { size = s }
 
-instance HasTabIndexProp (Button ms) where
-    getTabIndex = tabIndex
-    setTabIndex ti b = b { tabIndex = ti }
+instance HasProp TabIndex (Button ms) where
+    type Prop TabIndex (Button ms) = Maybe Int
+    getProp _ = tabIndex
+    setProp _ ti b = b { tabIndex = ti }
 
-instance HasToggleProp (Button ms) where
-    getToggle = toggle
-    setToggle t b = b { toggle = t }
+instance HasProp Toggle (Button ms) where
+    type Prop Toggle (Button ms) = Bool
+    getProp _ = toggle
+    setProp _ t b = b { toggle = t }
 
 data Content ms = Content_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -318,32 +338,35 @@ instance Pure Content ms where
                 )
                 children
 
-instance HasAsProp (Content ms) where
-    type AsProp (Content ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs f bc = bc { as = f }
+instance HasProp As (Content ms) where
+    type Prop As (Content ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ f bc = bc { as = f }
 
-instance HasAttributesProp (Content ms) where
-    type Attribute (Content ms) = Feature ms
-    getAttributes = attributes
-    setAttributes cs bc = bc { attributes = cs }
+instance HasProp Attributes (Content ms) where
+    type Prop Attributes (Content ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ cs bc = bc { attributes = cs }
 
-instance HasChildrenProp (Content ms) where
-    type Child (Content ms) = View ms
-    getChildren = children
-    setChildren cs bc = bc { children = cs }
+instance HasProp Children (Content ms) where
+    type Prop Children (Content ms) = [View ms]
+    getProp _ = children
+    setProp _ cs bc = bc { children = cs }
 
-instance HasClassesProp (Content ms) where
-    getClasses = classes
-    setClasses cs bc = bc { classes = cs }
+instance HasProp Classes (Content ms) where
+    type Prop Classes (Content ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs bc = bc { classes = cs }
 
-instance HasHiddenProp (Content ms) where
-    getHidden = hidden
-    setHidden h bc = bc { hidden = h }
+instance HasProp Hidden (Content ms) where
+    type Prop Hidden (Content ms) = Bool
+    getProp _ = hidden
+    setProp _ h bc = bc { hidden = h }
 
-instance HasVisibleProp (Content ms) where
-    getVisible = visible
-    setVisible v bc = bc { visible = v }
+instance HasProp Visible (Content ms) where
+    type Prop Visible (Content ms) = Bool
+    getProp _ = visible
+    setProp _ v bc = bc { visible = v }
 
 data Group ms = Group_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -365,7 +388,7 @@ data Group ms = Group_
     , size :: Txt
     , toggle :: Bool
     , vertical :: Bool
-    , widths :: Width
+    , widths :: Txt
     } deriving (Generic)
 
 instance Default (Group ms) where
@@ -409,89 +432,105 @@ instance Pure Group ms where
                 )
                 children
 
-instance HasAsProp (Group ms) where
-    type AsProp (Group ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs f bg = bg { as = f }
+instance HasProp As (Group ms) where
+    type Prop As (Group ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ f bg = bg { as = f }
 
-instance HasAttachedProp (Group ms) where
-    type AttachedProp (Group ms) = Maybe Txt
-    getAttached = attached
-    setAttached attach bg = bg { attached = attach }
+instance HasProp Attached (Group ms) where
+    type Prop Attached (Group ms) = Maybe Txt
+    getProp _ = attached
+    setProp _ attach bg = bg { attached = attach }
 
-instance HasAttributesProp (Group ms) where
-    type Attribute (Group ms) = Feature ms
-    getAttributes = attributes
-    setAttributes cs bg = bg { attributes = cs }
+instance HasProp Attributes (Group ms) where
+    type Prop Attributes (Group ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ cs bg = bg { attributes = cs }
 
-instance HasBasicProp (Group ms) where
-    getBasic = basic
-    setBasic b bg = bg { basic = b }
+instance HasProp Basic (Group ms) where
+    type Prop Basic (Group ms) = Bool
+    getProp _ = basic
+    setProp _ b bg = bg { basic = b }
 
-instance HasChildrenProp (Group ms) where
-    type Child (Group ms) = View ms
-    getChildren = children
-    setChildren cs bg = bg { children = cs }
+instance HasProp Children (Group ms) where
+    type Prop Children (Group ms) = [View ms]
+    getProp _ = children
+    setProp _ cs bg = bg { children = cs }
 
-instance HasClassesProp (Group ms) where
-    getClasses = classes
-    setClasses cs bg = bg { classes = cs }
+instance HasProp Classes (Group ms) where
+    type Prop Classes (Group ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs bg = bg { classes = cs }
 
-instance HasColorProp (Group ms) where
-    getColor = color
-    setColor c bg = bg { color = c }
+instance HasProp Color (Group ms) where
+    type Prop Color (Group ms) = Txt
+    getProp _ = color
+    setProp _ c bg = bg { color = c }
 
-instance HasCompactProp (Group ms) where
-    getCompact = compact
-    setCompact c bg = bg { compact = c }
+instance HasProp Compact (Group ms) where
+    type Prop Compact (Group ms) = Bool
+    getProp _ = compact
+    setProp _ c bg = bg { compact = c }
 
-instance HasFloatedProp (Group ms) where
-    getFloated = floated
-    setFloated f bg = bg { floated = f }
+instance HasProp Floated (Group ms) where
+    type Prop Floated (Group ms) = Txt
+    getProp _ = floated
+    setProp _ f bg = bg { floated = f }
 
-instance HasFluidProp (Group ms) where
-    getFluid = fluid
-    setFluid f bg = bg { fluid = f }
+instance HasProp Fluid (Group ms) where
+    type Prop Fluid (Group ms) = Bool
+    getProp _ = fluid
+    setProp _ f bg = bg { fluid = f }
 
-instance HasInvertedProp (Group ms) where
-    getInverted = inverted
-    setInverted i bg = bg { inverted = i }
+instance HasProp Inverted (Group ms) where
+    type Prop Inverted (Group ms) = Bool
+    getProp _ = inverted
+    setProp _ i bg = bg { inverted = i }
 
-instance HasLabeledProp (Group ms) where
-    getLabeled = labeled
-    setLabeled l bg = bg { labeled = l }
+instance HasProp Labeled (Group ms) where
+    type Prop Labeled (Group ms) = Bool
+    getProp _ = labeled
+    setProp _ l bg = bg { labeled = l }
 
-instance HasNegativeProp (Group ms) where
-    getNegative = negative
-    setNegative n bg = bg { negative = n }
+instance HasProp Negative (Group ms) where
+    type Prop Negative (Group ms) = Bool
+    getProp _ = negative
+    setProp _ n bg = bg { negative = n }
 
-instance HasPositiveProp (Group ms) where
-    getPositive = positive
-    setPositive p bg = bg { positive = p }
+instance HasProp Positive (Group ms) where
+    type Prop Positive (Group ms) = Bool
+    getProp _ = positive
+    setProp _ p bg = bg { positive = p }
 
-instance HasPrimaryProp (Group ms) where
-    getPrimary = primary
-    setPrimary p bg = bg { primary = p }
+instance HasProp Primary (Group ms) where
+    type Prop Primary (Group ms) = Bool
+    getProp _ = primary
+    setProp _ p bg = bg { primary = p }
 
-instance HasSecondaryProp (Group ms) where
-    getSecondary = secondary
-    setSecondary s bg = bg { secondary = s }
+instance HasProp Secondary (Group ms) where
+    type Prop Secondary (Group ms) = Bool
+    getProp _ = secondary
+    setProp _ s bg = bg { secondary = s }
 
-instance HasSizeProp (Group ms) where
-    getSize = size
-    setSize s bg = bg { size = s }
+instance HasProp Size (Group ms) where
+    type Prop Size (Group ms) = Txt
+    getProp _ = size
+    setProp _ s bg = bg { size = s }
 
-instance HasToggleProp (Group ms) where
-    getToggle = toggle
-    setToggle t bg = bg { toggle = t }
+instance HasProp Toggle (Group ms) where
+    type Prop Toggle (Group ms) = Bool
+    getProp _ = toggle
+    setProp _ t bg = bg { toggle = t }
 
-instance HasVerticalProp (Group ms) where
-    getVertical = vertical
-    setVertical v bg = bg { vertical = v }
+instance HasProp Vertical (Group ms) where
+    type Prop Vertical (Group ms) = Bool
+    getProp _ = vertical
+    setProp _ v bg = bg { vertical = v }
 
-instance HasWidthsProp (Group ms) where
-    getWidths = widths
-    setWidths w bg = bg { widths = w }
+instance HasProp Widths (Group ms) where
+    type Prop Widths (Group ms) = Txt
+    getProp _ = widths
+    setProp _ w bg = bg { widths = w }
 
 data Or ms = Or_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -515,20 +554,22 @@ instance Pure Or ms where
             )
             []
 
-instance HasAsProp (Or ms) where
-    type AsProp (Or ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs f bo = bo { as = f }
+instance HasProp As (Or ms) where
+    type Prop As (Or ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ f bo = bo { as = f }
 
-instance HasAttributesProp (Or ms) where
-    type Attribute (Or ms) = Feature ms
-    getAttributes = attributes
-    setAttributes cs bo = bo { attributes = cs }
+instance HasProp Attributes (Or ms) where
+    type Prop Attributes (Or ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ cs bo = bo { attributes = cs }
 
-instance HasClassesProp (Or ms) where
-    getClasses = classes
-    setClasses cs bo = bo { classes = cs }
+instance HasProp Classes (Or ms) where
+    type Prop Classes (Or ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs bo = bo { classes = cs }
 
-instance HasLocalizeProp (Or ms) where
-    getLocalize = localize
-    setLocalize l bo = bo { localize = l }
+instance HasProp Localize (Or ms) where
+    type Prop Localize (Or ms) = Txt
+    getProp _ = localize
+    setProp _ l bo = bo { localize = l }

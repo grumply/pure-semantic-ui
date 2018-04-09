@@ -19,15 +19,15 @@ import Semantic.Utils
 
 import Semantic.Elements.Image (Image(..))
 
-import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
-  ( HasAsProp(..), pattern As
-  , HasAttributesProp(..), pattern Attributes
-  , HasChildrenProp(..), pattern Children
-  , HasClassesProp(..), pattern Classes
-  , HasSizeProp(..), pattern Size
-  , HasIsTextProp(..), pattern IsText
+  ( pattern As, As(..)
+  , pattern Attributes, Attributes(..)
+  , pattern Children, Children(..)
+  , pattern Classes, Classes(..)
+  , pattern Size, Size(..)
+  , pattern IsText, IsText(..)
   )
 
 data Feed ms = Feed_
@@ -60,28 +60,30 @@ instance Pure Feed ms where
                 )
                 children
 
-instance HasAsProp (Feed ms) where
-    type AsProp (Feed ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a f = f { as = a }
+instance HasProp As (Feed ms) where
+    type Prop As (Feed ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a f = f { as = a }
 
-instance HasAttributesProp (Feed ms) where
-    type Attribute (Feed ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as f = f { attributes = as }
+instance HasProp Attributes (Feed ms) where
+    type Prop Attributes (Feed ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as f = f { attributes = as }
 
-instance HasChildrenProp (Feed ms) where
-    type Child (Feed ms) = View ms
-    getChildren = children
-    setChildren cs f = f { children = cs }
+instance HasProp Children (Feed ms) where
+    type Prop Children (Feed ms) = [View ms]
+    getProp _ = children
+    setProp _ cs f = f { children = cs }
 
-instance HasClassesProp (Feed ms) where
-    getClasses = classes
-    setClasses cs f = f { classes = cs }
+instance HasProp Classes (Feed ms) where
+    type Prop Classes (Feed ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs f = f { classes = cs }
 
-instance HasSizeProp (Feed ms) where
-    getSize = size
-    setSize s f = f { size = s }
+instance HasProp Size (Feed ms) where
+    type Prop Size (Feed ms) = Txt
+    getProp _ = size
+    setProp _ s f = f { size = s }
 
 data Content ms = Content_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -110,24 +112,25 @@ instance Pure Content ms where
                 )
                 children
 
-instance HasAsProp (Content ms) where
-    type AsProp (Content ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a fc = fc { as = a }
+instance HasProp As (Content ms) where
+    type Prop As (Content ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a fc = fc { as = a }
 
-instance HasAttributesProp (Content ms) where
-    type Attribute (Content ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as fc = fc { attributes = as }
+instance HasProp Attributes (Content ms) where
+    type Prop Attributes (Content ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as fc = fc { attributes = as }
 
-instance HasChildrenProp (Content ms) where
-    type Child (Content ms) = View ms
-    getChildren = children
-    setChildren cs fc = fc { children = cs }
+instance HasProp Children (Content ms) where
+    type Prop Children (Content ms) = [View ms]
+    getProp _ = children
+    setProp _ cs fc = fc { children = cs }
 
-instance HasClassesProp (Content ms) where
-    getClasses = classes
-    setClasses cs fc = fc { classes = cs }
+instance HasProp Classes (Content ms) where
+    type Prop Classes (Content ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs fc = fc { classes = cs }
 
 data Date ms = Date_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -156,24 +159,25 @@ instance Pure Date ms where
                 )
                 children
 
-instance HasAsProp (Date ms) where
-    type AsProp (Date ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a fd = fd { as = a }
+instance HasProp As (Date ms) where
+    type Prop As (Date ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a fd = fd { as = a }
 
-instance HasAttributesProp (Date ms) where
-    type Attribute (Date ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as fd = fd { attributes = as }
+instance HasProp Attributes (Date ms) where
+    type Prop Attributes (Date ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as fd = fd { attributes = as }
 
-instance HasChildrenProp (Date ms) where
-    type Child (Date ms) = View ms
-    getChildren = children
-    setChildren cs fd = fd { children = cs }
+instance HasProp Children (Date ms) where
+    type Prop Children (Date ms) = [View ms]
+    getProp _ = children
+    setProp _ cs fd = fd { children = cs }
 
-instance HasClassesProp (Date ms) where
-    getClasses = classes
-    setClasses cs fd = fd { classes = cs }
+instance HasProp Classes (Date ms) where
+    type Prop Classes (Date ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs fd = fd { classes = cs }
 
 data Event ms = Event_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -202,24 +206,25 @@ instance Pure Event ms where
                 )
                 children
 
-instance HasAsProp (Event ms) where
-    type AsProp (Event ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a fe = fe { as = a }
+instance HasProp As (Event ms) where
+    type Prop As (Event ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a fe = fe { as = a }
 
-instance HasAttributesProp (Event ms) where
-    type Attribute (Event ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as fe = fe { attributes = as }
+instance HasProp Attributes (Event ms) where
+    type Prop Attributes (Event ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as fe = fe { attributes = as }
 
-instance HasChildrenProp (Event ms) where
-    type Child (Event ms) = View ms
-    getChildren = children
-    setChildren cs fe = fe { children = cs }
+instance HasProp Children (Event ms) where
+    type Prop Children (Event ms) = [View ms]
+    getProp _ = children
+    setProp _ cs fe = fe { children = cs }
 
-instance HasClassesProp (Event ms) where
-    getClasses = classes
-    setClasses cs fe = fe { classes = cs }
+instance HasProp Classes (Event ms) where
+    type Prop Classes (Event ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs fe = fe { classes = cs }
 
 data Extra ms = Extra_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -253,28 +258,30 @@ instance Pure Extra ms where
                 )
                 children
 
-instance HasAsProp (Extra ms) where
-    type AsProp (Extra ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a fe = fe { as = a }
+instance HasProp As (Extra ms) where
+    type Prop As (Extra ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a fe = fe { as = a }
 
-instance HasAttributesProp (Extra ms) where
-    type Attribute (Extra ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as fe = fe { attributes = as }
+instance HasProp Attributes (Extra ms) where
+    type Prop Attributes (Extra ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as fe = fe { attributes = as }
 
-instance HasChildrenProp (Extra ms) where
-    type Child (Extra ms) = View ms
-    getChildren = children
-    setChildren cs fe = fe { children = cs }
+instance HasProp Children (Extra ms) where
+    type Prop Children (Extra ms) = [View ms]
+    getProp _ = children
+    setProp _ cs fe = fe { children = cs }
 
-instance HasClassesProp (Extra ms) where
-    getClasses = classes
-    setClasses cs fe = fe { classes = cs }
+instance HasProp Classes (Extra ms) where
+    type Prop Classes (Extra ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs fe = fe { classes = cs }
 
-instance HasIsTextProp (Extra ms) where
-    getIsText = text
-    setIsText it fe = fe { text = it }
+instance HasProp IsText (Extra ms) where
+    type Prop IsText (Extra ms) = Bool
+    getProp _ = text
+    setProp _ it fe = fe { text = it }
 
 data Label ms = Label_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -303,24 +310,25 @@ instance Pure Label ms where
                 )
                 children
 
-instance HasAsProp (Label ms) where
-    type AsProp (Label ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a fl = fl { as = a }
+instance HasProp As (Label ms) where
+    type Prop As (Label ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a fl = fl { as = a }
 
-instance HasAttributesProp (Label ms) where
-    type Attribute (Label ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as fl = fl { attributes = as }
+instance HasProp Attributes (Label ms) where
+    type Prop Attributes (Label ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as fl = fl { attributes = as }
 
-instance HasChildrenProp (Label ms) where
-    type Child (Label ms) = View ms
-    getChildren = children
-    setChildren cs fl = fl { children = cs }
+instance HasProp Children (Label ms) where
+    type Prop Children (Label ms) = [View ms]
+    getProp _ = children
+    setProp _ cs fl = fl { children = cs }
 
-instance HasClassesProp (Label ms) where
-    getClasses = classes
-    setClasses cs fl = fl { classes = cs }
+instance HasProp Classes (Label ms) where
+    type Prop Classes (Label ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs fl = fl { classes = cs }
 
 data Like ms = Like_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -349,24 +357,25 @@ instance Pure Like ms where
                 )
                 children
 
-instance HasAsProp (Like ms) where
-    type AsProp (Like ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a fl = fl { as = a }
+instance HasProp As (Like ms) where
+    type Prop As (Like ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a fl = fl { as = a }
 
-instance HasAttributesProp (Like ms) where
-    type Attribute (Like ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as fl = fl { attributes = as }
+instance HasProp Attributes (Like ms) where
+    type Prop Attributes (Like ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as fl = fl { attributes = as }
 
-instance HasChildrenProp (Like ms) where
-    type Child (Like ms) = View ms
-    getChildren = children
-    setChildren cs fl = fl { children = cs }
+instance HasProp Children (Like ms) where
+    type Prop Children (Like ms) = [View ms]
+    getProp _ = children
+    setProp _ cs fl = fl { children = cs }
 
-instance HasClassesProp (Like ms) where
-    getClasses = classes
-    setClasses cs fl = fl { classes = cs }
+instance HasProp Classes (Like ms) where
+    type Prop Classes (Like ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs fl = fl { classes = cs }
 
 data Meta ms = Meta_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -395,24 +404,25 @@ instance Pure Meta ms where
                 )
                 children
 
-instance HasAsProp (Meta ms) where
-    type AsProp (Meta ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a fm = fm { as = a }
+instance HasProp As (Meta ms) where
+    type Prop As (Meta ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a fm = fm { as = a }
 
-instance HasAttributesProp (Meta ms) where
-    type Attribute (Meta ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as fm = fm { attributes = as }
+instance HasProp Attributes (Meta ms) where
+    type Prop Attributes (Meta ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as fm = fm { attributes = as }
 
-instance HasChildrenProp (Meta ms) where
-    type Child (Meta ms) = View ms
-    getChildren = children
-    setChildren cs fm = fm { children = cs }
+instance HasProp Children (Meta ms) where
+    type Prop Children (Meta ms) = [View ms]
+    getProp _ = children
+    setProp _ cs fm = fm { children = cs }
 
-instance HasClassesProp (Meta ms) where
-    getClasses = classes
-    setClasses cs fm = fm { classes = cs }
+instance HasProp Classes (Meta ms) where
+    type Prop Classes (Meta ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs fm = fm { classes = cs }
 
 data Summary ms = Summary_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -441,24 +451,25 @@ instance Pure Summary ms where
                 )
                 children
 
-instance HasAsProp (Summary ms) where
-    type AsProp (Summary ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a fs = fs { as = a }
+instance HasProp As (Summary ms) where
+    type Prop As (Summary ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a fs = fs { as = a }
 
-instance HasAttributesProp (Summary ms) where
-    type Attribute (Summary ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as fs = fs { attributes = as }
+instance HasProp Attributes (Summary ms) where
+    type Prop Attributes (Summary ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as fs = fs { attributes = as }
 
-instance HasChildrenProp (Summary ms) where
-    type Child (Summary ms) = View ms
-    getChildren = children
-    setChildren cs fs = fs { children = cs }
+instance HasProp Children (Summary ms) where
+    type Prop Children (Summary ms) = [View ms]
+    getProp _ = children
+    setProp _ cs fs = fs { children = cs }
 
-instance HasClassesProp (Summary ms) where
-    getClasses = classes
-    setClasses cs fs = fs { classes = cs }
+instance HasProp Classes (Summary ms) where
+    type Prop Classes (Summary ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs fs = fs { classes = cs }
 
 data User ms = User_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -487,21 +498,22 @@ instance Pure User ms where
                 )
                 children
 
-instance HasAsProp (User ms) where
-    type AsProp (User ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a fu = fu { as = a }
+instance HasProp As (User ms) where
+    type Prop As (User ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a fu = fu { as = a }
 
-instance HasAttributesProp (User ms) where
-    type Attribute (User ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as fu = fu { attributes = as }
+instance HasProp Attributes (User ms) where
+    type Prop Attributes (User ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as fu = fu { attributes = as }
 
-instance HasChildrenProp (User ms) where
-    type Child (User ms) = View ms
-    getChildren = children
-    setChildren cs fu = fu { children = cs }
+instance HasProp Children (User ms) where
+    type Prop Children (User ms) = [View ms]
+    getProp _ = children
+    setProp _ cs fu = fu { children = cs }
 
-instance HasClassesProp (User ms) where
-    getClasses = classes
-    setClasses cs fu = fu { classes = cs }
+instance HasProp Classes (User ms) where
+    type Prop Classes (User ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs fu = fu { classes = cs }

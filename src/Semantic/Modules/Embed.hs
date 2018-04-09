@@ -14,23 +14,23 @@ import Semantic.Utils hiding (id)
 
 import Semantic.Elements.Icon
 
-import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
-  ( HasNameProp(..), pattern Name
-  , HasAsProp(..), pattern As
-  , HasAttributesProp(..), pattern Attributes
-  , HasChildrenProp(..), pattern Children
-  , HasClassesProp(..), pattern Classes
-  , HasActiveProp(..), pattern Active
-  , HasAspectRatioProp(..), pattern AspectRatio
-  , HasAutoplayProp(..), pattern Autoplay
-  , HasBrandedProp(..), pattern Branded
-  , HasColorProp(..), pattern Color
-  , HasDefaultActiveProp(..), pattern DefaultActive
-  , HasOnClickProp(..), pattern OnClick
-  , HasPlaceholderProp(..), pattern Placeholder
-  , HasURLProp(..), pattern URL
+  ( pattern Name, Name(..)
+  , pattern As, As(..)
+  , pattern Attributes, Attributes(..)
+  , pattern Children, Children(..)
+  , pattern Classes, Classes(..)
+  , pattern Active, Active(..)
+  , pattern AspectRatio, AspectRatio(..)
+  , pattern Autoplay, Autoplay(..)
+  , pattern Branded, Branded(..)
+  , pattern Color, Color(..)
+  , pattern DefaultActive, DefaultActive(..)
+  , pattern OnClick, OnClick(..)
+  , pattern Placeholder, Placeholder(..)
+  , pattern URL, URL(..)
   )
 
 import Prelude hiding (id)
@@ -155,48 +155,55 @@ instance VC ms => Pure Embed ms where
                 }
 
 
-instance HasAsProp (Embed ms) where
-    type AsProp (Embed ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a sp = sp { as = a }
+instance HasProp As (Embed ms) where
+    type Prop As (Embed ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a sp = sp { as = a }
 
-instance HasAttributesProp (Embed ms) where
-    type Attribute (Embed ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as sp = sp { attributes = as }
+instance HasProp Attributes (Embed ms) where
+    type Prop Attributes (Embed ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as sp = sp { attributes = as }
 
-instance HasChildrenProp (Embed ms) where
-    type Child (Embed ms) = View ms
-    getChildren = children
-    setChildren cs sp = sp { children = cs }
+instance HasProp Children (Embed ms) where
+    type Prop Children (Embed ms) = [View ms]
+    getProp _ = children
+    setProp _ cs sp = sp { children = cs }
 
-instance HasClassesProp (Embed ms) where
-    getClasses = classes
-    setClasses cs sp = sp { classes = cs }
+instance HasProp Classes (Embed ms) where
+    type Prop Classes (Embed ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs sp = sp { classes = cs }
 
-instance HasActiveProp (Embed ms) where
-    getActive = active
-    setActive a e = e { active = a }
+instance HasProp Active (Embed ms) where
+    type Prop Active (Embed ms) = Bool
+    getProp _ = active
+    setProp _ a e = e { active = a }
 
-instance HasAspectRatioProp (Embed ms) where
-    getAspectRatio = aspectRatio
-    setAspectRatio ar e = e { aspectRatio = ar }
+instance HasProp AspectRatio (Embed ms) where
+    type Prop AspectRatio (Embed ms) = Txt
+    getProp _ = aspectRatio
+    setProp _ ar e = e { aspectRatio = ar }
 
-instance HasAutoplayProp (Embed ms) where
-    getAutoplay = autoplay
-    setAutoplay a e = e { autoplay = a }
+instance HasProp Autoplay (Embed ms) where
+    type Prop Autoplay (Embed ms) = Bool
+    getProp _ = autoplay
+    setProp _ a e = e { autoplay = a }
 
-instance HasBrandedProp (Embed ms) where
-    getBranded = branded
-    setBranded b e = e { branded = b }
+instance HasProp Branded (Embed ms) where
+    type Prop Branded (Embed ms) = Bool
+    getProp _ = branded
+    setProp _ b e = e { branded = b }
 
-instance HasColorProp (Embed ms) where
-    getColor = color
-    setColor c e = e { color = c }
+instance HasProp Color (Embed ms) where
+    type Prop Color (Embed ms) = Txt
+    getProp _ = color
+    setProp _ c e = e { color = c }
 
-instance HasDefaultActiveProp (Embed ms) where
-    getDefaultActive = defaultActive
-    setDefaultActive da e = e { defaultActive = da }
+instance HasProp DefaultActive (Embed ms) where
+    type Prop DefaultActive (Embed ms) = Bool
+    getProp _ = defaultActive
+    setProp _ da e = e { defaultActive = da }
 
 pattern HD :: Embed ms -> Embed ms
 pattern HD e <- (hd &&& Prelude.id -> (True,e)) where
@@ -214,19 +221,21 @@ pattern EmbedIframe :: [Feature ms] -> Embed ms -> Embed ms
 pattern EmbedIframe fs e <- (iframe &&& Prelude.id -> (fs,e)) where
     EmbedIframe fs e = e { iframe = fs }
 
-instance HasOnClickProp (Embed ms) where
-    type OnClickProp (Embed ms) = Ef ms IO ()
-    getOnClick = onClick
-    setOnClick oc e = e { onClick = oc }
+instance HasProp OnClick (Embed ms) where
+    type Prop OnClick (Embed ms) = Ef ms IO ()
+    getProp _ = onClick
+    setProp _ oc e = e { onClick = oc }
 
-instance HasPlaceholderProp (Embed ms) where
-    getPlaceholder = placeholder
-    setPlaceholder p e = e { placeholder = p }
+instance HasProp Placeholder (Embed ms) where
+    type Prop Placeholder (Embed ms) = Txt
+    getProp _ = placeholder
+    setProp _ p e = e { placeholder = p }
 
 pattern EmbedSource :: EmbedSource -> Embed ms -> Embed ms
 pattern EmbedSource es e <- (source &&& Prelude.id -> (Just es,e)) where
     EmbedSource es e = e { source = Just es }
 
-instance HasURLProp (Embed ms) where
-    getURL = url
-    setURL u e = e { url = u }
+instance HasProp URL (Embed ms) where
+    type Prop URL (Embed ms) = Txt
+    getProp _ = url
+    setProp _ u e = e { url = u }

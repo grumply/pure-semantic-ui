@@ -9,19 +9,19 @@ import Pure.View hiding (position,verticalAlign)
 
 import Semantic.Utils
 
-import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
-  ( HasAsProp(..), pattern As
-  , HasAttachedProp(..), pattern Attached
-  , HasAttributesProp(..), pattern Attributes
-  , HasChildrenProp(..), pattern Children
-  , HasClassesProp(..), pattern Classes
-  , HasCloseProp(..), pattern Close
-  , HasDividingProp(..), pattern Dividing
-  , HasInternalProp(..), pattern Internal
-  , HasPositionProp(..), pattern Position
-  , HasSizeProp(..), pattern Size
+  ( pattern As, As(..)
+  , pattern Attached, Attached(..)
+  , pattern Attributes, Attributes(..)
+  , pattern Children, Children(..)
+  , pattern Classes, Classes(..)
+  , pattern Close, Close(..)
+  , pattern Dividing, Dividing(..)
+  , pattern Internal, Internal(..)
+  , pattern Position, Position(..)
+  , pattern Size, Size(..)
   )
 
 data Rail ms = Rail_
@@ -64,46 +64,52 @@ instance Pure Rail ms where
                 )
                 children
 
-instance HasAsProp (Rail ms) where
-    type AsProp (Rail ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs f r = r { as = f }
+instance HasProp As (Rail ms) where
+    type Prop As (Rail ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ f r = r { as = f }
 
-instance HasAttachedProp (Rail ms) where
-    type AttachedProp (Rail ms) = Bool
-    getAttached = attached
-    setAttached attach r = r { attached = attach }
+instance HasProp Attached (Rail ms) where
+    type Prop Attached (Rail ms) = Bool
+    getProp _ = attached
+    setProp _ attach r = r { attached = attach }
 
-instance HasAttributesProp (Rail ms) where
-    type Attribute (Rail ms) = Feature ms
-    getAttributes = attributes
-    setAttributes cs r = r { attributes = cs }
+instance HasProp Attributes (Rail ms) where
+    type Prop Attributes (Rail ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ cs r = r { attributes = cs }
 
-instance HasChildrenProp (Rail ms) where
-    type Child (Rail ms) = View ms
-    getChildren = children
-    setChildren cs r = r { children = cs }
+instance HasProp Children (Rail ms) where
+    type Prop Children (Rail ms) = [View ms]
+    getProp _ = children
+    setProp _ cs r = r { children = cs }
 
-instance HasClassesProp (Rail ms) where
-    getClasses = classes
-    setClasses cs r = r { classes = cs }
+instance HasProp Classes (Rail ms) where
+    type Prop Classes (Rail ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs r = r { classes = cs }
 
-instance HasCloseProp (Rail ms) where
-    getClose = close
-    setClose c r = r { close = c }
+instance HasProp Close (Rail ms) where
+    type Prop Close (Rail ms) = Maybe Txt
+    getProp _ = close
+    setProp _ c r = r { close = c }
 
-instance HasDividingProp (Rail ms) where
-    getDividing = dividing
-    setDividing d r = r { dividing = d }
+instance HasProp Dividing (Rail ms) where
+    type Prop Dividing (Rail ms) = Bool
+    getProp _ = dividing
+    setProp _ d r = r { dividing = d }
 
-instance HasInternalProp (Rail ms) where
-    getInternal = internal
-    setInternal i r = r { internal = i }
+instance HasProp Internal (Rail ms) where
+    type Prop Internal (Rail ms) = Bool
+    getProp _ = internal
+    setProp _ i r = r { internal = i }
 
-instance HasPositionProp (Rail ms) where
-    getPosition = position
-    setPosition p r = r { position = p }
+instance HasProp Position (Rail ms) where
+    type Prop Position (Rail ms) = Txt
+    getProp _ = position
+    setProp _ p r = r { position = p }
 
-instance HasSizeProp (Rail ms) where
-    getSize = size
-    setSize s r = r { size = s }
+instance HasProp Size (Rail ms) where
+    type Prop Size (Rail ms) = Txt
+    getProp _ = size
+    setProp _ s r = r { size = s }

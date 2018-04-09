@@ -13,39 +13,39 @@ import Pure.View hiding (active,color,fixed,onClick,text,vertical,widths,positio
 
 import Semantic.Utils
 
-import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
-  ( HasAsProp(..), pattern As
-  , HasAttributesProp(..), pattern Attributes
-  , HasChildrenProp(..), pattern Children
-  , HasClassesProp(..), pattern Classes
-  , HasAttachedProp(..), pattern Attached
-  , HasBorderlessProp(..), pattern Borderless
-  , HasColorProp(..), pattern Color
-  , HasCompactProp(..), pattern Compact
-  , HasFixedProp(..), pattern Fixed
-  , HasFloatedProp(..), pattern Floated
-  , HasFluidProp(..), pattern Fluid
-  , HasInvertedProp(..), pattern Inverted
-  , HasIsIconProp(..), pattern IsIcon
-  , HasIsTextProp(..), pattern IsText
-  , HasOnClickProp(..), pattern OnClick
-  , HasPaginationProp(..), pattern Pagination
-  , HasPointingProp(..), pattern Pointing
-  , HasSecondaryProp(..), pattern Secondary
-  , HasSizeProp(..), pattern Size
-  , HasStackableProp(..), pattern Stackable
-  , HasTabularProp(..), pattern Tabular
-  , HasVerticalProp(..), pattern Vertical
-  , HasWidthsProp(..), pattern Widths
-  , HasActiveProp(..), pattern Active
-  , HasDisabledProp(..), pattern Disabled
-  , HasFittedProp(..), pattern Fitted
-  , HasIndexProp(..), pattern Index
-  , HasIsHeaderProp(..), pattern IsHeader
-  , HasLinkProp(..), pattern Link
-  , HasPositionProp(..), pattern Position
+  ( pattern As, As(..)
+  , pattern Attributes, Attributes(..)
+  , pattern Children, Children(..)
+  , pattern Classes, Classes(..)
+  , pattern Attached, Attached(..)
+  , pattern Borderless, Borderless(..)
+  , pattern Color, Color(..)
+  , pattern Compact, Compact(..)
+  , pattern Fixed, Fixed(..)
+  , pattern Floated, Floated(..)
+  , pattern Fluid, Fluid(..)
+  , pattern Inverted, Inverted(..)
+  , pattern IsIcon, IsIcon(..)
+  , pattern IsText, IsText(..)
+  , pattern OnClick, OnClick(..)
+  , pattern Pagination, Pagination(..)
+  , pattern Pointing, Pointing(..)
+  , pattern Secondary, Secondary(..)
+  , pattern Size, Size(..)
+  , pattern Stackable, Stackable(..)
+  , pattern Tabular, Tabular(..)
+  , pattern Vertical, Vertical(..)
+  , pattern Widths, Widths(..)
+  , pattern Active, Active(..)
+  , pattern Disabled, Disabled(..)
+  , pattern Fitted, Fitted(..)
+  , pattern Index, Index(..)
+  , pattern IsHeader, IsHeader(..)
+  , pattern Link, Link(..)
+  , pattern Position, Position(..)
   )
 
 import Semantic.Elements.Icon
@@ -73,7 +73,7 @@ data Menu ms = Menu_
     , tabular :: Maybe Txt
     , text :: Bool
     , vertical :: Bool
-    , widths :: Width
+    , widths :: Txt
     } deriving (Generic)
 
 instance Default (Menu ms) where
@@ -118,105 +118,121 @@ instance VC ms => Pure Menu ms where
                 )
                 children'
 
-instance HasAsProp (Menu ms) where
-    type AsProp (Menu ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a m = m { as = a }
+instance HasProp As (Menu ms) where
+    type Prop As (Menu ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a m = m { as = a }
 
-instance HasAttributesProp (Menu ms) where
-    type Attribute (Menu ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as m = m { attributes = as }
+instance HasProp Attributes (Menu ms) where
+    type Prop Attributes (Menu ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as m = m { attributes = as }
 
-instance HasChildrenProp (Menu ms) where
-    type Child (Menu ms) = View ms
-    getChildren = children
-    setChildren cs m = m { children = cs }
+instance HasProp Children (Menu ms) where
+    type Prop Children (Menu ms) = [View ms]
+    getProp _ = children
+    setProp _ cs m = m { children = cs }
 
-instance HasClassesProp (Menu ms) where
-    getClasses = classes
-    setClasses cs m = m { classes = cs }
+instance HasProp Classes (Menu ms) where
+    type Prop Classes (Menu ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs m = m { classes = cs }
 
-instance HasAttachedProp (Menu ms) where
-    type AttachedProp (Menu ms) = Maybe Txt
-    getAttached = attached
-    setAttached a m = m { attached = a }
+instance HasProp Attached (Menu ms) where
+    type Prop Attached (Menu ms) = Maybe Txt
+    getProp _ = attached
+    setProp _ a m = m { attached = a }
 
-instance HasBorderlessProp (Menu ms) where
-    getBorderless = borderless
-    setBorderless b m = m { borderless = b }
+instance HasProp Borderless (Menu ms) where
+    type Prop Borderless (Menu ms) = Bool
+    getProp _ = borderless
+    setProp _ b m = m { borderless = b }
 
-instance HasColorProp (Menu ms) where
-    getColor = color
-    setColor c m = m { color = c }
+instance HasProp Color (Menu ms) where
+    type Prop Color (Menu ms) = Txt
+    getProp _ = color
+    setProp _ c m = m { color = c }
 
-instance HasCompactProp (Menu ms) where
-    getCompact = compact
-    setCompact c m = m { compact = c }
+instance HasProp Compact (Menu ms) where
+    type Prop Compact (Menu ms) = Bool
+    getProp _ = compact
+    setProp _ c m = m { compact = c }
 
-instance HasFixedProp (Menu ms) where
-    getFixed = fixed
-    setFixed f m = m { fixed = f }
+instance HasProp Fixed (Menu ms) where
+    type Prop Fixed (Menu ms) = Txt
+    getProp _ = fixed
+    setProp _ f m = m { fixed = f }
 
-instance HasFloatedProp (Menu ms) where
-    type FloatedProp (Menu ms) = Maybe Txt
-    getFloated = floated
-    setFloated f m = m { floated = f }
+instance HasProp Floated (Menu ms) where
+    type Prop Floated (Menu ms) = Maybe Txt
+    getProp _ = floated
+    setProp _ f m = m { floated = f }
 
-instance HasFluidProp (Menu ms) where
-    getFluid = fluid
-    setFluid f m = m { fluid = f }
+instance HasProp Fluid (Menu ms) where
+    type Prop Fluid (Menu ms) = Bool
+    getProp _ = fluid
+    setProp _ f m = m { fluid = f }
 
-instance HasIsIconProp (Menu ms) where
-    getIsIcon = icon
-    setIsIcon i m = m { icon = i }
+instance HasProp IsIcon (Menu ms) where
+    type Prop IsIcon (Menu ms) = Maybe Txt
+    getProp _ = icon
+    setProp _ i m = m { icon = i }
 
-instance HasInvertedProp (Menu ms) where
-    getInverted = inverted
-    setInverted i m = m { inverted = i }
+instance HasProp Inverted (Menu ms) where
+    type Prop Inverted (Menu ms) = Bool
+    getProp _ = inverted
+    setProp _ i m = m { inverted = i }
 
-instance HasOnClickProp (Menu ms) where
-    type OnClickProp (Menu ms) = Item ms -> Ef ms IO ()
-    getOnClick = onItemClick
-    setOnClick oc m = m { onItemClick = oc }
+instance HasProp OnClick (Menu ms) where
+    type Prop OnClick (Menu ms) = Item ms -> Ef ms IO ()
+    getProp _ = onItemClick
+    setProp _ oc m = m { onItemClick = oc }
 
-instance HasPaginationProp (Menu ms) where
-    getPagination = pagination
-    setPagination p m = m { pagination = p }
+instance HasProp Pagination (Menu ms) where
+    type Prop Pagination (Menu ms) = Bool
+    getProp _ = pagination
+    setProp _ p m = m { pagination = p }
 
-instance HasPointingProp (Menu ms) where
-    type PointingProp (Menu ms) = Bool
-    getPointing = pointing
-    setPointing p m = m { pointing = p }
+instance HasProp Pointing (Menu ms) where
+    type Prop Pointing (Menu ms) = Bool
+    getProp _ = pointing
+    setProp _ p m = m { pointing = p }
 
-instance HasSecondaryProp (Menu ms) where
-    getSecondary = secondary
-    setSecondary s m = m { secondary = s }
+instance HasProp Secondary (Menu ms) where
+    type Prop Secondary (Menu ms) = Bool
+    getProp _ = secondary
+    setProp _ s m = m { secondary = s }
 
-instance HasSizeProp (Menu ms) where
-    getSize = size
-    setSize s m = m { size = s }
+instance HasProp Size (Menu ms) where
+    type Prop Size (Menu ms) = Txt
+    getProp _ = size
+    setProp _ s m = m { size = s }
 
-instance HasStackableProp (Menu ms) where
-    type StackableProp (Menu ms) = Bool
-    getStackable = stackable
-    setStackable s m = m { stackable = s }
+instance HasProp Stackable (Menu ms) where
+    type Prop Stackable (Menu ms) = Bool
+    getProp _ = stackable
+    setProp _ s m = m { stackable = s }
 
-instance HasTabularProp (Menu ms) where
-    getTabular = tabular
-    setTabular t m = m { tabular = t }
+instance HasProp Tabular (Menu ms) where
+    type Prop Tabular (Menu ms) = Maybe Txt
+    getProp _ = tabular
+    setProp _ t m = m { tabular = t }
 
-instance HasIsTextProp (Menu ms) where
-    getIsText = text
-    setIsText t m = m { text = t }
+instance HasProp IsText (Menu ms) where
+    type Prop IsText (Menu ms) = Bool
+    getProp _ = text
+    setProp _ t m = m { text = t }
 
-instance HasVerticalProp (Menu ms) where
-    getVertical = vertical
-    setVertical v m = m { vertical = v }
+instance HasProp Vertical (Menu ms) where
+    type Prop Vertical (Menu ms) = Bool
+    getProp _ = vertical
+    setProp _ v m = m { vertical = v }
 
-instance HasWidthsProp (Menu ms) where
-    getWidths = widths
-    setWidths w m = m { widths = w }
+instance HasProp Widths (Menu ms) where
+    type Prop Widths (Menu ms) = Txt
+    getProp _ = widths
+    setProp _ w m = m { widths = w }
+
 data Header ms = Header_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]
@@ -244,24 +260,25 @@ instance Pure Header ms where
                 )
                 children
 
-instance HasAsProp (Header ms) where
-    type AsProp (Header ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a mh = mh { as = a }
+instance HasProp As (Header ms) where
+    type Prop As (Header ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a mh = mh { as = a }
 
-instance HasAttributesProp (Header ms) where
-    type Attribute (Header ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as mh = mh { attributes = as }
+instance HasProp Attributes (Header ms) where
+    type Prop Attributes (Header ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as mh = mh { attributes = as }
 
-instance HasChildrenProp (Header ms) where
-    type Child (Header ms) = View ms
-    getChildren = children
-    setChildren cs mh = mh { children = cs }
+instance HasProp Children (Header ms) where
+    type Prop Children (Header ms) = [View ms]
+    getProp _ = children
+    setProp _ cs mh = mh { children = cs }
 
-instance HasClassesProp (Header ms) where
-    getClasses = classes
-    setClasses cs mh = mh { classes = cs }
+instance HasProp Classes (Header ms) where
+    type Prop Classes (Header ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs mh = mh { classes = cs }
 
 data Item ms = Item_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -316,63 +333,70 @@ instance Pure Item ms where
                 )
                 children
 
-instance HasAsProp (Item ms) where
-    type AsProp (Item ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a mi = mi { as = a }
+instance HasProp As (Item ms) where
+    type Prop As (Item ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a mi = mi { as = a }
 
-instance HasAttributesProp (Item ms) where
-    type Attribute (Item ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as mi = mi { attributes = as }
+instance HasProp Attributes (Item ms) where
+    type Prop Attributes (Item ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as mi = mi { attributes = as }
 
-instance HasChildrenProp (Item ms) where
-    type Child (Item ms) = View ms
-    getChildren = children
-    setChildren cs mi = mi { children = cs }
+instance HasProp Children (Item ms) where
+    type Prop Children (Item ms) = [View ms]
+    getProp _ = children
+    setProp _ cs mi = mi { children = cs }
 
-instance HasClassesProp (Item ms) where
-    getClasses = classes
-    setClasses cs mi = mi { classes = cs }
+instance HasProp Classes (Item ms) where
+    type Prop Classes (Item ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs mi = mi { classes = cs }
 
-instance HasActiveProp (Item ms) where
-    getActive = active
-    setActive a mi = mi { active = a }
+instance HasProp Active (Item ms) where
+    type Prop Active (Item ms) = Bool
+    getProp _ = active
+    setProp _ a mi = mi { active = a }
 
-instance HasColorProp (Item ms) where
-    getColor = color
-    setColor c mi = mi { color = c }
+instance HasProp Color (Item ms) where
+    type Prop Color (Item ms) = Txt
+    getProp _ = color
+    setProp _ c mi = mi { color = c }
 
-instance HasDisabledProp (Item ms) where
-    getDisabled = disabled
-    setDisabled d mi = mi { disabled = d }
+instance HasProp Disabled (Item ms) where
+    type Prop Disabled (Item ms) = Bool
+    getProp _ = disabled
+    setProp _ d mi = mi { disabled = d }
 
-instance HasFittedProp (Item ms) where
-    type FittedProp (Item ms) = Maybe Txt
-    getFitted = fitted
-    setFitted f mi = mi { fitted = f }
+instance HasProp Fitted (Item ms) where
+    type Prop Fitted (Item ms) = Maybe Txt
+    getProp _ = fitted
+    setProp _ f mi = mi { fitted = f }
 
-instance HasIsHeaderProp (Item ms) where
-    getIsHeader = header
-    setIsHeader h mi = mi { header = h }
+instance HasProp IsHeader (Item ms) where
+    type Prop IsHeader (Item ms) = Bool
+    getProp _ = header
+    setProp _ h mi = mi { header = h }
 
-instance HasIndexProp (Item ms) where
-    getIndex = index
-    setIndex i mi = mi { index = i }
+instance HasProp Index (Item ms) where
+    type Prop Index (Item ms) = Int
+    getProp _ = index
+    setProp _ i mi = mi { index = i }
 
-instance HasLinkProp (Item ms) where
-    getLink = link
-    setLink l mi = mi { link = l }
+instance HasProp Link (Item ms) where
+    type Prop Link (Item ms) = Bool
+    getProp _ = link
+    setProp _ l mi = mi { link = l }
 
-instance HasOnClickProp (Item ms) where
-    type OnClickProp (Item ms) = Ef ms IO ()
-    getOnClick = onClick
-    setOnClick oc mi = mi { onClick = oc }
+instance HasProp OnClick (Item ms) where
+    type Prop OnClick (Item ms) = Ef ms IO ()
+    getProp _ = onClick
+    setProp _ oc mi = mi { onClick = oc }
 
-instance HasPositionProp (Item ms) where
-    getPosition = position
-    setPosition p mi = mi { position = p }
-
+instance HasProp Position (Item ms) where
+    type Prop Position (Item ms) = Txt
+    getProp _ = position
+    setProp _ p mi = mi { position = p }
 
 data Submenu ms = Submenu_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -403,25 +427,27 @@ instance Pure Submenu ms where
                 )
                 children
 
-instance HasAsProp (Submenu ms) where
-    type AsProp (Submenu ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a mm = mm { as = a }
+instance HasProp As (Submenu ms) where
+    type Prop As (Submenu ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a mm = mm { as = a }
 
-instance HasAttributesProp (Submenu ms) where
-    type Attribute (Submenu ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as mm = mm { attributes = as }
+instance HasProp Attributes (Submenu ms) where
+    type Prop Attributes (Submenu ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as mm = mm { attributes = as }
 
-instance HasChildrenProp (Submenu ms) where
-    type Child (Submenu ms) = View ms
-    getChildren = children
-    setChildren cs mm = mm { children = cs }
+instance HasProp Children (Submenu ms) where
+    type Prop Children (Submenu ms) = [View ms]
+    getProp _ = children
+    setProp _ cs mm = mm { children = cs }
 
-instance HasClassesProp (Submenu ms) where
-    getClasses = classes
-    setClasses cs mm = mm { classes = cs }
+instance HasProp Classes (Submenu ms) where
+    type Prop Classes (Submenu ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs mm = mm { classes = cs }
 
-instance HasPositionProp (Submenu ms) where
-    getPosition = position
-    setPosition p mm = mm { position = p }
+instance HasProp Position (Submenu ms) where
+    type Prop Position (Submenu ms) = Txt
+    getProp _ = position
+    setProp _ p mm = mm { position = p }

@@ -12,7 +12,7 @@ module Semantic.Modules.Modal
 import Data.IORef
 import Data.Maybe
 import GHC.Generics as G
-import Pure.View hiding (active,round,addClass,trigger,OnClose,Content,Description,Header)
+import Pure.View hiding (active,round,addClass,trigger,OnClose,Content,Description,Header,Styles)
 import Pure.DOM (addAnimation)
 import Pure.Lifted (body,IsJSV(..),JSV,Node(..),Element(..))
 
@@ -20,33 +20,33 @@ import Semantic.Utils
 
 import qualified Semantic.Addons.Portal as Portal
 
-import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
-  ( HasCloseOnDocumentClickProp(..), pattern CloseOnDocumentClick
-  , HasCloseOnRootNodeClickProp(..), pattern CloseOnRootNodeClick
-  , HasOpenOnTriggerClickProp(..), pattern OpenOnTriggerClick
-  , HasOnCloseProp(..), pattern OnClose
-  , HasOnMountProp(..), pattern OnMount
-  , HasOnOpenProp(..), pattern OnOpen
-  , HasOnUnmountProp(..), pattern OnUnmount
-  , HasOpenProp(..), pattern Open
-  , HasTriggerProp(..), pattern Trigger
-  , HasMountNodeProp(..), pattern MountNode
-  , HasAsProp(..), pattern As
-  , HasAttributesProp(..), pattern Attributes
-  , HasChildrenProp(..), pattern Children
-  , HasClassesProp(..), pattern Classes
-  , HasBasicProp(..), pattern Basic
-  , HasCloseOnDimmerClickProp(..), pattern CloseOnDimmerClick
-  , HasDefaultOpenProp(..), pattern DefaultOpen
-  , HasDimmerTypeProp(..), pattern DimmerType
-  , HasScrollableProp(..), pattern Scrollable
-  , HasSizeProp(..), pattern Size
-  , HasStylesProp(..), pattern Styles
-  , HasWithPortalProp(..), pattern WithPortal
-  , HasIsImageProp(..), pattern IsImage
-  , HasScrollingProp(..), pattern Scrolling
+  ( pattern CloseOnDocumentClick, CloseOnDocumentClick(..)
+  , pattern CloseOnRootNodeClick, CloseOnRootNodeClick(..)
+  , pattern OpenOnTriggerClick, OpenOnTriggerClick(..)
+  , pattern OnClose, OnClose(..)
+  , pattern OnMount, OnMount(..)
+  , pattern OnOpen, OnOpen(..)
+  , pattern OnUnmount, OnUnmount(..)
+  , pattern Open, Open(..)
+  , pattern Trigger, Trigger(..)
+  , pattern MountNode, MountNode(..)
+  , pattern As, As(..)
+  , pattern Attributes, Attributes(..)
+  , pattern Children, Children(..)
+  , pattern Classes, Classes(..)
+  , pattern Basic, Basic(..)
+  , pattern CloseOnDimmerClick, CloseOnDimmerClick(..)
+  , pattern DefaultOpen, DefaultOpen(..)
+  , pattern DimmerType, DimmerType(..)
+  , pattern Scrollable, Scrollable(..)
+  , pattern Size, Size(..)
+  , pattern Styles, Styles(..)
+  , pattern WithPortal, WithPortal(..)
+  , pattern IsImage, IsImage(..)
+  , pattern Scrolling, Scrolling(..)
   )
 
 data Modal ms = Modal_
@@ -215,8 +215,8 @@ instance VC ms => Pure Modal ms where
                                     children
 
                     in Portal.Portal $ withPortal $ def
-                        & (closeOnDocumentClick ? CloseOnDocumentClick $ id)
-                        & (closeOnDimmerClick   ? CloseOnRootNodeClick $ id)
+                        & (closeOnDocumentClick ? CloseOnDocumentClick True $ id)
+                        & (closeOnDimmerClick   ? CloseOnRootNodeClick True $ id)
                         & Trigger trigger
                         & Classes dimmerClasses
                         & MountNode mountNode
@@ -228,95 +228,105 @@ instance VC ms => Pure Modal ms where
                         & Children [ renderContent ]
                 }
 
-instance HasAsProp (Modal ms) where
-    type AsProp (Modal ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a m = m { as = a }
+instance HasProp As (Modal ms) where
+    type Prop As (Modal ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a m = m { as = a }
 
-instance HasAttributesProp (Modal ms) where
-    type Attribute (Modal ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as m = m { attributes = as }
+instance HasProp Attributes (Modal ms) where
+    type Prop Attributes (Modal ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as m = m { attributes = as }
 
-instance HasChildrenProp (Modal ms) where
-    type Child (Modal ms) = View ms
-    getChildren = children
-    setChildren cs m = m { children = cs }
+instance HasProp Children (Modal ms) where
+    type Prop Children (Modal ms) = [View ms]
+    getProp _ = children
+    setProp _ cs m = m { children = cs }
 
-instance HasClassesProp (Modal ms) where
-    getClasses = classes
-    setClasses cs m = m { classes = cs }
+instance HasProp Classes (Modal ms) where
+    type Prop Classes (Modal ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs m = m { classes = cs }
 
-instance HasBasicProp (Modal ms) where
-    type BasicProp (Modal ms) = Bool
-    getBasic = basic
-    setBasic b m = m { basic = b }
+instance HasProp Basic (Modal ms) where
+    type Prop Basic (Modal ms) = Bool
+    getProp _ = basic
+    setProp _ b m = m { basic = b }
 
-instance HasCloseOnDimmerClickProp (Modal ms) where
-    getCloseOnDimmerClick = closeOnDimmerClick
-    setCloseOnDimmerClick codc m = m { closeOnDimmerClick = codc }
+instance HasProp CloseOnDimmerClick (Modal ms) where
+    type Prop CloseOnDimmerClick (Modal ms) = Bool
+    getProp _ = closeOnDimmerClick
+    setProp _ codc m = m { closeOnDimmerClick = codc }
 
-instance HasCloseOnDocumentClickProp (Modal ms) where
-    getCloseOnDocumentClick = closeOnDocumentClick
-    setCloseOnDocumentClick codc m = m { closeOnDocumentClick = codc }
+instance HasProp CloseOnDocumentClick (Modal ms) where
+    type Prop CloseOnDocumentClick (Modal ms) = Bool
+    getProp _ = closeOnDocumentClick
+    setProp _ codc m = m { closeOnDocumentClick = codc }
 
-instance HasDefaultOpenProp (Modal ms) where
-    getDefaultOpen = defaultOpen
-    setDefaultOpen o m = m { defaultOpen = o }
+instance HasProp DefaultOpen (Modal ms) where
+    type Prop DefaultOpen (Modal ms) = Bool
+    getProp _ = defaultOpen
+    setProp _ o m = m { defaultOpen = o }
 
-instance HasDimmerTypeProp (Modal ms) where
-    getDimmerType = dimmer
-    setDimmerType d m = m { dimmer = d }
+instance HasProp DimmerType (Modal ms) where
+    type Prop DimmerType (Modal ms) = Maybe Txt
+    getProp _ = dimmer
+    setProp _ d m = m { dimmer = d }
 
-instance HasMountNodeProp (Modal ms) where
-    getMountNode = mountNode
-    setMountNode mn m = m { mountNode = mn }
+instance HasProp MountNode (Modal ms) where
+    type Prop MountNode (Modal ms) = Maybe JSV
+    getProp _ = mountNode
+    setProp _ mn m = m { mountNode = mn }
 
-instance HasOnCloseProp (Modal ms) where
-    type OnCloseProp (Modal ms) = Ef ms IO ()
-    getOnClose = onClose
-    setOnClose oc m = m { onClose = oc }
+instance HasProp OnClose (Modal ms) where
+    type Prop OnClose (Modal ms) = Ef ms IO ()
+    getProp _ = onClose
+    setProp _ oc m = m { onClose = oc }
 
-instance HasOnMountProp (Modal ms) where
-    type OnMountProp (Modal ms) = Ef ms IO ()
-    getOnMount = onMount
-    setOnMount om m = m { onMount = om }
+instance HasProp OnMount (Modal ms) where
+    type Prop OnMount (Modal ms) = Ef ms IO ()
+    getProp _ = onMount
+    setProp _ om m = m { onMount = om }
 
-instance HasOnOpenProp (Modal ms) where
-    type OnOpenProp (Modal ms) = Ef ms IO ()
-    getOnOpen = onOpen
-    setOnOpen oo m = m { onOpen = oo }
+instance HasProp OnOpen (Modal ms) where
+    type Prop OnOpen (Modal ms) = Ef ms IO ()
+    getProp _ = onOpen
+    setProp _ oo m = m { onOpen = oo }
 
-instance HasOnUnmountProp (Modal ms) where
-    type OnUnmountProp (Modal ms) = Ef ms IO ()
-    getOnUnmount = onUnmount
-    setOnUnmount ou m = m { onUnmount = ou }
+instance HasProp OnUnmount (Modal ms) where
+    type Prop OnUnmount (Modal ms) = Ef ms IO ()
+    getProp _ = onUnmount
+    setProp _ ou m = m { onUnmount = ou }
 
-instance HasOpenProp (Modal ms) where
-    getOpen = open
-    setOpen o m = m { open = o }
+instance HasProp Open (Modal ms) where
+    type Prop Open (Modal ms) = Bool
+    getProp _ = open
+    setProp _ o m = m { open = o }
 
-instance HasScrollableProp (Modal ms) where
-    getScrollable = scrollable
-    setScrollable s m = m { scrollable = s }
+instance HasProp Scrollable (Modal ms) where
+    type Prop Scrollable (Modal ms) = Bool
+    getProp _ = scrollable
+    setProp _ s m = m { scrollable = s }
 
-instance HasSizeProp (Modal ms) where
-    getSize = size
-    setSize s m = m { size = s }
+instance HasProp Size (Modal ms) where
+    type Prop Size (Modal ms) = Txt
+    getProp _ = size
+    setProp _ s m = m { size = s }
 
-instance HasStylesProp (Modal ms) where
-    getStyles = styles
-    setStyles ss m = m { styles = ss }
+instance HasProp Styles (Modal ms) where
+    type Prop Styles (Modal ms) = [(Txt,Txt)]
+    getProp _ = styles
+    setProp _ ss m = m { styles = ss }
 
-instance HasWithPortalProp (Modal ms) where
-    type WithPortalProp (Modal ms) = Portal.Portal ms -> Portal.Portal ms
-    getWithPortal = withPortal
-    setWithPortal wp m = m { withPortal = wp }
+instance HasProp WithPortal (Modal ms) where
+    type Prop WithPortal (Modal ms) = Portal.Portal ms -> Portal.Portal ms
+    getProp _ = withPortal
+    setProp _ wp m = m { withPortal = wp }
 
-instance HasTriggerProp (Modal ms) where
-    type TriggerProp (Modal ms) = View ms
-    getTrigger = trigger
-    setTrigger t m = m { trigger = t }
+instance HasProp Trigger (Modal ms) where
+    type Prop Trigger (Modal ms) = View ms
+    getProp _ = trigger
+    setProp _ t m = m { trigger = t }
 
 data Actions ms = Actions_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -339,24 +349,25 @@ instance Pure Actions ms where
             )
             children
 
-instance HasAsProp (Actions ms) where
-    type AsProp (Actions ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs f ma = ma { as = f }
+instance HasProp As (Actions ms) where
+    type Prop As (Actions ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ f ma = ma { as = f }
 
-instance HasAttributesProp (Actions ms) where
-    type Attribute (Actions ms) = Feature ms
-    getAttributes = attributes
-    setAttributes cs ma = ma { attributes = cs }
+instance HasProp Attributes (Actions ms) where
+    type Prop Attributes (Actions ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ cs ma = ma { attributes = cs }
 
-instance HasChildrenProp (Actions ms) where
-    type Child (Actions ms) = View ms
-    getChildren = children
-    setChildren cs ma = ma { children = cs }
+instance HasProp Children (Actions ms) where
+    type Prop Children (Actions ms) = [View ms]
+    getProp _ = children
+    setProp _ cs ma = ma { children = cs }
 
-instance HasClassesProp (Actions ms) where
-    getClasses = classes
-    setClasses cs ma = ma { classes = cs }
+instance HasProp Classes (Actions ms) where
+    type Prop Classes (Actions ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs ma = ma { classes = cs }
 
 data Content ms = Content_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -389,32 +400,35 @@ instance Pure Content ms where
                 )
                 children
 
-instance HasAsProp (Content ms) where
-    type AsProp (Content ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs f mc = mc { as = f }
+instance HasProp As (Content ms) where
+    type Prop As (Content ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ f mc = mc { as = f }
 
-instance HasAttributesProp (Content ms) where
-    type Attribute (Content ms) = Feature ms
-    getAttributes = attributes
-    setAttributes cs mc = mc { attributes = cs }
+instance HasProp Attributes (Content ms) where
+    type Prop Attributes (Content ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ cs mc = mc { attributes = cs }
 
-instance HasChildrenProp (Content ms) where
-    type Child (Content ms) = View ms
-    getChildren = children
-    setChildren cs mc = mc { children = cs }
+instance HasProp Children (Content ms) where
+    type Prop Children (Content ms) = [View ms]
+    getProp _ = children
+    setProp _ cs mc = mc { children = cs }
 
-instance HasClassesProp (Content ms) where
-    getClasses = classes
-    setClasses cs mc = mc { classes = cs }
+instance HasProp Classes (Content ms) where
+    type Prop Classes (Content ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs mc = mc { classes = cs }
 
-instance HasIsImageProp (Content ms) where
-    getIsImage = image
-    setIsImage ii mc = mc { image = ii }
+instance HasProp IsImage (Content ms) where
+    type Prop IsImage (Content ms) = Bool
+    getProp _ = image
+    setProp _ ii mc = mc { image = ii }
 
-instance HasScrollingProp (Content ms) where
-    getScrolling = scrolling
-    setScrolling s mc = mc { scrolling = s }
+instance HasProp Scrolling (Content ms) where
+    type Prop Scrolling (Content ms) = Bool
+    getProp _ = scrolling
+    setProp _ s mc = mc { scrolling = s }
 
 data Description ms = Description_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -444,24 +458,25 @@ instance Pure Description ms where
                 )
                 children
 
-instance HasAsProp (Description ms) where
-    type AsProp (Description ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs f md = md { as = f }
+instance HasProp As (Description ms) where
+    type Prop As (Description ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ f md = md { as = f }
 
-instance HasAttributesProp (Description ms) where
-    type Attribute (Description ms) = Feature ms
-    getAttributes = attributes
-    setAttributes cs md = md { attributes = cs }
+instance HasProp Attributes (Description ms) where
+    type Prop Attributes (Description ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ cs md = md { attributes = cs }
 
-instance HasChildrenProp (Description ms) where
-    type Child (Description ms) = View ms
-    getChildren = children
-    setChildren cs md = md { children = cs }
+instance HasProp Children (Description ms) where
+    type Prop Children (Description ms) = [View ms]
+    getProp _ = children
+    setProp _ cs md = md { children = cs }
 
-instance HasClassesProp (Description ms) where
-    getClasses = classes
-    setClasses cs md = md { classes = cs }
+instance HasProp Classes (Description ms) where
+    type Prop Classes (Description ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs md = md { classes = cs }
 
 data Header ms = Header_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -488,21 +503,22 @@ instance Pure Header ms where
                 )
                 children
 
-instance HasAsProp (Header ms) where
-    type AsProp (Header ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs f mh = mh { as = f }
+instance HasProp As (Header ms) where
+    type Prop As (Header ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ f mh = mh { as = f }
 
-instance HasAttributesProp (Header ms) where
-    type Attribute (Header ms) = Feature ms
-    getAttributes = attributes
-    setAttributes cs mh = mh { attributes = cs }
+instance HasProp Attributes (Header ms) where
+    type Prop Attributes (Header ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ cs mh = mh { attributes = cs }
 
-instance HasChildrenProp (Header ms) where
-    type Child (Header ms) = View ms
-    getChildren = children
-    setChildren cs mh = mh { children = cs }
+instance HasProp Children (Header ms) where
+    type Prop Children (Header ms) = [View ms]
+    getProp _ = children
+    setProp _ cs mh = mh { children = cs }
 
-instance HasClassesProp (Header ms) where
-    getClasses = classes
-    setClasses cs mh = mh { classes = cs }
+instance HasProp Classes (Header ms) where
+    type Prop Classes (Header ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs mh = mh { classes = cs }

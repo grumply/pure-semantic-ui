@@ -7,7 +7,7 @@ module Semantic.Addons.TextArea
 
 import Data.IORef
 import GHC.Generics as G
-import Pure.View hiding (focus,value,onInput)
+import Pure.View hiding (focus,value,onInput,Styles,Value)
 import qualified Pure.View as HTML
 import Pure.Lifted (setStyle,removeStyle,focusNode,JSV,Node(..),Element(..),(.#))
 import qualified Pure.Data.Txt as T
@@ -17,19 +17,19 @@ import Text.Read (readMaybe)
 import Semantic.Utils
 import qualified Semantic.Utils as Utils
 
-import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
-  ( HasAsProp(..)         , pattern As
-  , HasAttributesProp(..) , pattern Attributes
-  , HasClassesProp(..)    , pattern Classes
-  , HasAutoHeightProp(..) , pattern AutoHeight
-  , HasOnChangeProp(..)   , pattern OnChange
-  , HasOnInputProp(..)    , pattern OnInput
-  , HasRowsProp(..)       , pattern Rows
-  , HasStylesProp(..)     , pattern Styles
-  , HasValueProp(..)      , pattern Value
-  , HasFocusProp(..)      , pattern Focus
+  ( pattern As, As(..)
+  , pattern Attributes, Attributes(..)
+  , pattern Classes, Classes(..)
+  , pattern AutoHeight, AutoHeight(..)
+  , pattern OnChange, OnChange(..)
+  , pattern OnInput, OnInput(..)
+  , pattern Rows, Rows(..)
+  , pattern Styles, Styles(..)
+  , pattern Value, Value(..)
+  , pattern Focus, Focus(..)
   )
 
 data TextArea ms = TextArea_
@@ -144,46 +144,52 @@ instance VC ms => Pure TextArea ms where
 
                 }
 
-instance HasAsProp (TextArea ms) where
-    type AsProp (TextArea ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs f ta = ta { as = f }
+instance HasProp As (TextArea ms) where
+    type Prop As (TextArea ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ f ta = ta { as = f }
 
-instance HasAttributesProp (TextArea ms) where
-    type Attribute (TextArea ms) = Feature ms
-    getAttributes = attributes
-    setAttributes cs ta = ta { attributes = cs }
+instance HasProp Attributes (TextArea ms) where
+    type Prop Attributes (TextArea ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ cs ta = ta { attributes = cs }
 
-instance HasClassesProp (TextArea ms) where
-    getClasses = classes
-    setClasses cs ta = ta { classes = cs }
+instance HasProp Classes (TextArea ms) where
+    type Prop Classes (TextArea ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs ta = ta { classes = cs }
 
-instance HasAutoHeightProp (TextArea ms) where
-    getAutoHeight = autoHeight
-    setAutoHeight ah ta = ta { autoHeight = ah }
+instance HasProp AutoHeight (TextArea ms) where
+    type Prop AutoHeight (TextArea ms) = Bool
+    getProp _ = autoHeight
+    setProp _ ah ta = ta { autoHeight = ah }
 
-instance HasOnChangeProp (TextArea ms) where
-    type OnChangeProp (TextArea ms) = Txt -> Ef ms IO ()
-    getOnChange = onChange
-    setOnChange oc ta = ta { onChange = oc }
+instance HasProp OnChange (TextArea ms) where
+    type Prop OnChange (TextArea ms) = Txt -> Ef ms IO ()
+    getProp _ = onChange
+    setProp _ oc ta = ta { onChange = oc }
 
-instance HasOnInputProp (TextArea ms) where
-    type OnInputProp (TextArea ms) = Txt -> Ef ms IO ()
-    getOnInput = onInput
-    setOnInput oi ta = ta { onInput = oi }
+instance HasProp OnInput (TextArea ms) where
+    type Prop OnInput (TextArea ms) = Txt -> Ef ms IO ()
+    getProp _ = onInput
+    setProp _ oi ta = ta { onInput = oi }
 
-instance HasRowsProp (TextArea ms) where
-    getRows = rows
-    setRows r ta = ta { rows = r }
+instance HasProp Rows (TextArea ms) where
+    type Prop Rows (TextArea ms) = Int
+    getProp _ = rows
+    setProp _ r ta = ta { rows = r }
 
-instance HasStylesProp (TextArea ms) where
-    getStyles = styles
-    setStyles ss ta = ta { styles = ss }
+instance HasProp Styles (TextArea ms) where
+    type Prop Styles (TextArea ms) = [(Txt,Txt)]
+    getProp _ = styles
+    setProp _ ss ta = ta { styles = ss }
 
-instance HasValueProp (TextArea ms) where
-    getValue = value
-    setValue v ta = ta { value = v }
+instance HasProp Value (TextArea ms) where
+    type Prop Value (TextArea ms) = Txt
+    getProp _ = value
+    setProp _ v ta = ta { value = v }
 
-instance HasFocusProp (TextArea ms) where
-    getFocus = focus
-    setFocus f ta = ta { focus = f }
+instance HasProp Focus (TextArea ms) where
+    type Prop Focus (TextArea ms) = Bool
+    getProp _ = focus
+    setProp _ f ta = ta { focus = f }

@@ -12,20 +12,20 @@ import Pure.View hiding (color,horizontal,widths,text,Value,Label)
 
 import Semantic.Utils
 
-import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
-  ( HasAsProp(..), pattern As
-  , HasAttributesProp(..), pattern Attributes
-  , HasChildrenProp(..), pattern Children
-  , HasClassesProp(..), pattern Classes
-  , HasColorProp(..), pattern Color
-  , HasFloatedProp(..), pattern Floated
-  , HasHorizontalProp(..), pattern Horizontal
-  , HasInvertedProp(..), pattern Inverted
-  , HasSizeProp(..), pattern Size
-  , HasWidthsProp(..), pattern Widths
-  , HasIsTextProp(..), pattern IsText
+  ( pattern As, As(..)
+  , pattern Attributes, Attributes(..)
+  , pattern Children, Children(..)
+  , pattern Classes, Classes(..)
+  , pattern Color, Color(..)
+  , pattern Floated, Floated(..)
+  , pattern Horizontal, Horizontal(..)
+  , pattern Inverted, Inverted(..)
+  , pattern Size, Size(..)
+  , pattern Widths, Widths(..)
+  , pattern IsText, IsText(..)
   )
 
 data Statistic ms = Statistic_
@@ -66,44 +66,50 @@ instance Pure Statistic ms where
                 )
                 children
 
-instance HasAsProp (Statistic ms) where
-    type AsProp (Statistic ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a s = s { as = a }
+instance HasProp As (Statistic ms) where
+    type Prop As (Statistic ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a s = s { as = a }
 
-instance HasAttributesProp (Statistic ms) where
-    type Attribute (Statistic ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as s = s { attributes = as }
+instance HasProp Attributes (Statistic ms) where
+    type Prop Attributes (Statistic ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as s = s { attributes = as }
 
-instance HasChildrenProp (Statistic ms) where
-    type Child (Statistic ms) = View ms
-    getChildren = children
-    setChildren cs s = s { children = cs }
+instance HasProp Children (Statistic ms) where
+    type Prop Children (Statistic ms) = [View ms]
+    getProp _ = children
+    setProp _ cs s = s { children = cs }
 
-instance HasClassesProp (Statistic ms) where
-    getClasses = classes
-    setClasses cs s = s { classes = cs }
+instance HasProp Classes (Statistic ms) where
+    type Prop Classes (Statistic ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs s = s { classes = cs }
 
-instance HasColorProp (Statistic ms) where
-    getColor = color
-    setColor c s = s { color = c }
+instance HasProp Color (Statistic ms) where
+    type Prop Color (Statistic ms) = Txt
+    getProp _ = color
+    setProp _ c s = s { color = c }
 
-instance HasFloatedProp (Statistic ms) where
-    getFloated = floated
-    setFloated f s = s { floated = f }
+instance HasProp Floated (Statistic ms) where
+    type Prop Floated (Statistic ms) = Txt
+    getProp _ = floated
+    setProp _ f s = s { floated = f }
 
-instance HasHorizontalProp (Statistic ms) where
-    getHorizontal = horizontal
-    setHorizontal h s = s { horizontal = h }
+instance HasProp Horizontal (Statistic ms) where
+    type Prop Horizontal (Statistic ms) = Bool
+    getProp _ = horizontal
+    setProp _ h s = s { horizontal = h }
 
-instance HasInvertedProp (Statistic ms) where
-    getInverted = inverted
-    setInverted i s = s { inverted = i }
+instance HasProp Inverted (Statistic ms) where
+    type Prop Inverted (Statistic ms) = Bool
+    getProp _ = inverted
+    setProp _ i s = s { inverted = i }
 
-instance HasSizeProp (Statistic ms) where
-    getSize = size
-    setSize sz s = s { size = sz }
+instance HasProp Size (Statistic ms) where
+    type Prop Size (Statistic ms) = Txt
+    getProp _ = size
+    setProp _ sz s = s { size = sz }
 
 data Group ms = Group_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -114,7 +120,7 @@ data Group ms = Group_
     , horizontal :: Bool
     , inverted :: Bool
     , size :: Txt
-    , widths :: Width
+    , widths :: Txt
     } deriving (Generic)
 
 instance Default (Group ms) where
@@ -143,44 +149,50 @@ instance Pure Group ms where
                 )
                 children
 
-instance HasAsProp (Group ms) where
-    type AsProp (Group ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a sg = sg { as = a }
+instance HasProp As (Group ms) where
+    type Prop As (Group ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a sg = sg { as = a }
 
-instance HasAttributesProp (Group ms) where
-    type Attribute (Group ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as sg = sg { attributes = as }
+instance HasProp Attributes (Group ms) where
+    type Prop Attributes (Group ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as sg = sg { attributes = as }
 
-instance HasChildrenProp (Group ms) where
-    type Child (Group ms) = View ms
-    getChildren = children
-    setChildren cs sg = sg { children = cs }
+instance HasProp Children (Group ms) where
+    type Prop Children (Group ms) = [View ms]
+    getProp _ = children
+    setProp _ cs sg = sg { children = cs }
 
-instance HasClassesProp (Group ms) where
-    getClasses = classes
-    setClasses cs sg = sg { classes = cs }
+instance HasProp Classes (Group ms) where
+    type Prop Classes (Group ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs sg = sg { classes = cs }
 
-instance HasColorProp (Group ms) where
-    getColor = color
-    setColor c s = s { color = c }
+instance HasProp Color (Group ms) where
+    type Prop Color (Group ms) = Txt
+    getProp _ = color
+    setProp _ c s = s { color = c }
 
-instance HasHorizontalProp (Group ms) where
-    getHorizontal = horizontal
-    setHorizontal h s = s { horizontal = h }
+instance HasProp Horizontal (Group ms) where
+    type Prop Horizontal (Group ms) = Bool
+    getProp _ = horizontal
+    setProp _ h s = s { horizontal = h }
 
-instance HasInvertedProp (Group ms) where
-    getInverted = inverted
-    setInverted i s = s { inverted = i }
+instance HasProp Inverted (Group ms) where
+    type Prop Inverted (Group ms) = Bool
+    getProp _ = inverted
+    setProp _ i s = s { inverted = i }
 
-instance HasSizeProp (Group ms) where
-    getSize = size
-    setSize sz s = s { size = sz }
+instance HasProp Size (Group ms) where
+    type Prop Size (Group ms) = Txt
+    getProp _ = size
+    setProp _ sz s = s { size = sz }
 
-instance HasWidthsProp (Group ms) where
-    getWidths = widths
-    setWidths w s = s { widths = w }
+instance HasProp Widths (Group ms) where
+    type Prop Widths (Group ms) = Txt
+    getProp _ = widths
+    setProp _ w s = s { widths = w }
 
 data Label ms = Label_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -209,24 +221,25 @@ instance Pure Label ms where
                 )
                 children
 
-instance HasAsProp (Label ms) where
-    type AsProp (Label ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a sl = sl { as = a }
+instance HasProp As (Label ms) where
+    type Prop As (Label ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a sl = sl { as = a }
 
-instance HasAttributesProp (Label ms) where
-    type Attribute (Label ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as sl = sl { attributes = as }
+instance HasProp Attributes (Label ms) where
+    type Prop Attributes (Label ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as sl = sl { attributes = as }
 
-instance HasChildrenProp (Label ms) where
-    type Child (Label ms) = View ms
-    getChildren = children
-    setChildren cs sl = sl { children = cs }
+instance HasProp Children (Label ms) where
+    type Prop Children (Label ms) = [View ms]
+    getProp _ = children
+    setProp _ cs sl = sl { children = cs }
 
-instance HasClassesProp (Label ms) where
-    getClasses = classes
-    setClasses cs sl = sl { classes = cs }
+instance HasProp Classes (Label ms) where
+    type Prop Classes (Label ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs sl = sl { classes = cs }
 
 data Value ms = Value_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -257,25 +270,27 @@ instance Pure Value ms where
                 )
                 children
 
-instance HasAsProp (Value ms) where
-    type AsProp (Value ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a sv = sv { as = a }
+instance HasProp As (Value ms) where
+    type Prop As (Value ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a sv = sv { as = a }
 
-instance HasAttributesProp (Value ms) where
-    type Attribute (Value ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as sv = sv { attributes = as }
+instance HasProp Attributes (Value ms) where
+    type Prop Attributes (Value ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as sv = sv { attributes = as }
 
-instance HasChildrenProp (Value ms) where
-    type Child (Value ms) = View ms
-    getChildren = children
-    setChildren cs sv = sv { children = cs }
+instance HasProp Children (Value ms) where
+    type Prop Children (Value ms) = [View ms]
+    getProp _ = children
+    setProp _ cs sv = sv { children = cs }
 
-instance HasClassesProp (Value ms) where
-    getClasses = classes
-    setClasses cs sv = sv { classes = cs }
+instance HasProp Classes (Value ms) where
+    type Prop Classes (Value ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs sv = sv { classes = cs }
 
-instance HasIsTextProp (Value ms) where
-    getIsText = text
-    setIsText it sv = sv { text = it }
+instance HasProp IsText (Value ms) where
+    type Prop IsText (Value ms) = Bool
+    getProp _ = text
+    setProp _ it sv = sv { text = it }

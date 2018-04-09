@@ -17,20 +17,20 @@ import qualified Semantic.Elements.Button as Button
 
 import qualified Semantic.Modules.Modal as Modal
 
-import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
-  ( HasOnClickProp(..)       , pattern OnClick
-  , HasOnCloseProp(..)       , pattern OnClose
-  , HasPrimaryProp(..)       , pattern Primary
-  , HasSizeProp(..)          , pattern Size
-  , HasChildrenProp(..)      , pattern Children
-  , HasOpenProp(..)          , pattern Open
-  , HasOnCancelProp(..)      , pattern OnCancel
-  , HasOnConfirmProp(..)     , pattern OnConfirm
-  , HasCancelButtonProp(..)  , pattern CancelButton
-  , HasConfirmButtonProp(..) , pattern ConfirmButton
-  , HasWithModalProp(..)     , pattern WithModal
+  ( pattern OnClick, OnClick(..)
+  , pattern OnClose, OnClose(..)
+  , pattern Primary, Primary(..)
+  , pattern Size, Size(..)
+  , pattern Children, Children(..)
+  , pattern Open, Open(..)
+  , pattern OnCancel, OnCancel(..)
+  , pattern OnConfirm, OnConfirm(..)
+  , pattern CancelButton, CancelButton(..)
+  , pattern ConfirmButton, ConfirmButton(..)
+  , pattern WithModal, WithModal(..)
   )
 
 data Confirm ms = Confirm_
@@ -68,23 +68,24 @@ instance VC ms => Pure Confirm ms where
             , Modal.Content content
             , Modal.Actions $ def & Children
                 [ Button.Button $ cancelButton & OnClick handleCancel
-                , Button.Button $ confirmButton & Primary & OnClick handleConfirm
+                , Button.Button $ confirmButton & Primary True & OnClick handleConfirm
                 ]
             ]
 
-instance HasOpenProp (Confirm ms) where
-    getOpen = open
-    setOpen o c = c { open = o }
+instance HasProp Open (Confirm ms) where
+    type Prop Open (Confirm ms) = Bool
+    getProp _ = open
+    setProp _ o c = c { open = o }
 
-instance HasCancelButtonProp (Confirm ms) where
-    type CancelButtonProp (Confirm ms) = Button.Button ms
-    getCancelButton = cancelButton
-    setCancelButton cb c = c { cancelButton = cb }
+instance HasProp CancelButton (Confirm ms) where
+    type Prop CancelButton (Confirm ms) = Button.Button ms
+    getProp _ = cancelButton
+    setProp _ cb c = c { cancelButton = cb }
 
-instance HasConfirmButtonProp (Confirm ms) where
-    type ConfirmButtonProp (Confirm ms) = Button.Button ms
-    getConfirmButton = confirmButton
-    setConfirmButton cb c = c { confirmButton = cb }
+instance HasProp ConfirmButton (Confirm ms) where
+    type Prop ConfirmButton (Confirm ms) = Button.Button ms
+    getProp _ = confirmButton
+    setProp _ cb c = c { confirmButton = cb }
 
 pattern ConfirmHeader :: Modal.Header ms -> Confirm ms -> Confirm ms
 pattern ConfirmHeader mh c <- (header &&& id -> (mh,c)) where
@@ -94,17 +95,17 @@ pattern ConfirmContent :: Modal.Content ms -> Confirm ms -> Confirm ms
 pattern ConfirmContent mc c <- (content &&& id -> (mc,c)) where
     ConfirmContent mc c = c { content = mc }
 
-instance HasOnCancelProp (Confirm ms) where
-    type OnCancelProp (Confirm ms) = Ef ms IO ()
-    getOnCancel = onCancel
-    setOnCancel oc c = c { onCancel = oc }
+instance HasProp OnCancel (Confirm ms) where
+    type Prop OnCancel (Confirm ms) = Ef ms IO ()
+    getProp _ = onCancel
+    setProp _ oc c = c { onCancel = oc }
 
-instance HasOnConfirmProp (Confirm ms) where
-    type OnConfirmProp (Confirm ms) = Ef ms IO ()
-    getOnConfirm = onConfirm
-    setOnConfirm oc c = c { onConfirm = oc }
+instance HasProp OnConfirm (Confirm ms) where
+    type Prop OnConfirm (Confirm ms) = Ef ms IO ()
+    getProp _ = onConfirm
+    setProp _ oc c = c { onConfirm = oc }
 
-instance HasWithModalProp (Confirm ms) where
-    type WithModalProp (Confirm ms) = Modal.Modal ms -> Modal.Modal ms
-    getWithModal = withModal
-    setWithModal wm c = c { withModal = wm }
+instance HasProp WithModal (Confirm ms) where
+    type Prop WithModal (Confirm ms) = Modal.Modal ms -> Modal.Modal ms
+    getProp _ = withModal
+    setProp _ wm c = c { withModal = wm }

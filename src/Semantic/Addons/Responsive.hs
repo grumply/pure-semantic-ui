@@ -14,17 +14,17 @@ import Pure.Lifted (Win(..),Node(..),getWindow)
 
 import Semantic.Utils
 
-import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
-  ( HasAsProp(..)          , pattern As
-  , HasAttributesProp(..)  , pattern Attributes
-  , HasChildrenProp(..)    , pattern Children
-  , HasClassesProp(..)     , pattern Classes
-  , HasMinWidthProp(..)    , pattern MinWidth
-  , HasMaxWidthProp(..)    , pattern MaxWidth
-  , HasFireOnMountProp(..) , pattern FireOnMount
-  , HasOnUpdateProp(..)    , pattern OnUpdate
+  ( pattern As, As(..)
+  , pattern Attributes, Attributes(..)
+  , pattern Children, Children(..)
+  , pattern Classes, Classes(..)
+  , pattern MinWidth, MinWidth(..)
+  , pattern MaxWidth, MaxWidth(..)
+  , pattern FireOnMount, FireOnMount(..)
+  , pattern OnUpdate, OnUpdate(..)
   )
 
 data Responsive ms = Responsive_
@@ -106,38 +106,42 @@ instance Pure Responsive ms where
 
                 }
 
-instance HasAsProp (Responsive ms) where
-    type AsProp (Responsive ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a r = r { as = a }
+instance HasProp As (Responsive ms) where
+    type Prop As (Responsive ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a r = r { as = a }
 
-instance HasAttributesProp (Responsive ms) where
-    type Attribute (Responsive ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as r = r { attributes = as }
+instance HasProp Attributes (Responsive ms) where
+    type Prop Attributes (Responsive ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as r = r { attributes = as }
 
-instance HasChildrenProp (Responsive ms) where
-    type Child (Responsive ms) = View ms
-    getChildren = children
-    setChildren cs r = r { children = cs }
+instance HasProp Children (Responsive ms) where
+    type Prop Children (Responsive ms) = [View ms]
+    getProp _ = children
+    setProp _ cs r = r { children = cs }
 
-instance HasClassesProp (Responsive ms) where
-    getClasses = classes
-    setClasses cs r = r { classes = cs }
+instance HasProp Classes (Responsive ms) where
+    type Prop Classes (Responsive ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs r = r { classes = cs }
 
-instance HasFireOnMountProp (Responsive ms) where
-    getFireOnMount = fireOnMount
-    setFireOnMount fom r = r { fireOnMount = fom }
+instance HasProp FireOnMount (Responsive ms) where
+    type Prop FireOnMount (Responsive ms) = Bool
+    getProp _ = fireOnMount
+    setProp _ fom r = r { fireOnMount = fom }
 
-instance HasMaxWidthProp (Responsive ms) where
-    getMaxWidth = maxWidth
-    setMaxWidth mw r = r { maxWidth = mw }
+instance HasProp MaxWidth (Responsive ms) where
+    type Prop MaxWidth (Responsive ms) = Int
+    getProp _ = maxWidth
+    setProp _ mw r = r { maxWidth = mw }
 
-instance HasMinWidthProp (Responsive ms) where
-    getMinWidth = minWidth
-    setMinWidth mw r = r { minWidth = mw }
+instance HasProp MinWidth (Responsive ms) where
+    type Prop MinWidth (Responsive ms) = Int
+    getProp _ = minWidth
+    setProp _ mw r = r { minWidth = mw }
 
-instance HasOnUpdateProp (Responsive ms) where
-    type OnUpdateProp (Responsive ms) = Ef ms IO ()
-    getOnUpdate = onUpdate
-    setOnUpdate ou r = r { onUpdate = ou }
+instance HasProp OnUpdate (Responsive ms) where
+    type Prop OnUpdate (Responsive ms) = Ef ms IO ()
+    getProp _ = onUpdate
+    setProp _ ou r = r { onUpdate = ou }

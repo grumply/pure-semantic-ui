@@ -11,39 +11,39 @@ import Pure.View hiding (name,textAlign,verticalAlign,color,width)
 
 import Semantic.Utils hiding (only)
 
-import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
-  ( HasAsProp(..), pattern As
-  , HasAttributesProp(..), pattern Attributes
-  , HasChildrenProp(..), pattern Children
-  , HasClassesProp(..), pattern Classes
-  , HasCelledProp(..), pattern Celled
-  , HasCenteredProp(..), pattern Centered
-  , HasColumnsProp(..), pattern Columns
-  , HasIsContainerProp(..), pattern IsContainer
-  , HasDividedProp(..), pattern Divided
-  , HasDoublingProp(..), pattern Doubling
-  , HasInvertedProp(..), pattern Inverted
-  , HasPaddedProp(..), pattern Padded
-  , HasRelaxedProp(..), pattern Relaxed
-  , HasReversedProp(..), pattern Reversed
-  , HasStackableProp(..), pattern Stackable
-  , HasStretchedProp(..), pattern Stretched
-  , HasTextAlignProp(..), pattern TextAlign
-  , HasVerticalAlignProp(..), pattern VerticalAlign
-  , HasColorProp(..), pattern Color
-  , HasFloatedProp(..), pattern Floated
-  , HasOnComputerProp(..), pattern OnComputer
-  , HasOnLargeScreenProp(..), pattern OnLargeScreen
-  , HasOnlyProp(..), pattern Only
-  , HasOnMobileProp(..), pattern OnMobile
-  , HasOnTabletProp(..), pattern OnTablet
-  , HasOnWidescreenProp(..), pattern OnWidescreen
-  , HasStretchedProp(..), pattern Stretched
-  , HasTextAlignProp(..), pattern TextAlign
-  , HasVerticalAlignProp(..), pattern VerticalAlign
-  , HasWidthProp(..), pattern Width
+  ( pattern As, As(..)
+  , pattern Attributes, Attributes(..)
+  , pattern Children, Children(..)
+  , pattern Classes, Classes(..)
+  , pattern Celled, Celled(..)
+  , pattern Centered, Centered(..)
+  , pattern Columns, Columns(..)
+  , pattern IsContainer, IsContainer(..)
+  , pattern Divided, Divided(..)
+  , pattern Doubling, Doubling(..)
+  , pattern Inverted, Inverted(..)
+  , pattern Padded, Padded(..)
+  , pattern Relaxed, Relaxed(..)
+  , pattern Reversed, Reversed(..)
+  , pattern Stackable, Stackable(..)
+  , pattern Stretched, Stretched(..)
+  , pattern TextAlign, TextAlign(..)
+  , pattern VerticalAlign, VerticalAlign(..)
+  , pattern Color, Color(..)
+  , pattern Floated, Floated(..)
+  , pattern OnComputer, OnComputer(..)
+  , pattern OnLargeScreen, OnLargeScreen(..)
+  , pattern Only, Only(..)
+  , pattern OnMobile, OnMobile(..)
+  , pattern OnTablet, OnTablet(..)
+  , pattern OnWidescreen, OnWidescreen(..)
+  , pattern Stretched, Stretched(..)
+  , pattern TextAlign, TextAlign(..)
+  , pattern VerticalAlign, VerticalAlign(..)
+  , pattern Width, Width(..)
   )
 
 data Grid ms = Grid_
@@ -53,7 +53,7 @@ data Grid ms = Grid_
     , classes :: [Txt]
     , celled :: Maybe Txt
     , centered :: Bool
-    , columns :: Width
+    , columns :: Txt
     , container :: Bool
     , divided :: Maybe Txt
     , doubling :: Bool
@@ -102,84 +102,96 @@ instance Pure Grid ms where
                 )
                 children
 
-instance HasAsProp (Grid ms) where
-    type AsProp (Grid ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a g = g { as = a }
+instance HasProp As (Grid ms) where
+    type Prop As (Grid ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a g = g { as = a }
 
-instance HasAttributesProp (Grid ms) where
-    type Attribute (Grid ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as g = g { attributes = as }
+instance HasProp Attributes (Grid ms) where
+    type Prop Attributes (Grid ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as g = g { attributes = as }
 
-instance HasChildrenProp (Grid ms) where
-    type Child (Grid ms) = View ms
-    getChildren = children
-    setChildren cs g = g { children = cs }
+instance HasProp Children (Grid ms) where
+    type Prop Children (Grid ms) = [View ms]
+    getProp _ = children
+    setProp _ cs g = g { children = cs }
 
-instance HasClassesProp (Grid ms) where
-    getClasses = classes
-    setClasses cs g = g { classes = cs }
+instance HasProp Classes (Grid ms) where
+    type Prop Classes (Grid ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs g = g { classes = cs }
 
-instance HasCelledProp (Grid ms) where
-    type CelledProp (Grid ms) = Maybe Txt
-    getCelled = celled
-    setCelled c g = g { celled = c }
+instance HasProp Celled (Grid ms) where
+    type Prop Celled (Grid ms) = Maybe Txt
+    getProp _ = celled
+    setProp _ c g = g { celled = c }
 
-instance HasCenteredProp (Grid ms) where
-    getCentered = centered
-    setCentered c g = g { centered = c }
+instance HasProp Centered (Grid ms) where
+    type Prop Centered (Grid ms) = Bool
+    getProp _ = centered
+    setProp _ c g = g { centered = c }
 
-instance HasColumnsProp (Grid ms) where
-    getColumns = columns
-    setColumns c g = g { columns = c }
+instance HasProp Columns (Grid ms) where
+    type Prop Columns (Grid ms) = Txt
+    getProp _ = columns
+    setProp _ c g = g { columns = c }
 
-instance HasIsContainerProp (Grid ms) where
-    getIsContainer = container
-    setIsContainer ic g = g { container = ic }
+instance HasProp IsContainer (Grid ms) where
+    type Prop IsContainer (Grid ms) = Bool
+    getProp _ = container
+    setProp _ ic g = g { container = ic }
 
-instance HasDividedProp (Grid ms) where
-    type DividedProp (Grid ms) = Maybe Txt
-    getDivided = divided
-    setDivided d g = g { divided = d }
+instance HasProp Divided (Grid ms) where
+    type Prop Divided (Grid ms) = Maybe Txt
+    getProp _ = divided
+    setProp _ d g = g { divided = d }
 
-instance HasDoublingProp (Grid ms) where
-    getDoubling = doubling
-    setDoubling d g = g { doubling = d }
+instance HasProp Doubling (Grid ms) where
+    type Prop Doubling (Grid ms) = Bool
+    getProp _ = doubling
+    setProp _ d g = g { doubling = d }
 
-instance HasInvertedProp (Grid ms) where
-    getInverted = inverted
-    setInverted i g = g { inverted = i }
+instance HasProp Inverted (Grid ms) where
+    type Prop Inverted (Grid ms) = Bool
+    getProp _ = inverted
+    setProp _ i g = g { inverted = i }
 
-instance HasPaddedProp (Grid ms) where
-    getPadded = padded
-    setPadded p g = g { padded = p }
+instance HasProp Padded (Grid ms) where
+    type Prop Padded (Grid ms) = Maybe Txt
+    getProp _ = padded
+    setProp _ p g = g { padded = p }
 
-instance HasRelaxedProp (Grid ms) where
-    getRelaxed = relaxed
-    setRelaxed r g = g { relaxed = r }
+instance HasProp Relaxed (Grid ms) where
+    type Prop Relaxed (Grid ms) = Maybe Txt
+    getProp _ = relaxed
+    setProp _ r g = g { relaxed = r }
 
-instance HasReversedProp (Grid ms) where
-    type ReversedProp (Grid ms) = [Txt]
-    getReversed = reversed
-    setReversed r g = g { reversed = r }
+instance HasProp Reversed (Grid ms) where
+    type Prop Reversed (Grid ms) = [Txt]
+    getProp _ = reversed
+    setProp _ r g = g { reversed = r }
 
-instance HasStackableProp (Grid ms) where
-    type StackableProp (Grid ms) = Bool
-    getStackable = stackable
-    setStackable s g = g { stackable = s }
+instance HasProp Stackable (Grid ms) where
+    type Prop Stackable (Grid ms) = Bool
+    type Prop Stackable (Grid ms) = Bool
+    getProp _ = stackable
+    setProp _ s g = g { stackable = s }
 
-instance HasStretchedProp (Grid ms) where
-    getStretched = stretched
-    setStretched s g = g { stretched = s }
+instance HasProp Stretched (Grid ms) where
+    type Prop Stretched (Grid ms) = Bool
+    getProp _ = stretched
+    setProp _ s g = g { stretched = s }
 
-instance HasTextAlignProp (Grid ms) where
-    getTextAlign = textAlign
-    setTextAlign t g = g { textAlign = t }
+instance HasProp TextAlign (Grid ms) where
+    type Prop TextAlign (Grid ms) = Txt
+    getProp _ = textAlign
+    setProp _ t g = g { textAlign = t }
 
-instance HasVerticalAlignProp (Grid ms) where
-    getVerticalAlign = verticalAlign
-    setVerticalAlign v g = g { verticalAlign = v }
+instance HasProp VerticalAlign (Grid ms) where
+    type Prop VerticalAlign (Grid ms) = Txt
+    getProp _ = verticalAlign
+    setProp _ v g = g { verticalAlign = v }
 
 data Column ms = Column_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -187,17 +199,17 @@ data Column ms = Column_
     , children :: [View ms]
     , classes :: [Txt]
     , color :: Txt
-    , computer :: Width
+    , computer :: Txt
     , floated :: Txt
-    , largeScreen :: Width
-    , mobile :: Width
+    , largeScreen :: Txt
+    , mobile :: Txt
     , only :: [Txt]
     , stretched :: Bool
-    , tablet :: Width
+    , tablet :: Txt
     , textAlign :: Txt
     , verticalAlign :: Txt
-    , widescreen :: Width
-    , width :: Width
+    , widescreen :: Txt
+    , width :: Txt
     } deriving (Generic)
 
 instance Default (Column ms) where
@@ -231,72 +243,86 @@ instance Pure Column ms where
                 )
                 children
 
-instance HasAsProp (Column ms) where
-    type AsProp (Column ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a gc = gc { as = a }
+instance HasProp As (Column ms) where
+    type Prop As (Column ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a gc = gc { as = a }
 
-instance HasAttributesProp (Column ms) where
-    type Attribute (Column ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as gc = gc { attributes = as }
+instance HasProp Attributes (Column ms) where
+    type Prop Attributes (Column ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as gc = gc { attributes = as }
 
-instance HasChildrenProp (Column ms) where
-    type Child (Column ms) = View ms
-    getChildren = children
-    setChildren cs gc = gc { children = cs }
+instance HasProp Children (Column ms) where
+    type Prop Children (Column ms) = [View ms]
+    getProp _ = children
+    setProp _ cs gc = gc { children = cs }
 
-instance HasClassesProp (Column ms) where
-    getClasses = classes
-    setClasses cs gc = gc { classes = cs }
+instance HasProp Classes (Column ms) where
+    type Prop Classes (Column ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs gc = gc { classes = cs }
 
-instance HasColorProp (Column ms) where
-    getColor = color
-    setColor c gc = gc { color = c }
+instance HasProp Color (Column ms) where
+    type Prop Color (Column ms) = Txt
+    getProp _ = color
+    setProp _ c gc = gc { color = c }
 
-instance HasOnComputerProp (Column ms) where
-    getOnComputer = computer
-    setOnComputer c gc = gc { computer = c }
+instance HasProp OnComputer (Column ms) where
+    type Prop OnComputer (Column ms) = Txt
+    getProp _ = computer
+    setProp _ c gc = gc { computer = c }
 
-instance HasFloatedProp (Column ms) where
-    getFloated = floated
-    setFloated f gc = gc { floated = f }
+instance HasProp Floated (Column ms) where
+    type Prop Floated (Column ms) = Txt
+    getProp _ = floated
+    setProp _ f gc = gc { floated = f }
 
-instance HasOnLargeScreenProp (Column ms) where
-    getOnLargeScreen = largeScreen
-    setOnLargeScreen ls gc = gc { largeScreen = ls }
+instance HasProp OnLargeScreen (Column ms) where
+    type Prop OnLargeScreen (Column ms) = Txt
+    getProp _ = largeScreen
+    setProp _ ls gc = gc { largeScreen = ls }
 
-instance HasOnMobileProp (Column ms) where
-    getOnMobile = mobile
-    setOnMobile m gc = gc { mobile = m }
+instance HasProp OnMobile (Column ms) where
+    type Prop OnMobile (Column ms) = Txt
+    getProp _ = mobile
+    setProp _ m gc = gc { mobile = m }
 
-instance HasOnlyProp (Column ms) where
-    getOnly = only
-    setOnly o gc = gc { only = o }
+instance HasProp Only (Column ms) where
+    type Prop Only (Column ms) = [Txt]
+    getProp _ = only
+    setProp _ o gc = gc { only = o }
 
-instance HasStretchedProp (Column ms) where
-    getStretched = stretched
-    setStretched s gc = gc { stretched = s }
+instance HasProp Stretched (Column ms) where
+    type Prop Stretched (Column ms) = Bool
+    getProp _ = stretched
+    setProp _ s gc = gc { stretched = s }
 
-instance HasOnTabletProp (Column ms) where
-    getOnTablet = tablet
-    setOnTablet t gc = gc { tablet = t }
+instance HasProp OnTablet (Column ms) where
+    type Prop OnTablet (Column ms) = Txt
+    getProp _ = tablet
+    setProp _ t gc = gc { tablet = t }
 
-instance HasTextAlignProp (Column ms) where
-    getTextAlign = textAlign
-    setTextAlign t gc = gc { textAlign = t }
+instance HasProp TextAlign (Column ms) where
+    type Prop TextAlign (Column ms) = Txt
+    getProp _ = textAlign
+    setProp _ t gc = gc { textAlign = t }
 
-instance HasVerticalAlignProp (Column ms) where
-    getVerticalAlign = verticalAlign
-    setVerticalAlign v gc = gc { verticalAlign = v }
+instance HasProp VerticalAlign (Column ms) where
+    type Prop VerticalAlign (Column ms) = Txt
+    getProp _ = verticalAlign
+    setProp _ v gc = gc { verticalAlign = v }
 
-instance HasOnWidescreenProp (Column ms) where
-    getOnWidescreen = widescreen
-    setOnWidescreen w gc = gc { widescreen = w }
+instance HasProp OnWidescreen (Column ms) where
+    type Prop OnWidescreen (Column ms) = Txt
+    getProp _ = widescreen
+    setProp _ w gc = gc { widescreen = w }
 
-instance HasWidthProp (Column ms) where
-    getWidth = width
-    setWidth w gc = gc { width = w }
+instance HasProp Width (Column ms) where
+    type Prop Width (Column ms) = Txt
+    getProp _ = width
+    setProp _ w gc = gc { width = w }
+
 data Row ms = Row_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]
@@ -304,7 +330,7 @@ data Row ms = Row_
     , classes :: [Txt]
     , centered :: Bool
     , color :: Txt
-    , columns :: Width
+    , columns :: Txt
     , divided :: Bool
     , only :: [Txt]
     , reversed :: [Txt]
@@ -342,55 +368,63 @@ instance Pure Row ms where
                 )
                 children
 
-instance HasAsProp (Row ms) where
-    type AsProp (Row ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a gr = gr { as = a }
+instance HasProp As (Row ms) where
+    type Prop As (Row ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a gr = gr { as = a }
 
-instance HasAttributesProp (Row ms) where
-    type Attribute (Row ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as gr = gr { attributes = as }
+instance HasProp Attributes (Row ms) where
+    type Prop Attributes (Row ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as gr = gr { attributes = as }
 
-instance HasChildrenProp (Row ms) where
-    type Child (Row ms) = View ms
-    getChildren = children
-    setChildren cs gr = gr { children = cs }
+instance HasProp Children (Row ms) where
+    type Prop Children (Row ms) = [View ms]
+    getProp _ = children
+    setProp _ cs gr = gr { children = cs }
 
-instance HasClassesProp (Row ms) where
-    getClasses = classes
-    setClasses cs gr = gr { classes = cs }
+instance HasProp Classes (Row ms) where
+    type Prop Classes (Row ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs gr = gr { classes = cs }
 
-instance HasColorProp (Row ms) where
-    getColor = color
-    setColor c gr = gr { color = c }
+instance HasProp Color (Row ms) where
+    type Prop Color (Row ms) = Txt
+    getProp _ = color
+    setProp _ c gr = gr { color = c }
 
-instance HasColumnsProp (Row ms) where
-    getColumns = columns
-    setColumns c gr = gr { columns = c }
+instance HasProp Columns (Row ms) where
+    type Prop Columns (Row ms) = Txt
+    getProp _ = columns
+    setProp _ c gr = gr { columns = c }
 
-instance HasDividedProp (Row ms) where
-    getDivided = divided
-    setDivided d gr = gr { divided = d }
+instance HasProp Divided (Row ms) where
+    type Prop Divided (Row ms) = Bool
+    getProp _ = divided
+    setProp _ d gr = gr { divided = d }
 
-instance HasOnlyProp (Row ms) where
-    getOnly = only
-    setOnly o gr = gr { only = o }
+instance HasProp Only (Row ms) where
+    type Prop Only (Row ms) = [Txt]
+    getProp _ = only
+    setProp _ o gr = gr { only = o }
 
-instance HasReversedProp (Row ms) where
-    type ReversedProp (Row ms) = [Txt]
-    getReversed = reversed
-    setReversed r gr = gr { reversed = r }
+instance HasProp Reversed (Row ms) where
+    type Prop Reversed (Row ms) = [Txt]
+    getProp _ = reversed
+    setProp _ r gr = gr { reversed = r }
 
-instance HasStretchedProp (Row ms) where
-    getStretched = stretched
-    setStretched s gr = gr { stretched = s }
+instance HasProp Stretched (Row ms) where
+    type Prop Stretched (Row ms) = Bool
+    getProp _ = stretched
+    setProp _ s gr = gr { stretched = s }
 
-instance HasTextAlignProp (Row ms) where
-    getTextAlign = textAlign
-    setTextAlign t gr = gr { textAlign = t }
+instance HasProp TextAlign (Row ms) where
+    type Prop TextAlign (Row ms) = Txt
+    getProp _ = textAlign
+    setProp _ t gr = gr { textAlign = t }
 
-instance HasVerticalAlignProp (Row ms) where
-    getVerticalAlign = verticalAlign
-    setVerticalAlign v gr = gr { verticalAlign = v }
+instance HasProp VerticalAlign (Row ms) where
+    type Prop VerticalAlign (Row ms) = Txt
+    getProp _ = verticalAlign
+    setProp _ v gr = gr { verticalAlign = v }
 

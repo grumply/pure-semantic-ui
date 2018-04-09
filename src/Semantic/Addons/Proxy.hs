@@ -10,11 +10,11 @@ import Pure.Lifted (Node)
 
 import Semantic.Utils
 
-import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
-  ( HasChildrenProp(..), pattern Children
-  , HasInnerRefProp(..), pattern InnerRef
+  ( pattern Children, Children(..)
+  , pattern InnerRef, InnerRef(..)
   )
 
 data Proxy ms = Proxy_
@@ -35,12 +35,12 @@ instance Pure Proxy ms where
             , renderer = \ref _ -> only (children ref)
             }
 
-instance HasChildrenProp (Proxy ms) where
-    type Child (Proxy ms) = View ms
-    getChildren = children
-    setChildren cs p = p { children = cs }
+instance HasProp Children (Proxy ms) where
+    type Prop Children (Proxy ms) = [View ms]
+    getProp _ = children
+    setProp _ cs p = p { children = cs }
 
-instance HasInnerRefProp (Proxy ms) where
-    type InnerRefProp (Proxy ms) = Node -> IO ()
-    getInnerRef = innerRef
-    setInnerRef ir p = p { innerRef = ir }
+instance HasProp InnerRef (Proxy ms) where
+    type Prop InnerRef (Proxy ms) = Node -> IO ()
+    getProp _ = innerRef
+    setProp _ ir p = p { innerRef = ir }

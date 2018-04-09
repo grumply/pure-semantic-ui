@@ -16,43 +16,43 @@ import qualified Pure.View as HTML
 
 import Semantic.Utils
 
-import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
-  ( HasAsProp(..), pattern As
-  , HasAttributesProp(..), pattern Attributes
-  , HasChildrenProp(..), pattern Children
-  , HasClassesProp(..), pattern Classes
-  , HasAttachedProp(..), pattern Attached
-  , HasBasicProp(..), pattern Basic
-  , HasCelledProp(..), pattern Celled
-  , HasCollapsingProp(..), pattern Collapsing
-  , HasColorProp(..), pattern Color
-  , HasColumnsProp(..), pattern Columns
-  , HasCompactProp(..), pattern Compact
-  , HasDefinitionProp(..), pattern Definition
-  , HasFixedProp(..), pattern Fixed
-  , HasInvertedProp(..), pattern Inverted
-  , HasPaddedProp(..), pattern Padded
-  , HasSelectableProp(..), pattern Selectable
-  , HasSingleLineProp(..), pattern SingleLine
-  , HasSizeProp(..), pattern Size
-  , HasSortableProp(..), pattern Sortable
-  , HasStackableProp(..), pattern Stackable
-  , HasStripedProp(..), pattern Striped
-  , HasStructuredProp(..), pattern Structured
-  , HasTextAlignProp(..), pattern TextAlign
-  , HasUnstackableProp(..), pattern Unstackable
-  , HasVerticalAlignProp(..), pattern VerticalAlign
-  , HasActiveProp(..), pattern Active
-  , HasDisabledProp(..), pattern Disabled
-  , HasErrorProp(..), pattern Error
-  , HasNegativeProp(..), pattern Negative
-  , HasPositiveProp(..), pattern Positive
-  , HasWarningProp(..), pattern Warning
-  , HasWidthProp(..), pattern Width
-  , HasFullWidthProp(..), pattern FullWidth
-  , HasSortedProp(..), pattern Sorted
+  ( pattern As, As(..)
+  , pattern Attributes, Attributes(..)
+  , pattern Children, Children(..)
+  , pattern Classes, Classes(..)
+  , pattern Attached, Attached(..)
+  , pattern Basic, Basic(..)
+  , pattern Celled, Celled(..)
+  , pattern Collapsing, Collapsing(..)
+  , pattern Color, Color(..)
+  , pattern Columns, Columns(..)
+  , pattern Compact, Compact(..)
+  , pattern Definition, Definition(..)
+  , pattern Fixed, Fixed(..)
+  , pattern Inverted, Inverted(..)
+  , pattern Padded, Padded(..)
+  , pattern Selectable, Selectable(..)
+  , pattern SingleLine, SingleLine(..)
+  , pattern Size, Size(..)
+  , pattern Sortable, Sortable(..)
+  , pattern Stackable, Stackable(..)
+  , pattern Striped, Striped(..)
+  , pattern Structured, Structured(..)
+  , pattern TextAlign, TextAlign(..)
+  , pattern Unstackable, Unstackable(..)
+  , pattern VerticalAlign, VerticalAlign(..)
+  , pattern Active, Active(..)
+  , pattern Disabled, Disabled(..)
+  , pattern Error, Error(..)
+  , pattern Negative, Negative(..)
+  , pattern Positive, Positive(..)
+  , pattern Warning, Warning(..)
+  , pattern Width, Width(..)
+  , pattern FullWidth, FullWidth(..)
+  , pattern Sorted, Sorted(..)
   )
 
 import Prelude hiding (error)
@@ -67,7 +67,7 @@ data Table ms = Table_
     , celled :: Bool
     , collapsing :: Bool
     , color :: Txt
-    , columns :: Width
+    , columns :: Txt
     , compact :: Maybe Txt
     , definition :: Bool
     , fixed :: Bool
@@ -127,113 +127,130 @@ instance Pure Table ms where
                 )
                 children
 
-instance HasAsProp (Table ms) where
-    type AsProp (Table ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a t = t { as = a }
+instance HasProp As (Table ms) where
+    type Prop As (Table ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a t = t { as = a }
 
-instance HasAttributesProp (Table ms) where
-    type Attribute (Table ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as t = t { attributes = as }
+instance HasProp Attributes (Table ms) where
+    type Prop Attributes (Table ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as t = t { attributes = as }
 
-instance HasChildrenProp (Table ms) where
-    type Child (Table ms) = View ms
-    getChildren = children
-    setChildren cs t = t { children = cs }
+instance HasProp Children (Table ms) where
+    type Prop Children (Table ms) = [View ms]
+    getProp _ = children
+    setProp _ cs t = t { children = cs }
 
-instance HasClassesProp (Table ms) where
-    getClasses = classes
-    setClasses cs t = t { classes = cs }
+instance HasProp Classes (Table ms) where
+    type Prop Classes (Table ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs t = t { classes = cs }
 
-instance HasAttachedProp (Table ms) where
-    type AttachedProp (Table ms) = Maybe Txt
-    getAttached = attached
-    setAttached a t = t { attached = a }
+instance HasProp Attached (Table ms) where
+    type Prop Attached (Table ms) = Maybe Txt
+    getProp _ = attached
+    setProp _ a t = t { attached = a }
 
-instance HasBasicProp (Table ms) where
-    type BasicProp (Table ms) = Maybe Txt
-    getBasic = basic
-    setBasic b t = t { basic = b }
+instance HasProp Basic (Table ms) where
+    type Prop Basic (Table ms) = Maybe Txt
+    getProp _ = basic
+    setProp _ b t = t { basic = b }
 
-instance HasCelledProp (Table ms) where
-    getCelled = celled
-    setCelled c t = t { celled = c }
+instance HasProp Celled (Table ms) where
+    type Prop Celled (Table ms) = Bool
+    getProp _ = celled
+    setProp _ c t = t { celled = c }
 
-instance HasCollapsingProp (Table ms) where
-    getCollapsing = collapsing
-    setCollapsing c t = t { collapsing = c }
+instance HasProp Collapsing (Table ms) where
+    type Prop Collapsing (Table ms) = Bool
+    getProp _ = collapsing
+    setProp _ c t = t { collapsing = c }
 
-instance HasColorProp (Table ms) where
-    getColor = color
-    setColor c t = t { color = c }
+instance HasProp Color (Table ms) where
+    type Prop Color (Table ms) = Txt
+    getProp _ = color
+    setProp _ c t = t { color = c }
 
-instance HasColumnsProp (Table ms) where
-    getColumns = columns
-    setColumns c t = t { columns = c }
+instance HasProp Columns (Table ms) where
+    type Prop Columns (Table ms) = Txt
+    getProp _ = columns
+    setProp _ c t = t { columns = c }
 
-instance HasCompactProp (Table ms) where
-    type CompactProp (Table ms) = Maybe Txt
-    getCompact = compact
-    setCompact c t = t { compact = c }
+instance HasProp Compact (Table ms) where
+    type Prop Compact (Table ms) = Maybe Txt
+    getProp _ = compact
+    setProp _ c t = t { compact = c }
 
-instance HasDefinitionProp (Table ms) where
-    getDefinition = definition
-    setDefinition d t = t { definition = d }
+instance HasProp Definition (Table ms) where
+    type Prop Definition (Table ms) = Bool
+    getProp _ = definition
+    setProp _ d t = t { definition = d }
 
-instance HasFixedProp (Table ms) where
-    type FixedProp (Table ms) = Bool
-    getFixed = fixed
-    setFixed f t = t { fixed = f }
+instance HasProp Fixed (Table ms) where
+    type Prop Fixed (Table ms) = Bool
+    getProp _ = fixed
+    setProp _ f t = t { fixed = f }
 
-instance HasInvertedProp (Table ms) where
-    getInverted = inverted
-    setInverted i t = t { inverted = i }
+instance HasProp Inverted (Table ms) where
+    type Prop Inverted (Table ms) = Bool
+    getProp _ = inverted
+    setProp _ i t = t { inverted = i }
 
-instance HasPaddedProp (Table ms) where
-    getPadded = padded
-    setPadded p t = t { padded = p }
+instance HasProp Padded (Table ms) where
+    type Prop Padded (Table ms) = Maybe Txt
+    getProp _ = padded
+    setProp _ p t = t { padded = p }
 
-instance HasSelectableProp (Table ms) where
-    getSelectable = selectable
-    setSelectable s t = t { selectable = s }
+instance HasProp Selectable (Table ms) where
+    type Prop Selectable (Table ms) = Bool
+    getProp _ = selectable
+    setProp _ s t = t { selectable = s }
 
-instance HasSingleLineProp (Table ms) where
-    getSingleLine = singleLine
-    setSingleLine sl t = t { singleLine = sl }
+instance HasProp SingleLine (Table ms) where
+    type Prop SingleLine (Table ms) = Bool
+    getProp _ = singleLine
+    setProp _ sl t = t { singleLine = sl }
 
-instance HasSizeProp (Table ms) where
-    getSize = size
-    setSize s t = t { size = s }
+instance HasProp Size (Table ms) where
+    type Prop Size (Table ms) = Txt
+    getProp _ = size
+    setProp _ s t = t { size = s }
 
-instance HasSortableProp (Table ms) where
-    getSortable = sortable
-    setSortable s t = t { sortable = s }
+instance HasProp Sortable (Table ms) where
+    type Prop Sortable (Table ms) = Bool
+    getProp _ = sortable
+    setProp _ s t = t { sortable = s }
 
-instance HasStackableProp (Table ms) where
-    type StackableProp (Table ms) = Bool
-    getStackable = stackable
-    setStackable s t = t { stackable = s }
+instance HasProp Stackable (Table ms) where
+    type Prop Stackable (Table ms) = Bool
+    getProp _ = stackable
+    setProp _ s t = t { stackable = s }
 
-instance HasStripedProp (Table ms) where
-    getStriped = striped
-    setStriped s t = t { striped = s }
+instance HasProp Striped (Table ms) where
+    type Prop Striped (Table ms) = Bool
+    getProp _ = striped
+    setProp _ s t = t { striped = s }
 
-instance HasStructuredProp (Table ms) where
-    getStructured = structured
-    setStructured s t = t { structured = s }
+instance HasProp Structured (Table ms) where
+    type Prop Structured (Table ms) = Bool
+    getProp _ = structured
+    setProp _ s t = t { structured = s }
 
-instance HasTextAlignProp (Table ms) where
-    getTextAlign = textAlign
-    setTextAlign ta t = t { textAlign = ta }
+instance HasProp TextAlign (Table ms) where
+    type Prop TextAlign (Table ms) = Txt
+    getProp _ = textAlign
+    setProp _ ta t = t { textAlign = ta }
 
-instance HasUnstackableProp (Table ms) where
-    getUnstackable = unstackable
-    setUnstackable u t = t { unstackable = u }
+instance HasProp Unstackable (Table ms) where
+    type Prop Unstackable (Table ms) = Bool
+    getProp _ = unstackable
+    setProp _ u t = t { unstackable = u }
 
-instance HasVerticalAlignProp (Table ms) where
-    getVerticalAlign = verticalAlign
-    setVerticalAlign va t = t { verticalAlign = va }
+instance HasProp VerticalAlign (Table ms) where
+    type Prop VerticalAlign (Table ms) = Txt
+    getProp _ = verticalAlign
+    setProp _ va t = t { verticalAlign = va }
 
 data Body ms = Body_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -256,24 +273,25 @@ instance Pure Body ms where
             )
             children
 
-instance HasAsProp (Body ms) where
-    type AsProp (Body ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a tb = tb { as = a }
+instance HasProp As (Body ms) where
+    type Prop As (Body ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a tb = tb { as = a }
 
-instance HasAttributesProp (Body ms) where
-    type Attribute (Body ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as tb = tb { attributes = as }
+instance HasProp Attributes (Body ms) where
+    type Prop Attributes (Body ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as tb = tb { attributes = as }
 
-instance HasChildrenProp (Body ms) where
-    type Child (Body ms) = View ms
-    getChildren = children
-    setChildren cs tb = tb { children = cs }
+instance HasProp Children (Body ms) where
+    type Prop Children (Body ms) = [View ms]
+    getProp _ = children
+    setProp _ cs tb = tb { children = cs }
 
-instance HasClassesProp (Body ms) where
-    getClasses = classes
-    setClasses cs tb = tb { classes = cs }
+instance HasProp Classes (Body ms) where
+    type Prop Classes (Body ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs tb = tb { classes = cs }
 
 data Cell ms = Cell_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -291,7 +309,7 @@ data Cell ms = Cell_
     , textAlign :: Txt
     , verticalAlign :: Txt
     , warning :: Bool
-    , width :: Width
+    , width :: Txt
     } deriving (Generic)
 
 instance Default (Cell ms) where
@@ -325,72 +343,85 @@ instance Pure Cell ms where
                 )
                 children
 
-instance HasAsProp (Cell ms) where
-    type AsProp (Cell ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a tc = tc { as = a }
+instance HasProp As (Cell ms) where
+    type Prop As (Cell ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a tc = tc { as = a }
 
-instance HasAttributesProp (Cell ms) where
-    type Attribute (Cell ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as tc = tc { attributes = as }
+instance HasProp Attributes (Cell ms) where
+    type Prop Attributes (Cell ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as tc = tc { attributes = as }
 
-instance HasChildrenProp (Cell ms) where
-    type Child (Cell ms) = View ms
-    getChildren = children
-    setChildren cs tc = tc { children = cs }
+instance HasProp Children (Cell ms) where
+    type Prop Children (Cell ms) = [View ms]
+    getProp _ = children
+    setProp _ cs tc = tc { children = cs }
 
-instance HasClassesProp (Cell ms) where
-    getClasses = classes
-    setClasses cs tc = tc { classes = cs }
+instance HasProp Classes (Cell ms) where
+    type Prop Classes (Cell ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs tc = tc { classes = cs }
 
-instance HasActiveProp (Cell ms) where
-    getActive = active
-    setActive a tc = tc { active = a }
+instance HasProp Active (Cell ms) where
+    type Prop Active (Cell ms) = Bool
+    getProp _ = active
+    setProp _ a tc = tc { active = a }
 
-instance HasCollapsingProp (Cell ms) where
-    getCollapsing = collapsing
-    setCollapsing c tc = tc { collapsing = c }
+instance HasProp Collapsing (Cell ms) where
+    type Prop Collapsing (Cell ms) = Bool
+    getProp _ = collapsing
+    setProp _ c tc = tc { collapsing = c }
 
-instance HasDisabledProp (Cell ms) where
-    getDisabled = disabled
-    setDisabled d tc = tc { disabled = d }
+instance HasProp Disabled (Cell ms) where
+    type Prop Disabled (Cell ms) = Bool
+    getProp _ = disabled
+    setProp _ d tc = tc { disabled = d }
 
-instance HasErrorProp (Cell ms) where
-    getError = error
-    setError e tc = tc { error = e }
+instance HasProp Error (Cell ms) where
+    type Prop Error (Cell ms) = Bool
+    getProp _ = error
+    setProp _ e tc = tc { error = e }
 
-instance HasNegativeProp (Cell ms) where
-    getNegative = negative
-    setNegative n tc = tc { negative = n }
+instance HasProp Negative (Cell ms) where
+    type Prop Negative (Cell ms) = Bool
+    getProp _ = negative
+    setProp _ n tc = tc { negative = n }
 
-instance HasPositiveProp (Cell ms) where
-    getPositive = positive
-    setPositive p tc = tc { positive = p }
+instance HasProp Positive (Cell ms) where
+    type Prop Positive (Cell ms) = Bool
+    getProp _ = positive
+    setProp _ p tc = tc { positive = p }
 
-instance HasSelectableProp (Cell ms) where
-    getSelectable = selectable
-    setSelectable s tc = tc { selectable = s }
+instance HasProp Selectable (Cell ms) where
+    type Prop Selectable (Cell ms) = Bool
+    getProp _ = selectable
+    setProp _ s tc = tc { selectable = s }
 
-instance HasSingleLineProp (Cell ms) where
-    getSingleLine = singleLine
-    setSingleLine sl tc = tc { singleLine = sl }
+instance HasProp SingleLine (Cell ms) where
+    type Prop SingleLine (Cell ms) = Bool
+    getProp _ = singleLine
+    setProp _ sl tc = tc { singleLine = sl }
 
-instance HasTextAlignProp (Cell ms) where
-    getTextAlign = textAlign
-    setTextAlign ta tc = tc { textAlign = ta }
+instance HasProp TextAlign (Cell ms) where
+    type Prop TextAlign (Cell ms) = Txt
+    getProp _ = textAlign
+    setProp _ ta tc = tc { textAlign = ta }
 
-instance HasVerticalAlignProp (Cell ms) where
-    getVerticalAlign = verticalAlign
-    setVerticalAlign va tc = tc { verticalAlign = va }
+instance HasProp VerticalAlign (Cell ms) where
+    type Prop VerticalAlign (Cell ms) = Txt
+    getProp _ = verticalAlign
+    setProp _ va tc = tc { verticalAlign = va }
 
-instance HasWarningProp (Cell ms) where
-    getWarning = warning
-    setWarning w tc = tc { warning = w }
+instance HasProp Warning (Cell ms) where
+    type Prop Warning (Cell ms) = Bool
+    getProp _ = warning
+    setProp _ w tc = tc { warning = w }
 
-instance HasWidthProp (Cell ms) where
-    getWidth = width
-    setWidth w tc = tc { width = w }
+instance HasProp Width (Cell ms) where
+    type Prop Width (Cell ms) = Txt
+    getProp _ = width
+    setProp _ w tc = tc { width = w }
 
 data Footer ms = Footer_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -413,24 +444,25 @@ instance Pure Footer ms where
             )
             children
 
-instance HasAsProp (Footer ms) where
-    type AsProp (Footer ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a tf = tf { as = a }
+instance HasProp As (Footer ms) where
+    type Prop As (Footer ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a tf = tf { as = a }
 
-instance HasAttributesProp (Footer ms) where
-    type Attribute (Footer ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as tf = tf { attributes = as }
+instance HasProp Attributes (Footer ms) where
+    type Prop Attributes (Footer ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as tf = tf { attributes = as }
 
-instance HasChildrenProp (Footer ms) where
-    type Child (Footer ms) = View ms
-    getChildren = children
-    setChildren cs tf = tf { children = cs }
+instance HasProp Children (Footer ms) where
+    type Prop Children (Footer ms) = [View ms]
+    getProp _ = children
+    setProp _ cs tf = tf { children = cs }
 
-instance HasClassesProp (Footer ms) where
-    getClasses = classes
-    setClasses cs tf = tf { classes = cs }
+instance HasProp Classes (Footer ms) where
+    type Prop Classes (Footer ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs tf = tf { classes = cs }
 
 data Header ms = Header_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -460,28 +492,31 @@ instance Pure Header ms where
                 )
                 children
 
-instance HasAsProp (Header ms) where
-    type AsProp (Header ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a th = th { as = a }
+instance HasProp As (Header ms) where
+    type Prop As (Header ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a th = th { as = a }
 
-instance HasAttributesProp (Header ms) where
-    type Attribute (Header ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as th = th { attributes = as }
+instance HasProp Attributes (Header ms) where
+    type Prop Attributes (Header ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as th = th { attributes = as }
 
-instance HasChildrenProp (Header ms) where
-    type Child (Header ms) = View ms
-    getChildren = children
-    setChildren cs th = th { children = cs }
+instance HasProp Children (Header ms) where
+    type Prop Children (Header ms) = [View ms]
+    getProp _ = children
+    setProp _ cs th = th { children = cs }
 
-instance HasClassesProp (Header ms) where
-    getClasses = classes
-    setClasses cs th = th { classes = cs }
+instance HasProp Classes (Header ms) where
+    type Prop Classes (Header ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs th = th { classes = cs }
 
-instance HasFullWidthProp (Header ms) where
-    getFullWidth = fullWidth
-    setFullWidth fw th = th { fullWidth = fw }
+instance HasProp FullWidth (Header ms) where
+    type Prop FullWidth (Header ms) = Bool
+    getProp _ = fullWidth
+    setProp _ fw th = th { fullWidth = fw }
+
 data HeaderCell ms = HeaderCell_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]
@@ -499,7 +534,7 @@ data HeaderCell ms = HeaderCell_
     , textAlign :: Txt
     , verticalAlign :: Txt
     , warning :: Bool
-    , width :: Width
+    , width :: Txt
     } deriving (Generic)
 
 instance Default (HeaderCell ms) where
@@ -534,76 +569,90 @@ instance Pure HeaderCell ms where
                 )
                 children
 
-instance HasAsProp (HeaderCell ms) where
-    type AsProp (HeaderCell ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a thc = thc { as = a }
+instance HasProp As (HeaderCell ms) where
+    type Prop As (HeaderCell ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a thc = thc { as = a }
 
-instance HasAttributesProp (HeaderCell ms) where
-    type Attribute (HeaderCell ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as thc = thc { attributes = as }
+instance HasProp Attributes (HeaderCell ms) where
+    type Prop Attributes (HeaderCell ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as thc = thc { attributes = as }
 
-instance HasChildrenProp (HeaderCell ms) where
-    type Child (HeaderCell ms) = View ms
-    getChildren = children
-    setChildren cs thc = thc { children = cs }
+instance HasProp Children (HeaderCell ms) where
+    type Prop Children (HeaderCell ms) = [View ms]
+    getProp _ = children
+    setProp _ cs thc = thc { children = cs }
 
-instance HasClassesProp (HeaderCell ms) where
-    getClasses = classes
-    setClasses cs thc = thc { classes = cs }
+instance HasProp Classes (HeaderCell ms) where
+    type Prop Classes (HeaderCell ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs thc = thc { classes = cs }
 
-instance HasActiveProp (HeaderCell ms) where
-    getActive = active
-    setActive a thc = thc { active = a }
+instance HasProp Active (HeaderCell ms) where
+    type Prop Active (HeaderCell ms) = Bool
+    getProp _ = active
+    setProp _ a thc = thc { active = a }
 
-instance HasCollapsingProp (HeaderCell ms) where
-    getCollapsing = collapsing
-    setCollapsing c thc = thc { collapsing = c }
+instance HasProp Collapsing (HeaderCell ms) where
+    type Prop Collapsing (HeaderCell ms) = Bool
+    getProp _ = collapsing
+    setProp _ c thc = thc { collapsing = c }
 
-instance HasDisabledProp (HeaderCell ms) where
-    getDisabled = disabled
-    setDisabled d thc = thc { disabled = d }
+instance HasProp Disabled (HeaderCell ms) where
+    type Prop Disabled (HeaderCell ms) = Bool
+    getProp _ = disabled
+    setProp _ d thc = thc { disabled = d }
 
-instance HasErrorProp (HeaderCell ms) where
-    getError = error
-    setError e thc = thc { error = e }
+instance HasProp Error (HeaderCell ms) where
+    type Prop Error (HeaderCell ms) = Bool
+    getProp _ = error
+    setProp _ e thc = thc { error = e }
 
-instance HasNegativeProp (HeaderCell ms) where
-    getNegative = negative
-    setNegative n thc = thc { negative = n }
+instance HasProp Negative (HeaderCell ms) where
+    type Prop Negative (HeaderCell ms) = Bool
+    getProp _ = negative
+    setProp _ n thc = thc { negative = n }
 
-instance HasPositiveProp (HeaderCell ms) where
-    getPositive = positive
-    setPositive p thc = thc { positive = p }
+instance HasProp Positive (HeaderCell ms) where
+    type Prop Positive (HeaderCell ms) = Bool
+    getProp _ = positive
+    setProp _ p thc = thc { positive = p }
 
-instance HasSelectableProp (HeaderCell ms) where
-    getSelectable = selectable
-    setSelectable s thc = thc { selectable = s }
+instance HasProp Selectable (HeaderCell ms) where
+    type Prop Selectable (HeaderCell ms) = Bool
+    getProp _ = selectable
+    setProp _ s thc = thc { selectable = s }
 
-instance HasSingleLineProp (HeaderCell ms) where
-    getSingleLine = singleLine
-    setSingleLine sl thc = thc { singleLine = sl }
+instance HasProp SingleLine (HeaderCell ms) where
+    type Prop SingleLine (HeaderCell ms) = Bool
+    getProp _ = singleLine
+    setProp _ sl thc = thc { singleLine = sl }
 
-instance HasSortedProp (HeaderCell ms) where
-    getSorted = sorted
-    setSorted s thc = thc { sorted = s }
+instance HasProp Sorted (HeaderCell ms) where
+    type Prop Sorted (HeaderCell ms) = Txt
+    getProp _ = sorted
+    setProp _ s thc = thc { sorted = s }
 
-instance HasTextAlignProp (HeaderCell ms) where
-    getTextAlign = textAlign
-    setTextAlign ta thc = thc { textAlign = ta }
+instance HasProp TextAlign (HeaderCell ms) where
+    type Prop TextAlign (HeaderCell ms) = Txt
+    getProp _ = textAlign
+    setProp _ ta thc = thc { textAlign = ta }
 
-instance HasVerticalAlignProp (HeaderCell ms) where
-    getVerticalAlign = verticalAlign
-    setVerticalAlign va thc = thc { verticalAlign = va }
+instance HasProp VerticalAlign (HeaderCell ms) where
+    type Prop VerticalAlign (HeaderCell ms) = Txt
+    getProp _ = verticalAlign
+    setProp _ va thc = thc { verticalAlign = va }
 
-instance HasWarningProp (HeaderCell ms) where
-    getWarning = warning
-    setWarning w thc = thc { warning = w }
+instance HasProp Warning (HeaderCell ms) where
+    type Prop Warning (HeaderCell ms) = Bool
+    getProp _ = warning
+    setProp _ w thc = thc { warning = w }
 
-instance HasWidthProp (HeaderCell ms) where
-    getWidth = width
-    setWidth w thc = thc { width = w }
+instance HasProp Width (HeaderCell ms) where
+    type Prop Width (HeaderCell ms) = Txt
+    getProp _ = width
+    setProp _ w thc = thc { width = w }
 
 data Row ms = Row_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -647,53 +696,62 @@ instance Pure Row ms where
                 )
                 children
 
-instance HasAsProp (Row ms) where
-    type AsProp (Row ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a tr = tr { as = a }
+instance HasProp As (Row ms) where
+    type Prop As (Row ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a tr = tr { as = a }
 
-instance HasAttributesProp (Row ms) where
-    type Attribute (Row ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as tr = tr { attributes = as }
+instance HasProp Attributes (Row ms) where
+    type Prop Attributes (Row ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as tr = tr { attributes = as }
 
-instance HasChildrenProp (Row ms) where
-    type Child (Row ms) = View ms
-    getChildren = children
-    setChildren cs tr = tr { children = cs }
+instance HasProp Children (Row ms) where
+    type Prop Children (Row ms) = [View ms]
+    getProp _ = children
+    setProp _ cs tr = tr { children = cs }
 
-instance HasClassesProp (Row ms) where
-    getClasses = classes
-    setClasses cs tr = tr { classes = cs }
+instance HasProp Classes (Row ms) where
+    type Prop Classes (Row ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs tr = tr { classes = cs }
 
-instance HasActiveProp (Row ms) where
-    getActive = active
-    setActive a tr = tr { active = a }
+instance HasProp Active (Row ms) where
+    type Prop Active (Row ms) = Bool
+    getProp _ = active
+    setProp _ a tr = tr { active = a }
 
-instance HasDisabledProp (Row ms) where
-    getDisabled = disabled
-    setDisabled d tr = tr { disabled = d }
+instance HasProp Disabled (Row ms) where
+    type Prop Disabled (Row ms) = Bool
+    getProp _ = disabled
+    setProp _ d tr = tr { disabled = d }
 
-instance HasErrorProp (Row ms) where
-    getError = error
-    setError e tr = tr { error = e }
+instance HasProp Error (Row ms) where
+    type Prop Error (Row ms) = Bool
+    getProp _ = error
+    setProp _ e tr = tr { error = e }
 
-instance HasNegativeProp (Row ms) where
-    getNegative = negative
-    setNegative n tr = tr { negative = n }
+instance HasProp Negative (Row ms) where
+    type Prop Negative (Row ms) = Bool
+    getProp _ = negative
+    setProp _ n tr = tr { negative = n }
 
-instance HasPositiveProp (Row ms) where
-    getPositive = positive
-    setPositive p tr = tr { positive = p }
+instance HasProp Positive (Row ms) where
+    type Prop Positive (Row ms) = Bool
+    getProp _ = positive
+    setProp _ p tr = tr { positive = p }
 
-instance HasTextAlignProp (Row ms) where
-    getTextAlign = textAlign
-    setTextAlign ta tr = tr { textAlign = ta }
+instance HasProp TextAlign (Row ms) where
+    type Prop TextAlign (Row ms) = Txt
+    getProp _ = textAlign
+    setProp _ ta tr = tr { textAlign = ta }
 
-instance HasVerticalAlignProp (Row ms) where
-    getVerticalAlign = verticalAlign
-    setVerticalAlign va tr = tr { verticalAlign = va }
+instance HasProp VerticalAlign (Row ms) where
+    type Prop VerticalAlign (Row ms) = Txt
+    getProp _ = verticalAlign
+    setProp _ va tr = tr { verticalAlign = va }
 
-instance HasWarningProp (Row ms) where
-    getWarning = warning
-    setWarning w tr = tr { warning = w }
+instance HasProp Warning (Row ms) where
+    type Prop Warning (Row ms) = Bool
+    getProp _ = warning
+    setProp _ w tr = tr { warning = w }

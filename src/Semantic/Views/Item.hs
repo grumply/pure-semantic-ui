@@ -16,32 +16,32 @@ import Pure.View hiding (verticalAlign,disabled,inline,hidden,Content,Descriptio
 
 import Semantic.Utils
 
-import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
-  ( HasAsProp(..), pattern As
-  , HasAttributesProp(..), pattern Attributes
-  , HasChildrenProp(..), pattern Children
-  , HasClassesProp(..), pattern Classes
-  , HasVerticalAlignProp(..), pattern VerticalAlign
-  , HasDividedProp(..), pattern Divided
-  , HasLinkProp(..), pattern Link
-  , HasRelaxedProp(..), pattern Relaxed
-  , HasUnstackableProp(..), pattern Unstackable
-  , HasAvatarProp(..), pattern Avatar
-  , HasBorderedProp(..), pattern Bordered
-  , HasCenteredProp(..), pattern Centered
-  , HasCircularProp(..), pattern Circular
-  , HasDisabledProp(..), pattern Disabled
-  , HasFloatedProp(..), pattern Floated
-  , HasFluidProp(..), pattern Fluid
-  , HasHiddenProp(..), pattern Hidden
-  , HasInlineProp(..), pattern Inline
-  , HasRoundedProp(..), pattern Rounded
-  , HasSizeProp(..), pattern Size
-  , HasSpacedProp(..), pattern Spaced
-  , HasUIProp(..), pattern UI
-  , HasWrappedProp(..), pattern Wrapped
+  ( pattern As, As(..)
+  , pattern Attributes, Attributes(..)
+  , pattern Children, Children(..)
+  , pattern Classes, Classes(..)
+  , pattern VerticalAlign, VerticalAlign(..)
+  , pattern Divided, Divided(..)
+  , pattern Link, Link(..)
+  , pattern Relaxed, Relaxed(..)
+  , pattern Unstackable, Unstackable(..)
+  , pattern Avatar, Avatar(..)
+  , pattern Bordered, Bordered(..)
+  , pattern Centered, Centered(..)
+  , pattern Circular, Circular(..)
+  , pattern Disabled, Disabled(..)
+  , pattern Floated, Floated(..)
+  , pattern Fluid, Fluid(..)
+  , pattern Hidden, Hidden(..)
+  , pattern Inline, Inline(..)
+  , pattern Rounded, Rounded(..)
+  , pattern Size, Size(..)
+  , pattern Spaced, Spaced(..)
+  , pattern UI, UI(..)
+  , pattern Wrapped, Wrapped(..)
   )
 
 data Item ms = Item_
@@ -71,24 +71,25 @@ instance Pure Item ms where
                 )
                 children
 
-instance HasAsProp (Item ms) where
-    type AsProp (Item ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a i = i { as = a }
+instance HasProp As (Item ms) where
+    type Prop As (Item ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a i = i { as = a }
 
-instance HasAttributesProp (Item ms) where
-    type Attribute (Item ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as i = i { attributes = as }
+instance HasProp Attributes (Item ms) where
+    type Prop Attributes (Item ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as i = i { attributes = as }
 
-instance HasChildrenProp (Item ms) where
-    type Child (Item ms) = View ms
-    getChildren = children
-    setChildren cs i = i { children = cs }
+instance HasProp Children (Item ms) where
+    type Prop Children (Item ms) = [View ms]
+    getProp _ = children
+    setProp _ cs i = i { children = cs }
 
-instance HasClassesProp (Item ms) where
-    getClasses = classes
-    setClasses cs i = i { classes = cs }
+instance HasProp Classes (Item ms) where
+    type Prop Classes (Item ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs i = i { classes = cs }
 
 data Content ms = Content_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -119,28 +120,30 @@ instance Pure Content ms where
                 )
                 children
 
-instance HasAsProp (Content ms) where
-    type AsProp (Content ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a ic = ic { as = a }
+instance HasProp As (Content ms) where
+    type Prop As (Content ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a ic = ic { as = a }
 
-instance HasAttributesProp (Content ms) where
-    type Attribute (Content ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as ic = ic { attributes = as }
+instance HasProp Attributes (Content ms) where
+    type Prop Attributes (Content ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as ic = ic { attributes = as }
 
-instance HasChildrenProp (Content ms) where
-    type Child (Content ms) = View ms
-    getChildren = children
-    setChildren cs ic = ic { children = cs }
+instance HasProp Children (Content ms) where
+    type Prop Children (Content ms) = [View ms]
+    getProp _ = children
+    setProp _ cs ic = ic { children = cs }
 
-instance HasClassesProp (Content ms) where
-    getClasses = classes
-    setClasses cs ic = ic { classes = cs }
+instance HasProp Classes (Content ms) where
+    type Prop Classes (Content ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs ic = ic { classes = cs }
 
-instance HasVerticalAlignProp (Content ms) where
-    getVerticalAlign = verticalAlign
-    setVerticalAlign va ic = ic { verticalAlign = va }
+instance HasProp VerticalAlign (Content ms) where
+    type Prop VerticalAlign (Content ms) = Txt
+    getProp _ = verticalAlign
+    setProp _ va ic = ic { verticalAlign = va }
 
 data Description ms = Description_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -169,24 +172,25 @@ instance Pure Description ms where
                 )
                 children
 
-instance HasAsProp (Description ms) where
-    type AsProp (Description ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a id = id { as = a }
+instance HasProp As (Description ms) where
+    type Prop As (Description ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a id = id { as = a }
 
-instance HasAttributesProp (Description ms) where
-    type Attribute (Description ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as id = id { attributes = as }
+instance HasProp Attributes (Description ms) where
+    type Prop Attributes (Description ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as id = id { attributes = as }
 
-instance HasChildrenProp (Description ms) where
-    type Child (Description ms) = View ms
-    getChildren = children
-    setChildren cs id = id { children = cs }
+instance HasProp Children (Description ms) where
+    type Prop Children (Description ms) = [View ms]
+    getProp _ = children
+    setProp _ cs id = id { children = cs }
 
-instance HasClassesProp (Description ms) where
-    getClasses = classes
-    setClasses cs id = id { classes = cs }
+instance HasProp Classes (Description ms) where
+    type Prop Classes (Description ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs id = id { classes = cs }
 
 data Extra ms = Extra_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -215,24 +219,25 @@ instance Pure Extra ms where
                 )
                 children
 
-instance HasAsProp (Extra ms) where
-    type AsProp (Extra ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a ie = ie { as = a }
+instance HasProp As (Extra ms) where
+    type Prop As (Extra ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a ie = ie { as = a }
 
-instance HasAttributesProp (Extra ms) where
-    type Attribute (Extra ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as ie = ie { attributes = as }
+instance HasProp Attributes (Extra ms) where
+    type Prop Attributes (Extra ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as ie = ie { attributes = as }
 
-instance HasChildrenProp (Extra ms) where
-    type Child (Extra ms) = View ms
-    getChildren = children
-    setChildren cs ie = ie { children = cs }
+instance HasProp Children (Extra ms) where
+    type Prop Children (Extra ms) = [View ms]
+    getProp _ = children
+    setProp _ cs ie = ie { children = cs }
 
-instance HasClassesProp (Extra ms) where
-    getClasses = classes
-    setClasses cs ie = ie { classes = cs }
+instance HasProp Classes (Extra ms) where
+    type Prop Classes (Extra ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs ie = ie { classes = cs }
 
 data Group ms = Group_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -270,40 +275,45 @@ instance Pure Group ms where
                 )
                 children
 
-instance HasAsProp (Group ms) where
-    type AsProp (Group ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a ig = ig { as = a }
+instance HasProp As (Group ms) where
+    type Prop As (Group ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a ig = ig { as = a }
 
-instance HasAttributesProp (Group ms) where
-    type Attribute (Group ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as ig = ig { attributes = as }
+instance HasProp Attributes (Group ms) where
+    type Prop Attributes (Group ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as ig = ig { attributes = as }
 
-instance HasChildrenProp (Group ms) where
-    type Child (Group ms) = View ms
-    getChildren = children
-    setChildren cs ig = ig { children = cs }
+instance HasProp Children (Group ms) where
+    type Prop Children (Group ms) = [View ms]
+    getProp _ = children
+    setProp _ cs ig = ig { children = cs }
 
-instance HasClassesProp (Group ms) where
-    getClasses = classes
-    setClasses cs ig = ig { classes = cs }
+instance HasProp Classes (Group ms) where
+    type Prop Classes (Group ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs ig = ig { classes = cs }
 
-instance HasDividedProp (Group ms) where
-    getDivided = divided
-    setDivided d ig = ig { divided = d }
+instance HasProp Divided (Group ms) where
+    type Prop Divided (Group ms) = Bool
+    getProp _ = divided
+    setProp _ d ig = ig { divided = d }
 
-instance HasLinkProp (Group ms) where
-    getLink = link
-    setLink l ig = ig { link = l }
+instance HasProp Link (Group ms) where
+    type Prop Link (Group ms) = Bool
+    getProp _ = link
+    setProp _ l ig = ig { link = l }
 
-instance HasRelaxedProp (Group ms) where
-    getRelaxed = relaxed
-    setRelaxed r ig = ig { relaxed = r }
+instance HasProp Relaxed (Group ms) where
+    type Prop Relaxed (Group ms) = Maybe Txt
+    getProp _ = relaxed
+    setProp _ r ig = ig { relaxed = r }
 
-instance HasUnstackableProp (Group ms) where
-    getUnstackable = unstackable
-    setUnstackable u ig = ig { unstackable = u }
+instance HasProp Unstackable (Group ms) where
+    type Prop Unstackable (Group ms) = Bool
+    getProp _ = unstackable
+    setProp _ u ig = ig { unstackable = u }
 
 data Header ms = Header_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -332,24 +342,25 @@ instance Pure Header ms where
                 )
                 children
 
-instance HasAsProp (Header ms) where
-    type AsProp (Header ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a ih = ih { as = a }
+instance HasProp As (Header ms) where
+    type Prop As (Header ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a ih = ih { as = a }
 
-instance HasAttributesProp (Header ms) where
-    type Attribute (Header ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as ih = ih { attributes = as }
+instance HasProp Attributes (Header ms) where
+    type Prop Attributes (Header ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as ih = ih { attributes = as }
 
-instance HasChildrenProp (Header ms) where
-    type Child (Header ms) = View ms
-    getChildren = children
-    setChildren cs ih = ih { children = cs }
+instance HasProp Children (Header ms) where
+    type Prop Children (Header ms) = [View ms]
+    getProp _ = children
+    setProp _ cs ih = ih { children = cs }
 
-instance HasClassesProp (Header ms) where
-    getClasses = classes
-    setClasses cs ih = ih { classes = cs }
+instance HasProp Classes (Header ms) where
+    type Prop Classes (Header ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs ih = ih { classes = cs }
 
 data Image ms = Image_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -406,81 +417,95 @@ instance Pure Image ms where
                 )
                 children
 
-instance HasAvatarProp (Image ms) where
-    getAvatar = avatar
-    setAvatar a i = i { avatar = a }
+instance HasProp Avatar (Image ms) where
+    type Prop Avatar (Image ms) = Bool
+    getProp _ = avatar
+    setProp _ a i = i { avatar = a }
 
-instance HasAsProp (Image ms) where
-    type AsProp (Image ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs f i = i { as = f }
+instance HasProp As (Image ms) where
+    type Prop As (Image ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ f i = i { as = f }
 
-instance HasAttributesProp (Image ms) where
-    type Attribute (Image ms) = Feature ms
-    getAttributes = attributes
-    setAttributes cs i = i { attributes = cs }
+instance HasProp Attributes (Image ms) where
+    type Prop Attributes (Image ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ cs i = i { attributes = cs }
 
-instance HasBorderedProp (Image ms) where
-    getBordered = bordered
-    setBordered b i = i { bordered = b }
+instance HasProp Bordered (Image ms) where
+    type Prop Bordered (Image ms) = Bool
+    getProp _ = bordered
+    setProp _ b i = i { bordered = b }
 
-instance HasCenteredProp (Image ms) where
-    getCentered = centered
-    setCentered c i = i { centered = c }
+instance HasProp Centered (Image ms) where
+    type Prop Centered (Image ms) = Bool
+    getProp _ = centered
+    setProp _ c i = i { centered = c }
 
-instance HasChildrenProp (Image ms) where
-    type Child (Image ms) = View ms
-    getChildren = children
-    setChildren cs i = i { children = cs }
+instance HasProp Children (Image ms) where
+    type Prop Children (Image ms) = [View ms]
+    getProp _ = children
+    setProp _ cs i = i { children = cs }
 
-instance HasCircularProp (Image ms) where
-    getCircular = circular
-    setCircular c i = i { circular = c }
+instance HasProp Circular (Image ms) where
+    type Prop Circular (Image ms) = Bool
+    getProp _ = circular
+    setProp _ c i = i { circular = c }
 
-instance HasClassesProp (Image ms) where
-    getClasses = classes
-    setClasses cs i = i { classes = cs }
+instance HasProp Classes (Image ms) where
+    type Prop Classes (Image ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs i = i { classes = cs }
 
-instance HasDisabledProp (Image ms) where
-    getDisabled = disabled
-    setDisabled d i = i { disabled = d }
+instance HasProp Disabled (Image ms) where
+    type Prop Disabled (Image ms) = Bool
+    getProp _ = disabled
+    setProp _ d i = i { disabled = d }
 
-instance HasFloatedProp (Image ms) where
-    getFloated = floated
-    setFloated f i = i { floated = f }
+instance HasProp Floated (Image ms) where
+    type Prop Floated (Image ms) = Txt
+    getProp _ = floated
+    setProp _ f i = i { floated = f }
 
-instance HasFluidProp (Image ms) where
-    getFluid = fluid
-    setFluid f i = i { fluid = f }
+instance HasProp Fluid (Image ms) where
+    type Prop Fluid (Image ms) = Bool
+    getProp _ = fluid
+    setProp _ f i = i { fluid = f }
 
-instance HasInlineProp (Image ms) where
-    type InlineProp (Image ms) = Bool
-    getInline = inline
-    setInline inl i = i { inline = inl }
+instance HasProp Inline (Image ms) where
+    type Prop Inline (Image ms) = Bool
+    getProp _ = inline
+    setProp _ inl i = i { inline = inl }
 
-instance HasHiddenProp (Image ms) where
-    getHidden = hidden
-    setHidden h i = i { hidden = h }
+instance HasProp Hidden (Image ms) where
+    type Prop Hidden (Image ms) = Bool
+    getProp _ = hidden
+    setProp _ h i = i { hidden = h }
 
-instance HasRoundedProp (Image ms) where
-    getRounded = rounded
-    setRounded r i = i { rounded = r }
+instance HasProp Rounded (Image ms) where
+    type Prop Rounded (Image ms) = Bool
+    getProp _ = rounded
+    setProp _ r i = i { rounded = r }
 
-instance HasSizeProp (Image ms) where
-    getSize = size
-    setSize s i = i { size = s }
+instance HasProp Size (Image ms) where
+    type Prop Size (Image ms) = Txt
+    getProp _ = size
+    setProp _ s i = i { size = s }
 
-instance HasSpacedProp (Image ms) where
-    getSpaced = spaced
-    setSpaced s i = i { spaced = s }
+instance HasProp Spaced (Image ms) where
+    type Prop Spaced (Image ms) = Maybe Txt
+    getProp _ = spaced
+    setProp _ s i = i { spaced = s }
 
-instance HasVerticalAlignProp (Image ms) where
-    getVerticalAlign = verticalAlign
-    setVerticalAlign va i = i { verticalAlign = va }
+instance HasProp VerticalAlign (Image ms) where
+    type Prop VerticalAlign (Image ms) = Txt
+    getProp _ = verticalAlign
+    setProp _ va i = i { verticalAlign = va }
 
-instance HasWrappedProp (Image ms) where
-    getWrapped = wrapped
-    setWrapped w i = i { wrapped = w }
+instance HasProp Wrapped (Image ms) where
+    type Prop Wrapped (Image ms) = Bool
+    getProp _ = wrapped
+    setProp _ w i = i { wrapped = w }
 
 data Meta ms = Meta_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -509,21 +534,22 @@ instance Pure Meta ms where
                 )
                 children
 
-instance HasAsProp (Meta ms) where
-    type AsProp (Meta ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a im = im { as = a }
+instance HasProp As (Meta ms) where
+    type Prop As (Meta ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a im = im { as = a }
 
-instance HasAttributesProp (Meta ms) where
-    type Attribute (Meta ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as im = im { attributes = as }
+instance HasProp Attributes (Meta ms) where
+    type Prop Attributes (Meta ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as im = im { attributes = as }
 
-instance HasChildrenProp (Meta ms) where
-    type Child (Meta ms) = View ms
-    getChildren = children
-    setChildren cs im = im { children = cs }
+instance HasProp Children (Meta ms) where
+    type Prop Children (Meta ms) = [View ms]
+    getProp _ = children
+    setProp _ cs im = im { children = cs }
 
-instance HasClassesProp (Meta ms) where
-    getClasses = classes
-    setClasses cs im = im { classes = cs }
+instance HasProp Classes (Meta ms) where
+    type Prop Classes (Meta ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs im = im { classes = cs }

@@ -13,26 +13,26 @@ import Pure.View hiding (onFocus,onBlur,name,active,Result,onClick)
 
 import Semantic.Utils
 
-import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
-  ( HasAsProp(..), pattern As
-  , HasAttributesProp(..), pattern Attributes
-  , HasChildrenProp(..), pattern Children
-  , HasClassesProp(..), pattern Classes
-  , HasAlignedProp(..), pattern Aligned
-  , HasCategoryProp(..), pattern Category
-  , HasFluidProp(..), pattern Fluid
-  , HasFocusProp(..), pattern Focus
-  , HasLoadingProp(..), pattern Loading
-  , HasOnBlurProp(..), pattern OnBlur
-  , HasOnFocusProp(..), pattern OnFocus
-  , HasOnMouseDownProp(..), pattern OnMouseDown
-  , HasOpenProp(..), pattern Open
-  , HasSizeProp(..), pattern Size
-  , HasActiveProp(..), pattern Active
-  , HasNameProp(..), pattern Name
-  , HasOnClickProp(..), pattern OnClick
+  ( pattern As, As(..)
+  , pattern Attributes, Attributes(..)
+  , pattern Children, Children(..)
+  , pattern Classes, Classes(..)
+  , pattern Aligned, Aligned(..)
+  , pattern Category, Category(..)
+  , pattern Fluid, Fluid(..)
+  , pattern Focus, Focus(..)
+  , pattern Loading, Loading(..)
+  , pattern OnBlur, OnBlur(..)
+  , pattern OnFocus, OnFocus(..)
+  , pattern OnMouseDown, OnMouseDown(..)
+  , pattern Open, Open(..)
+  , pattern Size, Size(..)
+  , pattern Active, Active(..)
+  , pattern Name, Name(..)
+  , pattern OnClick, OnClick(..)
   )
 
 {-
@@ -93,67 +93,75 @@ instance Pure Search ms where
                )
                children
 
-instance HasAsProp (Search ms) where
-    type AsProp (Search ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs f s = s { as = f }
+instance HasProp As (Search ms) where
+    type Prop As (Search ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ f s = s { as = f }
 
-instance HasAttributesProp (Search ms) where
-    type Attribute (Search ms) = Feature ms
-    getAttributes = attributes
-    setAttributes cs s = s { attributes = cs }
+instance HasProp Attributes (Search ms) where
+    type Prop Attributes (Search ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ cs s = s { attributes = cs }
 
-instance HasChildrenProp (Search ms) where
-    type Child (Search ms) = View ms
-    getChildren = children
-    setChildren cs s = s { children = cs }
+instance HasProp Children (Search ms) where
+    type Prop Children (Search ms) = [View ms]
+    getProp _ = children
+    setProp _ cs s = s { children = cs }
 
-instance HasClassesProp (Search ms) where
-    getClasses = classes
-    setClasses cs s = s { classes = cs }
+instance HasProp Classes (Search ms) where
+    type Prop Classes (Search ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs s = s { classes = cs }
 
-instance HasAlignedProp (Search ms) where
-    getAligned = aligned
-    setAligned a s = s { aligned = a }
+instance HasProp Aligned (Search ms) where
+    type Prop Aligned (Search ms) = Txt
+    getProp _ = aligned
+    setProp _ a s = s { aligned = a }
 
-instance HasCategoryProp (Search ms) where
-    getCategory = category
-    setCategory c s = s { category = c }
+instance HasProp Category (Search ms) where
+    type Prop Category (Search ms) = Bool
+    getProp _ = category
+    setProp _ c s = s { category = c }
 
-instance HasFluidProp (Search ms) where
-    getFluid = fluid
-    setFluid f s = s { fluid = f }
+instance HasProp Fluid (Search ms) where
+    type Prop Fluid (Search ms) = Bool
+    getProp _ = fluid
+    setProp _ f s = s { fluid = f }
 
-instance HasFocusProp (Search ms) where
-    getFocus = focus
-    setFocus f s = s { focus = f }
+instance HasProp Focus (Search ms) where
+    type Prop Focus (Search ms) = Bool
+    getProp _ = focus
+    setProp _ f s = s { focus = f }
 
-instance HasLoadingProp (Search ms) where
-    getLoading = loading
-    setLoading l s = s { loading = l }
+instance HasProp Loading (Search ms) where
+    type Prop Loading (Search ms) = Bool
+    getProp _ = loading
+    setProp _ l s = s { loading = l }
 
-instance HasOnBlurProp (Search ms) where
-    type OnBlurProp (Search ms) = Ef ms IO ()
-    getOnBlur = onBlur
-    setOnBlur ob s = s { onBlur = ob }
+instance HasProp OnBlur (Search ms) where
+    type Prop OnBlur (Search ms) = Ef ms IO ()
+    getProp _ = onBlur
+    setProp _ ob s = s { onBlur = ob }
 
-instance HasOnFocusProp (Search ms) where
-    type OnFocusProp (Search ms) = Ef ms IO ()
-    getOnFocus = onFocus
-    setOnFocus onf s = s { onFocus = onf }
+instance HasProp OnFocus (Search ms) where
+    type Prop OnFocus (Search ms) = Ef ms IO ()
+    getProp _ = onFocus
+    setProp _ onf s = s { onFocus = onf }
 
-instance HasOnMouseDownProp (Search ms) where
-    type OnMouseDownProp (Search ms) = Ef ms IO ()
-    getOnMouseDown = onMouseDown
-    setOnMouseDown omd s = s { onMouseDown = omd }
+instance HasProp OnMouseDown (Search ms) where
+    type Prop OnMouseDown (Search ms) = Ef ms IO ()
+    getProp _ = onMouseDown
+    setProp _ omd s = s { onMouseDown = omd }
 
-instance HasOpenProp (Search ms) where
-    getOpen = open
-    setOpen o s = s { open = o }
+instance HasProp Open (Search ms) where
+    type Prop Open (Search ms) = Bool
+    getProp _ = open
+    setProp _ o s = s { open = o }
 
-instance HasSizeProp (Search ms) where
-    getSize = size
-    setSize sz s = s { size = sz }
+instance HasProp Size (Search ms) where
+    type Prop Size (Search ms) = Txt
+    getProp _ = size
+    setProp _ sz s = s { size = sz }
 
 data Categorized ms = Categorized_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -187,32 +195,35 @@ instance Pure Categorized ms where
                 )
                 children
 
-instance HasAsProp (Categorized ms) where
-    type AsProp (Categorized ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs f sc = sc { as = f }
+instance HasProp As (Categorized ms) where
+    type Prop As (Categorized ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ f sc = sc { as = f }
 
-instance HasAttributesProp (Categorized ms) where
-    type Attribute (Categorized ms) = Feature ms
-    getAttributes = attributes
-    setAttributes cs sc = sc { attributes = cs }
+instance HasProp Attributes (Categorized ms) where
+    type Prop Attributes (Categorized ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ cs sc = sc { attributes = cs }
 
-instance HasChildrenProp (Categorized ms) where
-    type Child (Categorized ms) = View ms
-    getChildren = children
-    setChildren cs sc = sc { children = cs }
+instance HasProp Children (Categorized ms) where
+    type Prop Children (Categorized ms) = [View ms]
+    getProp _ = children
+    setProp _ cs sc = sc { children = cs }
 
-instance HasClassesProp (Categorized ms) where
-    getClasses = classes
-    setClasses cs sc = sc { classes = cs }
+instance HasProp Classes (Categorized ms) where
+    type Prop Classes (Categorized ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs sc = sc { classes = cs }
 
-instance HasActiveProp (Categorized ms) where
-    getActive = active
-    setActive a sc = sc { active = a }
+instance HasProp Active (Categorized ms) where
+    type Prop Active (Categorized ms) = Bool
+    getProp _ = active
+    setProp _ a sc = sc { active = a }
 
-instance HasNameProp (Categorized ms) where
-    getName = name
-    setName n sc = sc { name = n }
+instance HasProp Name (Categorized ms) where
+    type Prop Name (Categorized ms) = Txt
+    getProp _ = name
+    setProp _ n sc = sc { name = n }
 
 data Result ms = Result_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -245,33 +256,35 @@ instance Pure Result ms where
                 )
                 children
 
-instance HasAsProp (Result ms) where
-    type AsProp (Result ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs f sr = sr { as = f }
+instance HasProp As (Result ms) where
+    type Prop As (Result ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ f sr = sr { as = f }
 
-instance HasAttributesProp (Result ms) where
-    type Attribute (Result ms) = Feature ms
-    getAttributes = attributes
-    setAttributes cs sr = sr { attributes = cs }
+instance HasProp Attributes (Result ms) where
+    type Prop Attributes (Result ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ cs sr = sr { attributes = cs }
 
-instance HasChildrenProp (Result ms) where
-    type Child (Result ms) = View ms
-    getChildren = children
-    setChildren cs sr = sr { children = cs }
+instance HasProp Children (Result ms) where
+    type Prop Children (Result ms) = [View ms]
+    getProp _ = children
+    setProp _ cs sr = sr { children = cs }
 
-instance HasClassesProp (Result ms) where
-    getClasses = classes
-    setClasses cs sr = sr { classes = cs }
+instance HasProp Classes (Result ms) where
+    type Prop Classes (Result ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs sr = sr { classes = cs }
 
-instance HasActiveProp (Result ms) where
-    getActive = active
-    setActive a sr = sr { active = a }
+instance HasProp Active (Result ms) where
+    type Prop Active (Result ms) = Bool
+    getProp _ = active
+    setProp _ a sr = sr { active = a }
 
-instance HasOnClickProp (Result ms) where
-    type OnClickProp (Result ms) = Ef ms IO ()
-    getOnClick = onClick
-    setOnClick oc sr = sr { onClick = oc }
+instance HasProp OnClick (Result ms) where
+    type Prop OnClick (Result ms) = Ef ms IO ()
+    getProp _ = onClick
+    setProp _ oc sr = sr { onClick = oc }
 
 data Results ms = Results_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -300,21 +313,22 @@ instance Pure Results ms where
                 )
                 children
 
-instance HasAsProp (Results ms) where
-    type AsProp (Results ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs f sr = sr { as = f }
+instance HasProp As (Results ms) where
+    type Prop As (Results ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ f sr = sr { as = f }
 
-instance HasAttributesProp (Results ms) where
-    type Attribute (Results ms) = Feature ms
-    getAttributes = attributes
-    setAttributes cs sr = sr { attributes = cs }
+instance HasProp Attributes (Results ms) where
+    type Prop Attributes (Results ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ cs sr = sr { attributes = cs }
 
-instance HasChildrenProp (Results ms) where
-    type Child (Results ms) = View ms
-    getChildren = children
-    setChildren cs sr = sr { children = cs }
+instance HasProp Children (Results ms) where
+    type Prop Children (Results ms) = [View ms]
+    getProp _ = children
+    setProp _ cs sr = sr { children = cs }
 
-instance HasClassesProp (Results ms) where
-    getClasses = classes
-    setClasses cs sr = sr { classes = cs }
+instance HasProp Classes (Results ms) where
+    type Prop Classes (Results ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs sr = sr { classes = cs }

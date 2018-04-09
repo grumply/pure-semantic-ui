@@ -7,36 +7,36 @@ module Semantic.Collections.Form
   ) where
 
 import GHC.Generics as G
-import Pure.View hiding (name,onSubmit,widths,Form,inline,disabled)
+import Pure.View hiding (name,onSubmit,widths,Form,inline,disabled,Action)
 import qualified Pure.View as HTML
 
 import Semantic.Utils
 import Prelude hiding (error)
 
-import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
-  ( HasAsProp(..), pattern As
-  , HasAttributesProp(..), pattern Attributes
-  , HasChildrenProp(..), pattern Children
-  , HasClassesProp(..), pattern Classes
-  , HasActionProp(..), pattern Action
-  , HasErrorProp(..), pattern Error
-  , HasInvertedProp(..), pattern Inverted
-  , HasLoadingProp(..), pattern Loading
-  , HasOnSubmitProp(..), pattern OnSubmit
-  , HasReplyProp(..), pattern Reply
-  , HasSizeProp(..), pattern Size
-  , HasSuccessProp(..), pattern Success
-  , HasUnstackableProp(..), pattern Unstackable
-  , HasWarningProp(..), pattern Warning
-  , HasWidthsProp(..), pattern Widths
-  , HasGroupedProp(..), pattern Grouped
-  , HasInlineProp(..), pattern Inline
-  , HasDisabledProp(..), pattern Disabled
-  , HasErrorProp(..), pattern Error
-  , HasRequiredProp(..), pattern Required
-  , HasTypeProp(..), pattern Type
+  ( pattern As, As(..)
+  , pattern Attributes, Attributes(..)
+  , pattern Children, Children(..)
+  , pattern Classes, Classes(..)
+  , pattern Action, Action(..)
+  , pattern Error, Error(..)
+  , pattern Inverted, Inverted(..)
+  , pattern Loading, Loading(..)
+  , pattern OnSubmit, OnSubmit(..)
+  , pattern Reply, Reply(..)
+  , pattern Size, Size(..)
+  , pattern Success, Success(..)
+  , pattern Unstackable, Unstackable(..)
+  , pattern Warning, Warning(..)
+  , pattern Widths, Widths(..)
+  , pattern Grouped, Grouped(..)
+  , pattern Inline, Inline(..)
+  , pattern Disabled, Disabled(..)
+  , pattern Error, Error(..)
+  , pattern Required, Required(..)
+  , pattern Type, Type(..)
   )
 
 data Form ms = Form_
@@ -54,7 +54,7 @@ data Form ms = Form_
     , success :: Bool
     , unstackable :: Bool
     , warning :: Bool
-    , widths :: Width
+    , widths :: Txt
     } deriving (Generic)
 
 instance Default (Form ms) where
@@ -89,69 +89,80 @@ instance Pure Form ms where
                 )
                 children
 
-instance HasAsProp (Form ms) where
-    type AsProp (Form ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a f = f { as = a }
+instance HasProp As (Form ms) where
+    type Prop As (Form ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a f = f { as = a }
 
-instance HasAttributesProp (Form ms) where
-    type Attribute (Form ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as f = f { attributes = as }
+instance HasProp Attributes (Form ms) where
+    type Prop Attributes (Form ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as f = f { attributes = as }
 
-instance HasChildrenProp (Form ms) where
-    type Child (Form ms) = View ms
-    getChildren = children
-    setChildren cs f = f { children = cs }
+instance HasProp Children (Form ms) where
+    type Prop Children (Form ms) = [View ms]
+    getProp _ = children
+    setProp _ cs f = f { children = cs }
 
-instance HasClassesProp (Form ms) where
-    getClasses = classes
-    setClasses cs f = f { classes = cs }
+instance HasProp Classes (Form ms) where
+    type Prop Classes (Form ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs f = f { classes = cs }
 
-instance HasActionProp (Form ms) where
-    getAction = action
-    setAction a f = f { action = a }
+instance HasProp Action (Form ms) where
+    type Prop Action (Form ms) = Txt
+    getProp _ = action
+    setProp _ a f = f { action = a }
 
-instance HasErrorProp (Form ms) where
-    getError = error
-    setError e f = f { error = e }
+instance HasProp Error (Form ms) where
+    type Prop Error (Form ms) = Bool
+    getProp _ = error
+    setProp _ e f = f { error = e }
 
-instance HasInvertedProp (Form ms) where
-    getInverted = inverted
-    setInverted i f = f { inverted = i }
+instance HasProp Inverted (Form ms) where
+    type Prop Inverted (Form ms) = Bool
+    getProp _ = inverted
+    setProp _ i f = f { inverted = i }
 
-instance HasLoadingProp (Form ms) where
-    getLoading = loading
-    setLoading l f = f { loading = l }
+instance HasProp Loading (Form ms) where
+    type Prop Loading (Form ms) = Bool
+    getProp _ = loading
+    setProp _ l f = f { loading = l }
 
-instance HasOnSubmitProp (Form ms) where
-    type OnSubmitProp (Form ms) = Ef ms IO ()
-    getOnSubmit = onSubmit
-    setOnSubmit os f = f { onSubmit = os }
+instance HasProp OnSubmit (Form ms) where
+    type Prop OnSubmit (Form ms) = Ef ms IO ()
+    getProp _ = onSubmit
+    setProp _ os f = f { onSubmit = os }
 
-instance HasReplyProp (Form ms) where
-    getReply = reply
-    setReply r f = f { reply = r }
+instance HasProp Reply (Form ms) where
+    type Prop Reply (Form ms) = Bool
+    getProp _ = reply
+    setProp _ r f = f { reply = r }
 
-instance HasSizeProp (Form ms) where
-    getSize = size
-    setSize sz f = f { size = sz }
+instance HasProp Size (Form ms) where
+    type Prop Size (Form ms) = Txt
+    getProp _ = size
+    setProp _ sz f = f { size = sz }
 
-instance HasSuccessProp (Form ms) where
-    getSuccess = success
-    setSuccess s f = f { success = s }
+instance HasProp Success (Form ms) where
+    type Prop Success (Form ms) = Bool
+    getProp _ = success
+    setProp _ s f = f { success = s }
 
-instance HasUnstackableProp (Form ms) where
-    getUnstackable = unstackable
-    setUnstackable u f = f { unstackable = u }
+instance HasProp Unstackable (Form ms) where
+    type Prop Unstackable (Form ms) = Bool
+    getProp _ = unstackable
+    setProp _ u f = f { unstackable = u }
 
-instance HasWarningProp (Form ms) where
-    getWarning = warning
-    setWarning w f = f { warning = w }
+instance HasProp Warning (Form ms) where
+    type Prop Warning (Form ms) = Bool
+    getProp _ = warning
+    setProp _ w f = f { warning = w }
 
-instance HasWidthsProp (Form ms) where
-    getWidths = widths
-    setWidths w f = f { widths = w }
+instance HasProp Widths (Form ms) where
+    type Prop Widths (Form ms) = Txt
+    getProp _ = widths
+    setProp _ w f = f { widths = w }
 
 data Field ms = Field_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -163,7 +174,7 @@ data Field ms = Field_
     , inline :: Bool
     , required :: Bool
     , _type :: Txt
-    , widths :: Width
+    , widths :: Txt
     } deriving (Generic)
 
 instance Default (Field ms) where
@@ -191,49 +202,56 @@ instance Pure Field ms where
                 )
                 children
 
-instance HasAsProp (Field ms) where
-    type AsProp (Field ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a ff = ff { as = a }
+instance HasProp As (Field ms) where
+    type Prop As (Field ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a ff = ff { as = a }
 
-instance HasAttributesProp (Field ms) where
-    type Attribute (Field ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as ff = ff { attributes = as }
+instance HasProp Attributes (Field ms) where
+    type Prop Attributes (Field ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as ff = ff { attributes = as }
 
-instance HasChildrenProp (Field ms) where
-    type Child (Field ms) = View ms
-    getChildren = children
-    setChildren cs ff = ff { children = cs }
+instance HasProp Children (Field ms) where
+    type Prop Children (Field ms) = [View ms]
+    getProp _ = children
+    setProp _ cs ff = ff { children = cs }
 
-instance HasClassesProp (Field ms) where
-    getClasses = classes
-    setClasses cs ff = ff { classes = cs }
+instance HasProp Classes (Field ms) where
+    type Prop Classes (Field ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs ff = ff { classes = cs }
 
-instance HasDisabledProp (Field ms) where
-    getDisabled = disabled
-    setDisabled d ff = ff { disabled = d }
+instance HasProp Disabled (Field ms) where
+    type Prop Disabled (Field ms) = Bool
+    getProp _ = disabled
+    setProp _ d ff = ff { disabled = d }
 
-instance HasErrorProp (Field ms) where
-    getError = error
-    setError e ff = ff { error = e }
+instance HasProp Error (Field ms) where
+    type Prop Error (Field ms) = Bool
+    getProp _ = error
+    setProp _ e ff = ff { error = e }
 
-instance HasInlineProp (Field ms) where
-    type InlineProp (Field ms) = Bool
-    getInline = inline
-    setInline i ff = ff { inline = i }
+instance HasProp Inline (Field ms) where
+    type Prop Inline (Field ms) = Bool
+    type Prop Inline (Field ms) = Bool
+    getProp _ = inline
+    setProp _ i ff = ff { inline = i }
 
-instance HasRequiredProp (Field ms) where
-    getRequired = required
-    setRequired r ff = ff { required = r }
+instance HasProp Required (Field ms) where
+    type Prop Required (Field ms) = Bool
+    getProp _ = required
+    setProp _ r ff = ff { required = r }
 
-instance HasTypeProp (Field ms) where
-    getType = _type
-    setType t ff = ff { _type = t }
+instance HasProp Type (Field ms) where
+    type Prop Type (Field ms) = Txt
+    getProp _ = _type
+    setProp _ t ff = ff { _type = t }
 
-instance HasWidthsProp (Field ms) where
-    getWidths = widths
-    setWidths w ff = ff { widths = w }
+instance HasProp Widths (Field ms) where
+    type Prop Widths (Field ms) = Txt
+    getProp _ = widths
+    setProp _ w ff = ff { widths = w }
 
 data Group ms = Group_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -243,7 +261,7 @@ data Group ms = Group_
     , grouped :: Bool
     , inline :: Bool
     , unstackable :: Bool
-    , widths :: Width
+    , widths :: Txt
     } deriving (Generic)
 
 instance Default (Group ms) where
@@ -270,38 +288,42 @@ instance Pure Group ms where
                 )
                 children
 
-instance HasAsProp (Group ms) where
-    type AsProp (Group ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a fg = fg { as = a }
+instance HasProp As (Group ms) where
+    type Prop As (Group ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a fg = fg { as = a }
 
-instance HasAttributesProp (Group ms) where
-    type Attribute (Group ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as fg = fg { attributes = as }
+instance HasProp Attributes (Group ms) where
+    type Prop Attributes (Group ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as fg = fg { attributes = as }
 
-instance HasChildrenProp (Group ms) where
-    type Child (Group ms) = View ms
-    getChildren = children
-    setChildren cs fg = fg { children = cs }
+instance HasProp Children (Group ms) where
+    type Prop Children (Group ms) = [View ms]
+    getProp _ = children
+    setProp _ cs fg = fg { children = cs }
 
-instance HasClassesProp (Group ms) where
-    getClasses = classes
-    setClasses cs fg = fg { classes = cs }
+instance HasProp Classes (Group ms) where
+    type Prop Classes (Group ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs fg = fg { classes = cs }
 
-instance HasGroupedProp (Group ms) where
-    getGrouped = grouped
-    setGrouped g fg = fg { grouped = g }
+instance HasProp Grouped (Group ms) where
+    type Prop Grouped (Group ms) = Bool
+    getProp _ = grouped
+    setProp _ g fg = fg { grouped = g }
 
-instance HasInlineProp (Group ms) where
-    type InlineProp (Group ms) = Bool
-    getInline = inline
-    setInline i fg = fg { inline = i }
+instance HasProp Inline (Group ms) where
+    type Prop Inline (Group ms) = Bool
+    getProp _ = inline
+    setProp _ i fg = fg { inline = i }
 
-instance HasUnstackableProp (Group ms) where
-    getUnstackable = unstackable
-    setUnstackable u fg = fg { unstackable = u }
+instance HasProp Unstackable (Group ms) where
+    type Prop Unstackable (Group ms) = Bool
+    getProp _ = unstackable
+    setProp _ u fg = fg { unstackable = u }
 
-instance HasWidthsProp (Group ms) where
-    getWidths = widths
-    setWidths w fg = fg { widths = w }
+instance HasProp Widths (Group ms) where
+    type Prop Widths (Group ms) = Txt
+    getProp _ = widths
+    setProp _ w fg = fg { widths = w }

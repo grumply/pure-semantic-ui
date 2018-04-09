@@ -13,21 +13,24 @@ import Semantic.Utils
 
 import Semantic.Properties ((!))
 
-import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
-  ( HasAsProp(..), pattern As
-  , HasAttributesProp(..), pattern Attributes
-  , HasChildrenProp(..), pattern Children
-  , HasClassesProp(..), pattern Classes
-  , HasSizeProp(..), pattern Size
-  , HasActiveProp(..), pattern Active
-  , HasRefProp(..), pattern Ref
-  , HasLinkProp(..), pattern Link
-  , HasOnClickProp(..), pattern OnClick
+  ( pattern As, As(..)
+  , pattern Attributes, Attributes(..)
+  , pattern Children, Children(..)
+  , pattern Classes, Classes(..)
+  , pattern Size, Size(..)
+  , pattern Active, Active(..)
+  , pattern Ref, Ref(..)
+  , pattern Link, Link(..)
+  , pattern OnClick, OnClick(..)
   )
 
-import Semantic.Properties (HasRefProp(..),pattern Ref,HasActiveProp(..),pattern Active)
+import Semantic.Properties
+  ( pattern Ref, Ref(..)
+  , pattern Active, Active(..)
+  )
 
 import qualified Data.List as List
 import Data.Function ((&))
@@ -62,28 +65,30 @@ instance Pure Breadcrumb ms where
                 )
                 children
 
-instance HasAsProp (Breadcrumb ms) where
-    type AsProp (Breadcrumb ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a bc = bc { as = a }
+instance HasProp As (Breadcrumb ms) where
+    type Prop As (Breadcrumb ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a bc = bc { as = a }
 
-instance HasAttributesProp (Breadcrumb ms) where
-    type Attribute (Breadcrumb ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as bc = bc { attributes = as }
+instance HasProp Attributes (Breadcrumb ms) where
+    type Prop Attributes (Breadcrumb ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as bc = bc { attributes = as }
 
-instance HasChildrenProp (Breadcrumb ms) where
-    type Child (Breadcrumb ms) = View ms
-    getChildren = children
-    setChildren cs bc = bc { children = cs }
+instance HasProp Children (Breadcrumb ms) where
+    type Prop Children (Breadcrumb ms) = [View ms]
+    getProp _ = children
+    setProp _ cs bc = bc { children = cs }
 
-instance HasClassesProp (Breadcrumb ms) where
-    getClasses = classes
-    setClasses cs bc = bc { classes = cs }
+instance HasProp Classes (Breadcrumb ms) where
+    type Prop Classes (Breadcrumb ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs bc = bc { classes = cs }
 
-instance HasSizeProp (Breadcrumb ms) where
-    getSize = size
-    setSize sz bc = bc { size = sz }
+instance HasProp Size (Breadcrumb ms) where
+    type Prop Size (Breadcrumb ms) = Txt
+    getProp _ = size
+    setProp _ sz bc = bc { size = sz }
 
 data Divider ms = Divider_
     { as         :: [Feature ms] -> [View ms] -> View ms
@@ -112,24 +117,25 @@ instance Pure Divider ms where
                 )
                 (children ? children $ "/")
 
-instance HasAsProp (Divider ms) where
-    type AsProp (Divider ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a bcd = bcd { as = a }
+instance HasProp As (Divider ms) where
+    type Prop As (Divider ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a bcd = bcd { as = a }
 
-instance HasAttributesProp (Divider ms) where
-    type Attribute (Divider ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as bcd = bcd { attributes = as }
+instance HasProp Attributes (Divider ms) where
+    type Prop Attributes (Divider ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as bcd = bcd { attributes = as }
 
-instance HasChildrenProp (Divider ms) where
-    type Child (Divider ms) = View ms
-    getChildren = children
-    setChildren cs bcd = bcd { children = cs }
+instance HasProp Children (Divider ms) where
+    type Prop Children (Divider ms) = [View ms]
+    getProp _ = children
+    setProp _ cs bcd = bcd { children = cs }
 
-instance HasClassesProp (Divider ms) where
-    getClasses = classes
-    setClasses cs bcd = bcd { classes = cs }
+instance HasProp Classes (Divider ms) where
+    type Prop Classes (Divider ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs bcd = bcd { classes = cs }
 
 data Section ms = Section_
     { as         :: [Feature ms] -> [View ms] -> View ms
@@ -166,39 +172,42 @@ instance Pure Section ms where
                 )
                 children
 
-instance HasAsProp (Section ms) where
-    type AsProp (Section ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a bcs = bcs { as = a }
+instance HasProp As (Section ms) where
+    type Prop As (Section ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a bcs = bcs { as = a }
 
-instance HasAttributesProp (Section ms) where
-    type Attribute (Section ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as bcs = bcs { attributes = as }
+instance HasProp Attributes (Section ms) where
+    type Prop Attributes (Section ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as bcs = bcs { attributes = as }
 
-instance HasChildrenProp (Section ms) where
-    type Child (Section ms) = View ms
-    getChildren = children
-    setChildren cs bcs = bcs { children = cs }
+instance HasProp Children (Section ms) where
+    type Prop Children (Section ms) = [View ms]
+    getProp _ = children
+    setProp _ cs bcs = bcs { children = cs }
 
-instance HasClassesProp (Section ms) where
-    getClasses = classes
-    setClasses cs bcs = bcs { classes = cs }
+instance HasProp Classes (Section ms) where
+    type Prop Classes (Section ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs bcs = bcs { classes = cs }
 
-instance HasActiveProp (Section ms) where
-    getActive = active
-    setActive a bcs = bcs { active = a }
+instance HasProp Active (Section ms) where
+    type Prop Active (Section ms) = Bool
+    getProp _ = active
+    setProp _ a bcs = bcs { active = a }
 
-instance HasRefProp (Section ms) where
-    type RefProp (Section ms) = Feature ms
-    getRef = ref
-    setRef r bcs = bcs { ref = r }
+instance HasProp Ref (Section ms) where
+    type Prop Ref (Section ms) = Feature ms
+    getProp _ = ref
+    setProp _ r bcs = bcs { ref = r }
 
-instance HasLinkProp (Section ms) where
-    getLink = link
-    setLink l bcs = bcs { link = l }
+instance HasProp Link (Section ms) where
+    type Prop Link (Section ms) = Bool
+    getProp _ = link
+    setProp _ l bcs = bcs { link = l }
 
-instance HasOnClickProp (Section ms) where
-    type OnClickProp (Section ms) = Ef ms IO ()
-    getOnClick = onClick
-    setOnClick oc bcs = bcs { onClick = oc }
+instance HasProp OnClick (Section ms) where
+    type Prop OnClick (Section ms) = Ef ms IO ()
+    getProp _ = onClick
+    setProp _ oc bcs = bcs { onClick = oc }

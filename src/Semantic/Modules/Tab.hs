@@ -10,19 +10,19 @@ import Pure.View hiding (active,Tab)
 
 import Semantic.Utils
 
-import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
-  ( HasAsProp(..), pattern As
-  , HasAttributesProp(..), pattern Attributes
-  , HasChildrenProp(..), pattern Children
-  , HasClassesProp(..), pattern Classes
-  , HasActiveProp(..), pattern Active
-  , HasLoadingProp(..), pattern Loading
+  ( pattern As, As(..)
+  , pattern Attributes, Attributes(..)
+  , pattern Children, Children(..)
+  , pattern Classes, Classes(..)
+  , pattern Active, Active(..)
+  , pattern Loading, Loading(..)
   )
 
 import Semantic.Properties
-  ( HasAttachedProp(..), pattern Attached )
+  ( pattern Attached, Attached(..) )
 
 import Semantic.Elements.Segment (pattern Segment)
 
@@ -42,24 +42,25 @@ pattern Tab t = View t
 instance Pure Tab ms where
     render Tab_ {..} = as ( ClassList classes : attributes ) children
 
-instance HasAsProp (Tab ms) where
-    type AsProp (Tab ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs f t = t { as = f }
+instance HasProp As (Tab ms) where
+    type Prop As (Tab ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ f t = t { as = f }
 
-instance HasAttributesProp (Tab ms) where
-    type Attribute (Tab ms) = Feature ms
-    getAttributes = attributes
-    setAttributes cs t = t { attributes = cs }
+instance HasProp Attributes (Tab ms) where
+    type Prop Attributes (Tab ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ cs t = t { attributes = cs }
 
-instance HasChildrenProp (Tab ms) where
-    type Child (Tab ms) = View ms
-    getChildren = children
-    setChildren cs t = t { children = cs }
+instance HasProp Children (Tab ms) where
+    type Prop Children (Tab ms) = [View ms]
+    getProp _ = children
+    setProp _ cs t = t { children = cs }
 
-instance HasClassesProp (Tab ms) where
-    getClasses = classes
-    setClasses cs t = t { classes = cs }
+instance HasProp Classes (Tab ms) where
+    type Prop Classes (Tab ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs t = t { classes = cs }
 
 data Pane ms = Pane_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -98,29 +99,32 @@ instance Pure Pane ms where
                 )
                 children
 
-instance HasAsProp (Pane ms) where
-    type AsProp (Pane ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs f tp = tp { as = f }
+instance HasProp As (Pane ms) where
+    type Prop As (Pane ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ f tp = tp { as = f }
 
-instance HasAttributesProp (Pane ms) where
-    type Attribute (Pane ms) = Feature ms
-    getAttributes = attributes
-    setAttributes cs tp = tp { attributes = cs }
+instance HasProp Attributes (Pane ms) where
+    type Prop Attributes (Pane ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ cs tp = tp { attributes = cs }
 
-instance HasChildrenProp (Pane ms) where
-    type Child (Pane ms) = View ms
-    getChildren = children
-    setChildren cs tp = tp { children = cs }
+instance HasProp Children (Pane ms) where
+    type Prop Children (Pane ms) = [View ms]
+    getProp _ = children
+    setProp _ cs tp = tp { children = cs }
 
-instance HasClassesProp (Pane ms) where
-    getClasses = classes
-    setClasses cs tp = tp { classes = cs }
+instance HasProp Classes (Pane ms) where
+    type Prop Classes (Pane ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs tp = tp { classes = cs }
 
-instance HasActiveProp (Pane ms) where
-    getActive = active
-    setActive a tp = tp { active = a }
+instance HasProp Active (Pane ms) where
+    type Prop Active (Pane ms) = Bool
+    getProp _ = active
+    setProp _ a tp = tp { active = a }
 
-instance HasLoadingProp (Pane ms) where
-    getLoading = loading
-    setLoading l tp = tp { loading = l }
+instance HasProp Loading (Pane ms) where
+    type Prop Loading (Pane ms) = Bool
+    getProp _ = loading
+    setProp _ l tp = tp { loading = l }

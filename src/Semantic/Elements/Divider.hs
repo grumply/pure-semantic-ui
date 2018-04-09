@@ -9,20 +9,20 @@ import Pure.View as View hiding (hidden,horizontal,vertical)
 
 import Semantic.Utils
 
-import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
-  ( HasAsProp(..), pattern As
-  , HasAttributesProp(..), pattern Attributes
-  , HasChildrenProp(..), pattern Children
-  , HasClassesProp(..), pattern Classes
-  , HasClearingProp(..), pattern Clearing
-  , HasFittedProp(..), pattern Fitted
-  , HasHiddenProp(..), pattern Hidden
-  , HasHorizontalProp(..), pattern Horizontal
-  , HasInvertedProp(..), pattern Inverted
-  , HasSectionProp(..), pattern Section
-  , HasVerticalProp(..), pattern Vertical
+  ( pattern As, As(..)
+  , pattern Attributes, Attributes(..)
+  , pattern Children, Children(..)
+  , pattern Classes, Classes(..)
+  , pattern Clearing, Clearing(..)
+  , pattern Fitted, Fitted(..)
+  , pattern Hidden, Hidden(..)
+  , pattern Horizontal, Horizontal(..)
+  , pattern Inverted, Inverted(..)
+  , pattern Section, Section(..)
+  , pattern Vertical, Vertical(..)
   )
 
 data Divider ms = Divider_
@@ -67,49 +67,57 @@ instance Pure Divider ms where
                 )
                 children
 
-instance HasAsProp (Divider ms) where
-    type AsProp (Divider ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs f d = d { as = f }
+instance HasProp As (Divider ms) where
+    type Prop As (Divider ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ f d = d { as = f }
 
-instance HasAttributesProp (Divider ms) where
-    type Attribute (Divider ms) = Feature ms
-    getAttributes = attributes
-    setAttributes cs d = d { attributes = cs }
+instance HasProp Attributes (Divider ms) where
+    type Prop Attributes (Divider ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ cs d = d { attributes = cs }
 
-instance HasChildrenProp (Divider ms) where
-    type Child (Divider ms) = View ms
-    getChildren = children
-    setChildren cs d = d { children = cs }
+instance HasProp Children (Divider ms) where
+    type Prop Children (Divider ms) = [View ms]
+    getProp _ = children
+    setProp _ cs d = d { children = cs }
 
-instance HasClassesProp (Divider ms) where
-    getClasses = classes
-    setClasses cs d = d { classes = cs }
+instance HasProp Classes (Divider ms) where
+    type Prop Classes (Divider ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs d = d { classes = cs }
 
-instance HasClearingProp (Divider ms) where
-    getClearing = clearing
-    setClearing c d = d { clearing = c }
+instance HasProp Clearing (Divider ms) where
+    type Prop Clearing (Divider ms) = Bool
+    getProp _ = clearing
+    setProp _ c d = d { clearing = c }
 
-instance HasFittedProp (Divider ms) where
-    getFitted = fitted
-    setFitted f d = d { fitted = f }
+instance HasProp Fitted (Divider ms) where
+    type Prop Fitted (Divider ms) = Bool
+    getProp _ = fitted
+    setProp _ f d = d { fitted = f }
 
-instance HasHiddenProp (Divider ms) where
-    getHidden = hidden
-    setHidden h d = d { hidden = h }
+instance HasProp Hidden (Divider ms) where
+    type Prop Hidden (Divider ms) = Bool
+    getProp _ = hidden
+    setProp _ h d = d { hidden = h }
 
-instance HasHorizontalProp (Divider ms) where
-    getHorizontal = horizontal
-    setHorizontal h d = d { horizontal = h }
+instance HasProp Horizontal (Divider ms) where
+    type Prop Horizontal (Divider ms) = Bool
+    getProp _ = horizontal
+    setProp _ h d = d { horizontal = h }
 
-instance HasInvertedProp (Divider ms) where
-    getInverted = inverted
-    setInverted i d = d { inverted = i }
+instance HasProp Inverted (Divider ms) where
+    type Prop Inverted (Divider ms) = Bool
+    getProp _ = inverted
+    setProp _ i d = d { inverted = i }
 
-instance HasSectionProp (Divider ms) where
-    getSection = section
-    setSection s d = d { section = s }
+instance HasProp Section (Divider ms) where
+    type Prop Section (Divider ms) = Bool
+    getProp _ = section
+    setProp _ s d = d { section = s }
 
-instance HasVerticalProp (Divider ms) where
-    getVertical = vertical
-    setVertical v d = d { vertical = v }
+instance HasProp Vertical (Divider ms) where
+    type Prop Vertical (Divider ms) = Bool
+    getProp _ = vertical
+    setProp _ v d = d { vertical = v }

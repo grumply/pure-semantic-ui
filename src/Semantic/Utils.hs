@@ -32,37 +32,11 @@ multiProp val key
         . Txt.unwords
         $ val
 
-widthProp :: Width -> Txt -> Bool -> Txt
+widthProp :: Txt -> Txt -> Bool -> Txt
 widthProp val widthClass canEqual
     | isNil val = ""
-    | canEqual && val == Equal = "equal width"
+    | canEqual && val == "equal" = "equal width"
     | otherwise = toTxt val <>> widthClass
-
-newtype Width = Width Txt deriving (Eq)
-instance Default Width where def = Width ""
-instance Cond Width where
-    nil = Width ""
-    isNil (Width "") = True
-    isNil _          = False
-instance ToTxt Width where toTxt (Width w) = w
-
-pattern Equal = Width "equal"
-pattern One = Width "one"
-pattern Two = Width "two"
-pattern Three = Width "three"
-pattern Four = Width "four"
-pattern Five = Width "five"
-pattern Six = Width "six"
-pattern Seven = Width "seven"
-pattern Eight = Width "eight"
-pattern Nine = Width "nine"
-pattern Ten = Width "ten"
-pattern Eleven = Width "eleven"
-pattern Twelve = Width "twelve"
-pattern Thirteen = Width "thirteen"
-pattern Fourteen = Width "fourteen"
-pattern Fifteen = Width "fifteen"
-pattern Sixteen = Width "sixteen"
 
 only :: [a] -> a
 only [a] = a

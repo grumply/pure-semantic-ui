@@ -19,34 +19,34 @@ import Semantic.Utils
 
 import Semantic.Addons.Proxy
 
-import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
-  ( HasAttributesProp(..)               , pattern Attributes
-  , HasChildrenProp(..)                 , pattern Children
-  , HasClassesProp(..)                  , pattern Classes
-  , HasCloseOnDocumentClickProp(..)     , pattern CloseOnDocumentClick
-  , HasCloseOnEscapeProp(..)            , pattern CloseOnEscape
-  , HasCloseOnPortalMouseLeaveProp(..)  , pattern CloseOnPortalMouseLeave
-  , HasCloseOnRootNodeClickProp(..)     , pattern CloseOnRootNodeClick
-  , HasCloseOnTriggerBlurProp(..)       , pattern CloseOnTriggerBlur
-  , HasCloseOnTriggerClickProp(..)      , pattern CloseOnTriggerClick
-  , HasCloseOnTriggerMouseLeaveProp(..) , pattern CloseOnTriggerMouseLeave
-  , HasDefaultOpenProp(..)              , pattern DefaultOpen
-  , HasMountNodeProp(..)                , pattern MountNode
-  , HasMouseEnterDelayProp(..)          , pattern MouseEnterDelay
-  , HasMouseLeaveDelayProp(..)          , pattern MouseLeaveDelay
-  , HasOnCloseProp(..)                  , pattern OnClose
-  , HasOnMountProp(..)                  , pattern OnMount
-  , HasOnOpenProp(..)                   , pattern OnOpen
-  , HasOnUnmountProp(..)                , pattern OnUnmount
-  , HasOpenProp(..)                     , pattern Open
-  , HasOpenOnTriggerClickProp(..)       , pattern OpenOnTriggerClick
-  , HasOpenOnTriggerFocusProp(..)       , pattern OpenOnTriggerFocus
-  , HasOpenOnTriggerMouseEnterProp(..)  , pattern OpenOnTriggerMouseEnter
-  , HasPrependProp(..)                  , pattern Prepend
-  , HasTriggerProp(..)                  , pattern Trigger
-  , HasInnerRefProp(..)                 , pattern InnerRef
+  ( pattern Attributes, Attributes(..)
+  , pattern Children, Children(..)
+  , pattern Classes, Classes(..)
+  , pattern CloseOnDocumentClick, CloseOnDocumentClick(..)
+  , pattern CloseOnEscape, CloseOnEscape(..)
+  , pattern CloseOnPortalMouseLeave, CloseOnPortalMouseLeave(..)
+  , pattern CloseOnRootNodeClick, CloseOnRootNodeClick(..)
+  , pattern CloseOnTriggerBlur, CloseOnTriggerBlur(..)
+  , pattern CloseOnTriggerClick, CloseOnTriggerClick(..)
+  , pattern CloseOnTriggerMouseLeave, CloseOnTriggerMouseLeave(..)
+  , pattern DefaultOpen, DefaultOpen(..)
+  , pattern MountNode, MountNode(..)
+  , pattern MouseEnterDelay, MouseEnterDelay(..)
+  , pattern MouseLeaveDelay, MouseLeaveDelay(..)
+  , pattern OnClose, OnClose(..)
+  , pattern OnMount, OnMount(..)
+  , pattern OnOpen, OnOpen(..)
+  , pattern OnUnmount, OnUnmount(..)
+  , pattern Open, Open(..)
+  , pattern OpenOnTriggerClick, OpenOnTriggerClick(..)
+  , pattern OpenOnTriggerFocus, OpenOnTriggerFocus(..)
+  , pattern OpenOnTriggerMouseEnter, OpenOnTriggerMouseEnter(..)
+  , pattern Prepend, Prepend(..)
+  , pattern Trigger, Trigger(..)
+  , pattern InnerRef, InnerRef(..)
   )
 
 -- used safely
@@ -351,105 +351,122 @@ instance Pure Portal ms where
                             )
                     }
 
-instance HasAttributesProp (Portal ms) where
-    type Attribute (Portal ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as p = p { attributes = as }
+instance HasProp Attributes (Portal ms) where
+    type Prop Attributes (Portal ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as p = p { attributes = as }
 
-instance HasChildrenProp (Portal ms) where
-    type Child (Portal ms) = View ms
-    getChildren = children
-    setChildren cs p = p { children = cs }
+instance HasProp Children (Portal ms) where
+    type Prop Children (Portal ms) = [View ms]
+    getProp _ = children
+    setProp _ cs p = p { children = cs }
 
-instance HasClassesProp (Portal ms) where
-    getClasses = classes
-    setClasses cs p = p { classes = cs }
+instance HasProp Classes (Portal ms) where
+    type Prop Classes (Portal ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs p = p { classes = cs }
 
-instance HasCloseOnDocumentClickProp (Portal ms) where
-    getCloseOnDocumentClick = closeOnDocumentClick
-    setCloseOnDocumentClick codc p = p { closeOnDocumentClick = codc }
+instance HasProp CloseOnDocumentClick (Portal ms) where
+    type Prop CloseOnDocumentClick (Portal ms) = Bool
+    getProp _ = closeOnDocumentClick
+    setProp _ codc p = p { closeOnDocumentClick = codc }
 
-instance HasCloseOnEscapeProp (Portal ms) where
-    getCloseOnEscape = closeOnEscape
-    setCloseOnEscape coe p = p { closeOnEscape = coe }
+instance HasProp CloseOnEscape (Portal ms) where
+    type Prop CloseOnEscape (Portal ms) = Bool
+    getProp _ = closeOnEscape
+    setProp _ coe p = p { closeOnEscape = coe }
 
-instance HasCloseOnPortalMouseLeaveProp (Portal ms) where
-    getCloseOnPortalMouseLeave = closeOnPortalMouseLeave
-    setCloseOnPortalMouseLeave copml p = p { closeOnPortalMouseLeave = copml }
+instance HasProp CloseOnPortalMouseLeave (Portal ms) where
+    type Prop CloseOnPortalMouseLeave (Portal ms) = Bool
+    getProp _ = closeOnPortalMouseLeave
+    setProp _ copml p = p { closeOnPortalMouseLeave = copml }
 
-instance HasCloseOnRootNodeClickProp (Portal ms) where
-    getCloseOnRootNodeClick = closeOnRootNodeClick
-    setCloseOnRootNodeClick cornc p = p { closeOnRootNodeClick = cornc }
+instance HasProp CloseOnRootNodeClick (Portal ms) where
+    type Prop CloseOnRootNodeClick (Portal ms) = Bool
+    getProp _ = closeOnRootNodeClick
+    setProp _ cornc p = p { closeOnRootNodeClick = cornc }
 
-instance HasCloseOnTriggerBlurProp (Portal ms) where
-    getCloseOnTriggerBlur = closeOnTriggerBlur
-    setCloseOnTriggerBlur cotb p = p { closeOnTriggerBlur = cotb }
+instance HasProp CloseOnTriggerBlur (Portal ms) where
+    type Prop CloseOnTriggerBlur (Portal ms) = Bool
+    getProp _ = closeOnTriggerBlur
+    setProp _ cotb p = p { closeOnTriggerBlur = cotb }
 
-instance HasCloseOnTriggerClickProp (Portal ms) where
-    getCloseOnTriggerClick = closeOnTriggerClick
-    setCloseOnTriggerClick cotc p = p { closeOnTriggerClick = cotc }
+instance HasProp CloseOnTriggerClick (Portal ms) where
+    type Prop CloseOnTriggerClick (Portal ms) = Bool
+    getProp _ = closeOnTriggerClick
+    setProp _ cotc p = p { closeOnTriggerClick = cotc }
 
-instance HasCloseOnTriggerMouseLeaveProp (Portal ms) where
-    getCloseOnTriggerMouseLeave = closeOnTriggerMouseLeave
-    setCloseOnTriggerMouseLeave cotml p = p { closeOnTriggerMouseLeave = cotml }
+instance HasProp CloseOnTriggerMouseLeave (Portal ms) where
+    type Prop CloseOnTriggerMouseLeave (Portal ms) = Bool
+    getProp _ = closeOnTriggerMouseLeave
+    setProp _ cotml p = p { closeOnTriggerMouseLeave = cotml }
 
-instance HasDefaultOpenProp (Portal ms) where
-    getDefaultOpen = defaultOpen
-    setDefaultOpen o p = p { defaultOpen = o }
+instance HasProp DefaultOpen (Portal ms) where
+    type Prop DefaultOpen (Portal ms) = Bool
+    getProp _ = defaultOpen
+    setProp _ o p = p { defaultOpen = o }
 
-instance HasMountNodeProp (Portal ms) where
-    getMountNode = mountNode
-    setMountNode mn p = p { mountNode = mn }
+instance HasProp MountNode (Portal ms) where
+    type Prop MountNode (Portal ms) = Maybe JSV
+    getProp _ = mountNode
+    setProp _ mn p = p { mountNode = mn }
 
-instance HasMouseEnterDelayProp (Portal ms) where
-    getMouseEnterDelay = mouseEnterDelay
-    setMouseEnterDelay med p = p { mouseEnterDelay = med }
+instance HasProp MouseEnterDelay (Portal ms) where
+    type Prop MouseEnterDelay (Portal ms) = Int
+    getProp _ = mouseEnterDelay
+    setProp _ med p = p { mouseEnterDelay = med }
 
-instance HasMouseLeaveDelayProp (Portal ms) where
-    getMouseLeaveDelay = mouseLeaveDelay
-    setMouseLeaveDelay mld p = p { mouseLeaveDelay = mld }
+instance HasProp MouseLeaveDelay (Portal ms) where
+    type Prop MouseLeaveDelay (Portal ms) = Int
+    getProp _ = mouseLeaveDelay
+    setProp _ mld p = p { mouseLeaveDelay = mld }
 
-instance HasOnCloseProp (Portal ms) where
-    type OnCloseProp (Portal ms) = Ef ms IO ()
-    getOnClose = onClose
-    setOnClose oc p = p { onClose = oc }
+instance HasProp OnClose (Portal ms) where
+    type Prop OnClose (Portal ms) = Ef ms IO ()
+    getProp _ = onClose
+    setProp _ oc p = p { onClose = oc }
 
-instance HasOnMountProp (Portal ms) where
-    type OnMountProp (Portal ms) = Ef ms IO ()
-    getOnMount = onMount
-    setOnMount om p = p { onMount = om }
+instance HasProp OnMount (Portal ms) where
+    type Prop OnMount (Portal ms) = Ef ms IO ()
+    getProp _ = onMount
+    setProp _ om p = p { onMount = om }
 
-instance HasOnOpenProp (Portal ms) where
-    type OnOpenProp (Portal ms) = Evt -> Ef ms IO ()
-    getOnOpen = onOpen
-    setOnOpen oo p = p { onOpen = oo }
+instance HasProp OnOpen (Portal ms) where
+    type Prop OnOpen (Portal ms) = Evt -> Ef ms IO ()
+    getProp _ = onOpen
+    setProp _ oo p = p { onOpen = oo }
 
-instance HasOnUnmountProp (Portal ms) where
-    type OnUnmountProp (Portal ms) = Ef ms IO ()
-    getOnUnmount = onUnmount
-    setOnUnmount ou p = p { onUnmount = ou }
+instance HasProp OnUnmount (Portal ms) where
+    type Prop OnUnmount (Portal ms) = Ef ms IO ()
+    getProp _ = onUnmount
+    setProp _ ou p = p { onUnmount = ou }
 
-instance HasOpenProp (Portal ms) where
-    getOpen = open
-    setOpen o p = p { open = o }
+instance HasProp Open (Portal ms) where
+    type Prop Open (Portal ms) = Bool
+    getProp _ = open
+    setProp _ o p = p { open = o }
 
-instance HasOpenOnTriggerClickProp (Portal ms) where
-    getOpenOnTriggerClick = openOnTriggerClick
-    setOpenOnTriggerClick ootc p = p { openOnTriggerClick = ootc }
+instance HasProp OpenOnTriggerClick (Portal ms) where
+    type Prop OpenOnTriggerClick (Portal ms) = Bool
+    getProp _ = openOnTriggerClick
+    setProp _ ootc p = p { openOnTriggerClick = ootc }
 
-instance HasOpenOnTriggerFocusProp (Portal ms) where
-    getOpenOnTriggerFocus = openOnTriggerFocus
-    setOpenOnTriggerFocus ootf p = p { openOnTriggerFocus = ootf }
+instance HasProp OpenOnTriggerFocus (Portal ms) where
+    type Prop OpenOnTriggerFocus (Portal ms) = Bool
+    getProp _ = openOnTriggerFocus
+    setProp _ ootf p = p { openOnTriggerFocus = ootf }
 
-instance HasOpenOnTriggerMouseEnterProp (Portal ms) where
-    getOpenOnTriggerMouseEnter = openOnTriggerMouseEnter
-    setOpenOnTriggerMouseEnter ootme p = p { openOnTriggerMouseEnter = ootme }
+instance HasProp OpenOnTriggerMouseEnter (Portal ms) where
+    type Prop OpenOnTriggerMouseEnter (Portal ms) = Bool
+    getProp _ = openOnTriggerMouseEnter
+    setProp _ ootme p = p { openOnTriggerMouseEnter = ootme }
 
-instance HasPrependProp (Portal ms) where
-    getPrepend = prepend
-    setPrepend pre p = p { prepend = pre }
+instance HasProp Prepend (Portal ms) where
+    type Prop Prepend (Portal ms) = Bool
+    getProp _ = prepend
+    setProp _ pre p = p { prepend = pre }
 
-instance HasTriggerProp (Portal ms) where
-    type TriggerProp (Portal ms) = View ms
-    getTrigger = trigger
-    setTrigger t p = p { trigger = t }
+instance HasProp Trigger (Portal ms) where
+    type Prop Trigger (Portal ms) = View ms
+    getProp _ = trigger
+    setProp _ t p = p { trigger = t }

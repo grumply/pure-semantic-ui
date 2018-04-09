@@ -10,33 +10,33 @@ import Pure.View hiding (color,disabled,textAlign,vertical,horizontal)
 
 import Semantic.Utils
 
-import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
-  ( HasAsProp(..), pattern As
-  , HasAttachedProp(..), pattern Attached
-  , HasAttributesProp(..), pattern Attributes
-  , HasBasicProp(..), pattern Basic
-  , HasChildrenProp(..), pattern Children
-  , HasCircularProp(..), pattern Circular
-  , HasClassesProp(..), pattern Classes
-  , HasClearingProp(..), pattern Clearing
-  , HasColorProp(..), pattern Color
-  , HasCompactProp(..), pattern Compact
-  , HasDisabledProp(..), pattern Disabled
-  , HasFloatedProp(..), pattern Floated
-  , HasInvertedProp(..), pattern Inverted
-  , HasLoadingProp(..), pattern Loading
-  , HasPaddedProp(..), pattern Padded
-  , HasPiledProp(..), pattern Piled
-  , HasRaisedProp(..), pattern Raised
-  , HasSecondaryProp(..), pattern Secondary
-  , HasSizeProp(..), pattern Size
-  , HasStackedProp(..), pattern Stacked
-  , HasTertiaryProp(..), pattern Tertiary
-  , HasTextAlignProp(..), pattern TextAlign
-  , HasVerticalProp(..), pattern Vertical
-  , HasHorizontalProp(..), pattern Horizontal
+  ( pattern As, As(..)
+  , pattern Attached, Attached(..)
+  , pattern Attributes, Attributes(..)
+  , pattern Basic, Basic(..)
+  , pattern Children, Children(..)
+  , pattern Circular, Circular(..)
+  , pattern Classes, Classes(..)
+  , pattern Clearing, Clearing(..)
+  , pattern Color, Color(..)
+  , pattern Compact, Compact(..)
+  , pattern Disabled, Disabled(..)
+  , pattern Floated, Floated(..)
+  , pattern Inverted, Inverted(..)
+  , pattern Loading, Loading(..)
+  , pattern Padded, Padded(..)
+  , pattern Piled, Piled(..)
+  , pattern Raised, Raised(..)
+  , pattern Secondary, Secondary(..)
+  , pattern Size, Size(..)
+  , pattern Stacked, Stacked(..)
+  , pattern Tertiary, Tertiary(..)
+  , pattern TextAlign, TextAlign(..)
+  , pattern Vertical, Vertical(..)
+  , pattern Horizontal, Horizontal(..)
   )
 
 data Segment ms = Segment_
@@ -105,101 +105,120 @@ instance Pure Segment ms where
                 )
                 children
 
-instance HasAsProp (Segment ms) where
-    type AsProp (Segment ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a s = s { as = a }
+instance HasProp As (Segment ms) where
+    type Prop As (Segment ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a s = s { as = a }
 
-instance HasAttachedProp (Segment ms) where
-    type AttachedProp (Segment ms) = Txt
-    getAttached = attached
-    setAttached a s = s { attached = a }
+instance HasProp Attached (Segment ms) where
+    type Prop Attached (Segment ms) = Txt
+    getProp _ = attached
+    setProp _ a s = s { attached = a }
 
-instance HasAttributesProp (Segment ms) where
-    type Attribute (Segment ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as s = s { attributes = as }
+instance HasProp Attributes (Segment ms) where
+    type Prop Attributes (Segment ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as s = s { attributes = as }
 
-instance HasBasicProp (Segment ms) where
-    getBasic = basic
-    setBasic b s = s { basic = b }
+instance HasProp Basic (Segment ms) where
+    type Prop Basic (Segment ms) = Bool
+    getProp _ = basic
+    setProp _ b s = s { basic = b }
 
-instance HasChildrenProp (Segment ms) where
-    type Child (Segment ms) = View ms
-    getChildren = children
-    setChildren cs s = s { children = cs }
+instance HasProp Children (Segment ms) where
+    type Prop Children (Segment ms) = [View ms]
+    getProp _ = children
+    setProp _ cs s = s { children = cs }
 
-instance HasCircularProp (Segment ms) where
-    getCircular = circular
-    setCircular c s = s { circular = c }
+instance HasProp Circular (Segment ms) where
+    type Prop Circular (Segment ms) = Bool
+    getProp _ = circular
+    setProp _ c s = s { circular = c }
 
-instance HasClassesProp (Segment ms) where
-    getClasses = classes
-    setClasses cs s = s { classes = cs }
+instance HasProp Classes (Segment ms) where
+    type Prop Classes (Segment ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs s = s { classes = cs }
 
-instance HasClearingProp (Segment ms) where
-    getClearing = clearing
-    setClearing c s = s { clearing = c }
+instance HasProp Clearing (Segment ms) where
+    type Prop Clearing (Segment ms) = Bool
+    getProp _ = clearing
+    setProp _ c s = s { clearing = c }
 
-instance HasColorProp (Segment ms) where
-    getColor = color
-    setColor c s = s { color = c }
+instance HasProp Color (Segment ms) where
+    type Prop Color (Segment ms) = Txt
+    getProp _ = color
+    setProp _ c s = s { color = c }
 
-instance HasCompactProp (Segment ms) where
-    getCompact = compact
-    setCompact c s = s { compact = c }
+instance HasProp Compact (Segment ms) where
+    type Prop Compact (Segment ms) = Bool
+    getProp _ = compact
+    setProp _ c s = s { compact = c }
 
-instance HasDisabledProp (Segment ms) where
-    getDisabled = disabled
-    setDisabled d s = s { disabled = d }
+instance HasProp Disabled (Segment ms) where
+    type Prop Disabled (Segment ms) = Bool
+    getProp _ = disabled
+    setProp _ d s = s { disabled = d }
 
-instance HasFloatedProp (Segment ms) where
-    getFloated = floated
-    setFloated f s = s { floated = f }
+instance HasProp Floated (Segment ms) where
+    type Prop Floated (Segment ms) = Txt
+    getProp _ = floated
+    setProp _ f s = s { floated = f }
 
-instance HasInvertedProp (Segment ms) where
-    getInverted = inverted
-    setInverted i s = s { inverted = i }
+instance HasProp Inverted (Segment ms) where
+    type Prop Inverted (Segment ms) = Bool
+    getProp _ = inverted
+    setProp _ i s = s { inverted = i }
 
-instance HasLoadingProp (Segment ms) where
-    getLoading = loading
-    setLoading l s = s { loading = l }
+instance HasProp Loading (Segment ms) where
+    type Prop Loading (Segment ms) = Bool
+    getProp _ = loading
+    setProp _ l s = s { loading = l }
 
-instance HasPaddedProp (Segment ms) where
-    getPadded = padded
-    setPadded p s = s { padded = p }
+instance HasProp Padded (Segment ms) where
+    type Prop Padded (Segment ms) = Maybe Txt
+    getProp _ = padded
+    setProp _ p s = s { padded = p }
 
-instance HasPiledProp (Segment ms) where
-    getPiled = piled
-    setPiled p s = s { piled = p }
+instance HasProp Piled (Segment ms) where
+    type Prop Piled (Segment ms) = Bool
+    getProp _ = piled
+    setProp _ p s = s { piled = p }
 
-instance HasRaisedProp (Segment ms) where
-    getRaised = raised
-    setRaised r s = s { raised = r }
+instance HasProp Raised (Segment ms) where
+    type Prop Raised (Segment ms) = Bool
+    getProp _ = raised
+    setProp _ r s = s { raised = r }
 
-instance HasSecondaryProp (Segment ms) where
-    getSecondary = secondary
-    setSecondary sec s = s { secondary = sec }
+instance HasProp Secondary (Segment ms) where
+    type Prop Secondary (Segment ms) = Bool
+    getProp _ = secondary
+    setProp _ sec s = s { secondary = sec }
 
-instance HasSizeProp (Segment ms) where
-    getSize = size
-    setSize sz s = s { size = sz }
+instance HasProp Size (Segment ms) where
+    type Prop Size (Segment ms) = Txt
+    getProp _ = size
+    setProp _ sz s = s { size = sz }
 
-instance HasStackedProp (Segment ms) where
-    getStacked = stacked
-    setStacked stkd s = s { stacked = stkd }
+instance HasProp Stacked (Segment ms) where
+    type Prop Stacked (Segment ms) = Bool
+    getProp _ = stacked
+    setProp _ stkd s = s { stacked = stkd }
 
-instance HasTertiaryProp (Segment ms) where
-    getTertiary = tertiary
-    setTertiary t s = s { tertiary = t }
+instance HasProp Tertiary (Segment ms) where
+    type Prop Tertiary (Segment ms) = Bool
+    getProp _ = tertiary
+    setProp _ t s = s { tertiary = t }
 
-instance HasTextAlignProp (Segment ms) where
-    getTextAlign = textAlign
-    setTextAlign ta s = s { textAlign = ta }
+instance HasProp TextAlign (Segment ms) where
+    type Prop TextAlign (Segment ms) = Txt
+    getProp _ = textAlign
+    setProp _ ta s = s { textAlign = ta }
 
-instance HasVerticalProp (Segment ms) where
-    getVertical = vertical
-    setVertical v s = s { vertical = v }
+instance HasProp Vertical (Segment ms) where
+    type Prop Vertical (Segment ms) = Bool
+    getProp _ = vertical
+    setProp _ v s = s { vertical = v }
 
 data Group ms = Group_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -241,45 +260,52 @@ instance Pure Group ms where
                 )
                 children
 
-instance HasAsProp (Group ms) where
-    type AsProp (Group ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a sg = sg { as = a }
+instance HasProp As (Group ms) where
+    type Prop As (Group ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a sg = sg { as = a }
 
-instance HasAttributesProp (Group ms) where
-    type Attribute (Group ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as sg = sg { attributes = as }
+instance HasProp Attributes (Group ms) where
+    type Prop Attributes (Group ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as sg = sg { attributes = as }
 
-instance HasChildrenProp (Group ms) where
-    type Child (Group ms) = View ms
-    getChildren = children
-    setChildren cs sg = sg { children = cs }
+instance HasProp Children (Group ms) where
+    type Prop Children (Group ms) = [View ms]
+    getProp _ = children
+    setProp _ cs sg = sg { children = cs }
 
-instance HasClassesProp (Group ms) where
-    getClasses = classes
-    setClasses cs sg = sg { classes = cs }
+instance HasProp Classes (Group ms) where
+    type Prop Classes (Group ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs sg = sg { classes = cs }
 
-instance HasCompactProp (Group ms) where
-    getCompact = compact
-    setCompact c sg = sg { compact = c }
+instance HasProp Compact (Group ms) where
+    type Prop Compact (Group ms) = Bool
+    getProp _ = compact
+    setProp _ c sg = sg { compact = c }
 
-instance HasHorizontalProp (Group ms) where
-    getHorizontal = horizontal
-    setHorizontal h sg = sg { horizontal = h }
+instance HasProp Horizontal (Group ms) where
+    type Prop Horizontal (Group ms) = Bool
+    getProp _ = horizontal
+    setProp _ h sg = sg { horizontal = h }
 
-instance HasPiledProp (Group ms) where
-    getPiled = piled
-    setPiled p sg = sg { piled = p }
+instance HasProp Piled (Group ms) where
+    type Prop Piled (Group ms) = Bool
+    getProp _ = piled
+    setProp _ p sg = sg { piled = p }
 
-instance HasRaisedProp (Group ms) where
-    getRaised = raised
-    setRaised r sg = sg { raised = r }
+instance HasProp Raised (Group ms) where
+    type Prop Raised (Group ms) = Bool
+    getProp _ = raised
+    setProp _ r sg = sg { raised = r }
 
-instance HasSizeProp (Group ms) where
-    getSize = size
-    setSize s sg = sg { size = s }
+instance HasProp Size (Group ms) where
+    type Prop Size (Group ms) = Txt
+    getProp _ = size
+    setProp _ s sg = sg { size = s }
 
-instance HasStackedProp (Group ms) where
-    getStacked = stacked
-    setStacked s sg = sg { stacked = s }
+instance HasProp Stacked (Group ms) where
+    type Prop Stacked (Group ms) = Bool
+    getProp _ = stacked
+    setProp _ s sg = sg { stacked = s }

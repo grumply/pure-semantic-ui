@@ -5,20 +5,21 @@ module Semantic.Elements.Reveal
   ) where
 
 import GHC.Generics as G
-import Pure.View hiding (disabled)
+import Pure.View hiding (disabled,active)
 
 import Semantic.Utils
 
-import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
-  ( HasAnimatedProp(..), pattern Animated
-  , HasAsProp(..), pattern As
-  , HasAttributesProp(..), pattern Attributes
-  , HasChildrenProp(..), pattern Children
-  , HasClassesProp(..), pattern Classes
-  , HasDisabledProp(..), pattern Disabled
-  , HasInstantProp(..), pattern Instant
+  ( pattern Animated, Animated(..)
+  , pattern As, As(..)
+  , pattern Active, Active(..)
+  , pattern Attributes, Attributes(..)
+  , pattern Children, Children(..)
+  , pattern Classes, Classes(..)
+  , pattern Disabled, Disabled(..)
+  , pattern Instant, Instant(..)
   )
 
 data Reveal ms = Reveal_
@@ -57,34 +58,42 @@ instance Pure Reveal ms where
                 )
                 children
 
-instance HasAnimatedProp (Reveal ms) where
-    type AnimatedProp (Reveal ms) = Txt
-    getAnimated = animated
-    setAnimated a r = r { animated = a }
+instance HasProp Active (Reveal ms) where
+    type Prop Active (Reveal ms) = Bool
+    getProp _ = active
+    setProp _ a r = r { active = a }
 
-instance HasAsProp (Reveal ms) where
-    type AsProp (Reveal ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs f r = r { as = f }
+instance HasProp Animated (Reveal ms) where
+    type Prop Animated (Reveal ms) = Txt
+    getProp _ = animated
+    setProp _ a r = r { animated = a }
 
-instance HasAttributesProp (Reveal ms) where
-    type Attribute (Reveal ms) = Feature ms
-    getAttributes = attributes
-    setAttributes cs r = r { attributes = cs }
+instance HasProp As (Reveal ms) where
+    type Prop As (Reveal ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ f r = r { as = f }
 
-instance HasChildrenProp (Reveal ms) where
-    type Child (Reveal ms) = View ms
-    getChildren = children
-    setChildren cs r = r { children = cs }
+instance HasProp Attributes (Reveal ms) where
+    type Prop Attributes (Reveal ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ cs r = r { attributes = cs }
 
-instance HasClassesProp (Reveal ms) where
-    getClasses = classes
-    setClasses cs r = r { classes = cs }
+instance HasProp Children (Reveal ms) where
+    type Prop Children (Reveal ms) = [View ms]
+    getProp _ = children
+    setProp _ cs r = r { children = cs }
 
-instance HasDisabledProp (Reveal ms) where
-    getDisabled = disabled
-    setDisabled d r = r { disabled = d }
+instance HasProp Classes (Reveal ms) where
+    type Prop Classes (Reveal ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs r = r { classes = cs }
 
-instance HasInstantProp (Reveal ms) where
-    getInstant = instant
-    setInstant i r = r { instant = i }
+instance HasProp Disabled (Reveal ms) where
+    type Prop Disabled (Reveal ms) = Bool
+    getProp _ = disabled
+    setProp _ d r = r { disabled = d }
+
+instance HasProp Instant (Reveal ms) where
+    type Prop Instant (Reveal ms) = Bool
+    getProp _ = instant
+    setProp _ i r = r { instant = i }

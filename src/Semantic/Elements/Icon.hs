@@ -10,26 +10,26 @@ import Pure.View as View hiding (color,disabled,name)
 
 import Semantic.Utils
 
-import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
-  ( HasAsProp(..), pattern As
-  , HasAttributesProp(..), pattern Attributes
-  , HasChildrenProp(..), pattern Children
-  , HasBorderedProp(..), pattern Bordered
-  , HasCircularProp(..), pattern Circular
-  , HasClassesProp(..), pattern Classes
-  , HasColorProp(..), pattern Color
-  , HasCornerProp(..), pattern Corner
-  , HasDisabledProp(..), pattern Disabled
-  , HasFittedProp(..), pattern Fitted
-  , HasFlippedProp(..), pattern Flipped
-  , HasInvertedProp(..), pattern Inverted
-  , HasLinkProp(..), pattern Link
-  , HasLoadingProp(..), pattern Loading
-  , HasNameProp(..), pattern Name
-  , HasRotatedProp(..), pattern Rotated
-  , HasSizeProp(..), pattern Size
+  ( pattern As, As(..)
+  , pattern Attributes, Attributes(..)
+  , pattern Children, Children(..)
+  , pattern Bordered, Bordered(..)
+  , pattern Circular, Circular(..)
+  , pattern Classes, Classes(..)
+  , pattern Color, Color(..)
+  , pattern Corner, Corner(..)
+  , pattern Disabled, Disabled(..)
+  , pattern Fitted, Fitted(..)
+  , pattern Flipped, Flipped(..)
+  , pattern Inverted, Inverted(..)
+  , pattern Link, Link(..)
+  , pattern Loading, Loading(..)
+  , pattern Name, Name(..)
+  , pattern Rotated, Rotated(..)
+  , pattern Size, Size(..)
   )
 
 data Icon ms = Icon_
@@ -85,72 +85,85 @@ instance Pure Icon ms where
                 )
                 []
 
-instance HasAsProp (Icon ms) where
-    type AsProp (Icon ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs f i = i { as = f }
+instance HasProp As (Icon ms) where
+    type Prop As (Icon ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ f i = i { as = f }
 
-instance HasAttributesProp (Icon ms) where
-    type Attribute (Icon ms) = Feature ms
-    getAttributes = attributes
-    setAttributes cs i = i { attributes = cs }
+instance HasProp Attributes (Icon ms) where
+    type Prop Attributes (Icon ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ cs i = i { attributes = cs }
 
-instance HasBorderedProp (Icon ms) where
-    getBordered = bordered
-    setBordered b i = i { bordered = b }
+instance HasProp Bordered (Icon ms) where
+    type Prop Bordered (Icon ms) = Bool
+    getProp _ = bordered
+    setProp _ b i = i { bordered = b }
 
-instance HasCircularProp (Icon ms) where
-    getCircular = circular
-    setCircular c i = i { circular = c }
+instance HasProp Circular (Icon ms) where
+    type Prop Circular (Icon ms) = Bool
+    getProp _ = circular
+    setProp _ c i = i { circular = c }
 
-instance HasNameProp (Icon ms) where
-    getName = name
-    setName n i = i { name = n }
+instance HasProp Name (Icon ms) where
+    type Prop Name (Icon ms) = Txt
+    getProp _ = name
+    setProp _ n i = i { name = n }
 
-instance HasClassesProp (Icon ms) where
-    getClasses = classes
-    setClasses cs i = i { classes = cs }
+instance HasProp Classes (Icon ms) where
+    type Prop Classes (Icon ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs i = i { classes = cs }
 
-instance HasColorProp (Icon ms) where
-    getColor = color
-    setColor c i = i { color = c }
+instance HasProp Color (Icon ms) where
+    type Prop Color (Icon ms) = Txt
+    getProp _ = color
+    setProp _ c i = i { color = c }
 
-instance HasCornerProp (Icon ms) where
-    type CornerProp (Icon ms) = Bool
-    getCorner = corner
-    setCorner c i = i { corner = c }
+instance HasProp Corner (Icon ms) where
+    type Prop Corner (Icon ms) = Bool
+    getProp _ = corner
+    setProp _ c i = i { corner = c }
 
-instance HasDisabledProp (Icon ms) where
-    getDisabled = disabled
-    setDisabled d i = i { disabled = d }
+instance HasProp Disabled (Icon ms) where
+    type Prop Disabled (Icon ms) = Bool
+    getProp _ = disabled
+    setProp _ d i = i { disabled = d }
 
-instance HasFittedProp (Icon ms) where
-    getFitted = fitted
-    setFitted f i = i { fitted = f }
+instance HasProp Fitted (Icon ms) where
+    type Prop Fitted (Icon ms) = Bool
+    getProp _ = fitted
+    setProp _ f i = i { fitted = f }
 
-instance HasFlippedProp (Icon ms) where
-    getFlipped = flipped
-    setFlipped f i = i { flipped = f }
+instance HasProp Flipped (Icon ms) where
+    type Prop Flipped (Icon ms) = Txt
+    getProp _ = flipped
+    setProp _ f i = i { flipped = f }
 
-instance HasInvertedProp (Icon ms) where
-    getInverted = inverted
-    setInverted inv i = i { inverted = inv }
+instance HasProp Inverted (Icon ms) where
+    type Prop Inverted (Icon ms) = Bool
+    getProp _ = inverted
+    setProp _ inv i = i { inverted = inv }
 
-instance HasLinkProp (Icon ms) where
-    getLink = link
-    setLink l i = i { link = l }
+instance HasProp Link (Icon ms) where
+    type Prop Link (Icon ms) = Bool
+    getProp _ = link
+    setProp _ l i = i { link = l }
 
-instance HasLoadingProp (Icon ms) where
-    getLoading = loading
-    setLoading l i = i { loading = l }
+instance HasProp Loading (Icon ms) where
+    type Prop Loading (Icon ms) = Bool
+    getProp _ = loading
+    setProp _ l i = i { loading = l }
 
-instance HasRotatedProp (Icon ms) where
-    getRotated = rotated
-    setRotated r i = i { rotated = r }
+instance HasProp Rotated (Icon ms) where
+    type Prop Rotated (Icon ms) = Txt
+    getProp _ = rotated
+    setProp _ r i = i { rotated = r }
 
-instance HasSizeProp (Icon ms) where
-    getSize = size
-    setSize s i = i { size = s }
+instance HasProp Size (Icon ms) where
+    type Prop Size (Icon ms) = Txt
+    getProp _ = size
+    setProp _ s i = i { size = s }
 
 data Group ms = Group_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -176,25 +189,27 @@ instance Pure Group ms where
                 )
         in as (mergeClasses $ ClassList cs : attributes) children
 
-instance HasAsProp (Group ms) where
-    type AsProp (Group ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs f ig = ig { as = f }
+instance HasProp As (Group ms) where
+    type Prop As (Group ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ f ig = ig { as = f }
 
-instance HasAttributesProp (Group ms) where
-    type Attribute (Group ms) = Feature ms
-    getAttributes = attributes
-    setAttributes cs ig = ig { attributes = cs }
+instance HasProp Attributes (Group ms) where
+    type Prop Attributes (Group ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ cs ig = ig { attributes = cs }
 
-instance HasChildrenProp (Group ms) where
-    type Child (Group ms) = View ms
-    getChildren = children
-    setChildren cs ig = ig { children = cs }
+instance HasProp Children (Group ms) where
+    type Prop Children (Group ms) = [View ms]
+    getProp _ = children
+    setProp _ cs ig = ig { children = cs }
 
-instance HasClassesProp (Group ms) where
-    getClasses = classes
-    setClasses cs ig = ig { classes = cs }
+instance HasProp Classes (Group ms) where
+    type Prop Classes (Group ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs ig = ig { classes = cs }
 
-instance HasSizeProp (Group ms) where
-    getSize = size
-    setSize s ig = ig { size = s }
+instance HasProp Size (Group ms) where
+    type Prop Size (Group ms) = Txt
+    getProp _ = size
+    setProp _ s ig = ig { size = s }

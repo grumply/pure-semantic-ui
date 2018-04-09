@@ -9,16 +9,16 @@ import Pure.View hiding (unit)
 
 import Semantic.Utils
 
-import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
-  ( HasAsProp(..), pattern As
-  , HasAttributesProp(..), pattern Attributes
-  , HasChildrenProp(..), pattern Children
-  , HasClassesProp(..), pattern Classes
-  , HasCenteredProp(..), pattern Centered
-  , HasTestProp(..), pattern Test
-  , HasUnitProp(..), pattern Unit
+  ( pattern As, As(..)
+  , pattern Attributes, Attributes(..)
+  , pattern Children, Children(..)
+  , pattern Classes, Classes(..)
+  , pattern Centered, Centered(..)
+  , pattern Test, Test(..)
+  , pattern Unit, Unit(..)
   )
 
 data Advertisement ms = Advertisement_
@@ -56,33 +56,37 @@ instance Pure Advertisement ms where
                 )
                 children
 
-instance HasAsProp (Advertisement ms) where
-    type AsProp (Advertisement ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a ad = ad { as = a }
+instance HasProp As (Advertisement ms) where
+    type Prop As (Advertisement ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a ad = ad { as = a }
 
-instance HasAttributesProp (Advertisement ms) where
-    type Attribute (Advertisement ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as a = a { attributes = as }
+instance HasProp Attributes (Advertisement ms) where
+    type Prop Attributes (Advertisement ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as a = a { attributes = as }
 
-instance HasChildrenProp (Advertisement ms) where
-    type Child (Advertisement ms) = View ms
-    getChildren = children
-    setChildren cs a = a { children = cs }
+instance HasProp Children (Advertisement ms) where
+    type Prop Children (Advertisement ms) = [View ms]
+    getProp _ = children
+    setProp _ cs a = a { children = cs }
 
-instance HasClassesProp (Advertisement ms) where
-    getClasses = classes
-    setClasses cs a = a { classes = cs }
+instance HasProp Classes (Advertisement ms) where
+    type Prop Classes (Advertisement ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs a = a { classes = cs }
 
-instance HasCenteredProp (Advertisement ms) where
-    getCentered = centered
-    setCentered c a = a { centered = c }
+instance HasProp Centered (Advertisement ms) where
+    type Prop Centered (Advertisement ms) = Bool
+    getProp _ = centered
+    setProp _ c a = a { centered = c }
 
-instance HasTestProp (Advertisement ms) where
-    getTest = test
-    setTest t a = a { test = t }
+instance HasProp Test (Advertisement ms) where
+    type Prop Test (Advertisement ms) = Txt
+    getProp _ = test
+    setProp _ t a = a { test = t }
 
-instance HasUnitProp (Advertisement ms) where
-    getUnit = unit
-    setUnit u a = a { unit = u }
+instance HasProp Unit (Advertisement ms) where
+    type Prop Unit (Advertisement ms) = Txt
+    getProp _ = unit
+    setProp _ u a = a { unit = u }

@@ -13,47 +13,47 @@ import Data.IORef
 import Data.Maybe
 import GHC.Generics as G
 import Pure.Data.Txt (isInfixOf)
-import Pure.View hiding (position,offset,round,trigger,OnClose,Content,Header)
+import Pure.View hiding (position,offset,round,trigger,OnClose,Content,Header,Offset,Styles)
 import Pure.Lifted (JSV,Node(..),Element(..),(.#),window,IsJSV(..))
 
 import Semantic.Utils hiding (on)
 
 import Semantic.Addons.Portal hiding (PS)
 
-import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
-  ( HasAsProp(..), pattern As
-  , HasAttributesProp(..), pattern Attributes
-  , HasChildrenProp(..), pattern Children
-  , HasClassesProp(..), pattern Classes
-  , HasBasicProp(..), pattern Basic
-  , HasFlowingProp(..), pattern Flowing
-  , HasHideOnScrollProp(..), pattern HideOnScroll
-  , HasHoverableProp(..), pattern Hoverable
-  , HasInvertedProp(..), pattern Inverted
-  , HasOffsetProp(..), pattern Offset
-  , HasPositionProp(..), pattern Position
-  , HasSizeProp(..), pattern Size
-  , HasStylesProp(..), pattern Styles
-  , HasTriggerOnProp(..), pattern TriggerOn
-  , HasWideProp(..), pattern Wide
-  , HasWithPortalProp(..), pattern WithPortal
-  , HasOnMountProp(..), pattern OnMount
-  , HasOnUnmountProp(..), pattern OnUnmount
-  , HasOnOpenProp(..), pattern OnOpen
-  , HasOnCloseProp(..), pattern OnClose
-  , HasTriggerProp(..), pattern Trigger
-  , HasCloseOnPortalMouseLeaveProp(..), pattern CloseOnPortalMouseLeave
-  , HasCloseOnTriggerBlurProp(..), pattern CloseOnTriggerBlur
-  , HasCloseOnTriggerClickProp(..), pattern CloseOnTriggerClick
-  , HasCloseOnTriggerMouseLeaveProp(..), pattern CloseOnTriggerMouseLeave
-  , HasCloseOnDocumentClickProp(..), pattern CloseOnDocumentClick
-  , HasOpenOnTriggerClickProp(..), pattern OpenOnTriggerClick
-  , HasOpenOnTriggerFocusProp(..), pattern OpenOnTriggerFocus
-  , HasOpenOnTriggerMouseEnterProp(..), pattern OpenOnTriggerMouseEnter
-  , HasMouseEnterDelayProp(..), pattern MouseEnterDelay
-  , HasMouseLeaveDelayProp(..), pattern MouseLeaveDelay
+  ( pattern As, As(..)
+  , pattern Attributes, Attributes(..)
+  , pattern Children, Children(..)
+  , pattern Classes, Classes(..)
+  , pattern Basic, Basic(..)
+  , pattern Flowing, Flowing(..)
+  , pattern HideOnScroll, HideOnScroll(..)
+  , pattern Hoverable, Hoverable(..)
+  , pattern Inverted, Inverted(..)
+  , pattern Offset, Offset(..)
+  , pattern Position, Position(..)
+  , pattern Size, Size(..)
+  , pattern Styles, Styles(..)
+  , pattern TriggerOn, TriggerOn(..)
+  , pattern Wide, Wide(..)
+  , pattern WithPortal, WithPortal(..)
+  , pattern OnMount, OnMount(..)
+  , pattern OnUnmount, OnUnmount(..)
+  , pattern OnOpen, OnOpen(..)
+  , pattern OnClose, OnClose(..)
+  , pattern Trigger, Trigger(..)
+  , pattern CloseOnPortalMouseLeave, CloseOnPortalMouseLeave(..)
+  , pattern CloseOnTriggerBlur, CloseOnTriggerBlur(..)
+  , pattern CloseOnTriggerClick, CloseOnTriggerClick(..)
+  , pattern CloseOnTriggerMouseLeave, CloseOnTriggerMouseLeave(..)
+  , pattern CloseOnDocumentClick, CloseOnDocumentClick(..)
+  , pattern OpenOnTriggerClick, OpenOnTriggerClick(..)
+  , pattern OpenOnTriggerFocus, OpenOnTriggerFocus(..)
+  , pattern OpenOnTriggerMouseEnter, OpenOnTriggerMouseEnter(..)
+  , pattern MouseEnterDelay, MouseEnterDelay(..)
+  , pattern MouseLeaveDelay, MouseLeaveDelay(..)
   )
 
 positions =
@@ -260,10 +260,10 @@ instance VC ms => Pure Popup ms where
                     let
                         applyPortalProps =
                             let
-                                hoverableProps = hoverable ? (CloseOnPortalMouseLeave . MouseLeaveDelay 300) $ id
-                                clickProps = ("click" `elem` triggerOn) ? (OpenOnTriggerClick . CloseOnTriggerClick . CloseOnDocumentClick) $ id
-                                focusProps = ("focus" `elem` triggerOn) ? (OpenOnTriggerFocus . CloseOnTriggerBlur) $ id
-                                hoverProps = ("hover" `elem` triggerOn) ? (OpenOnTriggerMouseEnter . CloseOnTriggerMouseLeave . MouseLeaveDelay 70 . MouseEnterDelay 50) $ id
+                                hoverableProps = hoverable ? (CloseOnPortalMouseLeave True . MouseLeaveDelay 300) $ id
+                                clickProps = ("click" `elem` triggerOn) ? (OpenOnTriggerClick True . CloseOnTriggerClick True . CloseOnDocumentClick True) $ id
+                                focusProps = ("focus" `elem` triggerOn) ? (OpenOnTriggerFocus True . CloseOnTriggerBlur True) $ id
+                                hoverProps = ("hover" `elem` triggerOn) ? (OpenOnTriggerMouseEnter True . CloseOnTriggerMouseLeave True . MouseLeaveDelay 70 . MouseEnterDelay 50) $ id
                             in
                                 hoverProps . focusProps . clickProps . hoverableProps
 
@@ -298,99 +298,110 @@ instance VC ms => Pure Popup ms where
                                     ]
                 }
 
-instance HasAsProp (Popup ms) where
-    type AsProp (Popup ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs f p = p { as = f }
+instance HasProp As (Popup ms) where
+    type Prop As (Popup ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ f p = p { as = f }
 
-instance HasAttributesProp (Popup ms) where
-    type Attribute (Popup ms) = Feature ms
-    getAttributes = attributes
-    setAttributes cs p = p { attributes = cs }
+instance HasProp Attributes (Popup ms) where
+    type Prop Attributes (Popup ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ cs p = p { attributes = cs }
 
-instance HasChildrenProp (Popup ms) where
-    type Child (Popup ms) = View ms
-    getChildren = children
-    setChildren cs p = p { children = cs }
+instance HasProp Children (Popup ms) where
+    type Prop Children (Popup ms) = [View ms]
+    getProp _ = children
+    setProp _ cs p = p { children = cs }
 
-instance HasClassesProp (Popup ms) where
-    getClasses = classes
-    setClasses cs p = p { classes = cs }
+instance HasProp Classes (Popup ms) where
+    type Prop Classes (Popup ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs p = p { classes = cs }
 
-instance HasBasicProp (Popup ms) where
-    getBasic = basic
-    setBasic b p = p { basic = b }
+instance HasProp Basic (Popup ms) where
+    type Prop Basic (Popup ms) = Bool
+    getProp _ = basic
+    setProp _ b p = p { basic = b }
 
-instance HasFlowingProp (Popup ms) where
-    getFlowing = flowing
-    setFlowing f p = p { flowing = f }
+instance HasProp Flowing (Popup ms) where
+    type Prop Flowing (Popup ms) = Bool
+    getProp _ = flowing
+    setProp _ f p = p { flowing = f }
 
-instance HasHideOnScrollProp (Popup ms) where
-    getHideOnScroll = hideOnScroll
-    setHideOnScroll hos p = p { hideOnScroll = hos }
+instance HasProp HideOnScroll (Popup ms) where
+    type Prop HideOnScroll (Popup ms) = Bool
+    getProp _ = hideOnScroll
+    setProp _ hos p = p { hideOnScroll = hos }
 
-instance HasHoverableProp (Popup ms) where
-    getHoverable = hoverable
-    setHoverable h p = p { hoverable = h }
+instance HasProp Hoverable (Popup ms) where
+    type Prop Hoverable (Popup ms) = Bool
+    getProp _ = hoverable
+    setProp _ h p = p { hoverable = h }
 
-instance HasInvertedProp (Popup ms) where
-    getInverted = inverted
-    setInverted i p = p { inverted = i }
+instance HasProp Inverted (Popup ms) where
+    type Prop Inverted (Popup ms) = Bool
+    getProp _ = inverted
+    setProp _ i p = p { inverted = i }
 
-instance HasOffsetProp (Popup ms) where
-    type OffsetProp (Popup ms) = Double
-    getOffset = offset
-    setOffset o p = p { offset = o }
+instance HasProp Offset (Popup ms) where
+    type Prop Offset (Popup ms) = Double
+    getProp _ = offset
+    setProp _ o p = p { offset = o }
 
-instance HasOnCloseProp (Popup ms) where
-    type OnCloseProp (Popup ms) = Ef ms IO ()
-    getOnClose = onClose
-    setOnClose oc p = p { onClose = oc }
+instance HasProp OnClose (Popup ms) where
+    type Prop OnClose (Popup ms) = Ef ms IO ()
+    getProp _ = onClose
+    setProp _ oc p = p { onClose = oc }
 
-instance HasOnMountProp (Popup ms) where
-    type OnMountProp (Popup ms) = Ef ms IO ()
-    getOnMount = onMount
-    setOnMount om p = p { onMount = om }
+instance HasProp OnMount (Popup ms) where
+    type Prop OnMount (Popup ms) = Ef ms IO ()
+    getProp _ = onMount
+    setProp _ om p = p { onMount = om }
 
-instance HasOnOpenProp (Popup ms) where
-    type OnOpenProp (Popup ms) = Ef ms IO ()
-    getOnOpen = onOpen
-    setOnOpen oo p = p { onOpen = oo }
+instance HasProp OnOpen (Popup ms) where
+    type Prop OnOpen (Popup ms) = Ef ms IO ()
+    getProp _ = onOpen
+    setProp _ oo p = p { onOpen = oo }
 
-instance HasOnUnmountProp (Popup ms) where
-    type OnUnmountProp (Popup ms) = Ef ms IO ()
-    getOnUnmount = onUnmount
-    setOnUnmount ou p = p { onUnmount = ou }
+instance HasProp OnUnmount (Popup ms) where
+    type Prop OnUnmount (Popup ms) = Ef ms IO ()
+    getProp _ = onUnmount
+    setProp _ ou p = p { onUnmount = ou }
 
-instance HasPositionProp (Popup ms) where
-    getPosition = position
-    setPosition pos p = p { position = pos }
+instance HasProp Position (Popup ms) where
+    type Prop Position (Popup ms) = Txt
+    getProp _ = position
+    setProp _ pos p = p { position = pos }
 
-instance HasSizeProp (Popup ms) where
-    getSize = size
-    setSize sz p = p { size = sz }
+instance HasProp Size (Popup ms) where
+    type Prop Size (Popup ms) = Txt
+    getProp _ = size
+    setProp _ sz p = p { size = sz }
 
-instance HasStylesProp (Popup ms) where
-    getStyles = styles
-    setStyles s p = p { styles = s }
+instance HasProp Styles (Popup ms) where
+    type Prop Styles (Popup ms) = [(Txt,Txt)]
+    getProp _ = styles
+    setProp _ s p = p { styles = s }
 
-instance HasTriggerProp (Popup ms) where
-    type TriggerProp (Popup ms) = View ms
-    getTrigger = trigger
-    setTrigger t p = p { trigger = t }
+instance HasProp Trigger (Popup ms) where
+    type Prop Trigger (Popup ms) = View ms
+    getProp _ = trigger
+    setProp _ t p = p { trigger = t }
 
-instance HasTriggerOnProp (Popup ms) where
-    getTriggerOn = triggerOn
-    setTriggerOn to p = p { triggerOn = to }
+instance HasProp TriggerOn (Popup ms) where
+    type Prop TriggerOn (Popup ms) = [Txt]
+    getProp _ = triggerOn
+    setProp _ to p = p { triggerOn = to }
 
-instance HasWideProp (Popup ms) where
-    getWide = wide
-    setWide w p = p { wide = w }
+instance HasProp Wide (Popup ms) where
+    type Prop Wide (Popup ms) = Maybe Txt
+    getProp _ = wide
+    setProp _ w p = p { wide = w }
 
-instance HasWithPortalProp (Popup ms) where
-    type WithPortalProp (Popup ms) = Portal ms -> Portal ms
-    getWithPortal = withPortal
-    setWithPortal wp p = p { withPortal = wp }
+instance HasProp WithPortal (Popup ms) where
+    type Prop WithPortal (Popup ms) = Portal ms -> Portal ms
+    getProp _ = withPortal
+    setProp _ wp p = p { withPortal = wp }
 
 data Content ms = Content_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -419,24 +430,25 @@ instance Pure Content ms where
                 )
                 children
 
-instance HasAsProp (Content ms) where
-    type AsProp (Content ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs f pc = pc { as = f }
+instance HasProp As (Content ms) where
+    type Prop As (Content ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ f pc = pc { as = f }
 
-instance HasAttributesProp (Content ms) where
-    type Attribute (Content ms) = Feature ms
-    getAttributes = attributes
-    setAttributes cs pc = pc { attributes = cs }
+instance HasProp Attributes (Content ms) where
+    type Prop Attributes (Content ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ cs pc = pc { attributes = cs }
 
-instance HasChildrenProp (Content ms) where
-    type Child (Content ms) = View ms
-    getChildren = children
-    setChildren cs pc = pc { children = cs }
+instance HasProp Children (Content ms) where
+    type Prop Children (Content ms) = [View ms]
+    getProp _ = children
+    setProp _ cs pc = pc { children = cs }
 
-instance HasClassesProp (Content ms) where
-    getClasses = classes
-    setClasses cs pc = pc { classes = cs }
+instance HasProp Classes (Content ms) where
+    type Prop Classes (Content ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs pc = pc { classes = cs }
 
 data Header ms = Header_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -465,21 +477,22 @@ instance Pure Header ms where
                 )
                 children
 
-instance HasAsProp (Header ms) where
-    type AsProp (Header ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs f ph = ph { as = f }
+instance HasProp As (Header ms) where
+    type Prop As (Header ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ f ph = ph { as = f }
 
-instance HasAttributesProp (Header ms) where
-    type Attribute (Header ms) = Feature ms
-    getAttributes = attributes
-    setAttributes cs ph = ph { attributes = cs }
+instance HasProp Attributes (Header ms) where
+    type Prop Attributes (Header ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ cs ph = ph { attributes = cs }
 
-instance HasChildrenProp (Header ms) where
-    type Child (Header ms) = View ms
-    getChildren = children
-    setChildren cs ph = ph { children = cs }
+instance HasProp Children (Header ms) where
+    type Prop Children (Header ms) = [View ms]
+    getProp _ = children
+    setProp _ cs ph = ph { children = cs }
 
-instance HasClassesProp (Header ms) where
-    getClasses = classes
-    setClasses cs ph = ph { classes = cs }
+instance HasProp Classes (Header ms) where
+    type Prop Classes (Header ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs ph = ph { classes = cs }

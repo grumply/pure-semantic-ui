@@ -15,21 +15,21 @@ import Semantic.Utils
 import Semantic.Addons.Portal as Portal
 import Semantic.Modules.Transition as Transition
 
-import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
-  ( HasChildrenProp(..)          , pattern Children
-  , HasOnCloseProp(..)           , pattern OnClose
-  , HasOnHideProp(..)            , pattern OnHide
-  , HasOnOpenProp(..)            , pattern OnOpen
-  , HasOnStartProp(..)           , pattern OnStart
-  , HasOpenProp(..)              , pattern Open
-  , HasAnimationProp(..)         , pattern Animation
-  , HasAnimationDurationProp(..) , pattern AnimationDuration
-  , HasWithPortalProp(..)        , pattern WithPortal
-  , HasWithTransitionProp(..)    , pattern WithTransition
-  , HasTransitionOnMountProp(..) , pattern TransitionOnMount
-  , HasVisibleProp(..)           , pattern Visible
+  ( pattern Children, Children(..)
+  , pattern OnClose, OnClose(..)
+  , pattern OnHide, OnHide(..)
+  , pattern OnOpen, OnOpen(..)
+  , pattern OnStart, OnStart(..)
+  , pattern Open, Open(..)
+  , pattern Animation, Animation(..)
+  , pattern AnimationDuration, AnimationDuration(..)
+  , pattern WithPortal, WithPortal(..)
+  , pattern WithTransition, WithTransition(..)
+  , pattern TransitionOnMount, TransitionOnMount(..)
+  , pattern Visible, Visible(..)
   , AnimationDuration(..)
   )
 
@@ -105,7 +105,7 @@ instance VC ms => Pure TransitionablePortal ms where
                         & OnClose handlePortalClose
                         & Children
                             [ Transition $ withTransition $ def
-                                & TransitionOnMount
+                                & TransitionOnMount True
                                 & OnStart handleTransitionStart
                                 & OnHide handleTransitionHide
                                 & Visible portalOpen
@@ -115,50 +115,52 @@ instance VC ms => Pure TransitionablePortal ms where
                             ]
                 }
 
-instance HasChildrenProp (TransitionablePortal ms) where
-    type Child (TransitionablePortal ms) = View ms
-    getChildren = children
-    setChildren cs tp = tp { children = cs }
+instance HasProp Children (TransitionablePortal ms) where
+    type Prop Children (TransitionablePortal ms) = [View ms]
+    getProp _ = children
+    setProp _ cs tp = tp { children = cs }
 
-instance HasOnCloseProp (TransitionablePortal ms) where
-    type OnCloseProp (TransitionablePortal ms) = Ef ms IO ()
-    getOnClose = onClose
-    setOnClose oc tp = tp { onClose = oc }
+instance HasProp OnClose (TransitionablePortal ms) where
+    type Prop OnClose (TransitionablePortal ms) = Ef ms IO ()
+    getProp _ = onClose
+    setProp _ oc tp = tp { onClose = oc }
 
-instance HasOnHideProp (TransitionablePortal ms) where
-    type OnHideProp (TransitionablePortal ms) = TransitionStatus -> Ef ms IO ()
-    getOnHide = onHide
-    setOnHide oh tp = tp { onHide = oh }
+instance HasProp OnHide (TransitionablePortal ms) where
+    type Prop OnHide (TransitionablePortal ms) = TransitionStatus -> Ef ms IO ()
+    getProp _ = onHide
+    setProp _ oh tp = tp { onHide = oh }
 
-instance HasOnOpenProp (TransitionablePortal ms) where
-    type OnOpenProp (TransitionablePortal ms) = Ef ms IO ()
-    getOnOpen = onOpen
-    setOnOpen oo tp = tp { onOpen = oo }
+instance HasProp OnOpen (TransitionablePortal ms) where
+    type Prop OnOpen (TransitionablePortal ms) = Ef ms IO ()
+    getProp _ = onOpen
+    setProp _ oo tp = tp { onOpen = oo }
 
-instance HasOnStartProp (TransitionablePortal ms) where
-    type OnStartProp (TransitionablePortal ms) = TransitionStatus -> Ef ms IO ()
-    getOnStart = onStart
-    setOnStart os tp = tp { onStart = os }
+instance HasProp OnStart (TransitionablePortal ms) where
+    type Prop OnStart (TransitionablePortal ms) = TransitionStatus -> Ef ms IO ()
+    getProp _ = onStart
+    setProp _ os tp = tp { onStart = os }
 
-instance HasOpenProp (TransitionablePortal ms) where
-    type OpenProp (TransitionablePortal ms) = Maybe Bool
-    getOpen = open
-    setOpen o tp = tp { open = o }
+instance HasProp Open (TransitionablePortal ms) where
+    type Prop Open (TransitionablePortal ms) = Maybe Bool
+    getProp _ = open
+    setProp _ o tp = tp { open = o }
 
-instance HasAnimationProp (TransitionablePortal ms) where
-    getAnimation = animation
-    setAnimation a tp = tp { animation = a }
+instance HasProp Animation (TransitionablePortal ms) where
+    type Prop Animation (TransitionablePortal ms) = Txt
+    getProp _ = animation
+    setProp _ a tp = tp { animation = a }
 
-instance HasAnimationDurationProp (TransitionablePortal ms) where
-    getAnimationDuration = duration
-    setAnimationDuration ad tp = tp { duration = ad }
+instance HasProp AnimationDuration (TransitionablePortal ms) where
+    type Prop AnimationDuration (TransitionablePortal ms) = AnimationDuration
+    getProp _ = duration
+    setProp _ ad tp = tp { duration = ad }
 
-instance HasWithPortalProp (TransitionablePortal ms) where
-    type WithPortalProp (TransitionablePortal ms) = Portal ms -> Portal ms
-    getWithPortal = withPortal
-    setWithPortal wp tp = tp { withPortal = wp }
+instance HasProp WithPortal (TransitionablePortal ms) where
+    type Prop WithPortal (TransitionablePortal ms) = Portal ms -> Portal ms
+    getProp _ = withPortal
+    setProp _ wp tp = tp { withPortal = wp }
 
-instance HasWithTransitionProp (TransitionablePortal ms) where
-    type WithTransitionProp (TransitionablePortal ms) = Transition ms -> Transition ms
-    getWithTransition = withTransition
-    setWithTransition wt tp = tp { withTransition = wt }
+instance HasProp WithTransition (TransitionablePortal ms) where
+    type Prop WithTransition (TransitionablePortal ms) = Transition ms -> Transition ms
+    getProp _ = withTransition
+    setProp _ wt tp = tp { withTransition = wt }

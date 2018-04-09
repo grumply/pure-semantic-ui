@@ -9,28 +9,28 @@ import Data.IORef
 import Data.Maybe
 import GHC.Generics as G
 import Pure.Lifted (same,window,body,IsJSV(..),JSV,Node(..),Element(..))
-import Pure.View hiding (active,bottom,offset,top,round)
+import Pure.View hiding (active,bottom,offset,top,round,Offset)
 import Pure.DOM (addAnimation)
 
 import Semantic.Utils hiding (body)
 
-import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
-  ( HasAsProp(..), pattern As
-  , HasAttributesProp(..), pattern Attributes
-  , HasChildrenProp(..), pattern Children
-  , HasClassesProp(..), pattern Classes
-  , HasActiveProp(..), pattern Active
-  , HasBottomOffsetProp(..), pattern BottomOffset
-  , HasContextProp(..), pattern Context
-  , HasOffsetProp(..), pattern Offset
-  , HasOnBottomProp(..), pattern OnBottom
-  , HasOnStickProp(..), pattern OnStick
-  , HasOnTopProp(..), pattern OnTop
-  , HasOnUnstickProp(..), pattern OnUnstick
-  , HasPushingProp(..), pattern Pushing
-  , HasScrollContextProp(..), pattern ScrollContext
+  ( pattern As, As(..)
+  , pattern Attributes, Attributes(..)
+  , pattern Children, Children(..)
+  , pattern Classes, Classes(..)
+  , pattern Active, Active(..)
+  , pattern BottomOffset, BottomOffset(..)
+  , pattern Context, Context(..)
+  , pattern Offset, Offset(..)
+  , pattern OnBottom, OnBottom(..)
+  , pattern OnStick, OnStick(..)
+  , pattern OnTop, OnTop(..)
+  , pattern OnUnstick, OnUnstick(..)
+  , pattern Pushing, Pushing(..)
+  , pattern ScrollContext, ScrollContext(..)
   )
 
 data Sticky ms = Sticky_
@@ -243,68 +243,72 @@ instance VC ms => Pure Sticky ms where
 
                 }
 
+instance HasProp As (Sticky ms) where
+    type Prop As (Sticky ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ f s = s { as = f }
 
-instance HasAsProp (Sticky ms) where
-    type AsProp (Sticky ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs f s = s { as = f }
+instance HasProp Attributes (Sticky ms) where
+    type Prop Attributes (Sticky ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ cs s = s { attributes = cs }
 
-instance HasAttributesProp (Sticky ms) where
-    type Attribute (Sticky ms) = Feature ms
-    getAttributes = attributes
-    setAttributes cs s = s { attributes = cs }
+instance HasProp Children (Sticky ms) where
+    type Prop Children (Sticky ms) = [View ms]
+    getProp _ = children
+    setProp _ cs s = s { children = cs }
 
-instance HasChildrenProp (Sticky ms) where
-    type Child (Sticky ms) = View ms
-    getChildren = children
-    setChildren cs s = s { children = cs }
+instance HasProp Classes (Sticky ms) where
+    type Prop Classes (Sticky ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs s = s { classes = cs }
 
-instance HasClassesProp (Sticky ms) where
-    getClasses = classes
-    setClasses cs s = s { classes = cs }
+instance HasProp Active (Sticky ms) where
+    type Prop Active (Sticky ms) = Bool
+    getProp _ = active
+    setProp _ a s = s { active = a }
 
-instance HasActiveProp (Sticky ms) where
-    getActive = active
-    setActive a s = s { active = a }
+instance HasProp BottomOffset (Sticky ms) where
+    type Prop BottomOffset (Sticky ms) = Double
+    getProp _ = bottomOffset
+    setProp _ bo s = s { bottomOffset = bo }
 
-instance HasBottomOffsetProp (Sticky ms) where
-    getBottomOffset = bottomOffset
-    setBottomOffset bo s = s { bottomOffset = bo }
+instance HasProp Context (Sticky ms) where
+    type Prop Context (Sticky ms) = Maybe JSV
+    getProp _ = context
+    setProp _ c s = s { context = c }
 
-instance HasContextProp (Sticky ms) where
-    type ContextProp (Sticky ms) = Maybe JSV
-    getContext = context
-    setContext c s = s { context = c }
+instance HasProp Offset (Sticky ms) where
+    type Prop Offset (Sticky ms) = Double
+    getProp _ = offset
+    setProp _ o s = s { offset = o }
 
-instance HasOffsetProp (Sticky ms) where
-    type OffsetProp (Sticky ms) = Double
-    getOffset = offset
-    setOffset o s = s { offset = o }
+instance HasProp OnBottom (Sticky ms) where
+    type Prop OnBottom (Sticky ms) = Ef ms IO ()
+    getProp _ = onBottom
+    setProp _ ob s = s { onBottom = ob }
 
-instance HasOnBottomProp (Sticky ms) where
-    type OnBottomProp (Sticky ms) = Ef ms IO ()
-    getOnBottom = onBottom
-    setOnBottom ob s = s { onBottom = ob }
+instance HasProp OnStick (Sticky ms) where
+    type Prop OnStick (Sticky ms) = Ef ms IO ()
+    getProp _ = onStick
+    setProp _ os s = s { onStick = os }
 
-instance HasOnStickProp (Sticky ms) where
-    type OnStickProp (Sticky ms) = Ef ms IO ()
-    getOnStick = onStick
-    setOnStick os s = s { onStick = os }
+instance HasProp OnTop (Sticky ms) where
+    type Prop OnTop (Sticky ms) = Ef ms IO ()
+    getProp _ = onTop
+    setProp _ ot s = s { onTop = ot }
 
-instance HasOnTopProp (Sticky ms) where
-    type OnTopProp (Sticky ms) = Ef ms IO ()
-    getOnTop = onTop
-    setOnTop ot s = s { onTop = ot }
+instance HasProp OnUnstick (Sticky ms) where
+    type Prop OnUnstick (Sticky ms) = Ef ms IO ()
+    getProp _ = onUnstick
+    setProp _ ou s = s { onUnstick = ou }
 
-instance HasOnUnstickProp (Sticky ms) where
-    type OnUnstickProp (Sticky ms) = Ef ms IO ()
-    getOnUnstick = onUnstick
-    setOnUnstick ou s = s { onUnstick = ou }
+instance HasProp Pushing (Sticky ms) where
+    type Prop Pushing (Sticky ms) = Bool
+    getProp _ = pushing
+    setProp _ p s = s { pushing = p }
 
-instance HasPushingProp (Sticky ms) where
-    getPushing = pushing
-    setPushing p s = s { pushing = p }
-
-instance HasScrollContextProp (Sticky ms) where
-    getScrollContext = scrollContext
-    setScrollContext sc s = s { scrollContext = sc }
+instance HasProp ScrollContext (Sticky ms) where
+    type Prop ScrollContext (Sticky ms) = Maybe JSV
+    getProp _ = scrollContext
+    setProp _ sc s = s { scrollContext = sc }

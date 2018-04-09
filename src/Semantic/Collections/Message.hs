@@ -15,31 +15,31 @@ import Semantic.Utils
 
 import Semantic.Elements.Icon
 
-import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
-  ( HasNameProp(..), pattern Name
-  , HasAsProp(..), pattern As
-  , HasAttributesProp(..), pattern Attributes
-  , HasChildrenProp(..), pattern Children
-  , HasClassesProp(..), pattern Classes
-  , HasAttachedProp(..), pattern Attached
-  , HasColorProp(..), pattern Color
-  , HasCompactProp(..), pattern Compact
-  , HasErrorProp(..), pattern Error
-  , HasFloatingProp(..), pattern Floating
-  , HasHiddenProp(..), pattern Hidden
-  , HasInfoProp(..), pattern Info
-  , HasNegativeProp(..), pattern Negative
-  , HasOnDismissProp(..), pattern OnDismiss
-  , HasPositiveProp(..), pattern Positive
-  , HasSizeProp(..), pattern Size
-  , HasSuccessProp(..), pattern Success
-  , HasVisibleProp(..), pattern Visible
-  , HasWarningProp(..), pattern Warning
+  ( pattern Name, Name(..)
+  , pattern As, As(..)
+  , pattern Attributes, Attributes(..)
+  , pattern Children, Children(..)
+  , pattern Classes, Classes(..)
+  , pattern Attached, Attached(..)
+  , pattern Color, Color(..)
+  , pattern Compact, Compact(..)
+  , pattern Error, Error(..)
+  , pattern Floating, Floating(..)
+  , pattern Hidden, Hidden(..)
+  , pattern Info, Info(..)
+  , pattern Negative, Negative(..)
+  , pattern OnDismiss, OnDismiss(..)
+  , pattern Positive, Positive(..)
+  , pattern Size, Size(..)
+  , pattern Success, Success(..)
+  , pattern Visible, Visible(..)
+  , pattern Warning, Warning(..)
   )
 
-import Prelude hiding (error)
+import Prelude hiding (error,Floating)
 
 data Message ms = Message_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -101,82 +101,95 @@ instance Pure Message ms where
                 )
                 ( dismissIcon : children )
 
-instance HasAsProp (Message ms) where
-    type AsProp (Message ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a m = m { as = a }
+instance HasProp As (Message ms) where
+    type Prop As (Message ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a m = m { as = a }
 
-instance HasAttributesProp (Message ms) where
-    type Attribute (Message ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as m = m { attributes = as }
+instance HasProp Attributes (Message ms) where
+    type Prop Attributes (Message ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as m = m { attributes = as }
 
-instance HasChildrenProp (Message ms) where
-    type Child (Message ms) = View ms
-    getChildren = children
-    setChildren cs m = m { children = cs }
+instance HasProp Children (Message ms) where
+    type Prop Children (Message ms) = [View ms]
+    getProp _ = children
+    setProp _ cs m = m { children = cs }
 
-instance HasClassesProp (Message ms) where
-    getClasses = classes
-    setClasses cs m = m { classes = cs }
+instance HasProp Classes (Message ms) where
+    type Prop Classes (Message ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs m = m { classes = cs }
 
-instance HasAttachedProp (Message ms) where
-    type AttachedProp (Message ms) = Maybe Txt
-    getAttached = attached
-    setAttached a m = m { attached = a }
+instance HasProp Attached (Message ms) where
+    type Prop Attached (Message ms) = Maybe Txt
+    getProp _ = attached
+    setProp _ a m = m { attached = a }
 
-instance HasColorProp (Message ms) where
-    getColor = color
-    setColor c m = m { color = c }
+instance HasProp Color (Message ms) where
+    type Prop Color (Message ms) = Txt
+    getProp _ = color
+    setProp _ c m = m { color = c }
 
-instance HasCompactProp (Message ms) where
-    getCompact = compact
-    setCompact c m = m { compact = c }
+instance HasProp Compact (Message ms) where
+    type Prop Compact (Message ms) = Bool
+    getProp _ = compact
+    setProp _ c m = m { compact = c }
 
-instance HasErrorProp (Message ms) where
-    getError = error
-    setError e m = m { error = e }
+instance HasProp Error (Message ms) where
+    type Prop Error (Message ms) = Bool
+    getProp _ = error
+    setProp _ e m = m { error = e }
 
-instance HasFloatingProp (Message ms) where
-    getFloating = floating
-    setFloating f m = m { floating = f }
+instance HasProp Floating (Message ms) where
+    type Prop Floating (Message ms) = Bool
+    getProp _ = floating
+    setProp _ f m = m { floating = f }
 
-instance HasHiddenProp (Message ms) where
-    getHidden = hidden
-    setHidden h m = m { hidden = h }
+instance HasProp Hidden (Message ms) where
+    type Prop Hidden (Message ms) = Bool
+    getProp _ = hidden
+    setProp _ h m = m { hidden = h }
 
-instance HasInfoProp (Message ms) where
-    getInfo = info
-    setInfo i m = m { info = i }
+instance HasProp Info (Message ms) where
+    type Prop Info (Message ms) = Bool
+    getProp _ = info
+    setProp _ i m = m { info = i }
 
-instance HasNegativeProp (Message ms) where
-    getNegative = negative
-    setNegative n m = m { negative = n }
+instance HasProp Negative (Message ms) where
+    type Prop Negative (Message ms) = Bool
+    getProp _ = negative
+    setProp _ n m = m { negative = n }
 
-instance HasOnDismissProp (Message ms) where
-    type OnDismissProp (Message ms) = Ef ms IO ()
-    getOnDismiss = onDismiss
-    setOnDismiss od m = m { onDismiss = od }
+instance HasProp OnDismiss (Message ms) where
+    type Prop OnDismiss (Message ms) = Ef ms IO ()
+    getProp _ = onDismiss
+    setProp _ od m = m { onDismiss = od }
 
-instance HasPositiveProp (Message ms) where
-    getPositive = positive
-    setPositive p m = m { positive = p }
+instance HasProp Positive (Message ms) where
+    type Prop Positive (Message ms) = Bool
+    getProp _ = positive
+    setProp _ p m = m { positive = p }
 
-instance HasSizeProp (Message ms) where
-    getSize = size
-    setSize s m = m { size = s }
+instance HasProp Size (Message ms) where
+    type Prop Size (Message ms) = Txt
+    getProp _ = size
+    setProp _ s m = m { size = s }
 
-instance HasSuccessProp (Message ms) where
-    getSuccess = success
-    setSuccess s m = m { success = s }
+instance HasProp Success (Message ms) where
+    type Prop Success (Message ms) = Bool
+    getProp _ = success
+    setProp _ s m = m { success = s }
 
-instance HasVisibleProp (Message ms) where
-    getVisible = visible
-    setVisible v m = m { visible = v }
+instance HasProp Visible (Message ms) where
+    type Prop Visible (Message ms) = Bool
+    getProp _ = visible
+    setProp _ v m = m { visible = v }
 
-instance HasWarningProp (Message ms) where
-    getWarning = warning
-    setWarning w m = m { warning = w }
+instance HasProp Warning (Message ms) where
+    type Prop Warning (Message ms) = Bool
+    getProp _ = warning
+    setProp _ w m = m { warning = w }
 
 data Content ms = Content_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -205,24 +218,25 @@ instance Pure Content ms where
                 )
                 children
 
-instance HasAsProp (Content ms) where
-    type AsProp (Content ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a mc = mc { as = a }
+instance HasProp As (Content ms) where
+    type Prop As (Content ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a mc = mc { as = a }
 
-instance HasAttributesProp (Content ms) where
-    type Attribute (Content ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as mc = mc { attributes = as }
+instance HasProp Attributes (Content ms) where
+    type Prop Attributes (Content ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as mc = mc { attributes = as }
 
-instance HasChildrenProp (Content ms) where
-    type Child (Content ms) = View ms
-    getChildren = children
-    setChildren cs mc = mc { children = cs }
+instance HasProp Children (Content ms) where
+    type Prop Children (Content ms) = [View ms]
+    getProp _ = children
+    setProp _ cs mc = mc { children = cs }
 
-instance HasClassesProp (Content ms) where
-    getClasses = classes
-    setClasses cs mc = mc { classes = cs }
+instance HasProp Classes (Content ms) where
+    type Prop Classes (Content ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs mc = mc { classes = cs }
 
 data Header ms = Header_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -251,24 +265,25 @@ instance Pure Header ms where
                 )
                 children
 
-instance HasAsProp (Header ms) where
-    type AsProp (Header ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a mh = mh { as = a }
+instance HasProp As (Header ms) where
+    type Prop As (Header ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a mh = mh { as = a }
 
-instance HasAttributesProp (Header ms) where
-    type Attribute (Header ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as mh = mh { attributes = as }
+instance HasProp Attributes (Header ms) where
+    type Prop Attributes (Header ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as mh = mh { attributes = as }
 
-instance HasChildrenProp (Header ms) where
-    type Child (Header ms) = View ms
-    getChildren = children
-    setChildren cs mh = mh { children = cs }
+instance HasProp Children (Header ms) where
+    type Prop Children (Header ms) = [View ms]
+    getProp _ = children
+    setProp _ cs mh = mh { children = cs }
 
-instance HasClassesProp (Header ms) where
-    getClasses = classes
-    setClasses cs mh = mh { classes = cs }
+instance HasProp Classes (Header ms) where
+    type Prop Classes (Header ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs mh = mh { classes = cs }
 
 data Item ms = Item_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -297,24 +312,25 @@ instance Pure Item ms where
                 )
                 children
 
-instance HasAsProp (Item ms) where
-    type AsProp (Item ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a mi = mi { as = a }
+instance HasProp As (Item ms) where
+    type Prop As (Item ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a mi = mi { as = a }
 
-instance HasAttributesProp (Item ms) where
-    type Attribute (Item ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as mi = mi { attributes = as }
+instance HasProp Attributes (Item ms) where
+    type Prop Attributes (Item ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as mi = mi { attributes = as }
 
-instance HasChildrenProp (Item ms) where
-    type Child (Item ms) = View ms
-    getChildren = children
-    setChildren cs mi = mi { children = cs }
+instance HasProp Children (Item ms) where
+    type Prop Children (Item ms) = [View ms]
+    getProp _ = children
+    setProp _ cs mi = mi { children = cs }
 
-instance HasClassesProp (Item ms) where
-    getClasses = classes
-    setClasses cs mi = mi { classes = cs }
+instance HasProp Classes (Item ms) where
+    type Prop Classes (Item ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs mi = mi { classes = cs }
 
 data List ms = List_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -343,22 +359,23 @@ instance Pure List ms where
                 )
                 children
 
-instance HasAsProp (List ms) where
-    type AsProp (List ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs a ml = ml { as = a }
+instance HasProp As (List ms) where
+    type Prop As (List ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ a ml = ml { as = a }
 
-instance HasAttributesProp (List ms) where
-    type Attribute (List ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as ml = ml { attributes = as }
+instance HasProp Attributes (List ms) where
+    type Prop Attributes (List ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as ml = ml { attributes = as }
 
-instance HasChildrenProp (List ms) where
-    type Child (List ms) = View ms
-    getChildren = children
-    setChildren cs ml = ml { children = cs }
+instance HasProp Children (List ms) where
+    type Prop Children (List ms) = [View ms]
+    getProp _ = children
+    setProp _ cs ml = ml { children = cs }
 
-instance HasClassesProp (List ms) where
-    getClasses = classes
-    setClasses cs ml = ml { classes = cs }
+instance HasProp Classes (List ms) where
+    type Prop Classes (List ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs ml = ml { classes = cs }
 

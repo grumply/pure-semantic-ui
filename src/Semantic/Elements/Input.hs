@@ -14,25 +14,25 @@ import Semantic.Elements.Button
 import Semantic.Elements.Icon
 import Semantic.Elements.Label
 
-import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
-  ( HasAsProp(..), pattern As
-  , HasAttributesProp(..), pattern Attributes
-  , HasChildrenProp(..), pattern Children
-  , HasClassesProp(..), pattern Classes
-  , HasDisabledProp(..), pattern Disabled
-  , HasErrorProp(..), pattern Error
-  , HasFluidProp(..), pattern Fluid
-  , HasFocusProp(..), pattern Focus
-  , HasFocusedProp(..), pattern Focused
-  , HasInvertedProp(..), pattern Inverted
-  , HasLoadingProp(..), pattern Loading
-  , HasOnChangeProp(..), pattern OnChange
-  , HasSizeProp(..), pattern Size
-  , HasTabIndexProp(..), pattern TabIndex
-  , HasTransparentProp(..), pattern Transparent
-  , HasTypeProp(..), pattern Type
+  ( pattern As, As(..)
+  , pattern Attributes, Attributes(..)
+  , pattern Children, Children(..)
+  , pattern Classes, Classes(..)
+  , pattern Disabled, Disabled(..)
+  , pattern Error, Error(..)
+  , pattern Fluid, Fluid(..)
+  , pattern Focus, Focus(..)
+  , pattern Focused, Focused(..)
+  , pattern Inverted, Inverted(..)
+  , pattern Loading, Loading(..)
+  , pattern OnChange, OnChange(..)
+  , pattern Size, Size(..)
+  , pattern TabIndex, TabIndex(..)
+  , pattern Transparent, Transparent(..)
+  , pattern Type, Type(..)
   )
 
 import Prelude hiding (error)
@@ -131,70 +131,82 @@ instance Pure Input ms where
                 )
                 ( map addInputProps children )
 
-instance HasAsProp (Input ms) where
-    type AsProp (Input ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs f i = i { as = f }
+instance HasProp As (Input ms) where
+    type Prop As (Input ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ f i = i { as = f }
 
-instance HasAttributesProp (Input ms) where
-    type Attribute (Input ms) = Feature ms
-    getAttributes = attributes
-    setAttributes cs i = i { attributes = cs }
+instance HasProp Attributes (Input ms) where
+    type Prop Attributes (Input ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ cs i = i { attributes = cs }
 
-instance HasOnChangeProp (Input ms) where
-    type OnChangeProp (Input ms) = Txt -> Ef ms IO ()
-    getOnChange = onChange
-    setOnChange oc i = i { onChange = oc }
+instance HasProp OnChange (Input ms) where
+    type Prop OnChange (Input ms) = Txt -> Ef ms IO ()
+    getProp _ = onChange
+    setProp _ oc i = i { onChange = oc }
 
-instance HasChildrenProp (Input ms) where
-    type Child (Input ms) = View ms
-    getChildren = children
-    setChildren cs i = i { children = cs }
+instance HasProp Children (Input ms) where
+    type Prop Children (Input ms) = [View ms]
+    getProp _ = children
+    setProp _ cs i = i { children = cs }
 
-instance HasClassesProp (Input ms) where
-    getClasses = classes
-    setClasses cs i = i { classes = cs }
+instance HasProp Classes (Input ms) where
+    type Prop Classes (Input ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs i = i { classes = cs }
 
-instance HasDisabledProp (Input ms) where
-    getDisabled = disabled
-    setDisabled d i = i { disabled = d }
+instance HasProp Disabled (Input ms) where
+    type Prop Disabled (Input ms) = Bool
+    getProp _ = disabled
+    setProp _ d i = i { disabled = d }
 
-instance HasErrorProp (Input ms) where
-    getError = error
-    setError e i = i { error = e }
+instance HasProp Error (Input ms) where
+    type Prop Error (Input ms) = Bool
+    getProp _ = error
+    setProp _ e i = i { error = e }
 
-instance HasFluidProp (Input ms) where
-    getFluid = fluid
-    setFluid f i = i { fluid = f }
+instance HasProp Fluid (Input ms) where
+    type Prop Fluid (Input ms) = Bool
+    getProp _ = fluid
+    setProp _ f i = i { fluid = f }
 
-instance HasFocusProp (Input ms) where
-    getFocus = focus
-    setFocus f i = i { focus = f }
+instance HasProp Focus (Input ms) where
+    type Prop Focus (Input ms) = Bool
+    getProp _ = focus
+    setProp _ f i = i { focus = f }
 
-instance HasFocusedProp (Input ms) where
-    getFocused = focused
-    setFocused f i = i { focused = f }
+instance HasProp Focused (Input ms) where
+    type Prop Focused (Input ms) = Bool
+    getProp _ = focused
+    setProp _ f i = i { focused = f }
 
-instance HasInvertedProp (Input ms) where
-    getInverted = inverted
-    setInverted inv i = i { inverted = inv }
+instance HasProp Inverted (Input ms) where
+    type Prop Inverted (Input ms) = Bool
+    getProp _ = inverted
+    setProp _ inv i = i { inverted = inv }
 
-instance HasLoadingProp (Input ms) where
-    getLoading = loading
-    setLoading l i = i { loading = l }
+instance HasProp Loading (Input ms) where
+    type Prop Loading (Input ms) = Bool
+    getProp _ = loading
+    setProp _ l i = i { loading = l }
 
-instance HasSizeProp (Input ms) where
-    getSize = size
-    setSize s i = i { size = s }
+instance HasProp Size (Input ms) where
+    type Prop Size (Input ms) = Txt
+    getProp _ = size
+    setProp _ s i = i { size = s }
 
-instance HasTabIndexProp (Input ms) where
-    getTabIndex = tabIndex
-    setTabIndex ti i = i { tabIndex = ti }
+instance HasProp TabIndex (Input ms) where
+    type Prop TabIndex (Input ms) = Maybe Int
+    getProp _ = tabIndex
+    setProp _ ti i = i { tabIndex = ti }
 
-instance HasTransparentProp (Input ms) where
-    getTransparent = transparent
-    setTransparent t i = i { transparent = t }
+instance HasProp Transparent (Input ms) where
+    type Prop Transparent (Input ms) = Bool
+    getProp _ = transparent
+    setProp _ t i = i { transparent = t }
 
-instance HasTypeProp (Input ms) where
-    getType = _type
-    setType t i = i { _type = t }
+instance HasProp Type (Input ms) where
+    type Prop Type (Input ms) = Txt
+    getProp _ = _type
+    setProp _ t i = i { _type = t }

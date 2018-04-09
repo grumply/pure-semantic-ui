@@ -15,23 +15,23 @@ import Pure.View hiding (animation,onComplete,visible,lookup)
 
 import Semantic.Utils
 
-import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
-  ( HasAsProp(..), pattern As
-  , HasAttributesProp(..), pattern Attributes
-  , HasChildrenProp(..), pattern Children
-  , HasClassesProp(..), pattern Classes
-  , HasAnimationProp(..), pattern Animation
-  , HasAnimationDurationProp(..), pattern AnimationDuration
-  , HasVisibleProp(..), pattern Visible
-  , HasMountOnShowProp(..), pattern MountOnShow
-  , HasOnCompleteProp(..), pattern OnComplete
-  , HasOnHideProp(..), pattern OnHide
-  , HasOnShowProp(..), pattern OnShow
-  , HasOnStartProp(..), pattern OnStart
-  , HasTransitionOnMountProp(..), pattern TransitionOnMount
-  , HasUnmountOnHideProp(..), pattern UnmountOnHide
+  ( pattern As, As(..)
+  , pattern Attributes, Attributes(..)
+  , pattern Children, Children(..)
+  , pattern Classes, Classes(..)
+  , pattern Animation, Animation(..)
+  , pattern AnimationDuration, AnimationDuration(..)
+  , pattern Visible, Visible(..)
+  , pattern MountOnShow, MountOnShow(..)
+  , pattern OnComplete, OnComplete(..)
+  , pattern OnHide, OnHide(..)
+  , pattern OnShow, OnShow(..)
+  , pattern OnStart, OnStart(..)
+  , pattern TransitionOnMount, TransitionOnMount(..)
+  , pattern UnmountOnHide, UnmountOnHide(..)
   , AnimationDuration(..)
   )
 
@@ -221,54 +221,60 @@ instance Pure Transition ms where
 
                     }
 
-instance HasChildrenProp (Transition ms) where
-    type Child (Transition ms) = View ms
-    getChildren = children
-    setChildren cs t = t { children = cs }
+instance HasProp Children (Transition ms) where
+    type Prop Children (Transition ms) = [View ms]
+    getProp _ = children
+    setProp _ cs t = t { children = cs }
 
-instance HasAnimationProp (Transition ms) where
-    getAnimation = animation
-    setAnimation a t = t { animation = a }
+instance HasProp Animation (Transition ms) where
+    type Prop Animation (Transition ms) = Txt
+    getProp _ = animation
+    setProp _ a t = t { animation = a }
 
-instance HasAnimationDurationProp (Transition ms) where
-    getAnimationDuration = duration
-    setAnimationDuration d t = t { duration = d }
+instance HasProp AnimationDuration (Transition ms) where
+    type Prop AnimationDuration (Transition ms) = AnimationDuration
+    getProp _ = duration
+    setProp _ d t = t { duration = d }
 
-instance HasVisibleProp (Transition ms) where
-    getVisible = visible
-    setVisible v t = t { visible = v }
+instance HasProp Visible (Transition ms) where
+    type Prop Visible (Transition ms) = Bool
+    getProp _ = visible
+    setProp _ v t = t { visible = v }
 
-instance HasMountOnShowProp (Transition ms) where
-    getMountOnShow = mountOnShow
-    setMountOnShow mos t = t { mountOnShow = mos }
+instance HasProp MountOnShow (Transition ms) where
+    type Prop MountOnShow (Transition ms) = Bool
+    getProp _ = mountOnShow
+    setProp _ mos t = t { mountOnShow = mos }
 
-instance HasOnCompleteProp (Transition ms) where
-    type OnCompleteProp (Transition ms) = TransitionStatus -> Ef ms IO ()
-    getOnComplete = onComplete
-    setOnComplete oc t = t { onComplete = oc }
+instance HasProp OnComplete (Transition ms) where
+    type Prop OnComplete (Transition ms) = TransitionStatus -> Ef ms IO ()
+    getProp _ = onComplete
+    setProp _ oc t = t { onComplete = oc }
 
-instance HasOnHideProp (Transition ms) where
-    type OnHideProp (Transition ms) = TransitionStatus -> Ef ms IO ()
-    getOnHide = onHide
-    setOnHide oh t = t { onHide = oh }
+instance HasProp OnHide (Transition ms) where
+    type Prop OnHide (Transition ms) = TransitionStatus -> Ef ms IO ()
+    getProp _ = onHide
+    setProp _ oh t = t { onHide = oh }
 
-instance HasOnShowProp (Transition ms) where
-    type OnShowProp (Transition ms) = TransitionStatus -> Ef ms IO ()
-    getOnShow = onShow
-    setOnShow os t = t { onShow = os }
+instance HasProp OnShow (Transition ms) where
+    type Prop OnShow (Transition ms) = TransitionStatus -> Ef ms IO ()
+    getProp _ = onShow
+    setProp _ os t = t { onShow = os }
 
-instance HasOnStartProp (Transition ms) where
-    type OnStartProp (Transition ms) = TransitionStatus -> Ef ms IO ()
-    getOnStart = onStart
-    setOnStart os t = t { onStart = os }
+instance HasProp OnStart (Transition ms) where
+    type Prop OnStart (Transition ms) = TransitionStatus -> Ef ms IO ()
+    getProp _ = onStart
+    setProp _ os t = t { onStart = os }
 
-instance HasTransitionOnMountProp (Transition ms) where
-    getTransitionOnMount = transitionOnMount
-    setTransitionOnMount tom t = t { transitionOnMount = tom }
+instance HasProp TransitionOnMount (Transition ms) where
+    type Prop TransitionOnMount (Transition ms) = Bool
+    getProp _ = transitionOnMount
+    setProp _ tom t = t { transitionOnMount = tom }
 
-instance HasUnmountOnHideProp (Transition ms) where
-    getUnmountOnHide = unmountOnHide
-    setUnmountOnHide uoh t = t { unmountOnHide = uoh }
+instance HasProp UnmountOnHide (Transition ms) where
+    type Prop UnmountOnHide (Transition ms) = Bool
+    getProp _ = unmountOnHide
+    setProp _ uoh t = t { unmountOnHide = uoh }
 
 data Group ms = Group_
     { as :: [Feature ms] -> [(Int,View ms)] -> View ms
@@ -344,29 +350,32 @@ instance VC ms => Pure Group ms where
                 , renderer = \Group_ {..} TGS {..} -> as attributes buffer
                 }
 
-instance HasAsProp (Group ms) where
-    type AsProp (Group ms) = [Feature ms] -> [(Int,View ms)] -> View ms
-    getAs = as
-    setAs a tg = tg { as = a }
+instance HasProp As (Group ms) where
+    type Prop As (Group ms) = [Feature ms] -> [(Int,View ms)] -> View ms
+    getProp _ = as
+    setProp _ a tg = tg { as = a }
 
-instance HasAttributesProp (Group ms) where
-    type Attribute (Group ms) = Feature ms
-    getAttributes = attributes
-    setAttributes as tg = tg { attributes = as }
+instance HasProp Attributes (Group ms) where
+    type Prop Attributes (Group ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ as tg = tg { attributes = as }
 
-instance HasChildrenProp (Group ms) where
-    type Child (Group ms) = (Int,View ms)
-    getChildren = children
-    setChildren cs tg = tg { children = cs }
+instance HasProp Children (Group ms) where
+    type Prop Children (Group ms) = [(Int,View ms)]
+    getProp _ = children
+    setProp _ cs tg = tg { children = cs }
 
-instance HasClassesProp (Group ms) where
-    getClasses = classes
-    setClasses cs tg = tg { classes = cs }
+instance HasProp Classes (Group ms) where
+    type Prop Classes (Group ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs tg = tg { classes = cs }
 
-instance HasAnimationProp (Group ms) where
-    getAnimation = animation
-    setAnimation a tg = tg { animation = a }
+instance HasProp Animation (Group ms) where
+    type Prop Animation (Group ms) = Txt
+    getProp _ = animation
+    setProp _ a tg = tg { animation = a }
 
-instance HasAnimationDurationProp (Group ms) where
-    getAnimationDuration = duration
-    setAnimationDuration d tg = tg { duration = d }
+instance HasProp AnimationDuration (Group ms) where
+    type Prop AnimationDuration (Group ms) = AnimationDuration
+    getProp _ = duration
+    setProp _ d tg = tg { duration = d }

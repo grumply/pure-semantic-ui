@@ -5,19 +5,20 @@ module Semantic.Elements.Container
   ) where
 
 import GHC.Generics as G
-import Pure.View hiding (textAlign)
+import Pure.View hiding (textAlign,text)
 
 import Semantic.Utils
 
-import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
-  ( HasAsProp(..), pattern As
-  , HasAttributesProp(..), pattern Attributes
-  , HasChildrenProp(..), pattern Children
-  , HasClassesProp(..), pattern Classes
-  , HasFluidProp(..), pattern Fluid
-  , HasTextAlignProp(..), pattern TextAlign
+  ( pattern As, As(..)
+  , pattern Attributes, Attributes(..)
+  , pattern Children, Children(..)
+  , pattern Classes, Classes(..)
+  , pattern Fluid, Fluid(..)
+  , pattern TextAlign, TextAlign(..)
+  , pattern IsText, IsText(..)
   )
 
 data Container ms = Container_
@@ -63,29 +64,37 @@ instance Pure Container ms where
               )
         in as (ClassList cs : attributes) children
 
-instance HasAsProp (Container ms) where
-    type AsProp (Container ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs f c = c { as = f }
+instance HasProp As (Container ms) where
+    type Prop As (Container ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ f c = c { as = f }
 
-instance HasAttributesProp (Container ms) where
-    type Attribute (Container ms) = Feature ms
-    getAttributes = attributes
-    setAttributes cs c = c { attributes = cs }
+instance HasProp Attributes (Container ms) where
+    type Prop Attributes (Container ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ cs c = c { attributes = cs }
 
-instance HasChildrenProp (Container ms) where
-    type Child (Container ms) = View ms
-    getChildren = children
-    setChildren cs c = c { children = cs }
+instance HasProp Children (Container ms) where
+    type Prop Children (Container ms) = [View ms]
+    getProp _ = children
+    setProp _ cs c = c { children = cs }
 
-instance HasClassesProp (Container ms) where
-    getClasses = classes
-    setClasses cs c = c { classes = cs }
+instance HasProp Classes (Container ms) where
+    type Prop Classes (Container ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs c = c { classes = cs }
 
-instance HasFluidProp (Container ms) where
-    getFluid = fluid
-    setFluid f c = c { fluid = f }
+instance HasProp Fluid (Container ms) where
+    type Prop Fluid (Container ms) = Bool
+    getProp _ = fluid
+    setProp _ f c = c { fluid = f }
 
-instance HasTextAlignProp (Container ms) where
-    getTextAlign = textAlign
-    setTextAlign ta c = c { textAlign = ta }
+instance HasProp IsText (Container ms) where
+    type Prop IsText (Container ms) = Bool
+    getProp _ = text
+    setProp _ t c = c { text = t }
+
+instance HasProp TextAlign (Container ms) where
+    type Prop TextAlign (Container ms) = Txt
+    getProp _ = textAlign
+    setProp _ ta c = c { textAlign = ta }

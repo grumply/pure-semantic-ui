@@ -14,28 +14,30 @@ import Semantic.Utils
 
 import Semantic.Elements.Image (Image(..))
 
-import Semantic.Properties as Tools ( (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
 
 import Semantic.Properties as Properties
-  ( HasActiveProp(..), pattern Active
-  , HasAsProp(..), pattern As
-  , HasAttachedProp(..), pattern Attached
-  , HasAttributesProp(..), pattern Attributes
-  , HasBasicProp(..), pattern Basic
-  , HasChildrenProp(..), pattern Children
-  , HasCircularProp(..), pattern Circular
-  , HasClassesProp(..), pattern Classes
-  , HasColorProp(..), pattern Color
-  , HasCornerProp(..), pattern Corner
-  , HasEmptyProp(..), pattern Empty
-  , HasFloatingProp(..), pattern Floating
-  , HasHorizontalProp(..), pattern Horizontal
-  , HasOnClickProp(..), pattern OnClick
-  , HasPointingProp(..), pattern Pointing
-  , HasRibbonProp(..), pattern Ribbon
-  , HasSizeProp(..), pattern Size
-  , HasTagProp(..), pattern Tag
+  ( pattern Active, Active(..)
+  , pattern As, As(..)
+  , pattern Attached, Attached(..)
+  , pattern Attributes, Attributes(..)
+  , pattern Basic, Basic(..)
+  , pattern Children, Children(..)
+  , pattern Circular, Circular(..)
+  , pattern Classes, Classes(..)
+  , pattern Color, Color(..)
+  , pattern Corner, Corner(..)
+  , pattern Empty, Empty(..)
+  , pattern Floating, Floating(..)
+  , pattern Horizontal, Horizontal(..)
+  , pattern OnClick, OnClick(..)
+  , pattern Pointing, Pointing(..)
+  , pattern Ribbon, Ribbon(..)
+  , pattern Size, Size(..)
+  , pattern Tag, Tag(..)
   )
+
+import Prelude hiding (Floating)
 
 data Label ms = Label_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -105,83 +107,95 @@ instance Pure Label ms where
                 )
                 children
 
-instance HasActiveProp (Label ms) where
-    getActive = active
-    setActive a l = l { active = a }
+instance HasProp Active (Label ms) where
+    type Prop Active (Label ms) = Bool
+    getProp _ = active
+    setProp _ a l = l { active = a }
 
-instance HasAsProp (Label ms) where
-    type AsProp (Label ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs f l = l { as = f }
+instance HasProp As (Label ms) where
+    type Prop As (Label ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ f l = l { as = f }
 
-instance HasAttachedProp (Label ms) where
-    type AttachedProp (Label ms) = Txt
-    getAttached = attached
-    setAttached attach l = l { attached = attach }
+instance HasProp Attached (Label ms) where
+    type Prop Attached (Label ms) = Txt
+    getProp _ = attached
+    setProp _ attach l = l { attached = attach }
 
-instance HasAttributesProp (Label ms) where
-    type Attribute (Label ms) = Feature ms
-    getAttributes = attributes
-    setAttributes cs l = l { attributes = cs }
+instance HasProp Attributes (Label ms) where
+    type Prop Attributes (Label ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ cs l = l { attributes = cs }
 
-instance HasBasicProp (Label ms) where
-    getBasic = basic
-    setBasic b l = l { basic = b }
+instance HasProp Basic (Label ms) where
+    type Prop Basic (Label ms) = Bool
+    getProp _ = basic
+    setProp _ b l = l { basic = b }
 
-instance HasChildrenProp (Label ms) where
-    type Child (Label ms) = View ms
-    getChildren = children
-    setChildren cs l = l { children = cs }
+instance HasProp Children (Label ms) where
+    type Prop Children (Label ms) = [View ms]
+    getProp _ = children
+    setProp _ cs l = l { children = cs }
 
-instance HasCircularProp (Label ms) where
-    getCircular = circular
-    setCircular c l = l { circular = c }
+instance HasProp Circular (Label ms) where
+    type Prop Circular (Label ms) = Bool
+    getProp _ = circular
+    setProp _ c l = l { circular = c }
 
-instance HasClassesProp (Label ms) where
-    getClasses = classes
-    setClasses cs l = l { classes = cs }
+instance HasProp Classes (Label ms) where
+    type Prop Classes (Label ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs l = l { classes = cs }
 
-instance HasOnClickProp (Label ms) where
-    type OnClickProp (Label ms) = Ef ms IO ()
-    getOnClick = onClick
-    setOnClick oc l = l { onClick = oc }
+instance HasProp OnClick (Label ms) where
+    type Prop OnClick (Label ms) = Ef ms IO ()
+    getProp _ = onClick
+    setProp _ oc l = l { onClick = oc }
 
-instance HasColorProp (Label ms) where
-    getColor = color
-    setColor c l = l { color = c }
+instance HasProp Color (Label ms) where
+    type Prop Color (Label ms) = Txt
+    getProp _ = color
+    setProp _ c l = l { color = c }
 
-instance HasCornerProp (Label ms) where
-    type CornerProp (Label ms) = Maybe Txt
-    getCorner = corner
-    setCorner c l = l { corner = c }
+instance HasProp Corner (Label ms) where
+    type Prop Corner (Label ms) = Maybe Txt
+    getProp _ = corner
+    setProp _ c l = l { corner = c }
 
-instance HasEmptyProp (Label ms) where
-    getEmpty = empty
-    setEmpty e l = l { empty = e }
+instance HasProp Empty (Label ms) where
+    type Prop Empty (Label ms) = Bool
+    getProp _ = empty
+    setProp _ e l = l { empty = e }
 
-instance HasFloatingProp (Label ms) where
-    getFloating = floating
-    setFloating f l = l { floating = f }
+instance HasProp Floating (Label ms) where
+    type Prop Floating (Label ms) = Bool
+    getProp _ = floating
+    setProp _ f l = l { floating = f }
 
-instance HasHorizontalProp (Label ms) where
-    getHorizontal = horizontal
-    setHorizontal h l = l { horizontal = h }
+instance HasProp Horizontal (Label ms) where
+    type Prop Horizontal (Label ms) = Bool
+    getProp _ = horizontal
+    setProp _ h l = l { horizontal = h }
 
-instance HasPointingProp (Label ms) where
-    getPointing = pointing
-    setPointing p l = l { pointing = p }
+instance HasProp Pointing (Label ms) where
+    type Prop Pointing (Label ms) = Maybe Txt
+    getProp _ = pointing
+    setProp _ p l = l { pointing = p }
 
-instance HasRibbonProp (Label ms) where
-    getRibbon = ribbon
-    setRibbon r l = l { ribbon = r }
+instance HasProp Ribbon (Label ms) where
+    type Prop Ribbon (Label ms) = Maybe Txt
+    getProp _ = ribbon
+    setProp _ r l = l { ribbon = r }
 
-instance HasSizeProp (Label ms) where
-    getSize = size
-    setSize s l = l { size = s }
+instance HasProp Size (Label ms) where
+    type Prop Size (Label ms) = Txt
+    getProp _ = size
+    setProp _ s l = l { size = s }
 
-instance HasTagProp (Label ms) where
-    getTag = tag
-    setTag t l = l { tag = t }
+instance HasProp Tag (Label ms) where
+    type Prop Tag (Label ms) = Bool
+    getProp _ = tag
+    setProp _ t l = l { tag = t }
 
 data Detail ms = Detail_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -204,24 +218,25 @@ instance Pure Detail ms where
             )
             children
 
-instance HasAsProp (Detail ms) where
-    type AsProp (Detail ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs f ld = ld { as = f }
+instance HasProp As (Detail ms) where
+    type Prop As (Detail ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ f ld = ld { as = f }
 
-instance HasAttributesProp (Detail ms) where
-    type Attribute (Detail ms) = Feature ms
-    getAttributes = attributes
-    setAttributes cs ld = ld { attributes = cs }
+instance HasProp Attributes (Detail ms) where
+    type Prop Attributes (Detail ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ cs ld = ld { attributes = cs }
 
-instance HasChildrenProp (Detail ms) where
-    type Child (Detail ms) = View ms
-    getChildren = children
-    setChildren cs ld = ld { children = cs }
+instance HasProp Children (Detail ms) where
+    type Prop Children (Detail ms) = [View ms]
+    getProp _ = children
+    setProp _ cs ld = ld { children = cs }
 
-instance HasClassesProp (Detail ms) where
-    getClasses = classes
-    setClasses cs ld = ld { classes = cs }
+instance HasProp Classes (Detail ms) where
+    type Prop Classes (Detail ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs ld = ld { classes = cs }
 
 data Group ms = Group_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -259,37 +274,42 @@ instance Pure Group ms where
                 )
                 children
 
-instance HasAsProp (Group ms) where
-    type AsProp (Group ms) = [Feature ms] -> [View ms] -> View ms
-    getAs = as
-    setAs f lg = lg { as = f }
+instance HasProp As (Group ms) where
+    type Prop As (Group ms) = [Feature ms] -> [View ms] -> View ms
+    getProp _ = as
+    setProp _ f lg = lg { as = f }
 
-instance HasAttributesProp (Group ms) where
-    type Attribute (Group ms) = Feature ms
-    getAttributes = attributes
-    setAttributes cs lg = lg { attributes = cs }
+instance HasProp Attributes (Group ms) where
+    type Prop Attributes (Group ms) = [Feature ms]
+    getProp _ = attributes
+    setProp _ cs lg = lg { attributes = cs }
 
-instance HasChildrenProp (Group ms) where
-    type Child (Group ms) = View ms
-    getChildren = children
-    setChildren cs lg = lg { children = cs }
+instance HasProp Children (Group ms) where
+    type Prop Children (Group ms) = [View ms]
+    getProp _ = children
+    setProp _ cs lg = lg { children = cs }
 
-instance HasCircularProp (Group ms) where
-    getCircular = circular
-    setCircular c lg = lg { circular = c }
+instance HasProp Circular (Group ms) where
+    type Prop Circular (Group ms) = Bool
+    getProp _ = circular
+    setProp _ c lg = lg { circular = c }
 
-instance HasClassesProp (Group ms) where
-    getClasses = classes
-    setClasses cs lg = lg { classes = cs }
+instance HasProp Classes (Group ms) where
+    type Prop Classes (Group ms) = [Txt]
+    getProp _ = classes
+    setProp _ cs lg = lg { classes = cs }
 
-instance HasColorProp (Group ms) where
-    getColor = color
-    setColor c lg = lg { color = c }
+instance HasProp Color (Group ms) where
+    type Prop Color (Group ms) = Txt
+    getProp _ = color
+    setProp _ c lg = lg { color = c }
 
-instance HasSizeProp (Group ms) where
-    getSize = size
-    setSize s lg = lg { size = s }
+instance HasProp Size (Group ms) where
+    type Prop Size (Group ms) = Txt
+    getProp _ = size
+    setProp _ s lg = lg { size = s }
 
-instance HasTagProp (Group ms) where
-    getTag = tag
-    setTag t lg = lg { tag = t }
+instance HasProp Tag (Group ms) where
+    type Prop Tag (Group ms) = Bool
+    getProp _ = tag
+    setProp _ t lg = lg { tag = t }
