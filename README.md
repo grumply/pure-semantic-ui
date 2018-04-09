@@ -6,7 +6,7 @@ Many thanks to the people over at Semantic-UI-React who did all of the hard work
 
 ## Usage
 
-Semantic-UI-Pure takes a `Component + Patterns` approach. Every component has a pattern for construction and inspection and for each property a component supports, an instance of a `Has*Prop` class is declared with a bi-directional pattern to get and set it.
+Every component has a pattern for construction and inspection and for each property a component supports, an instance of a `HasProp` class is declared with a bi-directional pattern to get and set it.
 
 ### Construction
 
@@ -48,30 +48,32 @@ data Grid ms = Grid_
     ...
     }
 
-instance HasInvertedProp (Grid ms) where
-    getInverted = inverted
-    setInverted i grid = grid { inverted = i }
+data Inverted = Inverted_
+instance HasProp Inverted (Grid ms) where
+    type Prop Inverted (Grid ms) = Bool
+    getProp _ = inverted
+    setProp _ i grid = grid { inverted = i }
 ```
 
 And there exists an `Inverted` pattern.
 
 ```haskell
-pattern Inverted :: HasInvertedProp a => a -> a
-pattern Inverted a <- (getInverted &&& id -> (True,a)) where
-    Inverted a = setInverted True a
+pattern Inverted :: HasInvertedProp a => InvertedProp a -> a -> a
+pattern Inverted b a <- (getProp Inverted_ &&& id -> (b,a)) where
+    Inverted b a = setInverted b a
 ```
 
 With this pattern we can set the inverted prop of a grid to `True`.
 
 ```haskell
-myInverteGrid = Grid $ def & Inverted
+myInverteGrid = Grid $ def & Inverted True
 ```
 
 And because this is a bi-directional pattern, we can even pattern match for inverted grids.
 
 ```haskell
 getInvertedGrid :: View ms -> Maybe (Grid ms)
-getInvertedGrid (Inverted (Grid g)) = Just g
+getInvertedGrid (Inverted True (Grid g)) = Just g
 getInvertedGrid _ = Nothing
 ```
 
@@ -79,13 +81,13 @@ We can even create a pattern for inverted grids.
 
 ```haskell
 pattern InvertedGrid :: Grid ms -> View ms
-pattern InvertedGrid g = Inverted (Grid g)
+pattern InvertedGrid g = Inverted True (Grid g)
 ```
 
 Note that properties can be easily chained together: 
 
 ```haskell
-myButton = Button $ def & Size "small" & Circular
+myButton = Button $ def & Size "small" & Circular True
 ```
 
 ### Children
@@ -93,20 +95,20 @@ myButton = Button $ def & Size "small" & Circular
 Most components implement the `Children` property.
 
 ```haskell
-myButton = Button $ def & Size "small" & Circular & Children
+myButton = Button $ def & Size "small" & Circular True & Children
     [ "My Button" ]
 ```
 
 There is a shorthand, `!`, for `& Children`.
 
 ```haskell
-myButton = Button $ def & Size "small" & Circular ! [ "My Button" ]
+myButton = Button $ def & Size "small" & Circular True ! [ "My Button" ]
 ```
 
 And since there is an `IsString` instance for `[View ms]`, we can omit the list syntax.
 
 ```haskell
-myButton = Button $ def & Size "small" & Circular ! "My Button"
+myButton = Button $ def & Size "small" & Circular True ! "My Button"
 ```
 
 ### Attributes/Features
@@ -141,7 +143,7 @@ With these, we can get a clean construction syntax.
 myView =
   Container <| def & Fluid |>
     [ ButtonGroup <| def & Color Teal |>
-        [ Button <| def & Circular |> 
+        [ Button <| def & Circular True |> 
             "Circular Button" 
         , Button <||> "Default Button"
         ]
@@ -172,5 +174,3 @@ A few of the automatically managed components from Semantic-UI-React are left un
 * Form (refer to #168 and grumply/semantic-ui-pure-forms#1)
 * Dropdown
 * Search
-
-Since shorthands are avoided in this library, the approach that Semantic-UI-React took is inapplicable; I plan to implement managed versions of each as appropriate implementations are found. If no implementations are found, I will implement the Semantic-UI-React approach with shorthands.
