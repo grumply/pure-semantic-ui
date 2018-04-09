@@ -42,6 +42,9 @@ import Semantic.Properties as Properties
   , pattern OnUpdate, OnUpdate(..)
   )
 
+import Data.Function as Tools ((&))
+import Pure.Data.Default as Tools
+
 data Passed = PixelsPassed Double | PercentPassed Double
     deriving (Generic,Default,Ord,Eq)
 

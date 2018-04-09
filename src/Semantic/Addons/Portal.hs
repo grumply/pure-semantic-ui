@@ -49,6 +49,9 @@ import Semantic.Properties as Properties
   , pattern InnerRef, InnerRef(..)
   )
 
+import Data.Function as Tools ((&))
+import Pure.Data.Default as Tools
+
 -- used safely
 import Unsafe.Coerce
 

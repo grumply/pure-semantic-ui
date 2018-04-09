@@ -53,6 +53,9 @@ import Semantic.Properties as Properties
   , pattern Value, Value(..)
   )
 
+import Data.Function as Tools ((&))
+import Pure.Data.Default as Tools
+
 data List ms = List_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]

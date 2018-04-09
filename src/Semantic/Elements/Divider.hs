@@ -25,6 +25,9 @@ import Semantic.Properties as Properties
   , pattern Vertical, Vertical(..)
   )
 
+import Data.Function as Tools ((&))
+import Pure.Data.Default as Tools
+
 data Divider ms = Divider_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]

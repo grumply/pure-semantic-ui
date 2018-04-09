@@ -35,6 +35,9 @@ import Semantic.Properties as Properties
   , pattern OnClick, OnClick(..)
   )
 
+import Data.Function as Tools ((&))
+import Pure.Data.Default as Tools
+
 {-
 Approaching this differently than Semantic-UI-React. Instead of managing
 everything internally, I want this to be a pure component that is maximally

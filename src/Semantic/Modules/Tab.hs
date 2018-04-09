@@ -26,6 +26,9 @@ import Semantic.Properties
 
 import Semantic.Elements.Segment (pattern Segment)
 
+import Data.Function as Tools ((&))
+import Pure.Data.Default as Tools
+
 data Tab ms = Tab_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]

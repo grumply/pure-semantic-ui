@@ -18,6 +18,9 @@ import Semantic.Properties as Properties
   , pattern Name, Name(..)
   )
 
+import Data.Function as Tools ((&))
+import Pure.Data.Default as Tools
+
 data Flag ms = Flag_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]

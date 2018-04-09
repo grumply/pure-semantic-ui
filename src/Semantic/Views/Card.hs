@@ -35,6 +35,9 @@ import Semantic.Properties as Properties
   , pattern Stackable, Stackable(..)
   )
 
+import Data.Function as Tool ((&))
+import Pure.Data.Default as Tools
+
 data Card ms = Card_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]

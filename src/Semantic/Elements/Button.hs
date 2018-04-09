@@ -53,6 +53,9 @@ import Semantic.Properties as Properties
   , pattern Localize, Localize(..)
   )
 
+import Data.Function as Tools ((&))
+import Pure.Data.Default as Tools
+
 data Button ms = Button_
   { as :: [Feature ms] -> [View ms] -> View ms
   , children :: [View ms]

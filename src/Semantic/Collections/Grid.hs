@@ -46,6 +46,9 @@ import Semantic.Properties as Properties
   , pattern Width, Width(..)
   )
 
+import Data.Function as Tools ((&))
+import Pure.Data.Default as Tools
+
 data Grid ms = Grid_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]

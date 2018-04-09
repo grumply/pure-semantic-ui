@@ -50,6 +50,9 @@ import Semantic.Properties as Properties
 
 import Semantic.Elements.Icon
 
+import Data.Function as Tools ((&))
+import Pure.Data.Default as Tools
+
 data Menu ms = Menu_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]

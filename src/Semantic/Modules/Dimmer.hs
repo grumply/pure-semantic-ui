@@ -39,6 +39,9 @@ import Semantic.Properties as Properties
   , pattern Dimmed, Dimmed(..)
   )
 
+import Data.Function as Tools ((&))
+import Pure.Data.Default as Tools
+
 data Dimmer ms = Dimmer_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]

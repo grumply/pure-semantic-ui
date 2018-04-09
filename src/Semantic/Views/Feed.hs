@@ -30,6 +30,9 @@ import Semantic.Properties as Properties
   , pattern IsText, IsText(..)
   )
 
+import Data.Function as Tool ((&))
+import Pure.Data.Default as Tools
+
 data Feed ms = Feed_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]

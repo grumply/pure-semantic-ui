@@ -37,6 +37,9 @@ import Semantic.Properties as Properties
   , pattern Widths, Widths(..)
   )
 
+import Data.Function as Tools ((&))
+import Pure.Data.Default as Tools
+
 data Step ms = Step_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]

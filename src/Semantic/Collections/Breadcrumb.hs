@@ -33,7 +33,9 @@ import Semantic.Properties
   )
 
 import qualified Data.List as List
-import Data.Function ((&))
+
+import Data.Function as Tools ((&))
+import Pure.Data.Default as Tools
 
 data Breadcrumb ms = Breadcrumb_
     { as :: [Feature ms] -> [View ms] -> View ms

@@ -34,6 +34,9 @@ import Semantic.Properties as Properties
   , pattern TextAlign, TextAlign(..)
   )
 
+import Data.Function as Tools ((&))
+import Pure.Data.Default as Tools
+
 data Header ms = Header_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attached :: Maybe Txt

@@ -39,6 +39,9 @@ import Semantic.Properties as Properties
   , pattern Horizontal, Horizontal(..)
   )
 
+import Data.Function as Tools ((&))
+import Pure.Data.Default as Tools
+
 data Segment ms = Segment_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]

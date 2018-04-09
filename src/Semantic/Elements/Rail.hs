@@ -24,6 +24,9 @@ import Semantic.Properties as Properties
   , pattern Size, Size(..)
   )
 
+import Data.Function as Tools ((&))
+import Pure.Data.Default as Tools
+
 data Rail ms = Rail_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]

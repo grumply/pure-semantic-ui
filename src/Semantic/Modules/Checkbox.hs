@@ -36,6 +36,9 @@ import Semantic.Properties as Properties
   , Checked(..)
   )
 
+import Data.Function as Tools ((&))
+import Pure.Data.Default as Tools
+
 data Checkbox ms = Checkbox_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]

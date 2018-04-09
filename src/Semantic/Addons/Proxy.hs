@@ -17,6 +17,9 @@ import Semantic.Properties as Properties
   , pattern InnerRef, InnerRef(..)
   )
 
+import Data.Function as Tools ((&))
+import Pure.Data.Default as Tools
+
 data Proxy ms = Proxy_
     { children :: [View ms]
     , innerRef :: Node -> IO ()

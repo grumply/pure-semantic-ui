@@ -35,6 +35,9 @@ import Semantic.Properties as Properties
   , AnimationDuration(..)
   )
 
+import Data.Function as Tools ((&))
+import Pure.Data.Default as Tools
+
 data TransitionStatus = Unmounted | Entered | Entering | Exited | Exiting
     deriving (Generic,Default,Ord,Eq)
 
@@ -44,7 +47,8 @@ calculateTransitionDuration Exiting  Skewed {..} = hide
 calculateTransitionDuration _        Skewed {..} = show
 
 data Transition ms = Transition_
-    { children :: [View ms]
+    { as :: Maybe ([Feature ms] -> [View ms] -> View ms)
+    , children :: [View ms]
     , animation :: Txt
     , duration :: AnimationDuration
     , visible :: Bool
@@ -59,7 +63,8 @@ data Transition ms = Transition_
 
 instance Default (Transition ms) where
     def = (G.to gdef)
-        { animation = "fade"
+        { as = Just Div
+        , animation = "fade"
         , duration = Uniform 500
         , visible = True
         , mountOnShow = True
@@ -190,8 +195,8 @@ instance Pure Transition ms where
 
                     , renderer = \Transition_ {..} TS {..} ->
                           let
-                              animationClasses =
-                                  ( animation ) :
+                              animationClasses cs =
+                                  ( animation : cs ) ++
                                       if animation `elem` directionalTransitions
                                           then
                                               [ animating # "animating"
@@ -206,18 +211,22 @@ instance Pure Transition ms where
                                           else
                                               [ animating # "animating transition" ]
 
-                              animationStyles =
+                              animationStyles styles =
                                   let ad =
                                           case status of
                                               Entering -> ("animation-duration",ms(calculateTransitionDuration status duration))
                                               Exiting  -> ("animation-duration",ms(calculateTransitionDuration status duration))
                                               _        -> def
-                                  in [ ad ]
+                                  in styles <> [ ad ]
+
+                              headMay [] = nil
+                              headMay (x : _) = x
 
                           in
                               (status /= Unmounted) #
-                                  Div [ ClassList animationClasses, StyleList animationStyles ]
-                                      children
+                                  case as of
+                                    Nothing -> updateStylesAndClasses animationStyles animationClasses $ headMay children
+                                    Just w  -> w [ ClassList (animationClasses []), StyleList (animationStyles [])] children
 
                     }
 

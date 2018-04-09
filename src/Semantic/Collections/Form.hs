@@ -39,6 +39,9 @@ import Semantic.Properties as Properties
   , pattern Type, Type(..)
   )
 
+import Data.Function as Tools ((&))
+import Pure.Data.Default as Tools
+
 data Form ms = Form_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]

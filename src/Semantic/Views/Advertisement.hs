@@ -21,6 +21,9 @@ import Semantic.Properties as Properties
   , pattern Unit, Unit(..)
   )
 
+import Data.Function as Tool ((&))
+import Pure.Data.Default as Tools
+
 data Advertisement ms = Advertisement_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]

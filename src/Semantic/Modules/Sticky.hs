@@ -33,6 +33,9 @@ import Semantic.Properties as Properties
   , pattern ScrollContext, ScrollContext(..)
   )
 
+import Data.Function as Tools ((&))
+import Pure.Data.Default as Tools
+
 data Sticky ms = Sticky_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]

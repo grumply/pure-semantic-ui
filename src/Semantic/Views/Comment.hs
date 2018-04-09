@@ -33,6 +33,9 @@ import Semantic.Properties as Properties
   , pattern Src, Src(..)
   )
 
+import Data.Function as Tool ((&))
+import Pure.Data.Default as Tools
+
 data Comment ms = Comment_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]

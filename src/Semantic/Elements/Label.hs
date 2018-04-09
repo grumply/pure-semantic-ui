@@ -39,6 +39,9 @@ import Semantic.Properties as Properties
 
 import Prelude hiding (Floating)
 
+import Data.Function as Tools ((&))
+import Pure.Data.Default as Tools
+
 data Label ms = Label_
     { as :: [Feature ms] -> [View ms] -> View ms
     , active :: Bool

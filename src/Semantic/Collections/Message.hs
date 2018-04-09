@@ -41,6 +41,9 @@ import Semantic.Properties as Properties
 
 import Prelude hiding (error,Floating)
 
+import Data.Function as Tools ((&))
+import Pure.Data.Default as Tools
+
 data Message ms = Message_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]

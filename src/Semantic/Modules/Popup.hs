@@ -56,16 +56,8 @@ import Semantic.Properties as Properties
   , pattern MouseLeaveDelay, MouseLeaveDelay(..)
   )
 
-positions =
-    [ "top left"
-    , "top right"
-    , "top center"
-    , "bottom left"
-    , "bottom right"
-    , "bottom center"
-    , "right center"
-    , "left center"
-    ]
+import Data.Function as Tools ((&))
+import Pure.Data.Default as Tools
 
 data Popup ms = Popup_
     { as :: [Feature ms] -> [View ms] -> View ms
@@ -200,6 +192,17 @@ instance VC ms => Pure Popup ms where
                             compute = computePopupStyle offset pbr cbr bs
 
                             s = compute position
+
+                            positions =
+                                [ "top left"
+                                , "top right"
+                                , "top center"
+                                , "bottom left"
+                                , "bottom right"
+                                , "bottom center"
+                                , "right center"
+                                , "left center"
+                                ]
 
                             ps = (position,s) : map (id &&& compute) (filter (/= position) positions)
 

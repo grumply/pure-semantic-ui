@@ -22,6 +22,9 @@ import Semantic.Properties as Properties
   , pattern Instant, Instant(..)
   )
 
+import Data.Function as Tools ((&))
+import Pure.Data.Default as Tools
+
 data Reveal ms = Reveal_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]

@@ -44,6 +44,9 @@ import Semantic.Properties as Properties
   , pattern Wrapped, Wrapped(..)
   )
 
+import Data.Function as Tool ((&))
+import Pure.Data.Default as Tools
+
 data Item ms = Item_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]

@@ -21,6 +21,9 @@ import Semantic.Properties as Properties
   , pattern IsText, IsText(..)
   )
 
+import Data.Function as Tools ((&))
+import Pure.Data.Default as Tools
+
 data Container ms = Container_
   { as :: [Feature ms] -> [View ms] -> View ms
   , children :: [View ms]

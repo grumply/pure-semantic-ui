@@ -32,6 +32,9 @@ import Semantic.Properties as Properties
   , pattern Focus, Focus(..)
   )
 
+import Data.Function as Tools ((&))
+import Pure.Data.Default as Tools
+
 data TextArea ms = TextArea_
     { as         :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]

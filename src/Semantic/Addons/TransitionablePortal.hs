@@ -33,6 +33,9 @@ import Semantic.Properties as Properties
   , AnimationDuration(..)
   )
 
+import Data.Function as Tools ((&))
+import Pure.Data.Default as Tools
+
 data TransitionablePortal ms = TransitionablePortal_
     { children       :: [View ms]
     , onClose        :: Ef ms IO ()

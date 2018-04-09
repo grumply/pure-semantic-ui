@@ -33,6 +33,9 @@ import Semantic.Properties as Properties
   , pattern WithModal, WithModal(..)
   )
 
+import Data.Function as Tools ((&))
+import Pure.Data.Default as Tools
+
 data Confirm ms = Confirm_
     { cancelButton  :: Button.Button ms
     , confirmButton :: Button.Button ms

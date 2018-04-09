@@ -27,6 +27,9 @@ import Semantic.Properties as Properties
   , pattern OnClick, OnClick(..)
   )
 
+import Data.Function as Tools ((&))
+import Pure.Data.Default as Tools
+
 data Accordion ms = Accordion_
     { as :: [Feature ms] -> [View ms] -> View ms
     , attributes :: [Feature ms]

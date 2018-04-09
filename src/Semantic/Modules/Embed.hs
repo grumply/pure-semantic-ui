@@ -36,6 +36,9 @@ import Semantic.Properties as Properties
 import Prelude hiding (id)
 import qualified Prelude
 
+import Data.Function as Tools ((&))
+import Pure.Data.Default as Tools
+
 data EmbedSource = YouTube | Vimeo | OtherSource Txt
 
 data Embed ms = Embed_
