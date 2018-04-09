@@ -1,5 +1,5 @@
 name:              semantic-ui-pure
-version:           0.1.0.1
+version:           0.2.0.0
 synopsis:          
 homepage:          
 author:            S. M. Hickman
@@ -16,7 +16,6 @@ library
   build-depends:
       base >=4.8
     , pure
-    -- END DEPENDENCIES
 
   default-extensions:
     BangPatterns
@@ -42,7 +41,6 @@ library
     MultiWayIf
     ScopedTypeVariables
     TupleSections
-    -- END EXTENSIONS
 
   exposed-modules:
     Semantic.Addons.Confirm
