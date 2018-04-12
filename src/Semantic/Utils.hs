@@ -120,8 +120,9 @@ contains node target =
 mergeClasses :: [Feature ms] -> [Feature ms]
 mergeClasses = go []
   where
-    go acc [] = [ Property "class" ( foldr (<<>>) mempty acc ) ]
-    go acc ( Property "class" cs : rest ) = go ( cs : acc ) rest
+    go acc [] = [ Attribute "class" ( foldr (<<>>) mempty acc ) ]
+    go acc ( Attribute "class" cs : rest ) = go ( cs : acc ) rest
+    go acc ( Property "className" cs : rest ) = go ( cs : acc ) rest
     go acc ( f : fs ) = f : go acc fs
 
 -- Note: This method only applies to the first rendering of a ComponentView.
