@@ -14,7 +14,7 @@ import Pure.Lifted (Win(..),Node(..),getWindow)
 
 import Semantic.Utils
 
-import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)

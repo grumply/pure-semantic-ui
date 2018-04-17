@@ -16,7 +16,7 @@ import Semantic.Utils
 import Semantic.Icon hiding (Group(..), pattern Group)
 import Semantic.Label hiding (Group(..), pattern Group)
 
-import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!) )
 
 import Semantic.Properties as Properties
   ( pattern Active, Active(..)

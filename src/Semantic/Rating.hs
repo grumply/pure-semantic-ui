@@ -11,7 +11,7 @@ import Pure.View hiding (disabled,OnClick,OnMouseEnter,Selected,onKeyUp,onClick,
 
 import Semantic.Utils
 
-import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!) )
 
 import Semantic.Properties as Properties
   ( pattern Active, Active(..)

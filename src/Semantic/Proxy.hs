@@ -10,7 +10,7 @@ import Pure.Lifted (Node)
 
 import Semantic.Utils
 
-import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!) )
 
 import Semantic.Properties as Properties
   ( pattern Children, Children(..)

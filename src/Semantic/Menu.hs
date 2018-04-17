@@ -13,7 +13,7 @@ import Pure.View hiding (active,color,fixed,onClick,text,vertical,widths,positio
 
 import Semantic.Utils
 
-import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)

@@ -20,7 +20,7 @@ import Semantic.Utils
 
 import qualified Semantic.Portal as Portal
 
-import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!) )
 
 import Semantic.Properties as Properties
   ( pattern CloseOnDocumentClick, CloseOnDocumentClick(..)

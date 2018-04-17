@@ -14,7 +14,7 @@ import Semantic.Button
 import Semantic.Icon
 import Semantic.Label
 
-import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)

@@ -14,7 +14,7 @@ import Semantic.Utils hiding (id)
 
 import Semantic.Icon
 
-import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!) )
 
 import Semantic.Properties as Properties
   ( pattern Name, Name(..)

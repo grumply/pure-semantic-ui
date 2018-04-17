@@ -20,7 +20,7 @@ import Semantic.Utils hiding (on)
 
 import Semantic.Portal hiding (PS)
 
-import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)

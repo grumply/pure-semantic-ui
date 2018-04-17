@@ -9,7 +9,7 @@ import Pure.View hiding (active,disabled,inline,verticalAlign)
 
 import Semantic.Utils
 
-import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!) )
 
 import Semantic.Properties as Properties
   ( pattern Active, Active(..)

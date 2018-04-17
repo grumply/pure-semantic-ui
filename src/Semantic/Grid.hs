@@ -11,7 +11,7 @@ import Pure.View hiding (name,textAlign,verticalAlign,color,width)
 
 import Semantic.Utils hiding (only)
 
-import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)

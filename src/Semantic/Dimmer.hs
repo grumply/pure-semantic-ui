@@ -15,7 +15,7 @@ import Semantic.Utils
 
 import Semantic.Portal
 
-import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!) )
 
 import Semantic.Properties as Properties
   ( pattern CloseOnEscape, CloseOnEscape(..)

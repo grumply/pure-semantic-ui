@@ -15,7 +15,7 @@ import Semantic.Utils
 import Semantic.Portal as Portal
 import Semantic.Transition as Transition
 
-import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!) )
 
 import Semantic.Properties as Properties
   ( pattern Children, Children(..)
