@@ -8,7 +8,7 @@ import Control.Arrow ((&&&))
 import Pure.Data.JSV (JSV)
 import Pure.Data.Txt (Txt)
 import Pure.Data.Default (Default(..))
-import Pure.View (list,mkHTML,mkSVG,View(..),Feature)
+import Pure.View (list,mkHTML,mkSVG,View(..),Feature,pattern StyleList)
 
 import qualified Data.Proxy as P
 
@@ -115,6 +115,10 @@ pattern Attributes p a <- (getProp Attributes_ &&& id -> (p,a)) where
 infixl 1 %
 (%) c as = c & Attributes as
 
+infixl 1 !
+(!) :: (HasProp Attributes (a ms), Prop Attributes (a ms) ~ [Feature ms]) => a ms -> [(Txt,Txt)] -> a ms
+(!) (Attributes old_cs c) styles = Attributes (StyleList styles : old_cs) c
+
 data AutoHeight = AutoHeight_
 pattern AutoHeight :: HasProp AutoHeight a => Prop AutoHeight a -> a -> a
 pattern AutoHeight p a <- (getProp AutoHeight_ &&& id -> (p,a)) where
@@ -199,9 +203,6 @@ data Children = Children_
 pattern Children :: HasProp Children a => Prop Children a -> a -> a
 pattern Children p a <- (getProp Children_ &&& id -> (p,a)) where
     Children p a = setProp Children_ p a
-
-infixl 1 !
-(!) c cs = Children cs c
 
 infixl 1 |>
 (|>) c cs = Children cs c
