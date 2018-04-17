@@ -145,7 +145,7 @@ instance VC ms => Pure Popup ms where
 
                         rightStyle''
                             | centerV   = fmap (subtract xOff) rightStyle'
-                            | otherwise = rightStyle
+                            | otherwise = rightStyle'
 
                         topStyle
                             | isTop     = Nothing
@@ -214,6 +214,7 @@ instance VC ms => Pure Popup ms where
                             (p,(l,r,t,b)) = findValid ps
 
                         let ss = [("position","absolute"),render left l,render right r,render top t,render bottom b]
+
                         setState self $ \_ PS {..} ->
                             PS { currentStyles  = ss
                                , currentPosition = p
