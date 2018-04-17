@@ -53,6 +53,10 @@ import Semantic.Properties as Properties
   , pattern Width, Width(..)
   , pattern FullWidth, FullWidth(..)
   , pattern Sorted, Sorted(..)
+  , pattern One, pattern Two, pattern Three, pattern Four
+  , pattern Five, pattern Six, pattern Seven, pattern Eight
+  , pattern Nine, pattern Ten, pattern Eleven, pattern Twelve
+  , pattern Thirtee, pattern Fourteen, pattern Fifteen, pattern Sixteen
   )
 
 import Prelude hiding (error)

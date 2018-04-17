@@ -26,6 +26,10 @@ import Semantic.Properties as Properties
   , pattern Width, Width(..)
   , pattern AnimationDuration, AnimationDuration(..)
   , pattern Dimmed, Dimmed(..)
+  , pattern One, pattern Two, pattern Three, pattern Four
+  , pattern Five, pattern Six, pattern Seven, pattern Eight
+  , pattern Nine, pattern Ten, pattern Eleven, pattern Twelve
+  , pattern Thirtee, pattern Fourteen, pattern Fifteen, pattern Sixteen
   )
 
 import Data.Function as Tools ((&))

@@ -26,6 +26,10 @@ import Semantic.Properties as Properties
   , pattern Size, Size(..)
   , pattern Widths, Widths(..)
   , pattern IsText, IsText(..)
+  , pattern One, pattern Two, pattern Three, pattern Four
+  , pattern Five, pattern Six, pattern Seven, pattern Eight
+  , pattern Nine, pattern Ten, pattern Eleven, pattern Twelve
+  , pattern Thirtee, pattern Fourteen, pattern Fifteen, pattern Sixteen
   )
 
 import Data.Function as Tools ((&))
