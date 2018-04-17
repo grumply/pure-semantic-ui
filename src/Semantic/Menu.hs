@@ -49,7 +49,7 @@ import Semantic.Properties as Properties
   , pattern One, pattern Two, pattern Three, pattern Four
   , pattern Five, pattern Six, pattern Seven, pattern Eight
   , pattern Nine, pattern Ten, pattern Eleven, pattern Twelve
-  , pattern Thirtee, pattern Fourteen, pattern Fifteen, pattern Sixteen
+  , pattern Thirteen, pattern Fourteen, pattern Fifteen, pattern Sixteen
   )
 
 import Semantic.Icon
