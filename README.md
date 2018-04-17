@@ -99,16 +99,11 @@ myButton = Button $ def & Size "small" & Circular True & Children
     [ "My Button" ]
 ```
 
-There is a shorthand, `!`, for `& Children`.
+There is a shorthand, `!`, for adding styles
 
 ```haskell
-myButton = Button $ def & Size "small" & Circular True ! [ "My Button" ]
-```
-
-And since there is an `IsString` instance for `[View ms]`, we can omit the list syntax.
-
-```haskell
-myButton = Button $ def & Size "small" & Circular True ! "My Button"
+myButton = Button $ def & Size "small" & Circular True ! [ (padding,pxs 12) ] & Children 
+    [ "My Button" ]
 ```
 
 ### Attributes/Features
@@ -141,7 +136,7 @@ With these, we can get a clean construction syntax.
 
 ```haskell
 myView =
-  Container <| def & Fluid |>
+  Container <| def & Fluid ! [(margin,pxs 8)] |>
     [ ButtonGroup <| def & Color Teal |>
         [ Button <| def & Circular True |> 
             "Circular Button" 
