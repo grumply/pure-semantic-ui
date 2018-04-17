@@ -13,7 +13,7 @@ import Pure.View hiding (onFocus,onBlur,name,active,Result,onClick)
 
 import Semantic.Utils
 
-import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!), (%) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)

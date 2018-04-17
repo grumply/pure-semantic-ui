@@ -13,7 +13,7 @@ import Pure.View hiding (animation,direction,visible,width)
 
 import Semantic.Utils
 
-import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!), (%) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)

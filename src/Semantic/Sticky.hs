@@ -14,7 +14,7 @@ import Pure.DOM (addAnimation)
 
 import Semantic.Utils hiding (body)
 
-import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!), (%) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)

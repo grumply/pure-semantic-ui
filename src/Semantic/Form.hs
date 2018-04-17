@@ -13,7 +13,7 @@ import qualified Pure.View as HTML
 import Semantic.Utils
 import Prelude hiding (error)
 
-import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!), (%) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)

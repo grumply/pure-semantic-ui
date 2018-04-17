@@ -15,7 +15,7 @@ import Pure.View hiding (animation,onComplete,visible,lookup)
 
 import Semantic.Utils
 
-import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!), (%) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)

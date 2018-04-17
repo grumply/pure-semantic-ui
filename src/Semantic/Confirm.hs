@@ -17,7 +17,7 @@ import qualified Semantic.Button as Button
 
 import qualified Semantic.Modal as Modal
 
-import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!), (%) )
 
 import Semantic.Properties as Properties
   ( pattern OnClick, OnClick(..)

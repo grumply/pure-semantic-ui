@@ -19,7 +19,7 @@ import Semantic.Utils
 
 import Semantic.Proxy
 
-import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!), (%) )
 
 import Semantic.Properties as Properties
   ( pattern Attributes, Attributes(..)

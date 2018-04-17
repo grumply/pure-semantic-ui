@@ -17,7 +17,7 @@ import Text.Read (readMaybe)
 import Semantic.Utils
 import qualified Semantic.Utils as Utils
 
-import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!) )
+import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!), (%) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)
