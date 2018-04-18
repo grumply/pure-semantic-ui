@@ -172,10 +172,10 @@ instance VC ms => Pure Popup ms where
                             | isJust b  = maybe 0 (\_ -> ch - fromJust b - brHeight) t
                             | otherwise = fromMaybe 0 t
 
-                        visibleTop    = topValue >= pyo
-                        visibleBottom = topValue + brHeight <= pyo + ch
-                        visibleLeft   = leftValue >= pyo
-                        visibleRight  = leftValue + brWidth <= pxo + cw
+                        visibleTop    = topValue > pyo
+                        visibleBottom = topValue + brHeight < pyo + ch
+                        visibleLeft   = leftValue > pyo
+                        visibleRight  = leftValue + brWidth < pxo + cw
 
                     in visibleTop && visibleBottom && visibleLeft && visibleRight
 
@@ -273,7 +273,7 @@ instance VC ms => Pure Popup ms where
 
                         cs =
                             ( "ui"
-                            : position
+                            : currentPosition
                             : size
                             : wide # "wide"
                             : basic # "basic"
