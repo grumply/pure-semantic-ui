@@ -135,7 +135,8 @@ instance VC ms => Pure TextArea ms where
 
                 , renderer = \TextArea_ {..} TAS {..} ->
                     as
-                        ( HTML.onInputChange handleChange
+                        ( mergeClasses $ ClassList classes
+                        : HTML.onInputChange handleChange
                         : HTML.onInput handleInput
                         : HostRef handleRef
                         : HTML.Rows rows
