@@ -410,7 +410,7 @@ instance Pure Image ms where
                 : useKeyOrValueAndKey spaced "spaced"
                 : floated # ("floated" <<>> floated)
                 : verticalAlign # ("aligned" <<>> verticalAlign)
-                : "Image"
+                : "image"
                 : classes
                 )
         in
