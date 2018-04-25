@@ -219,7 +219,7 @@ instance Pure Portal ms where
                         PSN {..} <- readIORef nodes
                         PSH {..} <- readIORef handlers
                         for_ rootNode $ \n ->
-                            setProperty (Element n) "className" (Txt.unwords classes)
+                            classes # setProperty (Element n) "className" (Txt.unwords classes)
                         mouseLeaveHandler
                         mouseEnterHandler
                         let chld = only children
@@ -248,7 +248,7 @@ instance Pure Portal ms where
                     updateRootClasses # do
                         PSN {..} <- readIORef nodes
                         for_ rootNode $ \n ->
-                            setProperty (Element n) "className" (Txt.unwords classes)
+                            classes # setProperty (Element n) "className" (Txt.unwords classes)
                     active # do
                         (mid,old) <- readIORef liveView
                         mtd  <- newIORef (return ())
