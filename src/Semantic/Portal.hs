@@ -308,6 +308,8 @@ instance Pure Portal ms where
 
                     parent self onUnmount
 
+                    writeIORef liveView (nil,nil)
+
                 handleRef (Node r) = do
                     PS {..} <- getState self
                     modifyIORef nodes $ \PSN {..} ->
