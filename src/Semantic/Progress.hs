@@ -27,6 +27,7 @@ import Semantic.Properties as Properties
   , pattern Inverted, Inverted(..)
   , pattern Percent, Percent(..)
   , pattern Precision, Precision(..)
+  , pattern ShowProgress, ShowProgress(..)
   , pattern Size, Size(..)
   , pattern Success, Success(..)
   , pattern Total, Total(..)
@@ -54,6 +55,7 @@ data Progress ms = Progress_
     , inverted :: Bool
     , percent :: Maybe Double
     , precision :: Int
+    , progress :: Bool
     , size :: Txt
     , success :: Bool
     , total :: Int
@@ -105,8 +107,9 @@ instance Pure Progress ms where
                 [ Div [ ClassList [ "bar" ]
                       , StyleList [(width,per getPercent)]
                       ]
-                      [ Div [ ClassList [ "progress" ] ]
-                            [ fromTxt $ maybe (int value <> "/" <> int total) per percent ]
+                      [ progress #
+                            Div [ ClassList [ "progress" ] ]
+                                [ fromTxt $ maybe (int value <> "/" <> int total) per percent ]
                       ]
                 , Div [ ClassList [ "label" ] ] children
                 ]
@@ -181,6 +184,11 @@ instance HasProp Precision (Progress ms) where
     type Prop Precision (Progress ms) = Int
     getProp _ = precision
     setProp _ pre p = p { precision = pre }
+
+instance HasProp ShowProgress (Progress ms) where
+    type Prop ShowProgress (Progress ms) = Bool
+    getProp _ = progress
+    setProp _ sp p = p { progress = sp }
 
 instance HasProp Size (Progress ms) where
     type Prop Size (Progress ms) = Txt

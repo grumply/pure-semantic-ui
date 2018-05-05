@@ -1087,6 +1087,11 @@ pattern Selection :: HasProp Selection a => Prop Selection a -> a -> a
 pattern Selection p a <- (getProp Selection_ &&& id -> (p,a)) where
     Selection p a = setProp Selection_ p a
 
+data ShowProgress = ShowProgress_
+pattern ShowProgress :: HasProp ShowProgress a => Prop ShowProgress a -> a -> a
+pattern ShowProgress p a <- (getProp ShowProgress_ &&& id -> (p,a)) where
+    ShowProgress p a = setProp ShowProgress_ p a
+
 data Simple = Simple_
 pattern Simple :: HasProp Simple a => Prop Simple a -> a -> a
 pattern Simple p a <- (getProp Simple_ &&& id -> (p,a)) where
