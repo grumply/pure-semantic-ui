@@ -5,10 +5,9 @@ import GHC.Generics
 
 import Control.Arrow ((&&&))
 
-import Pure.Data.JSV (JSV)
+import Pure.Data.View (JSV)
 import Pure.Data.Txt (Txt)
 import Pure.Data.Default (Default(..))
-import Pure.View (list,mkHTML,mkSVG,View(..),Feature,pattern StyleList)
 
 import qualified Data.Proxy as P
 
@@ -107,18 +106,6 @@ pattern Attached :: HasProp Attached a => Prop Attached a -> a -> a
 pattern Attached p a <- (getProp Attached_ &&& id -> (p,a)) where
     Attached p a = setProp Attached_ p a
 
-data Attributes = Attributes_
-pattern Attributes :: HasProp Attributes a => Prop Attributes a -> a -> a
-pattern Attributes p a <- (getProp Attributes_ &&& id -> (p,a)) where
-    Attributes p a = setProp Attributes_ p a
-
-infixl 1 %
-(%) c as = c & Attributes as
-
-infixl 1 !
-(!) :: (HasProp Attributes (a ms), Prop Attributes (a ms) ~ [Feature ms]) => a ms -> [(Txt,Txt)] -> a ms
-(!) (Attributes old_cs c) styles = Attributes (StyleList styles : old_cs) c
-
 data AutoHeight = AutoHeight_
 pattern AutoHeight :: HasProp AutoHeight a => Prop AutoHeight a -> a -> a
 pattern AutoHeight p a <- (getProp AutoHeight_ &&& id -> (p,a)) where
@@ -198,14 +185,6 @@ data Centered = Centered_
 pattern Centered :: HasProp Centered a => Prop Centered a -> a -> a
 pattern Centered p a <- (getProp Centered_ &&& id -> (p,a)) where
     Centered p a = setProp Centered_ p a
-
-data Children = Children_
-pattern Children :: HasProp Children a => Prop Children a -> a -> a
-pattern Children p a <- (getProp Children_ &&& id -> (p,a)) where
-    Children p a = setProp Children_ p a
-
-infixl 1 |>
-(|>) c cs = Children cs c
 
 data Circular = Circular_
 pattern Circular :: HasProp Circular a => Prop Circular a -> a -> a
@@ -1341,12 +1320,6 @@ data Wrapped = Wrapped_
 pattern Wrapped :: HasProp Wrapped a => Prop Wrapped a -> a -> a
 pattern Wrapped p a <- (getProp Wrapped_ &&& id -> (p,a)) where
     Wrapped p a = setProp Wrapped_ p a
-
-infixr 0 <|
-(<|) f = f
-
-infixr 0 <||>
-(<||>) c cs = c <| def |> cs
 
 pattern ToLeft = "left"
 pattern ToRight = "right"
