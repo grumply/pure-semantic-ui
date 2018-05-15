@@ -23,6 +23,8 @@ import Semantic.Properties as Properties
   ( pattern InnerRef, InnerRef(..)
   )
 
+import Pure.Data.Default as Tools
+
 data Proxy = Proxy_
     { child :: View
     , innerRef :: Node -> IO ()
@@ -35,17 +37,20 @@ pattern Proxy :: Proxy -> Proxy
 pattern Proxy a = a
 
 instance Pure Proxy where
-    view =
-        LibraryComponent $ \self -> def
-            { execute   = id
-            , performIO = id
-            , construct = return ()
-            , mounted   = do
+    view = LibraryComponent $ \self ->
+        let
+            withRef (getHost -> h) = do
                 f <- innerRef <$> getProps self
-                h <- getHost  <$> getView  self
                 traverse_ f h
-            , render    = \ref _ -> child ref
-            }
+        in
+            def
+                { execute   = id
+                , performIO = id
+                , construct = return ()
+                , mounted   = getView self >>= withRef
+                , updated   = \_ _ -> withRef
+                , render    = \ref _ -> child ref
+                }
 
 instance HasChildren Proxy where
     getChildren v = [ child v ]
@@ -56,6 +61,7 @@ instance HasProp InnerRef Proxy where
     getProp _ = innerRef
     setProp _ ir p = p { innerRef = ir }
 
+-- TODO: expose this in pure-dom
 getHost :: View -> Maybe Node
 getHost ComponentView {..} = join $ for record (getHost . unsafePerformIO . readIORef . crView)
 getHost TextView  {..} = fmap toNode textHost

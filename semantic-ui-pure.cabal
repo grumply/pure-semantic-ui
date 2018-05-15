@@ -1,5 +1,5 @@
 name:              semantic-ui-pure
-version:           0.2.0.0
+version:           0.3.0.0
 synopsis:          
 homepage:          
 author:            S. M. Hickman
@@ -8,6 +8,28 @@ license:           BSD3
 license-file:      LICENSE
 cabal-version:     >= 1.10
 build-type:        Simple
+
+test-suite test
+  type: exitcode-stdio-1.0
+
+  main-is: Main.hs
+
+  ghc-options: -dedupe -O2
+
+  hs-source-dirs: test
+
+  build-depends:
+    base >=4.8,
+    semantic-ui-pure >= 0.3 && < 0.4,
+    pure-core >= 0.7 && < 1,
+    pure-default >= 0.7 && < 1,
+    pure-dom >= 0.7 && < 1,
+    pure-events >= 0.7 && < 1,
+    pure-html >= 0.7 && < 1,
+    pure-lifted >= 0.7 && < 1,
+    pure-txt >= 0.7 && < 1
+
+  default-language: Haskell2010
 
 library
   hs-source-dirs:
@@ -67,8 +89,8 @@ library
     -- Semantic.Divider
     -- Semantic.Flag
     -- Semantic.Header
-    -- Semantic.Icon
-    -- Semantic.Image
+    Semantic.Icon
+    Semantic.Image
     -- Semantic.Input
     -- Semantic.Label
     -- Semantic.List
