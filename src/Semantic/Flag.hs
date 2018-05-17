@@ -39,9 +39,9 @@ instance Pure Flag where
     view Flag_ {..} =
         let
             cs =
-                ( name
-                : "flag"
-                )
+                [ name
+                , "flag"
+                ]
         in
             as
                 : attributes

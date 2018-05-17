@@ -1,7 +1,8 @@
+{-# LANGUAGE NoMonomorphismRestriction #-}
 module Semantic.Button
   ( module Properties
   , module Tools
-  , Button(..), pattern Button
+  , Button(..), pattern Semantic.Button.Button
   , Content(..), pattern Content
   , Group(..), pattern Group
   , Or(..), pattern Or
@@ -11,7 +12,8 @@ import GHC.Generics as G (Generic,to)
 import Pure.Data.View
 import Pure.Data.View.Patterns
 import Pure.Data.Txt
-import Pure.Data.HTML
+import Pure.Data.HTML as HTML
+import qualified Pure.Data.HTML.Properties as HTML
 
 import Semantic.Utils
 
@@ -103,7 +105,7 @@ instance Pure Button where
               : circular # "circular"
               : compact # "compact"
               : fluid # "fluid"
-              : icon # "icon"
+              : hasIcon # "icon"
               : inverted # "inverted"
               : loading # "loading"
               : negative # "negative"
@@ -118,55 +120,55 @@ instance Pure Button where
 
             hasIcon = not $ List.null $ List.filter isIcon children
               where
-                isIcon (View Icon {}) = True
+                isIcon (View Icon_ {}) = True
                 isIcon _ = False
 
+            labels, children' :: [View]
             (labels,children') = List.partition isLabel children
               where
-                isLabel (View Label {}) = True
+                isLabel (View Label_ {}) = True
                 isLabel _ = False
 
             labeled = not $ Prelude.null labels
 
-            labeledClasses xs = partition isLabel
-                ( ((labelPosition /= def)
-                    ? (labelPosition <<>> "labeled")
-                    $ (labeled # "labeled")
-                  )
-                : xs
-                )
+            labeledClasses xs
+              | labelPosition /= def = (labelPosition <<>> "labeled") : xs
+              | labeled              = "labeled" : xs
+              | otherwise            = xs
 
             wrapperClasses xs =
-                ( disabled # "disabled"
-                : floated # "floated"
+                  disabled # "disabled"
+                : (floated /= def) # (floated <>> "floated")
                 : xs
-                )
-
-            index =
-                disabled
-                  ? Tabindex "-1"
-                  $ maybe id (Tabindex . toTxt) tabIndex
 
             isButton =
                 case as def def of
                     HTMLView _ "button" _ _ -> True
                     _                       -> False
 
+            fs | labeled   = features & AddClasses ("ui" : labeledClasses ("button" : wrapperClasses []))
+               | otherwise = features & AddClasses ("ui" : baseClasses (wrapperClasses (labeledClasses ["button"])))
+                                      & ((disabled && isButton) ? HTML.Disabled "true" $ id)
+                                      & HTML.Role "button"
+                                      & (disabled ? HTML.TabIndex "-1"
+                                                  $ maybe id (HTML.TabIndex . toTxt) tabIndex
+                                        )
+
+            cs | not labeled = children
+               | otherwise   =
+                  [ (labelPosition == "left") # List.head labels
+                  , HTML.Button <| bfs |> children'
+                  , (labelPosition == "right") # List.head labels
+                  ]
+                  where
+                    bfs = AddClasses ("ui" : baseClasses ["button"])
+                        . HTML.Disabled (disabled ? "true" $ "false")
+                        . (disabled ? HTML.TabIndex "-1"
+                                    $ maybe id (HTML.TabIndex . toTxt) tabIndex
+                          )
+
         in
-            let cs = "ui" : baseClasses (wrapperClasses (labeledClasses ["button"]))
-                buttonClasses = "ui" : baseClasses ["button"]
-                containerClasses = "ui" : labeledClasses ("button" : wrapperClasses [])
-            in
-                labeled
-                  ? as
-                      ( features & AddClasses containerClasses )
-                      [ (labelPosition == "left") # List.head labels
-                      , HTML.Button <| Classes buttonClasses . HTML.Disabled (disabled ? "true" $ "false") . index |> children'
-                      , (labelPosition == "right") # List.head labels
-                      ]
-                  $ as
-                      ( features & AddClasses cs & (disabled && isButton ? HTML.Disabled "true" $ id) & Role "button" & index )
-                      children
+            as fs cs
 
 instance HasProp Animated Button where
     type Prop Animated Button = Maybe Txt
@@ -189,9 +191,8 @@ instance HasProp Attached Button where
     setProp _ attach b = b { attached = attach }
 
 instance HasFeatures Button where
-    type Prop Features Button = Features
-    getProp _ = features
-    setProp _ cs b = b { features = cs }
+    getFeatures = features
+    setFeatures cs b = b { features = cs }
 
 instance HasProp Basic Button where
     type Prop Basic Button = Bool
@@ -199,19 +200,13 @@ instance HasProp Basic Button where
     setProp _ bsc b = b { basic = bsc }
 
 instance HasChildren Button where
-    type Prop Children Button = [View]
-    getProp _ = children
-    setProp _ cs b = b { children = cs }
+    getChildren = children
+    setChildren cs b = b { children = cs }
 
 instance HasProp Circular Button where
     type Prop Circular Button = Bool
     getProp _ = circular
     setProp _ c b = b { circular = c }
-
-instance HasProp Classes Button where
-    type Prop Classes Button = [Txt]
-    getProp _ = classes
-    setProp _ cs b = b { classes = cs }
 
 instance HasProp Color Button where
     type Prop Color Button = Txt
@@ -308,7 +303,7 @@ pattern Content :: Content -> View
 pattern Content bc = View bc
 
 instance Pure Content where
-    render Content_ {..} =
+    view Content_ {..} =
         let
             cs =
                 [ hidden # "hidden"
@@ -329,9 +324,8 @@ instance HasFeatures Content where
     setFeatures fs bc = bc { features = fs }
 
 instance HasChildren Content where
-    type Prop Children Content = [View]
-    getProp _ = children
-    setProp _ cs bc = bc { children = cs }
+    getChildren = children
+    setChildren cs bc = bc { children = cs }
 
 instance HasProp Hidden Content where
     type Prop Hidden Content = Bool
@@ -372,7 +366,7 @@ pattern Group :: Group -> View
 pattern Group bc = View bc
 
 instance Pure Group where
-    render Group_ {..} =
+    view Group_ {..} =
         let
             icon =
                 foldPures (\(Icon_ {}) -> const True) False children
@@ -507,7 +501,7 @@ pattern Or :: Or -> View
 pattern Or bo = View bo
 
 instance Pure Or where
-    render Or_ {..} = as (features & Class "or" & Property ("data-text",localize)) []
+    view Or_ {..} = as (features & Class "or" & Property ("data-text",localize)) []
 
 instance HasProp As Or where
     type Prop As Or = Features -> [View] -> View

@@ -58,14 +58,14 @@ instance Pure Statistic where
     view Statistic_ {..} =
         let
             cs =
-                ( "ui"
-                : color
-                : size
-                : floated # (floated <>> "floated")
-                : horizontal # "horizontal"
-                : inverted # "inverted"
-                : "statistic"
-                )
+                [ "ui"
+                , color
+                , size
+                , floated # (floated <>> "floated")
+                , horizontal # "horizontal"
+                , inverted # "inverted"
+                , "statistic"
+                ]
         in
             as
                 : attributes
@@ -131,14 +131,14 @@ instance Pure Group where
     view Group_ {..} =
         let
             cs =
-                ( "ui"
-                : color
-                : size
-                : horizontal # "horizontal"
-                : inverted # "inverted"
-                : widthProp widths def def
-                : "statistics"
-                )
+                [ "ui"
+                , color
+                , size
+                , horizontal # "horizontal"
+                , inverted # "inverted"
+                , widthProp widths def def
+                , "statistics"
+                ]
         in
             as
                 : attributes
@@ -237,9 +237,9 @@ instance Pure Value where
     view Value_ {..} =
         let
             cs =
-                ( text # "text"
-                : "value"
-                )
+                [ text # "text"
+                , "value"
+                ]
         in
             as
                 : attributes

@@ -59,12 +59,12 @@ setTextContainer c =
 instance Pure Container where
     view Container_ {..} =
         let cs =
-              ( "ui"
-              : text # "text"
-              : fluid # "fluid"
-              : textAlign
-              : "container"
-              )
+              [ "ui"
+              , text # "text"
+              , fluid # "fluid"
+              , textAlign
+              , "container"
+              ]
         in as (ClassList cs : attributes) children
 
 instance HasProp As Container where

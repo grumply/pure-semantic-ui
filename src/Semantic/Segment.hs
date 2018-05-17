@@ -79,28 +79,28 @@ instance Pure Segment where
     view Segment_ {..} =
         let
             cs =
-                ( "ui"
-                : color
-                : size
-                : basic # "basic"
-                : circular # "circular"
-                : clearing # "clearing"
-                : compact # "compact"
-                : disabled # "disabled"
-                : inverted # "inverted"
-                : loading # "loading"
-                : piled # "piled"
-                : raised # "raised"
-                : secondary # "secondary"
-                : stacked # "stacked"
-                : tertiary # "tertiary"
-                : vertical # "vertical"
-                : attached # (attached <>> "attached")
-                : may (<>> "padded") padded
-                : textAlign
-                : floated # ("floated" <<>> floated)
-                : "segment"
-                )
+                [ "ui"
+                , color
+                , size
+                , basic # "basic"
+                , circular # "circular"
+                , clearing # "clearing"
+                , compact # "compact"
+                , disabled # "disabled"
+                , inverted # "inverted"
+                , loading # "loading"
+                , piled # "piled"
+                , raised # "raised"
+                , secondary # "secondary"
+                , stacked # "stacked"
+                , tertiary # "tertiary"
+                , vertical # "vertical"
+                , attached # (attached <>> "attached")
+                , may (<>> "padded") padded
+                , textAlign
+                , floated # ("floated" <<>> floated)
+                , "segment"
+                ]
         in
             as
                 : attributes
@@ -237,15 +237,15 @@ instance Pure Group where
     view Group_ {..} =
         let
             cs =
-                ( "ui"
-                : size
-                : compact # "compact"
-                : horizontal # "horizontal"
-                : piled # "piled"
-                : raised # "raised"
-                : stacked # "stacked"
-                : "segments"
-                )
+                [ "ui"
+                , size
+                , compact # "compact"
+                , horizontal # "horizontal"
+                , piled # "piled"
+                , raised # "raised"
+                , stacked # "stacked"
+                , "segments"
+                ]
         in
             as
                 : attributes

@@ -80,23 +80,23 @@ instance Pure Message where
             dismissIcon = onDismiss # (Icon $ def & Name "close" & Attributes [ On "click" def (\_ -> return $ Just onDismiss) ])
 
             cs =
-                ( "ui"
-                : color
-                : size
-                : compact # "compact"
-                : error # "error"
-                : floating # "floating"
-                : hidden # "hidden"
-                : icon # "icon"
-                : info # "info"
-                : negative # "negative"
-                : positive # "positive"
-                : success # "success"
-                : visible # "visible"
-                : warning # "warning"
-                : may (<>> "attached") attached
-                : "message"
-                )
+                [ "ui"
+                , color
+                , size
+                , compact # "compact"
+                , error # "error"
+                , floating # "floating"
+                , hidden # "hidden"
+                , icon # "icon"
+                , info # "info"
+                , negative # "negative"
+                , positive # "positive"
+                , success # "success"
+                , visible # "visible"
+                , warning # "warning"
+                , may (<>> "attached") attached
+                , "message"
+                ]
         in
             as
                 : attributes

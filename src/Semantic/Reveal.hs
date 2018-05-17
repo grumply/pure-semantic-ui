@@ -47,13 +47,13 @@ instance Pure Reveal where
     view Reveal_ {..} =
         let
             cs =
-                ( "ui"
-                : animated
-                : active # "active"
-                : disabled # "disabled"
-                : instant # "instant"
-                : "reveal"
-                )
+                [ "ui"
+                , animated
+                , active # "active"
+                , disabled # "disabled"
+                , instant # "instant"
+                , "reveal"
+                ]
         in
             as
                 : attributes

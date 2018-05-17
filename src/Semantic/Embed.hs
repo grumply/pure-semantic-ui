@@ -92,11 +92,11 @@ instance Pure Embed where
                 , render = \Embed_ {..} isActive ->
                     let
                         cs =
-                            ( "ui"
-                            : aspectRatio
-                            : isActive # "active"
-                            : "embed"
-                            )
+                            [ "ui"
+                            , aspectRatio
+                            , isActive # "active"
+                            , "embed"
+                            ]
 
                         viewSource YouTube          = "YouTube"
                         viewSource Vimeo            = "Vimeo"

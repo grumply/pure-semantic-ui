@@ -86,23 +86,23 @@ instance Pure Grid where
     view Grid_ {..} =
         let
             cs =
-                ( "ui"
-                : centered # "centered"
-                : container # "container"
-                : doubling # "doubling"
-                : inverted # "inverted"
-                : stackable # "stackable"
-                : stretched # "stretched"
-                : may (<>> "celled") celled
-                : may (<>> "divided") divided
-                : may (<>> "padded") padded
-                : may (<>> "relaxed") relaxed
-                : multiProp reversed "reversed"
-                : textAlign
-                : verticalAlign
-                : widthProp columns "column" True
-                : "grid"
-                )
+                [ "ui"
+                , centered # "centered"
+                , container # "container"
+                , doubling # "doubling"
+                , inverted # "inverted"
+                , stackable # "stackable"
+                , stretched # "stretched"
+                , may (<>> "celled") celled
+                , may (<>> "divided") divided
+                , may (<>> "padded") padded
+                , may (<>> "relaxed") relaxed
+                , multiProp reversed "reversed"
+                , textAlign
+                , verticalAlign
+                , widthProp columns "column" True
+                , "grid"
+                ]
         in
             as
                 : attributes
@@ -221,19 +221,19 @@ instance Pure Column where
     view Column_ {..} =
         let
             cs =
-                ( color
-                : stretched # "stretched"
-                : multiProp only "only"
-                : textAlign
-                : floated # (floated <>> "floated")
-                : verticalAlign
-                : widthProp computer "wide computer" def
-                : widthProp largeScreen "wide large screen" def
-                : widthProp mobile "wide mobile" def
-                : widthProp widescreen "wide widescreen" def
-                : widthProp width "wide" def
-                : "column"
-                )
+                [ color
+                , stretched # "stretched"
+                , multiProp only "only"
+                , textAlign
+                , floated # (floated <>> "floated")
+                , verticalAlign
+                , widthProp computer "wide computer" def
+                , widthProp largeScreen "wide large screen" def
+                , widthProp mobile "wide mobile" def
+                , widthProp widescreen "wide widescreen" def
+                , widthProp width "wide" def
+                , "column"
+                ]
         in
             as
                 : attributes
@@ -338,17 +338,17 @@ instance Pure Row where
     view Row_ {..} =
         let
             cs =
-                ( color
-                : centered # "centered"
-                : divided # "divided"
-                : stretched # "stretched"
-                : multiProp only "only"
-                : multiProp reversed "reversed"
-                : textAlign
-                : verticalAlign
-                : widthProp columns "columns" True
-                : "row"
-                )
+                [ color
+                , centered # "centered"
+                , divided # "divided"
+                , stretched # "stretched"
+                , multiProp only "only"
+                , multiProp reversed "reversed"
+                , textAlign
+                , verticalAlign
+                , widthProp columns "columns" True
+                , "row"
+                ]
         in
             as
                 : attributes

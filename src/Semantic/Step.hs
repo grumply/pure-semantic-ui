@@ -71,12 +71,12 @@ instance Pure Step where
             e = onClick ? A $ as
 
             cs =
-                ( active # "active"
-                : completed # "completed"
-                : disabled # "disabled"
-                : link # "link"
-                : "step"
-                )
+                [ active # "active"
+                , completed # "completed"
+                , disabled # "disabled"
+                , link # "link"
+                , "step"
+                ]
         in
             e
                 : ref
@@ -225,17 +225,17 @@ instance Pure Group where
     view Group_ {..} =
         let
             cs =
-                ( "ui"
-                : size
-                : fluid # "fluid"
-                : ordered # "ordered"
-                : unstackable # "unstackable"
-                : vertical # "vertical"
-                : may (<>> "attached") attached
-                : stackable # (stackable <>> "stackable")
-                : widthProp widths def def
-                : "steps"
-                )
+                [ "ui"
+                , size
+                , fluid # "fluid"
+                , ordered # "ordered"
+                , unstackable # "unstackable"
+                , vertical # "vertical"
+                , may (<>> "attached") attached
+                , stackable # (stackable <>> "stackable")
+                , widthProp widths def def
+                , "steps"
+                ]
         in
             as
                 : attributes

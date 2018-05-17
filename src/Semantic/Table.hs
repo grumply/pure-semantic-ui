@@ -102,30 +102,30 @@ instance Pure Table where
     view Table_ {..} =
         let
             cs =
-                ( "ui"
-                : color
-                : size
-                : celled # "celled"
-                : collapsing # "collapsing"
-                : definition # "definition"
-                : fixed # "fixed"
-                : inverted # "inverted"
-                : selectable # "selectable"
-                : singleLine # "single line"
-                : sortable # "sortable"
-                : stackable # "stackable"
-                : striped # "striped"
-                : structured # "structured"
-                : unstackable # "unstackable"
-                : may (<>> "attached") attached
-                : may (<>> "basic") basic
-                : may (<>> "compact") compact
-                : may (<>> "padded") padded
-                : textAlign
-                : verticalAlign
-                : widthProp columns "column" def
-                : "table"
-                )
+                [ "ui"
+                , color
+                , size
+                , celled # "celled"
+                , collapsing # "collapsing"
+                , definition # "definition"
+                , fixed # "fixed"
+                , inverted # "inverted"
+                , selectable # "selectable"
+                , singleLine # "single line"
+                , sortable # "sortable"
+                , stackable # "stackable"
+                , striped # "striped"
+                , structured # "structured"
+                , unstackable # "unstackable"
+                , may (<>> "attached") attached
+                , may (<>> "basic") basic
+                , may (<>> "compact") compact
+                , may (<>> "padded") padded
+                , textAlign
+                , verticalAlign
+                , widthProp columns "column" def
+                , "table"
+                ]
         in
             as
                 : attributes
@@ -310,19 +310,19 @@ instance Pure Cell where
     view Cell_ {..} =
         let
             cs =
-                ( active # "active"
-                : collapsing # "collapsing"
-                : disabled # "disabled"
-                : error # "error"
-                : negative # "negative"
-                : positive # "positive"
-                : selectable # "selectable"
-                : singleLine # "single line"
-                : warning # "warning"
-                : textAlign
-                : verticalAlign
-                : widthProp width "wide" def
-                )
+                [ active # "active"
+                , collapsing # "collapsing"
+                , disabled # "disabled"
+                , error # "error"
+                , negative # "negative"
+                , positive # "positive"
+                , selectable # "selectable"
+                , singleLine # "single line"
+                , warning # "warning"
+                , textAlign
+                , verticalAlign
+                , widthProp width "wide" def
+                ]
         in
             as
                 : attributes
@@ -506,20 +506,20 @@ instance Pure HeaderCell where
     view HeaderCell_ {..} =
         let
             cs =
-                ( active # "active"
-                : collapsing # "collapsing"
-                : disabled # "disabled"
-                : error # "error"
-                : negative # "negative"
-                : positive # "positive"
-                : selectable # "selectable"
-                : singleLine # "single line"
-                : warning # "warning"
-                : textAlign
-                : verticalAlign
-                : widthProp width "wide" def
-                : sorted # (sorted <>> "sorted")
-                )
+                [ active # "active"
+                , collapsing # "collapsing"
+                , disabled # "disabled"
+                , error # "error"
+                , negative # "negative"
+                , positive # "positive"
+                , selectable # "selectable"
+                , singleLine # "single line"
+                , warning # "warning"
+                , textAlign
+                , verticalAlign
+                , widthProp width "wide" def
+                , sorted # (sorted <>> "sorted")
+                ]
         in
             as
                 : attributes
@@ -628,15 +628,15 @@ instance Pure Row where
     view Row_ {..} =
         let
             cs =
-                ( active # "active"
-                : disabled # "disabled"
-                : error # "error"
-                : negative # "negative"
-                : positive # "positive"
-                : warning # "warning"
-                : textAlign
-                : verticalAlign
-                )
+                [ active # "active"
+                , disabled # "disabled"
+                , error # "error"
+                , negative # "negative"
+                , positive # "positive"
+                , warning # "warning"
+                , textAlign
+                , verticalAlign
+                ]
         in
             as
                 : attributes

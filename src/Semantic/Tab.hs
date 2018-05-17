@@ -68,11 +68,7 @@ data Pane = Pane_
 
 instance Default Pane where
     def = (G.to gdef)
-        { as = \fs cs ->
-            Segment $ def
-                & Attached "bottom"
-                & Attributes fs
-                & Children cs
+        { as = \fs cs -> Segment def <| Attached "bottom" . setFeatures fs |> cs
         }
 
 pattern Pane :: Pane -> Pane
@@ -82,10 +78,10 @@ instance Pure Pane where
     view Pane_ {..} =
         let
             cs =
-                ( active # "active"
-                : loading # "loading"
-                : "tab"
-                )
+                [ active # "active"
+                , loading # "loading"
+                , "tab"
+                ]
         in
             as
                 : attributes

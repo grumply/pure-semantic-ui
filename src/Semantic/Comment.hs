@@ -54,9 +54,9 @@ instance Pure Comment where
     view Comment_ {..} =
         let
             cs =
-                ( collapsed # "collapsed"
-                : "comment"
-                )
+                [ collapsed # "collapsed"
+                , "comment"
+                ]
         in
             as
                 : attributes
@@ -293,13 +293,13 @@ instance Pure Group where
     view Group_ {..} =
         let
             cs =
-                ( "ui"
-                : size
-                : collapsed # "collapsed"
-                : minimal # "minimal"
-                : threaded # "threaded"
-                : "comments"
-                )
+                [ "ui"
+                , size
+                , collapsed # "collapsed"
+                , minimal # "minimal"
+                , threaded # "threaded"
+                , "comments"
+                ]
         in
             as
                 : attributes

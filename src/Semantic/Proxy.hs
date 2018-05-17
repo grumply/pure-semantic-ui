@@ -48,7 +48,7 @@ instance Pure Proxy where
                 { construct = return ()
                 , mounted   = getView self >>= withRef
                 , updated   = \_ _ -> withRef
-                , view    = \ref _ -> child ref
+                , render    = \ref _ -> child ref
                 }
 
 instance HasChildren Proxy where

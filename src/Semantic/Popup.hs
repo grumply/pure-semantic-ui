@@ -275,15 +275,15 @@ instance Pure Popup where
                                 hoverProps . focusProps . clickProps . hoverableProps
 
                         cs =
-                            ( "ui"
-                            : currentPosition
-                            : size
-                            : wide # "wide"
-                            : basic # "basic"
-                            : flowing # "flowing"
-                            : inverted # "inverted"
-                            : "popup transition visible"
-                            )
+                            [ "ui"
+                            , currentPosition
+                            , size
+                            , wide # "wide"
+                            , basic # "basic"
+                            , flowing # "flowing"
+                            , inverted # "inverted"
+                            , "popup transition visible"
+                            ]
                     in
                         closed
                             ? trigger

@@ -61,14 +61,14 @@ instance Pure Card where
     view Card_ {..} =
         let
             cs =
-                ( "ui"
-                : color
-                : centered # "centered"
-                : fluid # "fluid"
-                : link # "link"
-                : raised # "raised"
-                : "card"
-                )
+                [ "ui"
+                , color
+                , centered # "centered"
+                , fluid # "fluid"
+                , link # "link"
+                , raised # "raised"
+                , "card"
+                ]
         in
             e
                 : ref
@@ -137,10 +137,10 @@ instance Pure Content where
     view Content_ {..} =
         let
             cs =
-                ( extra # "extra"
-                : textAlign
-                : "content"
-                )
+                [ extra # "extra"
+                , textAlign
+                , "content"
+                ]
         in
             as
                 : attributes
@@ -187,9 +187,9 @@ instance Pure Description where
     view Description_ {..} =
         let
             cs =
-                ( textAlign
-                : "description"
-                )
+                [ textAlign
+                , "description"
+                ]
         in
             as
                 : attributes
@@ -234,13 +234,13 @@ instance Pure Group where
     view Group_ {..} =
         let
             cs =
-                ( "ui"
-                : doubling # "doubling"
-                : stackable # "stackable"
-                : textAlign
-                : widthProp def width def
-                : "cards"
-                )
+                [ "ui"
+                , doubling # "doubling"
+                , stackable # "stackable"
+                , textAlign
+                , widthProp def width def
+                , "cards"
+                ]
         in
             as
                 : attributes
@@ -297,9 +297,9 @@ instance Pure Header where
     view Header_ {..} =
         let
             cs =
-                ( textAlign
-                : "header"
-                )
+                [ textAlign
+                , "header"
+                ]
         in
             as
                 : attributes
@@ -341,9 +341,9 @@ instance Pure Meta where
     view Meta_ {..} =
         let
             cs =
-                ( textAlign
-                : "meta"
-                )
+                [ textAlign
+                , "meta"
+                ]
         in
             as
                 : attributes

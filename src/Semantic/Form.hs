@@ -75,18 +75,18 @@ instance Pure Form where
     view Form_ {..} =
         let
             cs =
-                ( "ui"
-                : size
-                : error # "error"
-                : inverted # "inverted"
-                : loading # "loading"
-                : reply # "reply"
-                : success # "success"
-                : unstackable # "unstackable"
-                : warning # "warning"
-                : widthProp widths def True
-                : "form"
-                )
+                [ "ui"
+                , size
+                , error # "error"
+                , inverted # "inverted"
+                , loading # "loading"
+                , reply # "reply"
+                , success # "success"
+                , unstackable # "unstackable"
+                , warning # "warning"
+                , widthProp widths def True
+                , "form"
+                ]
         in
             as
                 : Prop "action" action
@@ -185,13 +185,13 @@ instance Pure Field where
     view Field_ {..} =
         let
             cs =
-                ( disabled # "disabled"
-                : error # "error"
-                : inline # "inline"
-                : required # "required"
-                : widthProp widths "wide" def
-                : "field"
-                )
+                [ disabled # "disabled"
+                , error # "error"
+                , inline # "inline"
+                , required # "required"
+                , widthProp widths "wide" def
+                , "field"
+                ]
         in
             as
                 : attributes
@@ -262,12 +262,12 @@ instance Pure Group where
     view Group_ {..} =
         let
             cs =
-                ( grouped # "grouped"
-                : inline # "inline"
-                : unstackable # "unstackable"
-                : widthProp widths def True
-                : "fields"
-                )
+                [ grouped # "grouped"
+                , inline # "inline"
+                , unstackable # "unstackable"
+                , widthProp widths def True
+                , "fields"
+                ]
         in
             as
                 : attributes

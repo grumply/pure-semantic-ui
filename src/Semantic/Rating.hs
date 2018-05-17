@@ -113,13 +113,13 @@ instance Pure Rating where
                 , render = \Rating_ {..} RS {..} ->
                     let
                         cs =
-                            ( "ui"
-                            : icon
-                            : size
-                            : disabled # "disabled"
-                            : (isSelecting && not disabled && selectedIndex >= Just 1) # "selected"
-                            : "rating"
-                            )
+                            [ "ui"
+                            , icon
+                            , size
+                            , disabled # "disabled"
+                            , (isSelecting && not disabled && selectedIndex >= Just 1) # "selected"
+                            , "rating"
+                            ]
                     in
                         as
                             : Role "radiogroup"
@@ -226,10 +226,10 @@ instance Pure Icon where
                 in return $ ome # Just ome
 
             cs =
-                ( active # "active"
-                : selected # "selected"
-                : "icon"
-                )
+                [ active # "active"
+                , selected # "selected"
+                , "icon"
+                ]
 
         in
             as

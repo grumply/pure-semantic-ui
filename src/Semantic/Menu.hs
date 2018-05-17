@@ -93,27 +93,27 @@ instance Pure Menu where
     view Menu_ {..} =
         let
             cs =
-                ( "ui"
-                : color
-                : size
-                : borderless # "borderless"
-                : compact # "compact"
-                : fluid # "fluid"
-                : inverted # "inverted"
-                : pagination # "pagination"
-                : pointing # "pointing"
-                : secondary # "secondary"
-                : stackable # "stackable"
-                : text # "text"
-                : vertical # "vertical"
-                : may (<>> "attached") attached
-                : may (<>> "floated") floated
-                : may (<>> "icon") icon
-                : may (<>> "tabular") tabular
-                : fixed # (fixed <>> "fixed")
-                : widthProp widths "item" def
-                : "menu"
-                )
+                [ "ui"
+                , color
+                , size
+                , borderless # "borderless"
+                , compact # "compact"
+                , fluid # "fluid"
+                , inverted # "inverted"
+                , pagination # "pagination"
+                , pointing # "pointing"
+                , secondary # "secondary"
+                , stackable # "stackable"
+                , text # "text"
+                , vertical # "vertical"
+                , may (<>> "attached") attached
+                , may (<>> "floated") floated
+                , may (<>> "icon") icon
+                , may (<>> "tabular") tabular
+                , fixed # (fixed <>> "fixed")
+                , widthProp widths "item" def
+                , "menu"
+                ]
         in
             as
                 : attributes
@@ -294,16 +294,16 @@ instance Pure Item where
                     _          -> False
 
             cs =
-                ( color
-                : position
-                : active # "active"
-                : disabled # "disabled"
-                : icon # "icon"
-                : header # "header"
-                : link # "link"
-                : may ("fitted" <<>>) fitted
-                : "item"
-                )
+                [ color
+                , position
+                , active # "active"
+                , disabled # "disabled"
+                , icon # "icon"
+                , header # "header"
+                , link # "link"
+                , may ("fitted" <<>>) fitted
+                , "item"
+                ]
 
         in
             e
@@ -381,9 +381,9 @@ instance Pure Submenu where
     view Submenu_ {..} =
         let
             cs =
-                ( position
-                : "menu"
-                )
+                [ position
+                , "menu"
+                ]
         in
             as
                 : attributes

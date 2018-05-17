@@ -99,14 +99,14 @@ instance Pure Dimmer where
                         return centerRef
                     , render = \Dimmer_ {..} _ ->
                         let cs =
-                                ( "ui"
-                                : active # "active transition visible"
-                                : disabled # "disabled"
-                                : inverted # "inverted"
-                                : page # "page"
-                                : simple # "simple"
-                                : "dimmer"
-                                )
+                                [ "ui"
+                                , active # "active transition visible"
+                                , disabled # "disabled"
+                                , inverted # "inverted"
+                                , page # "page"
+                                , simple # "simple"
+                                , "dimmer"
+                                ]
 
                             dimmer =
                                 as
@@ -196,10 +196,10 @@ instance Pure Dimmable where
     view Dimmable_ {..} =
         let
             cs =
-                ( blurring # "blurring"
-                : dimmed # "dimmed"
-                : "dimmable"
-                )
+                [ blurring # "blurring"
+                , dimmed # "dimmed"
+                , "dimmable"
+                ]
         in
             as
                 : attributes

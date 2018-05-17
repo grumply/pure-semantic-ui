@@ -53,16 +53,16 @@ instance Pure Divider where
     view Divider_ {..} =
         let
             cs =
-                ( "ui"
-                : clearing # "clearing"
-                : fitted # "fitted"
-                : hidden # "hidden"
-                : horizontal # "horizontal"
-                : inverted # "inverted"
-                : section # "section"
-                : vertical # "verical"
-                : "divider"
-                )
+                [ "ui"
+                , clearing # "clearing"
+                , fitted # "fitted"
+                , hidden # "hidden"
+                , horizontal # "horizontal"
+                , inverted # "inverted"
+                , section # "section"
+                , vertical # "verical"
+                , "divider"
+                ]
         in
             as
                 : attributes

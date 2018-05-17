@@ -10,10 +10,6 @@ import Data.Maybe (fromMaybe,fromJust)
 import Data.Monoid ((<>))
 import Data.STRef (newSTRef,readSTRef,writeSTRef,modifySTRef')
 import GHC.Generics (Generic)
-import Pure.Data.View
-import Pure.Data.View.Patterns
-import Pure.Data.Txt
-import Pure.Data.HTML
 
 -- from pure-default
 import Pure.Data.Default ((?),Default(..))
@@ -33,7 +29,7 @@ import Pure.Data.Events as Ev
 (<<>>) :: Txt -> Txt -> Txt
 (<<>>) x y = x `Txt.append` " " `Txt.append` y
 
-(#) :: Bool -> Txt -> Txt
+(#) :: Default a => Bool -> a -> a
 (#) b t = b ? t $ def
 
 useKeyOrValueAndKey val key =

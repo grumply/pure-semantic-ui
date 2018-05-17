@@ -86,19 +86,19 @@ instance Pure Progress where
                 (max 0 (min 100 (fromMaybe totalPercent percent)))
 
             cs =
-                ( "ui"
-                : color
-                : size
-                : (active || indicating) # "active"
-                : disabled # "disabled"
-                : error # "error"
-                : indicating # "indicating"
-                : inverted # "inverted"
-                : (success || isAutoSuccess) # "success"
-                : warning # "warning"
-                : attached # "attached"
-                : "progress"
-                )
+                [ "ui"
+                , color
+                , size
+                , (active || indicating) # "active"
+                , disabled # "disabled"
+                , error # "error"
+                , indicating # "indicating"
+                , inverted # "inverted"
+                , (success || isAutoSuccess) # "success"
+                , warning # "warning"
+                , attached # "attached"
+                , "progress"
+                ]
         in
             as
                 : attributes

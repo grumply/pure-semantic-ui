@@ -103,9 +103,9 @@ instance Pure Content where
     view Content_ {..} =
         let
             cs =
-                ( verticalAlign
-                : "content"
-                )
+                [ verticalAlign
+                , "content"
+                ]
         in
             as
                 : attributes
@@ -224,13 +224,13 @@ instance Pure Group where
     view Group_ {..} =
         let
             cs =
-                ( "ui"
-                : divided # "divided"
-                : link # "link"
-                : unstackable # "unstackable"
-                : may (<>> "relaxed") relaxed
-                : "items"
-                )
+                [ "ui"
+                , divided # "divided"
+                , link # "link"
+                , unstackable # "unstackable"
+                , may (<>> "relaxed") relaxed
+                , "items"
+                ]
         in
             as
                 : attributes
@@ -337,22 +337,22 @@ instance Pure Image where
     view Image_ {..} =
         let
             cs =
-                ( size # "ui"
-                : size
-                : avatar # "avatar"
-                : bordered # "bordered"
-                : circular # "circular"
-                : centered # "centered"
-                : disabled # "disabled"
-                : fluid # "fluid"
-                : hidden # "hidden"
-                : inline # "inline"
-                : rounded # "rounded"
-                : useKeyOrValueAndKey spaced "spaced"
-                : floated # ("floated" <<>> floated)
-                : verticalAlign # ("aligned" <<>> verticalAlign)
-                : "image"
-                )
+                [ size # "ui"
+                , size
+                , avatar # "avatar"
+                , bordered # "bordered"
+                , circular # "circular"
+                , centered # "centered"
+                , disabled # "disabled"
+                , fluid # "fluid"
+                , hidden # "hidden"
+                , inline # "inline"
+                , rounded # "rounded"
+                , useKeyOrValueAndKey spaced "spaced"
+                , floated # ("floated" <<>> floated)
+                , verticalAlign # ("aligned" <<>> verticalAlign)
+                , "image"
+                ]
         in
             as
                 : attributes

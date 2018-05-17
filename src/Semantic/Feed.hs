@@ -52,10 +52,10 @@ instance Pure Feed where
     view Feed_ {..} =
         let
             cs =
-                ( "ui"
-                : size
-                : "feed"
-                )
+                [ "ui"
+                , size
+                , "feed"
+                ]
         in
             as
                 : attributes
@@ -210,10 +210,10 @@ instance Pure Extra where
             image = foldPures (\(Image_ {}) -> const True) False children
 
             cs =
-                ( image # "images"
-                : text # "text"
-                : "extra"
-                )
+                [ image # "images"
+                , text # "text"
+                , "extra"
+                ]
         in
             as
                 : attributes

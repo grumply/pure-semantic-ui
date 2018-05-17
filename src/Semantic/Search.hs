@@ -70,16 +70,16 @@ pattern Search s = s
 instance Pure Search where
     view Search_ {..} =
         let
-            cs = ( "ui"
-                 : open # "active visible"
-                 : size
-                 : category # "category"
-                 : focus # "focus"
-                 : fluid # "fluid"
-                 : loading # "loading"
-                 : aligned # "aligned"
-                 : "search"
-                 )
+            cs = [ "ui"
+                 , open # "active visible"
+                 , size
+                 , category # "category"
+                 , focus # "focus"
+                 , fluid # "fluid"
+                 , loading # "loading"
+                 , aligned # "aligned"
+                 , "search"
+                 ]
 
         in as
                : attributes
@@ -169,9 +169,9 @@ instance Pure Categorized where
     view sc@Categorized_ {..} =
         let
             cs =
-                ( active # "active"
-                : "category"
-                )
+                [ active # "active"
+                , "category"
+                ]
         in
             as
                 : attributes
@@ -219,9 +219,9 @@ instance Pure Result where
     view sr@Result_ {..} =
         let
             cs =
-                ( active # "active"
-                : "result"
-                )
+                [ active # "active"
+                , "result"
+                ]
         in
             as
                 : onClick # On "click" def (\_ -> return $ Just onClick)

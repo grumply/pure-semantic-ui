@@ -90,14 +90,14 @@ instance Pure Sidebar where
                 , render = \Sidebar_ {..} SS {..} ->
                     let
                         cs =
-                            ( "ui"
-                            : animation
-                            : direction
-                            : width
-                            : animating # "animating"
-                            : visible # "visible"
-                            : "sidebar"
-                            )
+                            [ "ui"
+                            , animation
+                            , direction
+                            , width
+                            , animating # "animating"
+                            , visible # "visible"
+                            , "sidebar"
+                            ]
                     in
                         as
                             : attributes
@@ -197,9 +197,9 @@ instance Pure Pusher where
     view Pusher_ {..} =
         let
             cs =
-                ( "pusher"
-                : dimmed # "dimmed"
-                )
+                [ "pusher"
+                , dimmed # "dimmed"
+                ]
         in
             as
                 : attributes

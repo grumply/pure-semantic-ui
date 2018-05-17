@@ -196,12 +196,12 @@ instance Pure Modal where
                                 ss = maybe styles (\mt -> (marginTop,pxs mt) : styles ) topMargin
 
                                 cs =
-                                    ( "ui"
-                                    : size
-                                    : basic # "basic"
-                                    : (scrolling == Just True) # "scrolling"
-                                    : "modal transition visible active"
-                                    )
+                                    [ "ui"
+                                    , size
+                                    , basic # "basic"
+                                    , (scrolling == Just True) # "scrolling"
+                                    , "modal transition visible active"
+                                    ]
 
                                 children' = flip map children $ \c ->
                                     case c of

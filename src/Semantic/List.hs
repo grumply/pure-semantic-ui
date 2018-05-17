@@ -85,22 +85,22 @@ instance Pure List where
     view List_ {..} =
         let
             cs =
-                ( "ui"
-                : size
-                : animated # "animated"
-                : bulleted # "bulleted"
-                : celled # "celled"
-                : divided # "divided"
-                : horizontal # "horizontal"
-                : inverted # "inverted"
-                : link # "link"
-                : ordered # "ordered"
-                : selection # "selection"
-                : may (<>> "relaxed") relaxed
-                : floated # (floated <>> "floated")
-                : verticalAlign # (verticalAlign <>> "aligned")
-                : "list"
-                )
+                [ "ui"
+                , size
+                , animated # "animated"
+                , bulleted # "bulleted"
+                , celled # "celled"
+                , divided # "divided"
+                , horizontal # "horizontal"
+                , inverted # "inverted"
+                , link # "link"
+                , ordered # "ordered"
+                , selection # "selection"
+                , may (<>> "relaxed") relaxed
+                , floated # (floated <>> "floated")
+                , verticalAlign # (verticalAlign <>> "aligned")
+                , "list"
+                ]
         in
             as
                 : attributes
@@ -203,10 +203,10 @@ instance Pure Content where
     view Content_ {..} =
         let
             cs =
-                ( floated # (floated <>> "floated")
-                : verticalAlign # (verticalAlign <>> "aligned")
-                : "content"
-                )
+                [ floated # (floated <>> "floated")
+                , verticalAlign # (verticalAlign <>> "aligned")
+                , "content"
+                ]
         in
             as
                 : attributes
@@ -321,22 +321,22 @@ instance Pure Icon where
     view Icon_ {..} =
         let
             cs =
-                ( color
-                : name
-                : cond size
-                : bordered # "bordered"
-                : circular # "circular"
-                : corner # "corner"
-                : disabled # "disabled"
-                : fitted # "fitted"
-                : inverted # "inverted"
-                : link # "link"
-                : loading # "loading"
-                : flipped # ("flipped" <<>> flipped)
-                : rotated # ("rotated" <<>> rotated)
-                : verticalAlign # (verticalAlign <>> "aligned")
-                : "icon"
-                )
+                [ color
+                , name
+                , cond size
+                , bordered # "bordered"
+                , circular # "circular"
+                , corner # "corner"
+                , disabled # "disabled"
+                , fitted # "fitted"
+                , inverted # "inverted"
+                , link # "link"
+                , loading # "loading"
+                , flipped # ("flipped" <<>> flipped)
+                , rotated # ("rotated" <<>> rotated)
+                , verticalAlign # (verticalAlign <>> "aligned")
+                , "icon"
+                ]
         in
             as
                 : attributes
@@ -445,10 +445,10 @@ instance Pure Item where
                     Li _ _ -> True
                     _      -> False
             cs =
-                ( active # "active"
-                : disabled # "disabled"
-                : (not li) # "item"
-                )
+                [ active # "active"
+                , disabled # "disabled"
+                , (not li) # "item"
+                ]
 
             valueProp = li ? HTML.Value value $ Prop "data-value" value
         in
@@ -495,7 +495,7 @@ data Sublist = Sublist_
     } deriving (Generic)
 
 instance Default Sublist where
-    def = (G.to gdef) { as = Div }
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
 pattern Sublist :: Sublist -> Sublist
 pattern Sublist ll = ll
@@ -549,7 +549,7 @@ data Keyed = Keyed_
     } deriving (Generic)
 
 instance Default Keyed where
-    def = (G.to gdef) { as = list Div }
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs & Keyed }
 
 pattern Keyed :: Keyed -> Keyed
 pattern Keyed l = l
@@ -558,22 +558,22 @@ instance Pure Keyed where
     view Keyed_ {..} =
         let
             cs =
-                ( "ui"
-                : size
-                : animated # "animated"
-                : bulleted # "bulleted"
-                : celled # "celled"
-                : divided # "divided"
-                : horizontal # "horizontal"
-                : inverted # "inverted"
-                : link # "link"
-                : ordered # "ordered"
-                : selection # "selection"
-                : may (<>> "relaxed") relaxed
-                : floated # (floated <>> "floated")
-                : verticalAlign # (verticalAlign <>> "aligned")
-                : "list"
-                )
+                [ "ui"
+                , size
+                , animated # "animated"
+                , bulleted # "bulleted"
+                , celled # "celled"
+                , divided # "divided"
+                , horizontal # "horizontal"
+                , inverted # "inverted"
+                , link # "link"
+                , ordered # "ordered"
+                , selection # "selection"
+                , may (<>> "relaxed") relaxed
+                , floated # (floated <>> "floated")
+                , verticalAlign # (verticalAlign <>> "aligned")
+                , "list"
+                ]
         in
             as
                 : attributes

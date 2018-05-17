@@ -110,28 +110,28 @@ instance Pure Dropdown where
     view Dropdown_ {..} =
         let
             cs =
-                ( "ui"
-                : open # "active visible"
-                : disabled # "disabled"
-                : error # "error"
-                : loading # "loading"
-                : basic # "basic"
-                : button # "button"
-                : compact # "compact"
-                : fluid # "fluid"
-                : floating # "floating"
-                : inline # "inline"
-                : labeled # "labeled"
-                : item # "item"
-                : multiple # "multiple"
-                : search # "search"
-                : selection # "selection"
-                : simple # "simple"
-                : scrolling # "scrolling"
-                : upward # "upward"
-                : may (<<>> "pointing") pointing
-                : "dropdown"
-                )
+                [ "ui"
+                , open # "active visible"
+                , disabled # "disabled"
+                , error # "error"
+                , loading # "loading"
+                , basic # "basic"
+                , button # "button"
+                , compact # "compact"
+                , fluid # "fluid"
+                , floating # "floating"
+                , inline # "inline"
+                , labeled # "labeled"
+                , item # "item"
+                , multiple # "multiple"
+                , search # "search"
+                , selection # "selection"
+                , simple # "simple"
+                , scrolling # "scrolling"
+                , upward # "upward"
+                , may (<<>> "pointing") pointing
+                , "dropdown"
+                ]
         in as
                 : may Tabindex tabIndex
                 : attributes
@@ -339,11 +339,11 @@ instance Pure (Item ) where
     view di@Item_ {..} =
         let
             cs =
-                ( active # "active"
-                : disabled # "disabled"
-                : selected # "selected"
-                : "item"
-                )
+                [ active # "active"
+                , disabled # "disabled"
+                , selected # "selected"
+                , "item"
+                ]
         in
             as
                 : Role "option"
@@ -396,9 +396,9 @@ instance Pure Menu where
     view Menu_ {..} =
         let
             cs =
-                ( scrolling # "scrolling"
-                : "menu transition"
-                )
+                [ scrolling # "scrolling"
+                , "menu transition"
+                ]
         in
             as
                 : attributes

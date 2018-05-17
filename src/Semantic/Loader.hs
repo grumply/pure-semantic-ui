@@ -51,16 +51,16 @@ instance Pure Loader where
     view Loader_ {..} =
         let
             cs =
-                ( "ui"
-                : size
-                : active # "active"
-                : disabled # "disabled"
-                : indeterminate # "indeterminate"
-                : inverted # "inverted"
-                : children # "text"
-                : may (<>> "inline") inline
-                : "loader"
-                )
+                [ "ui"
+                , size
+                , active # "active"
+                , disabled # "disabled"
+                , indeterminate # "indeterminate"
+                , inverted # "inverted"
+                , children # "text"
+                , may (<>> "inline") inline
+                , "loader"
+                ]
         in
             as
                 : attributes

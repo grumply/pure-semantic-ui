@@ -70,17 +70,17 @@ instance Pure Checkbox where
     view cb@Checkbox_ {..} =
         let
             cs =
-                ( "ui"
-                : (checked == Just True) # "checked"
-                : disabled # "disabled"
-                : (checked == Nothing) # "indeterminate"
-                : fitted # "fitted"
-                : radio # "radio"
-                : readOnly # "read-only"
-                : slider # "slider"
-                : toggle # "toggle"
-                : "checkbox"
-                )
+                [ "ui"
+                , (checked == Just True) # "checked"
+                , disabled # "disabled"
+                , (checked == Nothing) # "indeterminate"
+                , fitted # "fitted"
+                , radio # "radio"
+                , readOnly # "read-only"
+                , slider # "slider"
+                , toggle # "toggle"
+                , "checkbox"
+                ]
 
         in
             as

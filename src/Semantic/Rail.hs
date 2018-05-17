@@ -51,15 +51,15 @@ instance Pure Rail where
     view Rail_ {..} =
         let
             cs =
-                ( "ui"
-                : position
-                : size
-                : attached # "attached"
-                : dividing # "dividing"
-                : internal # "internal"
-                : may (<>> "close") close
-                : "rail"
-                )
+                [ "ui"
+                , position
+                , size
+                , attached # "attached"
+                , dividing # "dividing"
+                , internal # "internal"
+                , may (<>> "close") close
+                , "rail"
+                ]
         in
             as
                 : attributes

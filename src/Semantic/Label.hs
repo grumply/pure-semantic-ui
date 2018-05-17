@@ -7,14 +7,13 @@ module Semantic.Label
   ) where
 
 import GHC.Generics as G (Generic,to)
+
 import Pure.Data.View
 import Pure.Data.View.Patterns
-import Pure.Data.Txt
-import Pure.Data.HTML
-import Pure.Data.View
-import Pure.Data.View.Patterns
-import Pure.Data.Txt
-import Pure.Data.HTML
+import Pure.Data.Txt (Txt)
+import Pure.Data.HTML (pattern Div)
+
+import Data.List as List (filter,null)
 
 import Semantic.Utils
 
@@ -47,7 +46,7 @@ import Pure.Data.Default as Tools
 data Label = Label_
     { as :: Features -> [View] -> View
     , active :: Bool
-    , attached :: Txt
+    , attached :: Maybe Txt
     , features :: Features
     , basic :: Bool
     , children :: [View]
@@ -99,12 +98,13 @@ instance Pure Label where
                 , horizontal # "horizontal"
                 , hasImage # "image"
                 , tag # "tag"
-                , corner # "corner"
-                , ribbon # "ribbon"
-                , attached # "attached"
+                , maybe def (<>> "corner") corner
+                , maybe def (<>> "ribbon") ribbon
+                , maybe def (<>> "attached") attached
                 , "label"
                 ]
         in
+            as (features & AddClasses cs) children
 
 instance HasProp Active Label where
     type Prop Active Label = Bool
@@ -117,14 +117,13 @@ instance HasProp As Label where
     setProp _ f l = l { as = f }
 
 instance HasProp Attached Label where
-    type Prop Attached Label = Txt
+    type Prop Attached Label = Maybe Txt
     getProp _ = attached
     setProp _ attach l = l { attached = attach }
 
 instance HasFeatures Label where
-    type Prop Attributes Label = Features
-    getProp _ = attributes
-    setProp _ cs l = l { attributes = cs }
+    getFeatures = features
+    setFeatures fs l = l { features = fs }
 
 instance HasProp Basic Label where
     type Prop Basic Label = Bool
@@ -139,11 +138,6 @@ instance HasProp Circular Label where
     type Prop Circular Label = Bool
     getProp _ = circular
     setProp _ c l = l { circular = c }
-
-instance HasProp OnClick Label where
-    type Prop OnClick Label = IO ()
-    getProp _ = onClick
-    setProp _ oc l = l { onClick = oc }
 
 instance HasProp Color Label where
     type Prop Color Label = Txt
@@ -203,11 +197,7 @@ pattern Detail :: Detail -> Detail
 pattern Detail ld = ld
 
 instance Pure Detail where
-    view Detail_ {..} =
-        as
-            : attributes
-            )
-            children
+    view Detail_ {..} = as (features & Class "detail") children
 
 instance HasProp As Detail where
     type Prop As Detail = Features -> [View] -> View
@@ -233,7 +223,7 @@ data Group = Group_
     } deriving (Generic)
 
 instance Default Group where
-    def = (G.to gdef) { as = Div }
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
 pattern Group :: Group -> Group
 pattern Group lg = lg
@@ -242,18 +232,15 @@ instance Pure Group where
     view Group_ {..} =
         let
             cs =
-                ( "ui"
-                : color
-                : size
-                : circular # "circular"
-                : tag # "tag"
-                : "labels"
-                )
+                [ "ui"
+                , color
+                , size
+                , circular # "circular"
+                , tag # "tag"
+                , "labels"
+                ]
         in
-            as
-                : attributes
-                )
-                children
+            as (features & AddClasses cs) children
 
 instance HasProp As Group where
     type Prop As Group = Features -> [View] -> View

@@ -110,20 +110,20 @@ instance Pure Input where
             IF {..} = calculatePositions children
 
             cs =
-                ( "ui"
-                : size
-                : disabled # "disabled"
-                : error # "error"
-                : fluid # "fluid"
-                : focus # "focus"
-                : inverted # "inverted"
-                : loading # "loading"
-                : transparent # "transparent"
-                : may (<>> "action")  actionPosition
-                : may (<>> "icon")    iconPosition
-                : may (<>> "labeled") labelPosition
-                : "input"
-                )
+                [ "ui"
+                , size
+                , disabled # "disabled"
+                , error # "error"
+                , fluid # "fluid"
+                , focus # "focus"
+                , inverted # "inverted"
+                , loading # "loading"
+                , transparent # "transparent"
+                , may (<>> "action")  actionPosition
+                , may (<>> "icon")    iconPosition
+                , may (<>> "labeled") labelPosition
+                , "input"
+                ]
         in
             as
                 )
