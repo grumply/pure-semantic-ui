@@ -7,8 +7,11 @@ module Semantic.TextArea
 
 import Data.IORef
 import GHC.Generics as G
-import Pure.View hiding (focus,value,onInput,Styles,Value)
-import qualified Pure.View as HTML
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML
+import Pure.Data.Event
 import Pure.Lifted (setStyle,removeStyle,focusNode,JSV,Node(..),Element(..),(.#))
 import qualified Pure.Data.Txt as T
 import Data.Char (isDigit)
@@ -52,9 +55,9 @@ data TextAreaState = TAS
     { ref :: IORef (Maybe JSV)
     }
 
-instance VC => Pure TextArea where
-    render ta =
-        Component "Semantic.Addons.TextArea" ta $ \self ->
+instance Pure TextArea where
+    view =
+        LibraryComponentIO $ \self ->
             let
                 computedTextAreaStyles :: Element -> IO (Maybe (Double,Double,Double))
                 computedTextAreaStyles e = do
@@ -121,7 +124,7 @@ instance VC => Pure TextArea where
                     ((autoHeight props && not (autoHeight oldprops)) || value oldprops /= value props)
                         # updateHeight
 
-                , renderer = \TextArea_ {..} TAS {..} ->
+                , render = \TextArea_ {..} TAS {..} ->
                     as
                         : HTML.onInput handleInput
                         : HostRef handleRef
@@ -142,7 +145,6 @@ instance HasProp As TextArea where
 instance HasFeatures TextArea where
     getFeatures = features
     setFeatures cs ta = ta { features = cs }
-
 
 instance HasProp AutoHeight TextArea where
     type Prop AutoHeight TextArea = Bool

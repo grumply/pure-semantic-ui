@@ -13,7 +13,10 @@ module Semantic.Feed
   ) where
 
 import GHC.Generics as G hiding (Meta)
-import Pure.View hiding (text,Event,Meta,Label,Content)
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML
 
 import Semantic.Utils
 
@@ -46,7 +49,7 @@ pattern Feed :: Feed -> Feed
 pattern Feed f = f
 
 instance Pure Feed where
-    render Feed_ {..} =
+    view Feed_ {..} =
         let
             cs =
                 ( "ui"
@@ -72,7 +75,6 @@ instance HasChildren Feed where
     getChildren = children
     setChildren cs f = f { children = cs }
 
-
 instance HasProp Size Feed where
     type Prop Size Feed = Txt
     getProp _ = size
@@ -91,7 +93,7 @@ pattern Content :: Content -> Content
 pattern Content fc = fc
 
 instance Pure Content where
-    render Content_ {..} =
+    view Content_ {..} =
         let
             cs =
                 ( "content"
@@ -115,7 +117,6 @@ instance HasChildren Content where
     getChildren = children
     setChildren cs fc = fc { children = cs }
 
-
 data Date = Date_
     { as :: Features -> [View] -> View
     , features :: Features
@@ -129,7 +130,7 @@ pattern Date :: Date -> Date
 pattern Date fd = fd
 
 instance Pure Date where
-    render Date_ {..} =
+    view Date_ {..} =
         let
             cs =
                 ( "date"
@@ -153,7 +154,6 @@ instance HasChildren Date where
     getChildren = children
     setChildren cs fd = fd { children = cs }
 
-
 data Event = Event_
     { as :: Features -> [View] -> View
     , features :: Features
@@ -167,7 +167,7 @@ pattern Event :: Event -> Event
 pattern Event fe = fe
 
 instance Pure Event where
-    render Event_ {..} =
+    view Event_ {..} =
         let
             cs =
                 ( "event"
@@ -191,7 +191,6 @@ instance HasChildren Event where
     getChildren = children
     setChildren cs fe = fe { children = cs }
 
-
 data Extra = Extra_
     { as :: Features -> [View] -> View
     , features :: Features
@@ -206,7 +205,7 @@ pattern Extra :: Extra -> Extra
 pattern Extra fe = fe
 
 instance Pure Extra where
-    render Extra_ {..} =
+    view Extra_ {..} =
         let
             image = foldPures (\(Image_ {}) -> const True) False children
 
@@ -234,7 +233,6 @@ instance HasChildren Extra where
     getChildren = children
     setChildren cs fe = fe { children = cs }
 
-
 instance HasProp IsText Extra where
     type Prop IsText Extra = Bool
     getProp _ = text
@@ -253,7 +251,7 @@ pattern Label :: Label -> Label
 pattern Label fl = fl
 
 instance Pure Label where
-    render Label_ {..} =
+    view Label_ {..} =
         let
             cs =
                 ( "label"
@@ -277,7 +275,6 @@ instance HasChildren Label where
     getChildren = children
     setChildren cs fl = fl { children = cs }
 
-
 data Like = Like_
     { as :: Features -> [View] -> View
     , features :: Features
@@ -291,7 +288,7 @@ pattern Like :: Like -> Like
 pattern Like fl = fl
 
 instance Pure Like where
-    render Like_ {..} =
+    view Like_ {..} =
         let
             cs =
                 ( "like"
@@ -315,7 +312,6 @@ instance HasChildren Like where
     getChildren = children
     setChildren cs fl = fl { children = cs }
 
-
 data Meta = Meta_
     { as :: Features -> [View] -> View
     , features :: Features
@@ -329,7 +325,7 @@ pattern Meta :: Meta -> Meta
 pattern Meta fm = fm
 
 instance Pure Meta where
-    render Meta_ {..} =
+    view Meta_ {..} =
         let
             cs =
                 ( "meta"
@@ -353,7 +349,6 @@ instance HasChildren Meta where
     getChildren = children
     setChildren cs fm = fm { children = cs }
 
-
 data Summary = Summary_
     { as :: Features -> [View] -> View
     , features :: Features
@@ -367,7 +362,7 @@ pattern Summary :: Summary -> Summary
 pattern Summary fs = fs
 
 instance Pure Summary where
-    render Summary_ {..} =
+    view Summary_ {..} =
         let
             cs =
                 ( "summary"
@@ -391,7 +386,6 @@ instance HasChildren Summary where
     getChildren = children
     setChildren cs fs = fs { children = cs }
 
-
 data User = User_
     { as :: Features -> [View] -> View
     , features :: Features
@@ -405,7 +399,7 @@ pattern User :: User -> User
 pattern User fu = fu
 
 instance Pure User where
-    render User_ {..} =
+    view User_ {..} =
         let
             cs =
                 ( "user"

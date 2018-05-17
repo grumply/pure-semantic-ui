@@ -12,7 +12,10 @@ module Semantic.Item
   ) where
 
 import GHC.Generics as G hiding (Meta)
-import Pure.View hiding (verticalAlign,disabled,inline,hidden,Content,Description,Header,Meta)
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML
 
 import Semantic.Utils
 
@@ -59,7 +62,7 @@ pattern Item :: Item -> Item
 pattern Item i = i
 
 instance Pure Item where
-    render Item_ {..} =
+    view Item_ {..} =
         let
             cs =
                 ( "item"
@@ -83,7 +86,6 @@ instance HasChildren Item where
     getChildren = children
     setChildren cs i = i { children = cs }
 
-
 data Content = Content_
     { as :: Features -> [View] -> View
     , features :: Features
@@ -98,7 +100,7 @@ pattern Content :: Content -> Content
 pattern Content ic = ic
 
 instance Pure Content where
-    render Content_ {..} =
+    view Content_ {..} =
         let
             cs =
                 ( verticalAlign
@@ -123,7 +125,6 @@ instance HasChildren Content where
     getChildren = children
     setChildren cs ic = ic { children = cs }
 
-
 instance HasProp VerticalAlign Content where
     type Prop VerticalAlign Content = Txt
     getProp _ = verticalAlign
@@ -142,7 +143,7 @@ pattern Description :: Description -> Description
 pattern Description id = id
 
 instance Pure Description where
-    render Description_ {..} =
+    view Description_ {..} =
         let
             cs =
                 ( "description"
@@ -166,7 +167,6 @@ instance HasChildren Description where
     getChildren = children
     setChildren cs id = id { children = cs }
 
-
 data Extra = Extra_
     { as :: Features -> [View] -> View
     , features :: Features
@@ -180,7 +180,7 @@ pattern Extra :: Extra -> Extra
 pattern Extra ie = ie
 
 instance Pure Extra where
-    render Extra_ {..} =
+    view Extra_ {..} =
         let
             cs =
                 ( "extra"
@@ -204,7 +204,6 @@ instance HasChildren Extra where
     getChildren = children
     setChildren cs ie = ie { children = cs }
 
-
 data Group = Group_
     { as :: Features -> [View] -> View
     , features :: Features
@@ -222,7 +221,7 @@ pattern Group :: Group -> Group
 pattern Group ig = ig
 
 instance Pure Group where
-    render Group_ {..} =
+    view Group_ {..} =
         let
             cs =
                 ( "ui"
@@ -250,7 +249,6 @@ instance HasFeatures Group where
 instance HasChildren Group where
     getChildren = children
     setChildren cs ig = ig { children = cs }
-
 
 instance HasProp Divided Group where
     type Prop Divided Group = Bool
@@ -285,7 +283,7 @@ pattern Header :: Header -> Header
 pattern Header ih = ih
 
 instance Pure Header where
-    render Header_ {..} =
+    view Header_ {..} =
         let
             cs =
                 ( "header"
@@ -308,7 +306,6 @@ instance HasFeatures Header where
 instance HasChildren Header where
     getChildren = children
     setChildren cs ih = ih { children = cs }
-
 
 data Image = Image_
     { as :: Features -> [View] -> View
@@ -337,7 +334,7 @@ pattern Image :: Image -> Image
 pattern Image i = i
 
 instance Pure Image where
-    render Image_ {..} =
+    view Image_ {..} =
         let
             cs =
                 ( size # "ui"
@@ -394,7 +391,6 @@ instance HasProp Circular Image where
     type Prop Circular Image = Bool
     getProp _ = circular
     setProp _ c i = i { circular = c }
-
 
 instance HasProp Disabled Image where
     type Prop Disabled Image = Bool
@@ -459,7 +455,7 @@ pattern Meta :: Meta -> Meta
 pattern Meta im = im
 
 instance Pure Meta where
-    render Meta_ {..} =
+    view Meta_ {..} =
         let
             cs =
                 ( "meta"

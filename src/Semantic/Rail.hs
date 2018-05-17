@@ -5,7 +5,10 @@ module Semantic.Rail
   ) where
 
 import GHC.Generics as G
-import Pure.View hiding (position,verticalAlign)
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML
 
 import Semantic.Utils
 
@@ -45,7 +48,7 @@ pattern Rail :: Rail -> Rail
 pattern Rail r = r
 
 instance Pure Rail where
-    render Rail_ {..} =
+    view Rail_ {..} =
         let
             cs =
                 ( "ui"
@@ -80,7 +83,6 @@ instance HasFeatures Rail where
 instance HasChildren Rail where
     getChildren = children
     setChildren cs r = r { children = cs }
-
 
 instance HasProp Close Rail where
     type Prop Close Rail = Maybe Txt

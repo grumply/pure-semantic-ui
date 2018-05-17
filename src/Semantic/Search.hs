@@ -9,7 +9,10 @@ module Semantic.Search
 
 import Control.Arrow ((&&&))
 import GHC.Generics as G
-import Pure.View hiding (onFocus,onBlur,name,active,Result,onClick)
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML
 
 import Semantic.Utils
 
@@ -65,7 +68,7 @@ pattern Search :: Search -> Search
 pattern Search s = s
 
 instance Pure Search where
-    render Search_ {..} =
+    view Search_ {..} =
         let
             cs = ( "ui"
                  : open # "active visible"
@@ -95,7 +98,6 @@ instance HasFeatures Search where
 instance HasChildren Search where
     getChildren = children
     setChildren cs s = s { children = cs }
-
 
 instance HasProp Aligned Search where
     type Prop Aligned Search = Txt
@@ -164,7 +166,7 @@ pattern Categorized :: Categorized -> Categorized
 pattern Categorized sc = sc
 
 instance Pure Categorized where
-    render sc@Categorized_ {..} =
+    view sc@Categorized_ {..} =
         let
             cs =
                 ( active # "active"
@@ -188,7 +190,6 @@ instance HasFeatures Categorized where
 instance HasChildren Categorized where
     getChildren = children
     setChildren cs sc = sc { children = cs }
-
 
 instance HasProp Active Categorized where
     type Prop Active Categorized = Bool
@@ -215,7 +216,7 @@ pattern Result :: Result -> Result
 pattern Result sr = sr
 
 instance Pure Result where
-    render sr@Result_ {..} =
+    view sr@Result_ {..} =
         let
             cs =
                 ( active # "active"
@@ -241,7 +242,6 @@ instance HasChildren Result where
     getChildren = children
     setChildren cs sr = sr { children = cs }
 
-
 instance HasProp Active Result where
     type Prop Active Result = Bool
     getProp _ = active
@@ -265,7 +265,7 @@ pattern Results :: Results -> Results
 pattern Results sr = sr
 
 instance Pure Results where
-    render Results_ {..} =
+    view Results_ {..} =
         let
             cs =
                 ( "results transition"

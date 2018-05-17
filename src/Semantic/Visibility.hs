@@ -8,9 +8,13 @@ module Semantic.Visibility
 import Data.Coerce
 import Data.IORef
 import GHC.Generics as G
-import Pure.View hiding (offset,Visibility,Offset)
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML
+import Pure.Data.Event
 import Pure.Lifted hiding (Offset)
-import Pure.DOM (addAnimation)
+import Pure.DOM (onRaw,addAnimation)
 
 import Semantic.Utils
 
@@ -121,8 +125,8 @@ data Calculations = Calculations
     } deriving (Generic,Default)
 
 instance Pure Visibility where
-    render v =
-        Component "Semantic.Behaviors.Visibility" v $ \self ->
+    view =
+        LibraryComponentIO $ \self ->
             let
                 handleRef (Node n) = do
                     VS {..} <- getState self
@@ -138,7 +142,7 @@ instance Pure Visibility where
                     fs <- readIORef fired
 
                     unless (not continuous && name `elem` fs) $ do
-                      parent self (callback cs)
+                      callback cs
                       writeIORef fired (name:fs)
 
                 fire callback name value rev = do
@@ -188,8 +192,7 @@ instance Pure Visibility where
 
                     cs <- readIORef calculations
 
-                    for_ onUpdate $ \ou ->
-                        parent self (ou cs)
+                    for_ onUpdate ($ cs)
 
                     fireOnPassed
 
@@ -276,7 +279,7 @@ instance Pure Visibility where
                     resizeHandler
                     scrollHandler
 
-                , renderer = \Visibility_ {..} _ ->
+                , render = \Visibility_ {..} _ ->
                     as
                         : HostRef handleRef
                         : attributes
@@ -297,7 +300,6 @@ instance HasFeatures Visibility where
 instance HasChildren Visibility where
     getChildren = children
     setChildren cs v = v { children = cs }
-
 
 instance HasProp Context Visibility where
     type Prop Context Visibility = Maybe JSV

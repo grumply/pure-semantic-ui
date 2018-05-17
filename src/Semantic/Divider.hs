@@ -5,7 +5,10 @@ module Semantic.Divider
   ) where
 
 import GHC.Generics as G
-import Pure.View as View hiding (hidden,horizontal,vertical)
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML
 
 import Semantic.Utils
 
@@ -47,7 +50,7 @@ pattern Divider :: Divider -> Divider
 pattern Divider d = d
 
 instance Pure Divider where
-    render Divider_ {..} =
+    view Divider_ {..} =
         let
             cs =
                 ( "ui"
@@ -78,7 +81,6 @@ instance HasFeatures Divider where
 instance HasChildren Divider where
     getChildren = children
     setChildren cs d = d { children = cs }
-
 
 instance HasProp Clearing Divider where
     type Prop Clearing Divider = Bool

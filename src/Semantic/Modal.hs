@@ -12,7 +12,11 @@ module Semantic.Modal
 import Data.IORef
 import Data.Maybe
 import GHC.Generics as G
-import Pure.View hiding (active,round,addClass,trigger,OnClose,Content,Description,Header,Styles)
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML
+import Pure.Data.Event
 import Pure.DOM (addAnimation)
 import Pure.Lifted (body,IsJSV(..),JSV,Node(..),Element(..))
 
@@ -93,9 +97,9 @@ data ModalState =
     , pendingAnimation :: IORef (IO ())
     }
 
-instance VC => Pure Modal where
-    render m =
-        Component "Semantic.Modules.Modal" m $ \self ->
+instance Pure Modal where
+    view =
+        LibraryComponentIO $ \self ->
             let
                 getMountNode = do
                     Modal_ {..} <- getProps self
@@ -178,8 +182,8 @@ instance VC => Pure Modal where
                 , unmount = do
                     Modal_ {..} <- getProps self
                     handlePortalUnmount
-                    parent self onUnmount
-                , renderer = \Modal_ {..} {..} ->
+                    onUnmount
+                , render = \Modal_ {..} {..} ->
                     let
                             dimmer #
                                 [ "ui"
@@ -187,7 +191,7 @@ instance VC => Pure Modal where
                                 , "page modals dimmer transition visible active"
                                 ]
 
-                        renderContent =
+                        viewContent =
                             let
                                 ss = maybe styles (\mt -> (marginTop,pxs mt) : styles ) topMargin
 
@@ -222,7 +226,7 @@ instance VC => Pure Modal where
                         & OnMount handlePortalMount
                         & OnOpen handleOpen
                         & OnUnmount (liftIO handlePortalUnmount >> onUnmount)
-                        & Children [ renderContent ]
+                        & Children [ viewContent ]
                 }
 
 instance HasProp As Modal where
@@ -237,7 +241,6 @@ instance HasFeatures Modal where
 instance HasChildren Modal where
     getChildren = children
     setChildren cs m = m { children = cs }
-
 
 instance HasProp Basic Modal where
     type Prop Basic Modal = Bool
@@ -332,7 +335,7 @@ pattern Actions :: Actions -> Actions
 pattern Actions ma = ma
 
 instance Pure Actions where
-    render Actions_ {..} =
+    view Actions_ {..} =
         as
             : attributes
             )
@@ -351,7 +354,6 @@ instance HasChildren Actions where
     getChildren = children
     setChildren cs ma = ma { children = cs }
 
-
 data Content = Content_
     { as :: Features -> [View] -> View
     , features :: Features
@@ -367,7 +369,7 @@ pattern Content :: Content -> Content
 pattern Content mc = mc
 
 instance Pure Content where
-    render Content_ {..} =
+    view Content_ {..} =
         let
                 [ image # "image"
                 , scrolling # "scrolling"
@@ -393,7 +395,6 @@ instance HasChildren Content where
     getChildren = children
     setChildren cs mc = mc { children = cs }
 
-
 instance HasProp IsImage Content where
     type Prop IsImage Content = Bool
     getProp _ = image
@@ -417,7 +418,7 @@ pattern Description :: Description -> Description
 pattern Description md = md
 
 instance Pure Description where
-    render Description_ {..} =
+    view Description_ {..} =
         let
             cs =
                 ( "description"
@@ -442,7 +443,6 @@ instance HasChildren Description where
     getChildren = children
     setChildren cs md = md { children = cs }
 
-
 data Header = Header_
     { as :: Features -> [View] -> View
     , features :: Features
@@ -456,7 +456,7 @@ pattern Header :: Header -> Header
 pattern Header mh = mh
 
 instance Pure Header where
-    render Header_ {..} =
+    view Header_ {..} =
         let
 
         in

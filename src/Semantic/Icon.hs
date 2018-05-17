@@ -175,7 +175,6 @@ instance Pure Group where
                 , "icons"
                 ]
 
-
 instance HasFeatures Group where
     getFeatures = features
     setFeatures fs ig = ig { features = fs }

@@ -13,8 +13,10 @@ module Semantic.Comment
   ) where
 
 import GHC.Generics as G
-import Pure.View hiding (Action,active,Content,Text)
-import qualified Pure.View as HTML
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML
 
 import Semantic.Utils
 
@@ -49,7 +51,7 @@ pattern Comment :: Comment -> Comment
 pattern Comment a = a
 
 instance Pure Comment where
-    render Comment_ {..} =
+    view Comment_ {..} =
         let
             cs =
                 ( collapsed # "collapsed"
@@ -74,7 +76,6 @@ instance HasChildren Comment where
     getChildren = children
     setChildren cs c = c { children = cs }
 
-
 instance HasProp Collapsed Comment where
     type Prop Collapsed Comment = Bool
     getProp _ = collapsed
@@ -94,7 +95,7 @@ pattern Action :: Action -> Action
 pattern Action ca = ca
 
 instance Pure Action where
-    render Action_ {..} =
+    view Action_ {..} =
         let
             cs =
                 ( active # "active"
@@ -118,7 +119,6 @@ instance HasChildren Action where
     getChildren = children
     setChildren cs ca = ca { children = cs }
 
-
 instance HasProp Active Action where
     type Prop Active Action = Bool
     getProp _ = active
@@ -137,7 +137,7 @@ pattern Actions :: Actions -> Actions
 pattern Actions ca = ca
 
 instance Pure Actions where
-    render Actions_ {..} =
+    view Actions_ {..} =
         let
             cs =
                 ( "Actionss"
@@ -161,7 +161,6 @@ instance HasChildren Actions where
     getChildren = children
     setChildren cs ca = ca { children = cs }
 
-
 data Author = Author_
     { as :: Features -> [View] -> View
     , features :: Features
@@ -175,7 +174,7 @@ pattern Author :: Author -> Author
 pattern Author ca = ca
 
 instance Pure Author where
-    render Author_ {..} =
+    view Author_ {..} =
         let
             cs =
                 ( "author"
@@ -199,7 +198,6 @@ instance HasChildren Author where
     getChildren = children
     setChildren cs ca = ca { children = cs }
 
-
 data Avatar = Avatar_
     { as :: Features -> [View] -> View
     , features :: Features
@@ -213,7 +211,7 @@ pattern Avatar :: Avatar -> Avatar
 pattern Avatar ca = ca
 
 instance Pure Avatar where
-    render Avatar_ {..} =
+    view Avatar_ {..} =
         let
             cs =
                 ( "avatar"
@@ -233,7 +231,6 @@ instance HasFeatures Avatar where
     getFeatures = features
     setFeatures as ca = ca { features = as }
 
-
 instance HasProp Src Avatar where
     type Prop Src Avatar = Txt
     getProp _ = src
@@ -252,7 +249,7 @@ pattern Content :: Content -> Content
 pattern Content cc = cc
 
 instance Pure Content where
-    render Content_ {..} =
+    view Content_ {..} =
         let
             cs =
                 ( "content"
@@ -276,7 +273,6 @@ instance HasChildren Content where
     getChildren = children
     setChildren cs cc = cc { children = cs }
 
-
 data Group = Group_
     { as :: Features -> [View] -> View
     , features :: Features
@@ -294,7 +290,7 @@ pattern Group :: Group -> Group
 pattern Group cg = cg
 
 instance Pure Group where
-    render Group_ {..} =
+    view Group_ {..} =
         let
             cs =
                 ( "ui"
@@ -322,7 +318,6 @@ instance HasFeatures Group where
 instance HasChildren Group where
     getChildren = children
     setChildren cs cg = cg { children = cs }
-
 
 instance HasProp Collapsed Group where
     type Prop Collapsed Group = Bool
@@ -357,7 +352,7 @@ pattern Metadata :: Metadata -> Metadata
 pattern Metadata cm = cm
 
 instance Pure Metadata where
-    render Metadata_ {..} =
+    view Metadata_ {..} =
         let
             cs =
                 ( "metadata"
@@ -381,7 +376,6 @@ instance HasChildren Metadata where
     getChildren = children
     setChildren cs cm = cm { children = cs }
 
-
 data Text = Text_
     { as :: Features -> [View] -> View
     , features :: Features
@@ -395,7 +389,7 @@ pattern Text :: Text -> Text
 pattern Text ct = ct
 
 instance Pure Text where
-    render Text_ {..} =
+    view Text_ {..} =
         let
             cs =
                 ( "text"

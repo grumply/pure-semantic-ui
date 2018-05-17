@@ -5,7 +5,10 @@ module Semantic.Loader
   ) where
 
 import GHC.Generics as G
-import Pure.View hiding (active,disabled,inline,verticalAlign)
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML
 
 import Semantic.Utils
 
@@ -45,7 +48,7 @@ pattern Loader :: Loader -> Loader
 pattern Loader l = l
 
 instance Pure Loader where
-    render Loader_ {..} =
+    view Loader_ {..} =
         let
             cs =
                 ( "ui"
@@ -81,7 +84,6 @@ instance HasFeatures Loader where
 instance HasChildren Loader where
     getChildren = children
     setChildren cs l = l { children = cs }
-
 
 instance HasProp Disabled Loader where
     type Prop Disabled Loader = Bool

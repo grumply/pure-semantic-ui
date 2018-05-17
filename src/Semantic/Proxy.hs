@@ -14,6 +14,7 @@ import Data.Foldable (traverse_)
 import Data.IORef (readIORef)
 import Data.Traversable (for)
 import GHC.Generics (Generic)
+
 import System.IO.Unsafe (unsafePerformIO)
 
 import Semantic.Utils
@@ -37,19 +38,17 @@ pattern Proxy :: Proxy -> Proxy
 pattern Proxy a = a
 
 instance Pure Proxy where
-    view = LibraryComponent $ \self ->
+    view = LibraryComponentIO $ \self ->
         let
             withRef (getHost -> h) = do
                 f <- innerRef <$> getProps self
                 traverse_ f h
         in
             def
-                { execute   = id
-                , performIO = id
-                , construct = return ()
+                { construct = return ()
                 , mounted   = getView self >>= withRef
                 , updated   = \_ _ -> withRef
-                , render    = \ref _ -> child ref
+                , view    = \ref _ -> child ref
                 }
 
 instance HasChildren Proxy where

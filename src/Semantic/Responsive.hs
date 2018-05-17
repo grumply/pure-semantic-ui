@@ -8,8 +8,12 @@ module Semantic.Responsive
 
 import Data.IORef
 import GHC.Generics as G
-import Pure.View hiding (minWidth,maxWidth)
-import Pure.DOM (addAnimation)
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML
+import Pure.Data.Event
+import Pure.DOM (addAnimation,onRaw)
 import Pure.Lifted (Win(..),Node(..),getWindow)
 
 import Semantic.Utils
@@ -67,8 +71,8 @@ data ResponsiveState = RS
     }
 
 instance Pure Responsive where
-    render r =
-        Component "Semantic.Addons.Responsive" r $ \self ->
+    view =
+        LibraryComponentIO $ \self ->
             let
                 handleResize = liftIO $ do
                     RS {..} <- getState self
@@ -101,7 +105,7 @@ instance Pure Responsive where
                     join $ readIORef handler
                     writeIORef handler def
 
-                , renderer = \Responsive_ {..} RS {..} ->
+                , render = \Responsive_ {..} RS {..} ->
                      (width <= maxWidth && width >= minWidth) #
                         as attributes children
 
@@ -119,7 +123,6 @@ instance HasFeatures Responsive where
 instance HasChildren Responsive where
     getChildren = children
     setChildren cs r = r { children = cs }
-
 
 instance HasProp FireOnMount Responsive where
     type Prop FireOnMount Responsive = Bool

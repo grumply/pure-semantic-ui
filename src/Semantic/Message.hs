@@ -9,7 +9,10 @@ module Semantic.Message
   ) where
 
 import GHC.Generics as G
-import Pure.View hiding (color,hidden,visible,Name,Content,Header)
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML
 
 import Semantic.Utils
 
@@ -70,7 +73,7 @@ pattern Message :: Message -> Message
 pattern Message m = m
 
 instance Pure Message where
-    render Message_ {..} =
+    view Message_ {..} =
         let
             icon = foldPures (\(Icon_ {}) -> const True) False children
 
@@ -112,7 +115,6 @@ instance HasFeatures Message where
 instance HasChildren Message where
     getChildren = children
     setChildren cs m = m { children = cs }
-
 
 instance HasProp Attached Message where
     type Prop Attached Message = Maybe Txt
@@ -197,7 +199,7 @@ pattern Content :: Content -> Content
 pattern Content mc = mc
 
 instance Pure Content where
-    render Content_ {..} =
+    view Content_ {..} =
         let
             cs =
                 ( "content"
@@ -221,7 +223,6 @@ instance HasChildren Content where
     getChildren = children
     setChildren cs mc = mc { children = cs }
 
-
 data Header = Header_
     { as :: Features -> [View] -> View
     , features :: Features
@@ -235,7 +236,7 @@ pattern Header :: Header -> Header
 pattern Header mh = mh
 
 instance Pure Header where
-    render Header_ {..} =
+    view Header_ {..} =
         let
             cs =
                 ( "header"
@@ -259,7 +260,6 @@ instance HasChildren Header where
     getChildren = children
     setChildren cs mh = mh { children = cs }
 
-
 data Item = Item_
     { as :: Features -> [View] -> View
     , features :: Features
@@ -273,7 +273,7 @@ pattern Item :: Item -> Item
 pattern Item mi = mi
 
 instance Pure Item where
-    render Item_ {..} =
+    view Item_ {..} =
         let
             cs =
                 ( "content"
@@ -297,7 +297,6 @@ instance HasChildren Item where
     getChildren = children
     setChildren cs mi = mi { children = cs }
 
-
 data List = List_
     { as :: Features -> [View] -> View
     , features :: Features
@@ -311,7 +310,7 @@ pattern List :: List -> List
 pattern List ml = ml
 
 instance Pure List where
-    render List_ {..} =
+    view List_ {..} =
         let
             cs =
                 ( "list"
@@ -334,5 +333,4 @@ instance HasFeatures List where
 instance HasChildren List where
     getChildren = children
     setChildren cs ml = ml { children = cs }
-
 

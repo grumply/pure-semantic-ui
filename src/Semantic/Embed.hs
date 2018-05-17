@@ -7,7 +7,11 @@ module Semantic.Embed
 
 import Control.Arrow ((&&&))
 import GHC.Generics as G
-import Pure.View hiding (active,onClick,url,color,Name,Width,Embed)
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML
+import Pure.Data.Event
 import Pure.Route (encodeURI)
 
 import Semantic.Utils hiding (id)
@@ -70,9 +74,9 @@ instance Default Embed where
 pattern Embed :: Embed -> Embed
 pattern Embed e = e
 
-instance VC => Pure Embed where
-    render e =
-        Component "Semantic.Modules.Embed" e $ \self ->
+instance Pure Embed where
+    view =
+        LibraryComponentIO $ \self ->
             let
                 handleClick = do
                     Embed_ {..} <- getProps self
@@ -85,7 +89,7 @@ instance VC => Pure Embed where
                     Embed_ {..} <- getProps self
                     return defaultActive
 
-                , renderer = \Embed_ {..} isActive ->
+                , render = \Embed_ {..} isActive ->
                     let
                         cs =
                             ( "ui"
@@ -94,9 +98,9 @@ instance VC => Pure Embed where
                             : "embed"
                             )
 
-                        renderSource YouTube          = "YouTube"
-                        renderSource Vimeo            = "Vimeo"
-                        renderSource (OtherSource os) = os
+                        viewSource YouTube          = "YouTube"
+                        viewSource Vimeo            = "Vimeo"
+                        viewSource (OtherSource os) = os
 
                         defaultIframeAttributes =
                             [ Attribute "allowfullscreen" "false"
@@ -104,7 +108,7 @@ instance VC => Pure Embed where
                             , Attribute "height" "100%"
                             , Attribute "scrolling" "no"
                             , Attribute "src" src
-                            , may (\s -> Attribute "title" ("Embedded content from " <> renderSource s <> ".")) source
+                            , may (\s -> Attribute "title" ("Embedded content from " <> viewSource s <> ".")) source
                             , Attribute "width" "100%"
                             ]
 
@@ -135,7 +139,6 @@ instance VC => Pure Embed where
 
                                 _ -> url
 
-
                     in
                         as
                             : attributes
@@ -151,7 +154,6 @@ instance VC => Pure Embed where
 
                 }
 
-
 instance HasProp As Embed where
     type Prop As Embed = Features -> [View] -> View
     getProp _ = as
@@ -164,7 +166,6 @@ instance HasFeatures Embed where
 instance HasChildren Embed where
     getChildren = children
     setChildren cs sp = sp { children = cs }
-
 
 instance HasProp Active Embed where
     type Prop Active Embed = Bool

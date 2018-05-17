@@ -7,7 +7,11 @@ module Semantic.Rating
   ) where
 
 import GHC.Generics as G
-import Pure.View hiding (disabled,OnClick,OnMouseEnter,Selected,onKeyUp,onClick,active)
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML
+import Pure.Data.Event
 
 import Semantic.Utils
 
@@ -61,8 +65,8 @@ data RatingState = RS
     }
 
 instance Pure Rating where
-    render r =
-        Component "Semantic.Modules.Rating" r $ \self ->
+    view =
+        LibraryComponentIO $ \self ->
             let
                 handleIconClick n = do
                     Rating_ {..} <- getProps self
@@ -102,12 +106,11 @@ instance Pure Rating where
                              )
                     return Nothing
 
-
             in def
                 { construct = do
                     Rating_ {..} <- getProps self
                     return (RS defaultRating def def)
-                , renderer = \Rating_ {..} RS {..} ->
+                , render = \Rating_ {..} RS {..} ->
                     let
                         cs =
                             ( "ui"
@@ -145,7 +148,6 @@ instance HasFeatures Rating where
 instance HasChildren Rating where
     getChildren = children
     setChildren cs r = r { children = cs }
-
 
 instance HasProp Clearable Rating where
     type Prop Clearable Rating = Maybe Txt
@@ -201,11 +203,11 @@ data Icon = Icon_
 instance Default Icon where
     def = (G.to gdef) { as = \fs cs -> I & Features fs & Children cs }
 
-pattern Icon :: VC => Icon -> View
-pattern Icon ri = View ri
+pattern Icon :: Icon -> Icon
+pattern Icon ri = ri
 
-instance VC => Pure Icon where
-    render Icon_ {..} =
+instance Pure Icon where
+    view Icon_ {..} =
         let
             handleClick _ =
                 let oc = onClick index
@@ -248,7 +250,6 @@ instance HasProp As Icon where
 instance HasFeatures Icon where
     getFeatures = features
     setFeatures as ri = ri { features = as }
-
 
 instance HasProp Active Icon where
     type Prop Active Icon = Bool

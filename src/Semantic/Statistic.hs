@@ -8,7 +8,10 @@ module Semantic.Statistic
   ) where
 
 import GHC.Generics as G
-import Pure.View hiding (color,horizontal,widths,text,Value,Label)
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML
 
 import Semantic.Utils
 
@@ -52,7 +55,7 @@ pattern Statistic :: Statistic -> Statistic
 pattern Statistic s = s
 
 instance Pure Statistic where
-    render Statistic_ {..} =
+    view Statistic_ {..} =
         let
             cs =
                 ( "ui"
@@ -81,7 +84,6 @@ instance HasFeatures Statistic where
 instance HasChildren Statistic where
     getChildren = children
     setChildren cs s = s { children = cs }
-
 
 instance HasProp Color Statistic where
     type Prop Color Statistic = Txt
@@ -126,7 +128,7 @@ pattern Group :: Group -> Group
 pattern Group sg = sg
 
 instance Pure Group where
-    render Group_ {..} =
+    view Group_ {..} =
         let
             cs =
                 ( "ui"
@@ -155,7 +157,6 @@ instance HasFeatures Group where
 instance HasChildren Group where
     getChildren = children
     setChildren cs sg = sg { children = cs }
-
 
 instance HasProp Color Group where
     type Prop Color Group = Txt
@@ -195,7 +196,7 @@ pattern Label :: Label -> Label
 pattern Label sl = sl
 
 instance Pure Label where
-    render Label_ {..} =
+    view Label_ {..} =
         let
             cs =
                 ( "label"
@@ -219,7 +220,6 @@ instance HasChildren Label where
     getChildren = children
     setChildren cs sl = sl { children = cs }
 
-
 data Value = Value_
     { as :: Features -> [View] -> View
     , features :: Features
@@ -234,7 +234,7 @@ pattern Value :: Value -> Value
 pattern Value sv = sv
 
 instance Pure Value where
-    render Value_ {..} =
+    view Value_ {..} =
         let
             cs =
                 ( text # "text"
@@ -258,7 +258,6 @@ instance HasFeatures Value where
 instance HasChildren Value where
     getChildren = children
     setChildren cs sv = sv { children = cs }
-
 
 instance HasProp IsText Value where
     type Prop IsText Value = Bool

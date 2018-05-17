@@ -10,6 +10,10 @@ import Data.Maybe (fromMaybe,fromJust)
 import Data.Monoid ((<>))
 import Data.STRef (newSTRef,readSTRef,writeSTRef,modifySTRef')
 import GHC.Generics (Generic)
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML
 
 -- from pure-default
 import Pure.Data.Default ((?),Default(..))

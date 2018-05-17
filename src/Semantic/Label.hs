@@ -11,6 +11,10 @@ import Pure.Data.View
 import Pure.Data.View.Patterns
 import Pure.Data.Txt
 import Pure.Data.HTML
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML
 
 import Semantic.Utils
 
@@ -136,7 +140,6 @@ instance HasProp Circular Label where
     getProp _ = circular
     setProp _ c l = l { circular = c }
 
-
 instance HasProp OnClick Label where
     type Prop OnClick Label = IO ()
     getProp _ = onClick
@@ -200,7 +203,7 @@ pattern Detail :: Detail -> Detail
 pattern Detail ld = ld
 
 instance Pure Detail where
-    render Detail_ {..} =
+    view Detail_ {..} =
         as
             : attributes
             )
@@ -219,7 +222,6 @@ instance HasChildren Detail where
     getChildren = children
     setChildren cs ld = ld { children = cs }
 
-
 data Group = Group_
     { as :: Features -> [View] -> View
     , features :: Features
@@ -237,7 +239,7 @@ pattern Group :: Group -> Group
 pattern Group lg = lg
 
 instance Pure Group where
-    render Group_ {..} =
+    view Group_ {..} =
         let
             cs =
                 ( "ui"
@@ -270,7 +272,6 @@ instance HasProp Circular Group where
     type Prop Circular Group = Bool
     getProp _ = circular
     setProp _ c lg = lg { circular = c }
-
 
 instance HasProp Color Group where
     type Prop Color Group = Txt

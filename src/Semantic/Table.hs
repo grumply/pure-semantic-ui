@@ -11,8 +11,10 @@ module Semantic.Table
   ) where
 
 import GHC.Generics as G
-import Pure.View hiding (color,fixed,textAlign,verticalAlign,Table,Body,Header,Footer,disabled,active,width)
-import qualified Pure.View as HTML
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML
 
 import Semantic.Utils
 
@@ -97,7 +99,7 @@ pattern Table :: Table -> Table
 pattern Table t = t
 
 instance Pure Table where
-    render Table_ {..} =
+    view Table_ {..} =
         let
             cs =
                 ( "ui"
@@ -142,7 +144,6 @@ instance HasFeatures Table where
 instance HasChildren Table where
     getChildren = children
     setChildren cs t = t { children = cs }
-
 
 instance HasProp Attached Table where
     type Prop Attached Table = Maybe Txt
@@ -262,7 +263,7 @@ pattern Body :: Body -> Body
 pattern Body tb = tb
 
 instance Pure Body where
-    render Body_ {..} =
+    view Body_ {..} =
         as
             : attributes
             )
@@ -280,7 +281,6 @@ instance HasFeatures Body where
 instance HasChildren Body where
     getChildren = children
     setChildren cs tb = tb { children = cs }
-
 
 data Cell = Cell_
     { as :: Features -> [View] -> View
@@ -307,7 +307,7 @@ pattern Cell :: Cell -> Cell
 pattern Cell tc = tc
 
 instance Pure Cell where
-    render Cell_ {..} =
+    view Cell_ {..} =
         let
             cs =
                 ( active # "active"
@@ -341,7 +341,6 @@ instance HasFeatures Cell where
 instance HasChildren Cell where
     getChildren = children
     setChildren cs tc = tc { children = cs }
-
 
 instance HasProp Active Cell where
     type Prop Active Cell = Bool
@@ -416,7 +415,7 @@ pattern Footer :: Footer -> Footer
 pattern Footer tf = tf
 
 instance Pure Footer where
-    render Footer_ {..} =
+    view Footer_ {..} =
         as
             : attributes
             )
@@ -435,7 +434,6 @@ instance HasChildren Footer where
     getChildren = children
     setChildren cs tf = tf { children = cs }
 
-
 data Header = Header_
     { as :: Features -> [View] -> View
     , features :: Features
@@ -450,7 +448,7 @@ pattern Header :: Header -> Header
 pattern Header th = th
 
 instance Pure Header where
-    render Header_ {..} =
+    view Header_ {..} =
         let
             cs =
                 ( fullWidth # "full-width"
@@ -473,7 +471,6 @@ instance HasFeatures Header where
 instance HasChildren Header where
     getChildren = children
     setChildren cs th = th { children = cs }
-
 
 instance HasProp FullWidth Header where
     type Prop FullWidth Header = Bool
@@ -506,7 +503,7 @@ pattern HeaderCell :: HeaderCell -> HeaderCell
 pattern HeaderCell thc = thc
 
 instance Pure HeaderCell where
-    render HeaderCell_ {..} =
+    view HeaderCell_ {..} =
         let
             cs =
                 ( active # "active"
@@ -541,7 +538,6 @@ instance HasFeatures HeaderCell where
 instance HasChildren HeaderCell where
     getChildren = children
     setChildren cs thc = thc { children = cs }
-
 
 instance HasProp Active HeaderCell where
     type Prop Active HeaderCell = Bool
@@ -629,7 +625,7 @@ pattern Row :: Row -> Row
 pattern Row tr = tr
 
 instance Pure Row where
-    render Row_ {..} =
+    view Row_ {..} =
         let
             cs =
                 ( active # "active"
@@ -659,7 +655,6 @@ instance HasFeatures Row where
 instance HasChildren Row where
     getChildren = children
     setChildren cs tr = tr { children = cs }
-
 
 instance HasProp Active Row where
     type Prop Active Row = Bool

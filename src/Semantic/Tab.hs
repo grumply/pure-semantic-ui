@@ -6,7 +6,10 @@ module Semantic.Tab
   ) where
 
 import GHC.Generics as G
-import Pure.View hiding (active,Tab)
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML
 
 import Semantic.Utils
 
@@ -55,7 +58,6 @@ instance HasChildren Tab where
     getChildren = children
     setChildren cs t = t { children = cs }
 
-
 data Pane = Pane_
     { as :: Features -> [View] -> View
     , features :: Features
@@ -77,7 +79,7 @@ pattern Pane :: Pane -> Pane
 pattern Pane tp = tp
 
 instance Pure Pane where
-    render Pane_ {..} =
+    view Pane_ {..} =
         let
             cs =
                 ( active # "active"
@@ -102,7 +104,6 @@ instance HasFeatures Pane where
 instance HasChildren Pane where
     getChildren = children
     setChildren cs tp = tp { children = cs }
-
 
 instance HasProp Active Pane where
     type Prop Active Pane = Bool

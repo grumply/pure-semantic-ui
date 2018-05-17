@@ -9,7 +9,11 @@ module Semantic.Step
   ) where
 
 import GHC.Generics as G
-import Pure.View hiding (active,completed,disabled,onClick,vertical,widths,Content,Title,Description,Step,Ref)
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML
+import Pure.Data.Event
 
 import Semantic.Utils
 
@@ -24,7 +28,6 @@ import Semantic.Properties as Properties
   , pattern Disabled, Disabled(..)
   , pattern Ref, Ref(..)
   , pattern Link, Link(..)
-  , pattern OnClick, OnClick(..)
   , pattern Ordered, Ordered(..)
   , pattern Attached, Attached(..)
   , pattern Fluid, Fluid(..)
@@ -63,7 +66,7 @@ pattern Step :: Step -> Step
 pattern Step s = s
 
 instance Pure Step where
-    render Step_ {..} =
+    view Step_ {..} =
         let
             e = onClick ? A $ as
 
@@ -77,7 +80,6 @@ instance Pure Step where
         in
             e
                 : ref
-                : onClick # (disabled #! On "click" def (\_ -> return $ Just onClick))
                 : attributes
                 )
                 children
@@ -94,7 +96,6 @@ instance HasFeatures Step where
 instance HasChildren Step where
     getChildren = children
     setChildren cs s = s { children = cs }
-
 
 instance HasProp Active Step where
     type Prop Active Step = Bool
@@ -121,11 +122,6 @@ instance HasProp Link Step where
     getProp _ = link
     setProp _ l s = s { link = l }
 
-instance HasProp OnClick Step where
-    type Prop OnClick Step = IO ()
-    getProp _ = onClick
-    setProp _ oc s = s { onClick = oc }
-
 instance HasProp Ordered Step where
     type Prop Ordered Step = Bool
     getProp _ = ordered
@@ -144,7 +140,7 @@ pattern Content :: Content -> Content
 pattern Content sc = sc
 
 instance Pure Content where
-    render Content_ {..} =
+    view Content_ {..} =
         let
             cs =
                 ( "content"
@@ -168,7 +164,6 @@ instance HasChildren Content where
     getChildren = children
     setChildren cs sc = sc { children = cs }
 
-
 data Description = Description_
     { as :: Features -> [View] -> View
     , features :: Features
@@ -182,7 +177,7 @@ pattern Description :: Description -> Description
 pattern Description sd = sd
 
 instance Pure Description where
-    render Description_ {..} =
+    view Description_ {..} =
         let
             cs =
                 ( "description"
@@ -206,7 +201,6 @@ instance HasChildren Description where
     getChildren = children
     setChildren cs sd = sd { children = cs }
 
-
 data Group = Group_
     { as :: Features -> [View] -> View
     , features :: Features
@@ -228,7 +222,7 @@ pattern Group :: Group -> Group
 pattern Group sg = sg
 
 instance Pure Group where
-    render Group_ {..} =
+    view Group_ {..} =
         let
             cs =
                 ( "ui"
@@ -260,7 +254,6 @@ instance HasFeatures Group where
 instance HasChildren Group where
     getChildren = children
     setChildren cs sg = sg { children = cs }
-
 
 instance HasProp Attached Group where
     type Prop Attached Group = Maybe Txt
@@ -315,7 +308,7 @@ pattern Title :: Title -> Title
 pattern Title st = st
 
 instance Pure Title where
-    render Title_ {..} =
+    view Title_ {..} =
         let
             cs =
                 ( "title"
@@ -338,5 +331,4 @@ instance HasFeatures Title where
 instance HasChildren Title where
     getChildren = children
     setChildren cs st = st { children = cs }
-
 

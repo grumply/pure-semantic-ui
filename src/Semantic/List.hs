@@ -13,7 +13,10 @@ module Semantic.List
   ) where
 
 import GHC.Generics as G
-import qualified Pure.View as HTML
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML
 
 import Semantic.Utils
 
@@ -75,11 +78,11 @@ data List = List_
 instance Default List where
     def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
-pattern List :: VC => List -> VC
+pattern List :: List -> List
 pattern List l = l
 
-instance VC => Pure List where
-    render List_ {..} =
+instance Pure List where
+    view List_ {..} =
         let
             cs =
                 ( "ui"
@@ -131,7 +134,6 @@ instance HasProp Celled List where
 instance HasChildren List where
     getChildren = children
     setChildren cs l = l { children = cs }
-
 
 instance HasProp Divided List where
     type Prop Divided List = Bool
@@ -198,7 +200,7 @@ pattern Content :: Content -> Content
 pattern Content lc = lc
 
 instance Pure Content where
-    render Content_ {..} =
+    view Content_ {..} =
         let
             cs =
                 ( floated # (floated <>> "floated")
@@ -224,7 +226,6 @@ instance HasChildren Content where
     getChildren = children
     setChildren cs lc = lc { children = cs }
 
-
 instance HasProp Floated Content where
     type Prop Floated Content = Txt
     getProp _ = floated
@@ -248,7 +249,7 @@ pattern Description :: Description -> Description
 pattern Description ld = ld
 
 instance Pure Description where
-    render Description_ {..} =
+    view Description_ {..} =
 
 instance HasProp As Description where
     type Prop As Description = Features -> [View] -> View
@@ -263,7 +264,6 @@ instance HasChildren Description where
     getChildren = children
     setChildren cs ld = ld { children = cs }
 
-
 data Header = Header_
     { as :: Features -> [View] -> View
     , features :: Features
@@ -277,7 +277,7 @@ pattern Header :: Header -> Header
 pattern Header lh = lh
 
 instance Pure Header where
-    render Header_ {..} =
+    view Header_ {..} =
 
 instance HasProp As Header where
     type Prop As Header = Features -> [View] -> View
@@ -291,7 +291,6 @@ instance HasFeatures Header where
 instance HasChildren Header where
     getChildren = children
     setChildren cs lh = lh { children = cs }
-
 
 data Icon = Icon_
     { as :: Features -> [View] -> View
@@ -319,7 +318,7 @@ pattern Icon :: Icon -> Icon
 pattern Icon li = li
 
 instance Pure Icon where
-    render Icon_ {..} =
+    view Icon_ {..} =
         let
             cs =
                 ( color
@@ -367,7 +366,6 @@ instance HasProp Name Icon where
     type Prop Name Icon = Txt
     getProp _ = name
     setProp _ n li = li { name = n }
-
 
 instance HasProp Color Icon where
     type Prop Color Icon = Txt
@@ -440,7 +438,7 @@ pattern Item :: Item -> Item
 pattern Item li = li
 
 instance Pure Item where
-    render Item_ {..} =
+    view Item_ {..} =
         let
             li =
                 case as [] [] of
@@ -503,7 +501,7 @@ pattern Sublist :: Sublist -> Sublist
 pattern Sublist ll = ll
 
 instance Pure Sublist where
-    render Sublist_ {..} =
+    view Sublist_ {..} =
         let
             proxy =
                 case as [] [] of
@@ -529,7 +527,6 @@ instance HasFeatures Sublist where
 instance HasChildren Sublist where
     getChildren = children
     setChildren cs ll = ll { children = cs }
-
 
 data Keyed = Keyed_
     { as :: Features -> [(Int,View)] -> View
@@ -557,8 +554,8 @@ instance Default Keyed where
 pattern Keyed :: Keyed -> Keyed
 pattern Keyed l = l
 
-instance VC => Pure Keyed where
-    render Keyed_ {..} =
+instance Pure Keyed where
+    view Keyed_ {..} =
         let
             cs =
                 ( "ui"
@@ -610,7 +607,6 @@ instance HasProp Celled Keyed where
 instance HasChildren Keyed where
     getChildren = children
     setChildren cs l = l { children = cs }
-
 
 instance HasProp Divided Keyed where
     type Prop Divided Keyed = Bool

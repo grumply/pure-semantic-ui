@@ -11,7 +11,10 @@ import Control.Concurrent
 import Data.IORef
 import Data.Maybe
 import GHC.Generics as G
-import Pure.View hiding (animation,onComplete,visible,lookup)
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML
 
 import Semantic.Utils
 
@@ -82,8 +85,8 @@ data TransitionState = TS
     }
 
 instance Pure Transition where
-    render t =
-        Component "Semantic.Modules.Transition" t $ \self ->
+    view =
+        LibraryComponentIO $ \self ->
             let
 
                 setSafeState f = do
@@ -104,7 +107,7 @@ instance Pure Transition where
                              , ..
                              }
                         , for_ upcoming $ \s -> do
-                            parent self (onStart s)
+                            onStart s
                             tid <- forkIO $ do
                                 threadDelay (calculateTransitionDuration s duration * 1000)
                                 handleComplete
@@ -114,13 +117,13 @@ instance Pure Transition where
                 handleComplete = do
                     Transition_ {..} <- getProps self
                     TS          {..} <- getState self
-                    parent self (onComplete status)
+                    onComplete status
                     maybe (return ()) (const handleStart) =<< readIORef next
                     s <- computeCompletedStatus
                     let callback = (status == Entering) ? onShow $ onHide
                     setSafeState $ \TS {..} ->
                         ( TS { status = s, animating = False, .. }
-                        , void (parent self (callback s))
+                        , callback s
                         )
 
                 updateStatus = do
@@ -193,7 +196,7 @@ instance Pure Transition where
                         TS {..} <- getState self
                         writeIORef mounted False
 
-                    , renderer = \Transition_ {..} TS {..} ->
+                    , render = \Transition_ {..} TS {..} ->
                           let
                               animationClasses cs =
                                   ( animation : cs ) ++
@@ -307,8 +310,8 @@ data GroupState = TGS
     { buffer :: [(Int,View)]
     }
 
-instance VC => Pure Group where
-    render tg =
+instance Pure Group where
+    view tg =
         Component "Semantic.Modules.Transition.Group" tg $ \self ->
             let
                 handleOnHide key _ =
@@ -355,7 +358,7 @@ instance VC => Pure Group where
                     , ..
                     }
 
-                , renderer = \Group_ {..} TGS {..} -> as attributes buffer
+                , render = \Group_ {..} TGS {..} -> as attributes buffer
                 }
 
 instance HasProp As Group where

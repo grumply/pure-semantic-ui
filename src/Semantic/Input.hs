@@ -5,8 +5,10 @@ module Semantic.Input
   ) where
 
 import GHC.Generics as G
-import Pure.View as View hiding (disabled,focused,transparent,Disabled,Button,Label,Input,Type)
-import qualified Pure.View as HTML
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML
 
 import Semantic.Utils
 
@@ -81,7 +83,7 @@ calculatePositions = foldl' analyze def
                 _               -> IF {..}
 
 instance Pure Input where
-    render Input_ {..} =
+    view Input_ {..} =
         let
             _focus e = do
                 focusNode e
@@ -139,7 +141,6 @@ instance HasFeatures Input where
 instance HasChildren Input where
     getChildren = children
     setChildren cs i = i { children = cs }
-
 
 instance HasProp Disabled Input where
     type Prop Disabled Input = Bool

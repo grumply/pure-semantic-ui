@@ -9,7 +9,11 @@ module Semantic.Confirm
 
 import Control.Arrow ((&&&))
 import GHC.Generics as G
-import Pure.View hiding (content,Button,Size,OnClose,OnClick)
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML
+import Pure.Data.Event
 
 import Semantic.Utils
 
@@ -54,11 +58,11 @@ instance Default Confirm where
         , withModal     = id
         }
 
-pattern Confirm :: Confirm -> VC
+pattern Confirm :: Confirm -> Confirm
 pattern Confirm c = c
 
-instance VC => Pure Confirm where
-    render Confirm_ {..} =
+instance Pure Confirm where
+    view Confirm_ {..} =
         let handleCancel = do
                 Button.onClick cancelButton
                 onCancel

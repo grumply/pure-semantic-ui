@@ -5,7 +5,10 @@ module Semantic.Checkbox
   ) where
 
 import GHC.Generics as G
-import qualified Pure.View as HTML
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML
 import Pure.Lifted (Node)
 
 import Semantic.Utils
@@ -59,12 +62,12 @@ pattern Checkbox c = c
 pattern Radio :: Checkbox -> Checkbox
 pattern Radio r = (Type "radio" (IsRadio True r))
 
-renderChecked Nothing = HTML.Checked False
-renderChecked (Just True) = HTML.Checked True
-renderChecked (Just False) = nil
+viewChecked Nothing = HTML.Checked False
+viewChecked (Just True) = HTML.Checked True
+viewChecked (Just False) = nil
 
 instance Pure Checkbox where
-    render cb@Checkbox_ {..} =
+    view cb@Checkbox_ {..} =
         let
             cs =
                 ( "ui"
@@ -86,7 +89,7 @@ instance Pure Checkbox where
                 ( HTML.Input
                     [ ClassList [ "hidden" ]
                     , HostRef (return . Just . withRef)
-                    , renderChecked checked
+                    , viewChecked checked
                     , HTML.Name name
                     , Readonly readOnly
                     , may (\ti -> Tabindex (disabled ? (-1) $ ti)) tabIndex
@@ -109,7 +112,6 @@ instance HasFeatures Checkbox where
 instance HasChildren Checkbox where
     getChildren = children
     setChildren cs cb = cb { children = cs }
-
 
 instance HasProp Disabled Checkbox where
     type Prop Disabled Checkbox = Bool

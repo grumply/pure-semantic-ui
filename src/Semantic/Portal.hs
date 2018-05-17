@@ -10,10 +10,14 @@ import Data.List as List
 import Data.Maybe (fromMaybe)
 import qualified Data.List as List
 import GHC.Generics as G
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML
+import Pure.Data.Event
 import Pure.Data.Txt as Txt (unwords)
-import Pure.View hiding (active,trigger,Proxy)
 import Pure.Lifted (getDocument,append,getChild,removeNode,setProperty,create,insertAt,body,IsJSV(..),JSV,Node(..),Element(..),Doc(..),(.#))
-import Pure.DOM
+import Pure.DOM (onRaw)
 
 import Semantic.Utils
 
@@ -117,8 +121,8 @@ data PortalStateNodes = PSN
     } deriving (Generic,Default)
 
 instance Pure Portal where
-    render p =
-        Component "Semantic.Addons.Portal" p $ \self ->
+    view =
+        LibraryComponentIO $ \self ->
             let
 
                 handleDocumentClick ((.# "target") -> Just (target :: JSV)) = do
@@ -201,14 +205,14 @@ instance Pure Portal where
                 openPortal e = do
                     Portal_ {..} <- getProps self
                     setState self $ \_ PS {..} -> PS { active = True, .. }
-                    void $ parent self (onOpen e)
+                    onOpen e
 
                 closePortal = do
                     Portal_ {..} <- getProps self
                     setState self $ \_ PS {..} -> PS { active = False, .. }
-                    void $ parent self onClose
+                    onClose
 
-                renderPortal = do
+                viewPortal = do
                     PS {..} <- getState self
                     active # do
                         mountPortal
@@ -221,7 +225,7 @@ instance Pure Portal where
                         mouseEnterHandler
                         let chld = only children
                         mtd <- newIORef (return ())
-                        new <- Pure.DOM.build (parent self) mtd Nothing chld
+                        new <- Pure.DOM.build mtd Nothing chld
                         writeIORef liveView (chld,new)
                         let Just n = getHost new
                         addAnimation $ do
@@ -247,7 +251,7 @@ instance Pure Portal where
                         (mid,old) <- readIORef liveView
                         mtd  <- newIORef (return ())
                         let new = only children
-                            (plan,newLive) = buildPlan (\p -> diffDeferred (parent self) mtd p old mid new)
+                            (plan,newLive) = buildPlan (\p -> diffDeferred mtd p old mid new)
                         m <- plan `seq` readIORef mtd
                         unless (List.null plan) $ do
                             barrier <- newEmptyMVar
@@ -280,7 +284,7 @@ instance Pure Portal where
                                 , ..
                                 }
 
-                        parent self onMount
+                        onMount
 
                 unmountPortal = do
                     PS {..} <- getState self
@@ -300,7 +304,7 @@ instance Pure Portal where
                     writeIORef handlers def
                     writeIORef nodes PSN { rootNode = def, portalNode = def, .. }
 
-                    parent self onUnmount
+                    onUnmount
 
                     writeIORef liveView (nil,nil)
 
@@ -316,7 +320,7 @@ instance Pure Portal where
                                     <*> newIORef def
                                     <*> newIORef def
                                     <*> newIORef def
-                    , mounted = renderPortal
+                    , mounted = viewPortal
                     , receiveProps = \newprops oldstate -> do
                         oldprops <- getProps self
                         return $
@@ -324,7 +328,7 @@ instance Pure Portal where
                             ? oldstate { active = open newprops }
                             $ oldstate
                         (active -> nowOpen@(not -> nowClosed)) <- getState self
-                        if | wasClosed && nowOpen -> renderPortal
+                        if | wasClosed && nowOpen -> viewPortal
                            | wasOpen && nowClosed -> unmountPortal
                            | nowOpen              -> diffPortal (oldCs /= newCs)
                            | otherwise            -> return ()
@@ -334,7 +338,7 @@ instance Pure Portal where
                         unmountPortal
                         for mouseEnterTimer killThread
                         for mouseLeaveTimer killThread
-                    , renderer = \Portal_ {..} ps ->
+                    , render = \Portal_ {..} ps ->
                         trigger #
                             (Proxy $ def & InnerRef handleRef & Children
                                 [ cloneWithProps trigger
@@ -355,7 +359,6 @@ instance HasFeatures Portal where
 instance HasChildren Portal where
     getChildren = children
     setChildren cs p = p { children = cs }
-
 
 instance HasProp CloseOnDocumentClick Portal where
     type Prop CloseOnDocumentClick Portal = Bool

@@ -8,9 +8,13 @@ module Semantic.Sticky
 import Data.IORef
 import Data.Maybe
 import GHC.Generics as G
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML
+import Pure.Data.Event
 import Pure.Lifted (same,window,body,IsJSV(..),JSV,Node(..),Element(..))
-import Pure.View hiding (active,bottom,offset,top,round,Offset)
-import Pure.DOM (addAnimation)
+import Pure.DOM (addAnimation,onRaw)
 
 import Semantic.Utils hiding (body)
 
@@ -76,9 +80,9 @@ data StickyState = SS
     , scrollListener :: IORef (IO ())
     }
 
-instance VC => Pure Sticky where
-    render s =
-        Component "Semantic.Modules.Sticky" s $ \self ->
+instance Pure Sticky where
+    view =
+        LibraryComponentIO $ \self ->
             let
                 getRects = do
                     Sticky_ {..} <- getProps self
@@ -125,11 +129,11 @@ instance VC => Pure Sticky where
                                 setSticking sticking = void $ do
                                     setState self $ \_ SS {..} -> SS { isSticking = sticking, .. }
                                     sticking
-                                        ? (onStick   # parent self onStick)
-                                        $ (onUnstick # parent self onUnstick)
+                                        ? onStick
+                                        $ onUnstick
 
                                 stickToContextBottom = void $ do
-                                    onBottom # parent self onBottom
+                                    onBottom
                                     setSticking True
                                     setState self $ \_ SS {..} -> SS
                                         { top = Just (brBottom contextRect - brHeight stickyRect)
@@ -139,7 +143,7 @@ instance VC => Pure Sticky where
                                     setPushing True
 
                                 stickToContextTop = void $ do
-                                    onTop # parent self onTop
+                                    onTop
                                     setSticking False
                                     setPushing False
 
@@ -225,7 +229,7 @@ instance VC => Pure Sticky where
                     Sticky_ {..} <- getProps self
                     removeListeners
 
-                , renderer = \Sticky_ {..} SS {..} ->
+                , render = \Sticky_ {..} SS {..} ->
                     let
                         computedStyles = isSticking #
                             [ maybe def (\b -> ("bottom",pxs $ round b)) bottom
@@ -255,7 +259,6 @@ instance HasFeatures Sticky where
 instance HasChildren Sticky where
     getChildren = children
     setChildren cs s = s { children = cs }
-
 
 instance HasProp Active Sticky where
     type Prop Active Sticky = Bool

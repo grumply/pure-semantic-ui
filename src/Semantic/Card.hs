@@ -10,7 +10,10 @@ module Semantic.Card
   ) where
 
 import GHC.Generics as G hiding (Meta)
-import Pure.View hiding (color,textAlign,Content,Header,Meta,Description,Ref)
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML
 
 import Semantic.Utils
 
@@ -55,7 +58,7 @@ pattern Card :: Card -> Card
 pattern Card a = a
 
 instance Pure Card where
-    render Card_ {..} =
+    view Card_ {..} =
         let
             cs =
                 ( "ui"
@@ -85,7 +88,6 @@ instance HasFeatures Card where
 instance HasChildren Card where
     getChildren = children
     setChildren cs c = c { children = cs }
-
 
 instance HasProp Centered Card where
     type Prop Centered Card = Bool
@@ -132,7 +134,7 @@ pattern Content :: Content -> Content
 pattern Content cc = cc
 
 instance Pure Content where
-    render Content_ {..} =
+    view Content_ {..} =
         let
             cs =
                 ( extra # "extra"
@@ -158,7 +160,6 @@ instance HasChildren Content where
     getChildren = children
     setChildren cs cc = cc { children = cs }
 
-
 instance HasProp Extra Content where
     type Prop Extra Content = Bool
     getProp _ = extra
@@ -183,7 +184,7 @@ pattern Description :: Description -> Description
 pattern Description cd = cd
 
 instance Pure Description where
-    render Description_ {..} =
+    view Description_ {..} =
         let
             cs =
                 ( textAlign
@@ -208,7 +209,6 @@ instance HasChildren Description where
     getChildren = children
     setChildren cs cd = cd { children = cs }
 
-
 instance HasProp TextAlign Description where
     type Prop TextAlign Description = Txt
     getProp _ = textAlign
@@ -231,7 +231,7 @@ pattern Group :: Group -> Group
 pattern Group cg = cg
 
 instance Pure Group where
-    render Group_ {..} =
+    view Group_ {..} =
         let
             cs =
                 ( "ui"
@@ -259,7 +259,6 @@ instance HasFeatures Group where
 instance HasChildren Group where
     getChildren = children
     setChildren cs cg = cg { children = cs }
-
 
 instance HasProp Doubling Group where
     type Prop Doubling Group = Bool
@@ -295,7 +294,7 @@ pattern Header :: Header -> Header
 pattern Header ch = ch
 
 instance Pure Header where
-    render Header_ {..} =
+    view Header_ {..} =
         let
             cs =
                 ( textAlign
@@ -320,7 +319,6 @@ instance HasChildren Header where
     getChildren = children
     setChildren cs ch = ch { children = cs }
 
-
 instance HasProp TextAlign Header where
     type Prop TextAlign Header = Txt
     getProp _ = textAlign
@@ -340,7 +338,7 @@ pattern Meta :: Meta -> Meta
 pattern Meta cm = cm
 
 instance Pure Meta where
-    render Meta_ {..} =
+    view Meta_ {..} =
         let
             cs =
                 ( textAlign
@@ -364,7 +362,6 @@ instance HasFeatures Meta where
 instance HasChildren Meta where
     getChildren = children
     setChildren cs cm = cm { children = cs }
-
 
 instance HasProp TextAlign Meta where
     type Prop TextAlign Meta = Txt

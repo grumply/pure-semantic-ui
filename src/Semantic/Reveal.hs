@@ -5,7 +5,10 @@ module Semantic.Reveal
   ) where
 
 import GHC.Generics as G
-import Pure.View hiding (disabled,active)
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML
 
 import Semantic.Utils
 
@@ -41,7 +44,7 @@ pattern Reveal :: Reveal -> Reveal
 pattern Reveal r = r
 
 instance Pure Reveal where
-    render Reveal_ {..} =
+    view Reveal_ {..} =
         let
             cs =
                 ( "ui"
@@ -79,7 +82,6 @@ instance HasFeatures Reveal where
 instance HasChildren Reveal where
     getChildren = children
     setChildren cs r = r { children = cs }
-
 
 instance HasProp Disabled Reveal where
     type Prop Disabled Reveal = Bool

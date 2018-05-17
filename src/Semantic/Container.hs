@@ -5,7 +5,10 @@ module Semantic.Container
   ) where
 
 import GHC.Generics as G
-import Pure.View hiding (textAlign,text)
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML
 
 import Semantic.Utils
 
@@ -54,7 +57,7 @@ setTextContainer c =
         _                    -> c
 
 instance Pure Container where
-    render Container_ {..} =
+    view Container_ {..} =
         let cs =
               ( "ui"
               : text # "text"
@@ -76,7 +79,6 @@ instance HasFeatures Container where
 instance HasChildren Container where
     getChildren = children
     setChildren cs c = c { children = cs }
-
 
 instance HasProp Fluid Container where
     type Prop Fluid Container = Bool

@@ -6,7 +6,10 @@ module Semantic.Segment
   ) where
 
 import GHC.Generics as G
-import Pure.View hiding (color,disabled,textAlign,vertical,horizontal)
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML
 
 import Semantic.Utils
 
@@ -73,7 +76,7 @@ pattern Segment :: Segment -> Segment
 pattern Segment s = s
 
 instance Pure Segment where
-    render Segment_ {..} =
+    view Segment_ {..} =
         let
             cs =
                 ( "ui"
@@ -131,7 +134,6 @@ instance HasProp Circular Segment where
     type Prop Circular Segment = Bool
     getProp _ = circular
     setProp _ c s = s { circular = c }
-
 
 instance HasProp Clearing Segment where
     type Prop Clearing Segment = Bool
@@ -232,7 +234,7 @@ pattern Group :: Group -> Group
 pattern Group sg = sg
 
 instance Pure Group where
-    render Group_ {..} =
+    view Group_ {..} =
         let
             cs =
                 ( "ui"
@@ -262,7 +264,6 @@ instance HasFeatures Group where
 instance HasChildren Group where
     getChildren = children
     setChildren cs sg = sg { children = cs }
-
 
 instance HasProp Compact Group where
     type Prop Compact Group = Bool

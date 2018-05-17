@@ -9,6 +9,10 @@ module Semantic.Menu
   ) where
 
 import GHC.Generics as G
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML
 
 import Semantic.Utils
 
@@ -85,8 +89,8 @@ instance Default Menu where
 pattern Menu :: Menu -> Menu
 pattern Menu m = m
 
-instance VC => Pure Menu where
-    render Menu_ {..} =
+instance Pure Menu where
+    view Menu_ {..} =
         let
             cs =
                 ( "ui"
@@ -128,7 +132,6 @@ instance HasFeatures Menu where
 instance HasChildren Menu where
     getChildren = children
     setChildren cs m = m { children = cs }
-
 
 instance HasProp Attached Menu where
     type Prop Attached Menu = Maybe Txt
@@ -238,7 +241,7 @@ pattern Header :: Header -> Header
 pattern Header mh = mh
 
 instance Pure Header where
-    render Header_ {..} =
+    view Header_ {..} =
         let
             cs =
                 ( "header"
@@ -262,7 +265,6 @@ instance HasChildren Header where
     getChildren = children
     setChildren cs mh = mh { children = cs }
 
-
 data Item = Item_
     { as :: Features -> [View] -> View
     , features :: Features
@@ -284,7 +286,7 @@ pattern Item :: Item -> Item
 pattern Item mi = mi
 
 instance Pure Item where
-    render Item_ {..} =
+    view Item_ {..} =
         let
             icon =
                 case children of
@@ -321,7 +323,6 @@ instance HasFeatures Item where
 instance HasChildren Item where
     getChildren = children
     setChildren cs mi = mi { children = cs }
-
 
 instance HasProp Active Item where
     type Prop Active Item = Bool
@@ -377,7 +378,7 @@ pattern Submenu :: Submenu -> Submenu
 pattern Submenu mm = mm
 
 instance Pure Submenu where
-    render Submenu_ {..} =
+    view Submenu_ {..} =
         let
             cs =
                 ( position
@@ -401,7 +402,6 @@ instance HasFeatures Submenu where
 instance HasChildren Submenu where
     getChildren = children
     setChildren cs mm = mm { children = cs }
-
 
 instance HasProp Position Submenu where
     type Prop Position Submenu = Txt

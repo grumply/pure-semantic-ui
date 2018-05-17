@@ -8,7 +8,11 @@ module Semantic.Dimmer
 
 import Data.IORef
 import GHC.Generics as G
-import Pure.View hiding (active,disabled,onClick,simple)
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML
+import Pure.Data.Event
 import Pure.Lifted (Node(..))
 
 import Semantic.Utils
@@ -61,8 +65,8 @@ pattern Dimmer :: Dimmer -> Dimmer
 pattern Dimmer d = d
 
 instance Pure Dimmer where
-    render d =
-        Component "Semantic.Modules.Dimmer" d $ \self ->
+    view =
+        LibraryComponentIO $ \self ->
             let
                 handlePortalMount = do
                     addBodyClass "dimmed"
@@ -93,7 +97,7 @@ instance Pure Dimmer where
                     { construct = do
                         centerRef <- newIORef Nothing
                         return centerRef
-                    , renderer = \Dimmer_ {..} _ ->
+                    , render = \Dimmer_ {..} _ ->
                         let cs =
                                 ( "ui"
                                 : active # "active transition visible"
@@ -138,7 +142,6 @@ instance HasFeatures Dimmer where
 instance HasChildren Dimmer where
     getChildren = children
     setChildren cs d = d { children = cs }
-
 
 instance HasProp Active Dimmer where
     type Prop Active Dimmer = Bool
@@ -190,7 +193,7 @@ pattern Dimmable :: Dimmable -> Dimmable
 pattern Dimmable dd = dd
 
 instance Pure Dimmable where
-    render Dimmable_ {..} =
+    view Dimmable_ {..} =
         let
             cs =
                 ( blurring # "blurring"
@@ -215,7 +218,6 @@ instance HasFeatures Dimmable where
 instance HasChildren Dimmable where
     getChildren = children
     setChildren cs dd = dd { children = cs }
-
 
 instance HasProp Blurring Dimmable where
     type Prop Blurring Dimmable = Bool

@@ -7,8 +7,11 @@ module Semantic.Form
   ) where
 
 import GHC.Generics as G
-import Pure.View hiding (name,onSubmit,widths,Form,inline,disabled,Action)
-import qualified Pure.View as HTML
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML
+import Pure.Data.Event
 
 import Semantic.Utils
 import Prelude hiding (error)
@@ -69,7 +72,7 @@ pattern Form :: Form -> Form
 pattern Form f = f
 
 instance Pure Form where
-    render Form_ {..} =
+    view Form_ {..} =
         let
             cs =
                 ( "ui"
@@ -104,7 +107,6 @@ instance HasFeatures Form where
 instance HasChildren Form where
     getChildren = children
     setChildren cs f = f { children = cs }
-
 
 instance HasProp Action Form where
     type Prop Action Form = Txt
@@ -180,7 +182,7 @@ pattern Field :: Field -> Field
 pattern Field ff = ff
 
 instance Pure Field where
-    render Field_ {..} =
+    view Field_ {..} =
         let
             cs =
                 ( disabled # "disabled"
@@ -208,7 +210,6 @@ instance HasFeatures Field where
 instance HasChildren Field where
     getChildren = children
     setChildren cs ff = ff { children = cs }
-
 
 instance HasProp Disabled Field where
     type Prop Disabled Field = Bool
@@ -258,7 +259,7 @@ pattern Group :: Group -> Group
 pattern Group fg = fg
 
 instance Pure Group where
-    render Group_ {..} =
+    view Group_ {..} =
         let
             cs =
                 ( grouped # "grouped"
@@ -285,7 +286,6 @@ instance HasFeatures Group where
 instance HasChildren Group where
     getChildren = children
     setChildren cs fg = fg { children = cs }
-
 
 instance HasProp Grouped Group where
     type Prop Grouped Group = Bool

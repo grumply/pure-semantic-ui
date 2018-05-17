@@ -9,7 +9,11 @@ module Semantic.Sidebar
 import Control.Concurrent
 import Data.IORef
 import GHC.Generics as G
-import Pure.View hiding (animation,direction,visible,width)
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML
+import Pure.Data.Event
 
 import Semantic.Utils
 
@@ -61,8 +65,8 @@ data SidebarState = SS
     }
 
 instance Pure Sidebar where
-    render sb =
-        Component "Semantic.Modules.Sidebar" sb $ \self ->
+    view =
+        LibraryComponentIO $ \self ->
             let
             in def
                 { construct = SS def <$> newIORef def
@@ -83,7 +87,7 @@ instance Pure Sidebar where
                     else
                         return oldstate
 
-                , renderer = \Sidebar_ {..} SS {..} ->
+                , render = \Sidebar_ {..} SS {..} ->
                     let
                         cs =
                             ( "ui"
@@ -113,7 +117,6 @@ instance HasFeatures Sidebar where
 instance HasChildren Sidebar where
     getChildren = children
     setChildren cs sb = sb { children = cs }
-
 
 instance HasProp Animation Sidebar where
     type Prop Animation Sidebar = Txt
@@ -153,7 +156,7 @@ pattern Pushable :: Pushable -> Pushable
 pattern Pushable sp = sp
 
 instance Pure Pushable where
-    render Pushable_ {..} =
+    view Pushable_ {..} =
         let
             cs =
                 ( "pushable"
@@ -177,7 +180,6 @@ instance HasChildren Pushable where
     getChildren = children
     setChildren cs sp = sp { children = cs }
 
-
 data Pusher = Pusher_
     { as :: Features -> [View] -> View
     , features :: Features
@@ -192,7 +194,7 @@ pattern Pusher :: Pusher -> Pusher
 pattern Pusher sp = sp
 
 instance Pure Pusher where
-    render Pusher_ {..} =
+    view Pusher_ {..} =
         let
             cs =
                 ( "pusher"
@@ -216,7 +218,6 @@ instance HasFeatures Pusher where
 instance HasChildren Pusher where
     getChildren = children
     setChildren cs sp = sp { children = cs }
-
 
 instance HasProp Dimmed Pusher where
     type Prop Dimmed Pusher = Bool

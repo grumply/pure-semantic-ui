@@ -6,7 +6,10 @@ module Semantic.Progress
 
 import Data.Maybe
 import GHC.Generics as G
-import Pure.View hiding (active,color,disabled,Progress,Value)
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML
 
 import Semantic.Utils
 
@@ -68,7 +71,7 @@ pattern Progress :: Progress -> Progress
 pattern Progress p = p
 
 instance Pure Progress where
-    render Progress_ {..} =
+    view Progress_ {..} =
         let
             decimals p x = (fromInteger $ Prelude.round $ x * (10^p)) / (10.0^^p)
 
@@ -110,7 +113,6 @@ instance Pure Progress where
                 , Div [ ClassList [ "label" ] ] children
                 ]
 
-
 instance HasProp As Progress where
     type Prop As Progress = Features -> [View] -> View
     getProp _ = as
@@ -123,7 +125,6 @@ instance HasFeatures Progress where
 instance HasChildren Progress where
     getChildren = children
     setChildren cs p = p { children = cs }
-
 
 instance HasProp Active Progress where
     type Prop Active Progress = Bool

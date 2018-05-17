@@ -5,7 +5,10 @@ module Semantic.Flag
   ) where
 
 import GHC.Generics as G
-import Pure.View hiding (name)
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML
 
 import Semantic.Utils
 
@@ -33,7 +36,7 @@ pattern Flag :: Flag -> Flag
 pattern Flag f = f
 
 instance Pure Flag where
-    render Flag_ {..} =
+    view Flag_ {..} =
         let
             cs =
                 ( name
@@ -53,7 +56,6 @@ instance HasProp As Flag where
 instance HasFeatures Flag where
     getFeatures = features
     setFeatures as f = f { features = as }
-
 
 instance HasProp Name Flag where
     type Prop Name Flag = Txt

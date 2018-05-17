@@ -8,7 +8,10 @@ module Semantic.TransitionablePortal
   ) where
 
 import GHC.Generics as G
-import Pure.View hiding (animation,OnClose)
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML
 
 import Semantic.Utils
 
@@ -65,9 +68,9 @@ data TransitionablePortalState = TPS
     , transitionVisible :: Bool
     }
 
-instance VC => Pure TransitionablePortal where
-    render tp =
-        Component "Semantic.Addons.TransitionablePortal" tp $ \self ->
+instance Pure TransitionablePortal where
+    view =
+        LibraryComponentIO $ \self ->
             let
                 handlePortalClose = do
                     TransitionablePortal_ {..} <- getProps self
@@ -101,7 +104,7 @@ instance VC => Pure TransitionablePortal where
                         Just o -> oldstate { portalOpen = o }
                         _      -> oldstate
 
-                , renderer = \TransitionablePortal_ {..} TPS {..} ->
+                , render = \TransitionablePortal_ {..} TPS {..} ->
                     Portal $ withPortal $ def
                         & Open (portalOpen || transitionVisible)
                         & OnOpen handlePortalOpen

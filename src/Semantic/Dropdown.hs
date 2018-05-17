@@ -10,9 +10,12 @@ module Semantic.Dropdown
   ) where
 
 import GHC.Generics as G
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML
+import Pure.Data.Event
 import Pure.Lifted (JSV,Node(..),(.#))
-import Pure.View hiding (button,disabled,inline,onBlur,onClick,onFocus,simple,Header,Menu,active,Value)
-import qualified Pure.View as HTML
 
 import Semantic.Utils
 
@@ -104,7 +107,7 @@ pattern Dropdown :: Dropdown -> Dropdown
 pattern Dropdown d = d
 
 instance Pure Dropdown where
-    render Dropdown_ {..} =
+    view Dropdown_ {..} =
         let
             cs =
                 ( "ui"
@@ -147,7 +150,6 @@ instance HasFeatures Dropdown where
 instance HasChildren Dropdown where
     getChildren = children
     setChildren cs dd = dd { children = cs }
-
 
 instance HasProp Basic Dropdown where
     type Prop Basic Dropdown = Bool
@@ -261,7 +263,7 @@ pattern Divider :: Divider -> Divider
 pattern Divider dd = dd
 
 instance Pure Divider where
-    render Divider_ {..} =
+    view Divider_ {..} =
         let
             cs =
                 ( "divider"
@@ -281,7 +283,6 @@ instance HasFeatures Divider where
     getFeatures = features
     setFeatures cs dd = dd { features = cs }
 
-
 data Header = Header_
     { as :: Features -> [View] -> View
     , features :: Features
@@ -295,7 +296,7 @@ pattern Header :: Header -> Header
 pattern Header dh = dh
 
 instance Pure Header where
-    render Header_ {..} =
+    view Header_ {..} =
         let
             cs =
                 ( "header"
@@ -319,7 +320,6 @@ instance HasChildren Header where
     getChildren = children
     setChildren cs dh = dh { children = cs }
 
-
 data Item = Item_
     { as :: Features -> [View] -> View
     , features :: Features
@@ -336,7 +336,7 @@ pattern Item :: Item -> Item
 pattern Item di = di
 
 instance Pure (Item ) where
-    render di@Item_ {..} =
+    view di@Item_ {..} =
         let
             cs =
                 ( active # "active"
@@ -369,7 +369,6 @@ instance HasChildren Item where
     getChildren = children
     setChildren cs di = di { children = cs }
 
-
 instance HasProp Disabled Item where
     type Prop Disabled Item = Bool
     getProp _ = disabled
@@ -394,7 +393,7 @@ pattern Menu :: Menu -> Menu
 pattern Menu dm = dm
 
 instance Pure Menu where
-    render Menu_ {..} =
+    view Menu_ {..} =
         let
             cs =
                 ( scrolling # "scrolling"
@@ -419,7 +418,6 @@ instance HasChildren Menu where
     getChildren = children
     setChildren cs dm = dm { children = cs }
 
-
 instance HasProp Scrolling Menu where
     type Prop Scrolling Menu = Bool
     getProp _ = scrolling
@@ -440,7 +438,7 @@ pattern SearchInput :: SearchInput -> SearchInput
 pattern SearchInput dh = dh
 
 instance Pure SearchInput where
-    render SearchInput_ {..} =
+    view SearchInput_ {..} =
         let
             cs =
                 ( "search"

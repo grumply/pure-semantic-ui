@@ -12,9 +12,14 @@ import Control.Concurrent
 import Data.IORef
 import Data.Maybe
 import GHC.Generics as G
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML
+import Pure.Data.Event
 import Pure.Data.Txt (isInfixOf)
-import Pure.View hiding (position,offset,round,trigger,OnClose,Content,Header,Offset,Styles)
 import Pure.Lifted (JSV,Node(..),Element(..),(.#),window,IsJSV(..))
+import Pure.DOM (onRaw)
 
 import Semantic.Utils hiding (on)
 
@@ -101,9 +106,9 @@ data PopupState = PS
     , scrollHandler :: IORef (IO ())
     }
 
-instance VC => Pure Popup where
-    render p =
-        Component "Semantic.Modules.Popup" p $ \self ->
+instance Pure Popup where
+    view =
+        LibraryComponentIO $ \self ->
             let
                 bounds = do
                     let fi = fromIntegral :: Int -> Double
@@ -185,7 +190,7 @@ instance VC => Pure Popup where
                     for_ ((,) <$> mcbr <*> mpbr) $ \(cbr,pbr) -> do
                         bs  <- bounds
                         let
-                            render d x = (d,maybe auto (pxs . round) x)
+                            view d x = (d,maybe auto (pxs . round) x)
 
                             compute = computePopupStyle offset pbr cbr bs
 
@@ -211,7 +216,7 @@ instance VC => Pure Popup where
 
                             (p,(l,r,t,b)) = findValid ps
 
-                        let ss = [("position","absolute"),render left l,render right r,render top t,render bottom b]
+                        let ss = [("position","absolute"),view left l,view right r,view top t,view bottom b]
 
                         setState self $ \_ PS {..} ->
                             PS { currentStyles  = ss
@@ -237,7 +242,7 @@ instance VC => Pure Popup where
                         forkIO $ do
                             threadDelay 50000
                             void $ setState self $ \_ PS {..} -> PS { closed = False, .. }
-                        void $ parent self onClose
+                        onClose
                     liftIO $ writeIORef scrollHandler sh
                     onMount
 
@@ -258,7 +263,7 @@ instance VC => Pure Popup where
 
             in def
                 { construct = PS def def "top left" <$> newIORef def <*> newIORef def <*> newIORef def
-                , renderer = \Popup_ {..} PS {..} ->
+                , render = \Popup_ {..} PS {..} ->
                     let
                         applyPortalProps =
                             let
@@ -310,7 +315,6 @@ instance HasFeatures Popup where
 instance HasChildren Popup where
     getChildren = children
     setChildren cs p = p { children = cs }
-
 
 instance HasProp Basic Popup where
     type Prop Basic Popup = Bool
@@ -410,7 +414,7 @@ pattern Content :: Content -> Content
 pattern Content pc = pc
 
 instance Pure Content where
-    render Content_ {..} =
+    view Content_ {..} =
         let
             cs =
                 ( "content"
@@ -434,7 +438,6 @@ instance HasChildren Content where
     getChildren = children
     setChildren cs pc = pc { children = cs }
 
-
 data Header = Header_
     { as :: Features -> [View] -> View
     , features :: Features
@@ -448,7 +451,7 @@ pattern Header :: Header -> Header
 pattern Header ph = ph
 
 instance Pure Header where
-    render Header_ {..} =
+    view Header_ {..} =
         let
             cs =
                 ( "header"

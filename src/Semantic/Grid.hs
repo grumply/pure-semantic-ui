@@ -7,7 +7,11 @@ module Semantic.Grid
   ) where
 
 import GHC.Generics as G
-import Pure.View hiding (name,textAlign,verticalAlign,color,width)
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML
+import Pure.Data.Event
 
 import Semantic.Utils hiding (only)
 
@@ -79,7 +83,7 @@ pattern Grid :: Grid -> Grid
 pattern Grid g = g
 
 instance Pure Grid where
-    render Grid_ {..} =
+    view Grid_ {..} =
         let
             cs =
                 ( "ui"
@@ -117,7 +121,6 @@ instance HasFeatures Grid where
 instance HasChildren Grid where
     getChildren = children
     setChildren cs g = g { children = cs }
-
 
 instance HasProp Celled Grid where
     type Prop Celled Grid = Maybe Txt
@@ -215,7 +218,7 @@ pattern Column :: Column -> Column
 pattern Column gc = gc
 
 instance Pure Column where
-    render Column_ {..} =
+    view Column_ {..} =
         let
             cs =
                 ( color
@@ -249,7 +252,6 @@ instance HasFeatures Column where
 instance HasChildren Column where
     getChildren = children
     setChildren cs gc = gc { children = cs }
-
 
 instance HasProp Color Column where
     type Prop Color Column = Txt
@@ -333,7 +335,7 @@ pattern Row :: Row -> Row
 pattern Row gr = gr
 
 instance Pure Row where
-    render Row_ {..} =
+    view Row_ {..} =
         let
             cs =
                 ( color
@@ -365,7 +367,6 @@ instance HasFeatures Row where
 instance HasChildren Row where
     getChildren = children
     setChildren cs gr = gr { children = cs }
-
 
 instance HasProp Color Row where
     type Prop Color Row = Txt
