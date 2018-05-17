@@ -9,7 +9,6 @@ module Semantic.Menu
   ) where
 
 import GHC.Generics as G
-import Pure.View hiding (active,color,fixed,onClick,text,vertical,widths,position,disabled,Menu,Header)
 
 import Semantic.Utils
 
@@ -29,7 +28,6 @@ import Semantic.Properties as Properties
   , pattern Inverted, Inverted(..)
   , pattern IsIcon, IsIcon(..)
   , pattern IsText, IsText(..)
-  , pattern OnClick, OnClick(..)
   , pattern Pagination, Pagination(..)
   , pattern Pointing, Pointing(..)
   , pattern Secondary, Secondary(..)
@@ -69,7 +67,7 @@ data Menu = Menu_
     , fluid :: Bool
     , icon :: Maybe Txt
     , inverted :: Bool
-    , onItemClick :: Item ms -> Ef ms IO ()
+    , onItemClick :: Item -> IO ()
     , pagination :: Bool
     , pointing :: Bool
     , secondary :: Bool
@@ -87,12 +85,9 @@ instance Default Menu where
 pattern Menu :: Menu -> Menu
 pattern Menu m = m
 
-instance VC => Pure Menu ms where
+instance VC => Pure Menu where
     render Menu_ {..} =
         let
-            children' =
-                mapPures (\mi@(Item_ {}) -> mi { onClick = onClick mi >> onItemClick mi }) children
-
             cs =
                 ( "ui"
                 : color
@@ -119,7 +114,7 @@ instance VC => Pure Menu ms where
             as
                 : attributes
                 )
-                children'
+                children
 
 instance HasProp As Menu where
     type Prop As Menu = Features -> [View] -> View
@@ -181,7 +176,7 @@ instance HasProp Inverted Menu where
     setProp _ i m = m { inverted = i }
 
 instance HasProp OnClick Menu where
-    type Prop OnClick Menu = Item ms -> Ef ms IO ()
+    type Prop OnClick Menu = Item -> IO ()
     getProp _ = onItemClick
     setProp _ oc m = m { onItemClick = oc }
 
@@ -242,7 +237,7 @@ instance Default Header where
 pattern Header :: Header -> Header
 pattern Header mh = mh
 
-instance Pure Header ms where
+instance Pure Header where
     render Header_ {..} =
         let
             cs =
@@ -279,7 +274,6 @@ data Item = Item_
     , header :: Bool
     , index :: Int
     , link :: Bool
-    , onClick :: Ef ms IO ()
     , position :: Txt
     } deriving (Generic)
 
@@ -289,11 +283,9 @@ instance Default Item where
 pattern Item :: Item -> Item
 pattern Item mi = mi
 
-instance Pure Item ms where
+instance Pure Item where
     render Item_ {..} =
         let
-            e = onClick ? A $ as
-
             icon =
                 case children of
                     [ Icon i ] -> True
@@ -313,7 +305,6 @@ instance Pure Item ms where
 
         in
             e
-                : onClick # (On "click" def (\_ -> return $ Just onClick))
                 : attributes
                 )
                 children
@@ -367,11 +358,6 @@ instance HasProp Link Item where
     getProp _ = link
     setProp _ l mi = mi { link = l }
 
-instance HasProp OnClick Item where
-    type Prop OnClick Item = Ef ms IO ()
-    getProp _ = onClick
-    setProp _ oc mi = mi { onClick = oc }
-
 instance HasProp Position Item where
     type Prop Position Item = Txt
     getProp _ = position
@@ -390,7 +376,7 @@ instance Default Submenu where
 pattern Submenu :: Submenu -> Submenu
 pattern Submenu mm = mm
 
-instance Pure Submenu ms where
+instance Pure Submenu where
     render Submenu_ {..} =
         let
             cs =

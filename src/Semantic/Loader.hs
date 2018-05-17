@@ -44,7 +44,7 @@ instance Default Loader where
 pattern Loader :: Loader -> Loader
 pattern Loader l = l
 
-instance Pure Loader ms where
+instance Pure Loader where
     render Loader_ {..} =
         let
             cs =

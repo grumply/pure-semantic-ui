@@ -50,9 +50,9 @@ data Step = Step_
     , active :: Bool
     , completed :: Bool
     , disabled :: Bool
-    , ref :: Feature ms
+    , ref :: Feature
     , link :: Bool
-    , onClick :: Ef ms IO ()
+    , onClick :: IO ()
     , ordered :: Bool
     } deriving (Generic)
 
@@ -62,7 +62,7 @@ instance Default Step where
 pattern Step :: Step -> Step
 pattern Step s = s
 
-instance Pure Step ms where
+instance Pure Step where
     render Step_ {..} =
         let
             e = onClick ? A $ as
@@ -112,7 +112,7 @@ instance HasProp Disabled Step where
     setProp _ d s = s { disabled = d }
 
 instance HasProp Ref Step where
-    type Prop Ref Step = Feature ms
+    type Prop Ref Step = Feature
     getProp _ = ref
     setProp _ r s = s { ref = r }
 
@@ -122,7 +122,7 @@ instance HasProp Link Step where
     setProp _ l s = s { link = l }
 
 instance HasProp OnClick Step where
-    type Prop OnClick Step = Ef ms IO ()
+    type Prop OnClick Step = IO ()
     getProp _ = onClick
     setProp _ oc s = s { onClick = oc }
 
@@ -143,7 +143,7 @@ instance Default Content where
 pattern Content :: Content -> Content
 pattern Content sc = sc
 
-instance Pure Content ms where
+instance Pure Content where
     render Content_ {..} =
         let
             cs =
@@ -181,7 +181,7 @@ instance Default Description where
 pattern Description :: Description -> Description
 pattern Description sd = sd
 
-instance Pure Description ms where
+instance Pure Description where
     render Description_ {..} =
         let
             cs =
@@ -227,7 +227,7 @@ instance Default Group where
 pattern Group :: Group -> Group
 pattern Group sg = sg
 
-instance Pure Group ms where
+instance Pure Group where
     render Group_ {..} =
         let
             cs =
@@ -314,7 +314,7 @@ instance Default Title where
 pattern Title :: Title -> Title
 pattern Title st = st
 
-instance Pure Title ms where
+instance Pure Title where
     render Title_ {..} =
         let
             cs =

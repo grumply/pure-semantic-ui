@@ -46,7 +46,7 @@ instance Default Divider where
 pattern Divider :: Divider -> Divider
 pattern Divider d = d
 
-instance Pure Divider ms where
+instance Pure Divider where
     render Divider_ {..} =
         let
             cs =

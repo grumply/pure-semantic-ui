@@ -43,10 +43,10 @@ data Sticky = Sticky_
     , bottomOffset :: Double
     , context :: Maybe JSV
     , offset :: Double
-    , onBottom :: Ef ms IO ()
-    , onStick :: Ef ms IO ()
-    , onTop :: Ef ms IO ()
-    , onUnstick :: Ef ms IO ()
+    , onBottom :: IO ()
+    , onStick :: IO ()
+    , onTop :: IO ()
+    , onUnstick :: IO ()
     , pushing :: Bool
     , scrollContext :: Maybe JSV
     } deriving (Generic)
@@ -76,7 +76,7 @@ data StickyState = SS
     , scrollListener :: IORef (IO ())
     }
 
-instance VC => Pure Sticky ms where
+instance VC => Pure Sticky where
     render s =
         Component "Semantic.Modules.Sticky" s $ \self ->
             let
@@ -91,8 +91,8 @@ instance VC => Pure Sticky ms where
 
                     cr <- boundingRect (Element $ fromMaybe (toJSV body) context)
 
-                    msr <- readIORef stickyRef
-                    sr <- case msr of
+                   r <- readIORef stickyRef
+                    sr <- caser of
                         Just sr -> boundingRect (Element sr)
                         Nothing -> return def
 
@@ -278,22 +278,22 @@ instance HasProp Offset Sticky where
     setProp _ o s = s { offset = o }
 
 instance HasProp OnBottom Sticky where
-    type Prop OnBottom Sticky = Ef ms IO ()
+    type Prop OnBottom Sticky = IO ()
     getProp _ = onBottom
     setProp _ ob s = s { onBottom = ob }
 
 instance HasProp OnStick Sticky where
-    type Prop OnStick Sticky = Ef ms IO ()
+    type Prop OnStick Sticky = IO ()
     getProp _ = onStick
     setProp _ os s = s { onStick = os }
 
 instance HasProp OnTop Sticky where
-    type Prop OnTop Sticky = Ef ms IO ()
+    type Prop OnTop Sticky = IO ()
     getProp _ = onTop
     setProp _ ot s = s { onTop = ot }
 
 instance HasProp OnUnstick Sticky where
-    type Prop OnUnstick Sticky = Ef ms IO ()
+    type Prop OnUnstick Sticky = IO ()
     getProp _ = onUnstick
     setProp _ ou s = s { onUnstick = ou }
 

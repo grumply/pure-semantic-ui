@@ -40,7 +40,7 @@ instance Default Reveal where
 pattern Reveal :: Reveal -> Reveal
 pattern Reveal r = r
 
-instance Pure Reveal ms where
+instance Pure Reveal where
     render Reveal_ {..} =
         let
             cs =

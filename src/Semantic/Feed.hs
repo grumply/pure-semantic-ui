@@ -45,7 +45,7 @@ instance Default Feed where
 pattern Feed :: Feed -> Feed
 pattern Feed f = f
 
-instance Pure Feed ms where
+instance Pure Feed where
     render Feed_ {..} =
         let
             cs =
@@ -90,7 +90,7 @@ instance Default Content where
 pattern Content :: Content -> Content
 pattern Content fc = fc
 
-instance Pure Content ms where
+instance Pure Content where
     render Content_ {..} =
         let
             cs =
@@ -128,7 +128,7 @@ instance Default Date where
 pattern Date :: Date -> Date
 pattern Date fd = fd
 
-instance Pure Date ms where
+instance Pure Date where
     render Date_ {..} =
         let
             cs =
@@ -166,7 +166,7 @@ instance Default Event where
 pattern Event :: Event -> Event
 pattern Event fe = fe
 
-instance Pure Event ms where
+instance Pure Event where
     render Event_ {..} =
         let
             cs =
@@ -205,7 +205,7 @@ instance Default Extra where
 pattern Extra :: Extra -> Extra
 pattern Extra fe = fe
 
-instance Pure Extra ms where
+instance Pure Extra where
     render Extra_ {..} =
         let
             image = foldPures (\(Image_ {}) -> const True) False children
@@ -252,7 +252,7 @@ instance Default Label where
 pattern Label :: Label -> Label
 pattern Label fl = fl
 
-instance Pure Label ms where
+instance Pure Label where
     render Label_ {..} =
         let
             cs =
@@ -290,7 +290,7 @@ instance Default Like where
 pattern Like :: Like -> Like
 pattern Like fl = fl
 
-instance Pure Like ms where
+instance Pure Like where
     render Like_ {..} =
         let
             cs =
@@ -328,7 +328,7 @@ instance Default Meta where
 pattern Meta :: Meta -> Meta
 pattern Meta fm = fm
 
-instance Pure Meta ms where
+instance Pure Meta where
     render Meta_ {..} =
         let
             cs =
@@ -366,7 +366,7 @@ instance Default Summary where
 pattern Summary :: Summary -> Summary
 pattern Summary fs = fs
 
-instance Pure Summary ms where
+instance Pure Summary where
     render Summary_ {..} =
         let
             cs =
@@ -404,7 +404,7 @@ instance Default User where
 pattern User :: User -> User
 pattern User fu = fu
 
-instance Pure User ms where
+instance Pure User where
     render User_ {..} =
         let
             cs =

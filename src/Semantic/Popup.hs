@@ -68,17 +68,17 @@ data Popup = Popup_
     , hoverable :: Bool
     , inverted :: Bool
     , offset :: Double
-    , onClose :: Ef ms IO ()
-    , onMount :: Ef ms IO ()
-    , onOpen :: Ef ms IO ()
-    , onUnmount :: Ef ms IO ()
+    , onClose :: IO ()
+    , onMount :: IO ()
+    , onOpen :: IO ()
+    , onUnmount :: IO ()
     , position :: Txt
     , size :: Txt
     , styles :: [(Txt,Txt)]
     , trigger :: View
     , triggerOn :: [Txt]
     , wide :: Maybe Txt
-    , withPortal :: Portal ms -> Portal ms
+    , withPortal :: Portal -> Portal
     } deriving (Generic)
 
 instance Default Popup where
@@ -101,7 +101,7 @@ data PopupState = PS
     , scrollHandler :: IORef (IO ())
     }
 
-instance VC => Pure Popup ms where
+instance VC => Pure Popup where
     render p =
         Component "Semantic.Modules.Popup" p $ \self ->
             let
@@ -343,22 +343,22 @@ instance HasProp Offset Popup where
     setProp _ o p = p { offset = o }
 
 instance HasProp OnClose Popup where
-    type Prop OnClose Popup = Ef ms IO ()
+    type Prop OnClose Popup = IO ()
     getProp _ = onClose
     setProp _ oc p = p { onClose = oc }
 
 instance HasProp OnMount Popup where
-    type Prop OnMount Popup = Ef ms IO ()
+    type Prop OnMount Popup = IO ()
     getProp _ = onMount
     setProp _ om p = p { onMount = om }
 
 instance HasProp OnOpen Popup where
-    type Prop OnOpen Popup = Ef ms IO ()
+    type Prop OnOpen Popup = IO ()
     getProp _ = onOpen
     setProp _ oo p = p { onOpen = oo }
 
 instance HasProp OnUnmount Popup where
-    type Prop OnUnmount Popup = Ef ms IO ()
+    type Prop OnUnmount Popup = IO ()
     getProp _ = onUnmount
     setProp _ ou p = p { onUnmount = ou }
 
@@ -393,7 +393,7 @@ instance HasProp Wide Popup where
     setProp _ w p = p { wide = w }
 
 instance HasProp WithPortal Popup where
-    type Prop WithPortal Popup = Portal ms -> Portal ms
+    type Prop WithPortal Popup = Portal -> Portal
     getProp _ = withPortal
     setProp _ wp p = p { withPortal = wp }
 
@@ -409,7 +409,7 @@ instance Default Content where
 pattern Content :: Content -> Content
 pattern Content pc = pc
 
-instance Pure Content ms where
+instance Pure Content where
     render Content_ {..} =
         let
             cs =
@@ -447,7 +447,7 @@ instance Default Header where
 pattern Header :: Header -> Header
 pattern Header ph = ph
 
-instance Pure Header ms where
+instance Pure Header where
     render Header_ {..} =
         let
             cs =

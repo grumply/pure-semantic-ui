@@ -55,7 +55,7 @@ data Message = Message_
     , hidden :: Bool
     , info :: Bool
     , negative :: Bool
-    , onDismiss :: Ef ms IO ()
+    , onDismiss :: IO ()
     , positive :: Bool
     , size :: Txt
     , success :: Bool
@@ -69,7 +69,7 @@ instance Default Message where
 pattern Message :: Message -> Message
 pattern Message m = m
 
-instance Pure Message ms where
+instance Pure Message where
     render Message_ {..} =
         let
             icon = foldPures (\(Icon_ {}) -> const True) False children
@@ -155,7 +155,7 @@ instance HasProp Negative Message where
     setProp _ n m = m { negative = n }
 
 instance HasProp OnDismiss Message where
-    type Prop OnDismiss Message = Ef ms IO ()
+    type Prop OnDismiss Message = IO ()
     getProp _ = onDismiss
     setProp _ od m = m { onDismiss = od }
 
@@ -196,7 +196,7 @@ instance Default Content where
 pattern Content :: Content -> Content
 pattern Content mc = mc
 
-instance Pure Content ms where
+instance Pure Content where
     render Content_ {..} =
         let
             cs =
@@ -234,7 +234,7 @@ instance Default Header where
 pattern Header :: Header -> Header
 pattern Header mh = mh
 
-instance Pure Header ms where
+instance Pure Header where
     render Header_ {..} =
         let
             cs =
@@ -272,7 +272,7 @@ instance Default Item where
 pattern Item :: Item -> Item
 pattern Item mi = mi
 
-instance Pure Item ms where
+instance Pure Item where
     render Item_ {..} =
         let
             cs =
@@ -310,7 +310,7 @@ instance Default List where
 pattern List :: List -> List
 pattern List ml = ml
 
-instance Pure List ms where
+instance Pure List where
     render List_ {..} =
         let
             cs =

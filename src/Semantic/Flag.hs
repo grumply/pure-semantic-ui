@@ -32,7 +32,7 @@ instance Default Flag where
 pattern Flag :: Flag -> Flag
 pattern Flag f = f
 
-instance Pure Flag ms where
+instance Pure Flag where
     render Flag_ {..} =
         let
             cs =

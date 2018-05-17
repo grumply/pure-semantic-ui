@@ -10,7 +10,7 @@ module Semantic.Card
   ) where
 
 import GHC.Generics as G hiding (Meta)
-import Pure.View hiding (color,onClick,textAlign,Content,Header,Meta,Description,Ref)
+import Pure.View hiding (color,textAlign,Content,Header,Meta,Description,Ref)
 
 import Semantic.Utils
 
@@ -25,7 +25,6 @@ import Semantic.Properties as Properties
   , pattern Fluid, Fluid(..)
   , pattern Ref, Ref(..)
   , pattern Link, Link(..)
-  , pattern OnClick, OnClick(..)
   , pattern Raised, Raised(..)
   , pattern Extra, Extra(..)
   , pattern TextAlign, TextAlign(..)
@@ -44,22 +43,20 @@ data Card = Card_
     , centered :: Bool
     , color :: Txt
     , fluid :: Bool
-    , ref :: Feature ms
+    , ref :: Feature
     , link :: Bool
-    , onClick :: Ef ms IO ()
     , raised :: Bool
     } deriving (Generic)
 
 instance Default Card where
-    def = (G.to gdef) { as = Div }
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
 pattern Card :: Card -> Card
 pattern Card a = a
 
-instance Pure Card ms where
+instance Pure Card where
     render Card_ {..} =
         let
-            e = onClick ? A $ as
             cs =
                 ( "ui"
                 : color
@@ -72,7 +69,6 @@ instance Pure Card ms where
         in
             e
                 : ref
-                : onClick # (On "click" def (\_ -> return $ Just onClick))
                 : attributes
                 )
                 children
@@ -107,7 +103,7 @@ instance HasProp Fluid Card where
     setProp _ f c = c { fluid = f }
 
 instance HasProp Ref Card where
-    type Prop Ref Card = Feature ms
+    type Prop Ref Card = Feature
     getProp _ = ref
     setProp _ r c = c { ref = r }
 
@@ -115,11 +111,6 @@ instance HasProp Link Card where
     type Prop Link Card = Bool
     getProp _ = link
     setProp _ l c = c { link = l }
-
-instance HasProp OnClick Card where
-    type Prop OnClick Card = Ef ms IO ()
-    getProp _ = onClick
-    setProp _ oc c = c { onClick = oc }
 
 instance HasProp Raised Card where
     type Prop Raised Card = Bool
@@ -135,12 +126,12 @@ data Content = Content_
     } deriving (Generic)
 
 instance Default Content where
-    def = (G.to gdef) { as = Div }
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
 pattern Content :: Content -> Content
 pattern Content cc = cc
 
-instance Pure Content ms where
+instance Pure Content where
     render Content_ {..} =
         let
             cs =
@@ -191,7 +182,7 @@ instance Default Description where
 pattern Description :: Description -> Description
 pattern Description cd = cd
 
-instance Pure Description ms where
+instance Pure Description where
     render Description_ {..} =
         let
             cs =
@@ -239,7 +230,7 @@ instance Default Group where
 pattern Group :: Group -> Group
 pattern Group cg = cg
 
-instance Pure Group ms where
+instance Pure Group where
     render Group_ {..} =
         let
             cs =
@@ -303,7 +294,7 @@ instance Default Header where
 pattern Header :: Header -> Header
 pattern Header ch = ch
 
-instance Pure Header ms where
+instance Pure Header where
     render Header_ {..} =
         let
             cs =
@@ -348,7 +339,7 @@ instance Default Meta where
 pattern Meta :: Meta -> Meta
 pattern Meta cm = cm
 
-instance Pure Meta ms where
+instance Pure Meta where
     render Meta_ {..} =
         let
             cs =

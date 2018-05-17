@@ -51,7 +51,7 @@ instance Default Statistic where
 pattern Statistic :: Statistic -> Statistic
 pattern Statistic s = s
 
-instance Pure Statistic ms where
+instance Pure Statistic where
     render Statistic_ {..} =
         let
             cs =
@@ -125,7 +125,7 @@ instance Default Group where
 pattern Group :: Group -> Group
 pattern Group sg = sg
 
-instance Pure Group ms where
+instance Pure Group where
     render Group_ {..} =
         let
             cs =
@@ -194,7 +194,7 @@ instance Default Label where
 pattern Label :: Label -> Label
 pattern Label sl = sl
 
-instance Pure Label ms where
+instance Pure Label where
     render Label_ {..} =
         let
             cs =
@@ -233,7 +233,7 @@ instance Default Value where
 pattern Value :: Value -> Value
 pattern Value sv = sv
 
-instance Pure Value ms where
+instance Pure Value where
     render Value_ {..} =
         let
             cs =

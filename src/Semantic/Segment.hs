@@ -72,7 +72,7 @@ instance Default Segment where
 pattern Segment :: Segment -> Segment
 pattern Segment s = s
 
-instance Pure Segment ms where
+instance Pure Segment where
     render Segment_ {..} =
         let
             cs =
@@ -231,7 +231,7 @@ instance Default Group where
 pattern Group :: Group -> Group
 pattern Group sg = sg
 
-instance Pure Group ms where
+instance Pure Group where
     render Group_ {..} =
         let
             cs =

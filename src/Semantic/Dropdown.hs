@@ -87,11 +87,6 @@ data Dropdown = Dropdown_
     , loading :: Bool
     , item :: Bool
     , multiple :: Bool
-    , onBlur :: Ef ms IO ()
-    , onChange :: Ef ms IO ()
-    , onClick :: Ef ms IO ()
-    , onFocus :: Ef ms IO ()
-    , onMouseDown :: Ef ms IO ()
     , open :: Bool
     , pointing :: Maybe Txt
     , search :: Bool
@@ -108,7 +103,7 @@ instance Default Dropdown where
 pattern Dropdown :: Dropdown -> Dropdown
 pattern Dropdown d = d
 
-instance Pure Dropdown ms where
+instance Pure Dropdown where
     render Dropdown_ {..} =
         let
             cs =
@@ -135,11 +130,6 @@ instance Pure Dropdown ms where
                 : "dropdown"
                 )
         in as
-                : onBlur # On "blur" def (\_ -> return $ Just onBlur)
-                : onChange # On "change" def (\_ -> return $ Just onChange)
-                : onClick # On "click" def (\_ -> return $ Just onClick)
-                : onFocus # On "focus" def (\_ -> return $ Just onFocus)
-                : onMouseDown # On "mousedown" def (\_ -> return $ Just onMouseDown)
                 : may Tabindex tabIndex
                 : attributes
                 )
@@ -219,31 +209,6 @@ instance HasProp Multiple Dropdown where
     getProp _ = multiple
     setProp _ m dd = dd { multiple = m }
 
-instance HasProp OnBlur Dropdown where
-    type Prop OnBlur Dropdown = Ef ms IO ()
-    getProp _ = onBlur
-    setProp _ ob dd = dd { onBlur = ob }
-
-instance HasProp OnChange Dropdown where
-    type Prop OnChange Dropdown = Ef ms IO ()
-    getProp _ = onChange
-    setProp _ oc dd = dd { onChange = oc }
-
-instance HasProp OnClick Dropdown where
-    type Prop OnClick Dropdown = Ef ms IO ()
-    getProp _ = onClick
-    setProp _ oc dd = dd { onClick = oc }
-
-instance HasProp OnFocus Dropdown where
-    type Prop OnFocus Dropdown = Ef ms IO ()
-    getProp _ = onFocus
-    setProp _ onf dd = dd { onFocus = onf }
-
-instance HasProp OnMouseDown Dropdown where
-    type Prop OnMouseDown Dropdown = Ef ms IO ()
-    getProp _ = onMouseDown
-    setProp _ omd dd = dd { onMouseDown = omd }
-
 instance HasProp Open Dropdown where
     type Prop Open Dropdown = Bool
     getProp _ = open
@@ -295,7 +260,7 @@ instance Default Divider where
 pattern Divider :: Divider -> Divider
 pattern Divider dd = dd
 
-instance Pure Divider ms where
+instance Pure Divider where
     render Divider_ {..} =
         let
             cs =
@@ -329,7 +294,7 @@ instance Default Header where
 pattern Header :: Header -> Header
 pattern Header dh = dh
 
-instance Pure Header ms where
+instance Pure Header where
     render Header_ {..} =
         let
             cs =
@@ -361,7 +326,6 @@ data Item = Item_
     , children :: [View]
     , active :: Bool
     , disabled :: Bool
-    , onClick :: Ef ms IO ()
     , selected :: Bool
     } deriving (Generic)
 
@@ -371,7 +335,7 @@ instance Default Item where
 pattern Item :: Item -> Item
 pattern Item di = di
 
-instance Pure (Item ) ms where
+instance Pure (Item ) where
     render di@Item_ {..} =
         let
             cs =
@@ -382,7 +346,6 @@ instance Pure (Item ) ms where
                 )
         in
             as
-                : onClick # On "click" def (\_ -> return $ Just onClick)
                 : Role "option"
                 : attributes
                 )
@@ -412,11 +375,6 @@ instance HasProp Disabled Item where
     getProp _ = disabled
     setProp _ d di = di { disabled = d }
 
-instance HasProp OnClick Item where
-    type Prop OnClick Item = Ef ms IO ()
-    getProp _ = onClick
-    setProp _ oc di = di { onClick = oc }
-
 instance HasProp Selected Item where
     type Prop Selected Item = Bool
     getProp _ = selected
@@ -435,7 +393,7 @@ instance Default Menu where
 pattern Menu :: Menu -> Menu
 pattern Menu dm = dm
 
-instance Pure Menu ms where
+instance Pure Menu where
     render Menu_ {..} =
         let
             cs =
@@ -469,8 +427,7 @@ instance HasProp Scrolling Menu where
 
 data SearchInput = SearchInput_
     { features :: Features
-    , inputRef :: JSV -> Ef ms IO ()
-    , onChange :: Txt -> Ef ms IO ()
+    , inputRef :: JSV -> IO ()
     , tabIndex :: Maybe Int
     , _type :: Txt
     , value :: Txt
@@ -482,18 +439,15 @@ instance Default SearchInput where
 pattern SearchInput :: SearchInput -> SearchInput
 pattern SearchInput dh = dh
 
-instance Pure SearchInput ms where
+instance Pure SearchInput where
     render SearchInput_ {..} =
         let
-            handleChange = return . fmap onChange . ((.# "target") >=> (.# "value")) . evtObj
-
             cs =
                 ( "search"
                 )
         in
             Input
                 ( HTML.Value value
-                : On "change" def handleChange
                 : HostRef (\(Node n) -> return . Just $ inputRef n)
                 : may Tabindex tabIndex
                 : HTML.Type _type
@@ -505,16 +459,10 @@ instance HasFeatures SearchInput where
     getFeatures = features
     setFeatures cs dsi = dsi { features = cs }
 
-
 instance HasProp InputRef SearchInput where
-    type Prop InputRef SearchInput = JSV -> Ef ms IO ()
+    type Prop InputRef SearchInput = JSV -> IO ()
     getProp _ = inputRef
     setProp _ ir dsi = dsi { inputRef = ir }
-
-instance HasProp OnChange SearchInput where
-    type Prop OnChange SearchInput = Txt -> Ef ms IO ()
-    getProp _ = onChange
-    setProp _ oc dsi = dsi { onChange = oc }
 
 instance HasProp TabIndex SearchInput where
     type Prop TabIndex SearchInput = Maybe Int

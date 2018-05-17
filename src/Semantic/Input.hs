@@ -27,7 +27,6 @@ import Semantic.Properties as Properties
   , pattern Focused, Focused(..)
   , pattern Inverted, Inverted(..)
   , pattern Loading, Loading(..)
-  , pattern OnChange, OnChange(..)
   , pattern Size, Size(..)
   , pattern TabIndex, TabIndex(..)
   , pattern Transparent, Transparent(..)
@@ -50,7 +49,6 @@ data Input = Input_
     , focused :: Bool
     , inverted :: Bool
     , loading :: Bool
-    , onChange :: Txt -> Ef ms IO ()
     , size :: Txt
     , tabIndex :: Maybe Int
     , transparent :: Bool
@@ -70,7 +68,7 @@ data InputFormatter = IF
   , actionPosition :: Maybe Txt
   } deriving (Generic,Default)
 
-calculatePositions :: forall ms.  [View] -> InputFormatter
+calculatePositions :: forall.  [View] -> InputFormatter
 calculatePositions = foldl' analyze def
     where
         analyze :: InputFormatter -> View -> InputFormatter
@@ -82,7 +80,7 @@ calculatePositions = foldl' analyze def
                 View Button_{}  -> IF { actionPosition = Just nis, .. }
                 _               -> IF {..}
 
-instance Pure Input ms where
+instance Pure Input where
     render Input_ {..} =
         let
             _focus e = do
@@ -126,7 +124,6 @@ instance Pure Input ms where
                 )
         in
             as
-                : otherAttrs
                 )
                 ( map addInputProps children )
 
@@ -138,11 +135,6 @@ instance HasProp As Input where
 instance HasFeatures Input where
     getFeatures = features
     setFeatures cs i = i { features = cs }
-
-instance HasProp OnChange Input where
-    type Prop OnChange Input = Txt -> Ef ms IO ()
-    getProp _ = onChange
-    setProp _ oc i = i { onChange = oc }
 
 instance HasChildren Input where
     getChildren = children

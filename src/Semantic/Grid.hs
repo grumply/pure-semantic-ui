@@ -78,7 +78,7 @@ instance Default Grid where
 pattern Grid :: Grid -> Grid
 pattern Grid g = g
 
-instance Pure Grid ms where
+instance Pure Grid where
     render Grid_ {..} =
         let
             cs =
@@ -214,7 +214,7 @@ instance Default Column where
 pattern Column :: Column -> Column
 pattern Column gc = gc
 
-instance Pure Column ms where
+instance Pure Column where
     render Column_ {..} =
         let
             cs =
@@ -332,7 +332,7 @@ instance Default Row where
 pattern Row :: Row -> Row
 pattern Row gr = gr
 
-instance Pure Row ms where
+instance Pure Row where
     render Row_ {..} =
         let
             cs =

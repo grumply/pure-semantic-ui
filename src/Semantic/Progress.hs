@@ -67,7 +67,7 @@ instance Default Progress where
 pattern Progress :: Progress -> Progress
 pattern Progress p = p
 
-instance Pure Progress ms where
+instance Pure Progress where
     render Progress_ {..} =
         let
             decimals p x = (fromInteger $ Prelude.round $ x * (10^p)) / (10.0^^p)

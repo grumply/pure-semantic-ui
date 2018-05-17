@@ -48,7 +48,7 @@ instance Default Comment where
 pattern Comment :: Comment -> Comment
 pattern Comment a = a
 
-instance Pure Comment ms where
+instance Pure Comment where
     render Comment_ {..} =
         let
             cs =
@@ -93,7 +93,7 @@ instance Default Action where
 pattern Action :: Action -> Action
 pattern Action ca = ca
 
-instance Pure Action ms where
+instance Pure Action where
     render Action_ {..} =
         let
             cs =
@@ -136,7 +136,7 @@ instance Default Actions where
 pattern Actions :: Actions -> Actions
 pattern Actions ca = ca
 
-instance Pure Actions ms where
+instance Pure Actions where
     render Actions_ {..} =
         let
             cs =
@@ -174,7 +174,7 @@ instance Default Author where
 pattern Author :: Author -> Author
 pattern Author ca = ca
 
-instance Pure Author ms where
+instance Pure Author where
     render Author_ {..} =
         let
             cs =
@@ -212,7 +212,7 @@ instance Default Avatar where
 pattern Avatar :: Avatar -> Avatar
 pattern Avatar ca = ca
 
-instance Pure Avatar ms where
+instance Pure Avatar where
     render Avatar_ {..} =
         let
             cs =
@@ -251,7 +251,7 @@ instance Default Content where
 pattern Content :: Content -> Content
 pattern Content cc = cc
 
-instance Pure Content ms where
+instance Pure Content where
     render Content_ {..} =
         let
             cs =
@@ -293,7 +293,7 @@ instance Default Group where
 pattern Group :: Group -> Group
 pattern Group cg = cg
 
-instance Pure Group ms where
+instance Pure Group where
     render Group_ {..} =
         let
             cs =
@@ -356,7 +356,7 @@ instance Default Metadata where
 pattern Metadata :: Metadata -> Metadata
 pattern Metadata cm = cm
 
-instance Pure Metadata ms where
+instance Pure Metadata where
     render Metadata_ {..} =
         let
             cs =
@@ -394,7 +394,7 @@ instance Default Text where
 pattern Text :: Text -> Text
 pattern Text ct = ct
 
-instance Pure Text ms where
+instance Pure Text where
     render Text_ {..} =
         let
             cs =

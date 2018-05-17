@@ -40,7 +40,7 @@ instance Default Tab where
 pattern Tab :: Tab -> Tab
 pattern Tab t = t
 
-instance Pure Tab ms where
+instance Pure Tab where
 
 instance HasProp As Tab where
     type Prop As Tab = Features -> [View] -> View
@@ -76,7 +76,7 @@ instance Default Pane where
 pattern Pane :: Pane -> Pane
 pattern Pane tp = tp
 
-instance Pure Pane ms where
+instance Pure Pane where
     render Pane_ {..} =
         let
             cs =

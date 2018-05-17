@@ -68,10 +68,10 @@ data Portal = Portal_
     , mountNode                :: Maybe JSV
     , mouseEnterDelay          :: Int
     , mouseLeaveDelay          :: Int
-    , onClose                  :: Ef ms IO ()
-    , onMount                  :: Ef ms IO ()
-    , onOpen                   :: Evt -> Ef ms IO ()
-    , onUnmount                :: Ef ms IO ()
+    , onClose                  :: IO ()
+    , onMount                  :: IO ()
+    , onOpen                   :: Evt -> IO ()
+    , onUnmount                :: IO ()
     , open                     :: Bool
     , openOnTriggerClick       :: Bool
     , openOnTriggerFocus       :: Bool
@@ -116,7 +116,7 @@ data PortalStateNodes = PSN
     , triggerNode :: Maybe JSV
     } deriving (Generic,Default)
 
-instance Pure Portal ms where
+instance Pure Portal where
     render p =
         Component "Semantic.Addons.Portal" p $ \self ->
             let
@@ -413,22 +413,22 @@ instance HasProp MouseLeaveDelay Portal where
     setProp _ mld p = p { mouseLeaveDelay = mld }
 
 instance HasProp OnClose Portal where
-    type Prop OnClose Portal = Ef ms IO ()
+    type Prop OnClose Portal = IO ()
     getProp _ = onClose
     setProp _ oc p = p { onClose = oc }
 
 instance HasProp OnMount Portal where
-    type Prop OnMount Portal = Ef ms IO ()
+    type Prop OnMount Portal = IO ()
     getProp _ = onMount
     setProp _ om p = p { onMount = om }
 
 instance HasProp OnOpen Portal where
-    type Prop OnOpen Portal = Evt -> Ef ms IO ()
+    type Prop OnOpen Portal = Evt -> IO ()
     getProp _ = onOpen
     setProp _ oo p = p { onOpen = oo }
 
 instance HasProp OnUnmount Portal where
-    type Prop OnUnmount Portal = Ef ms IO ()
+    type Prop OnUnmount Portal = IO ()
     getProp _ = onUnmount
     setProp _ ou p = p { onUnmount = ou }
 

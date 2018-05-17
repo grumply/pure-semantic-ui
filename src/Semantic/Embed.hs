@@ -51,10 +51,9 @@ data Embed = Embed_
     , color :: Txt
     , defaultActive :: Bool
     , hd :: Bool
-    , icon :: Icon ms
+    , icon :: Icon
     , id :: Txt
     , iframe :: Features
-    , onClick :: Ef ms IO ()
     , placeholder :: Txt
     , source :: Maybe EmbedSource
     , url :: Txt
@@ -71,7 +70,7 @@ instance Default Embed where
 pattern Embed :: Embed -> Embed
 pattern Embed e = e
 
-instance VC => Pure Embed ms where
+instance VC => Pure Embed where
     render e =
         Component "Semantic.Modules.Embed" e $ \self ->
             let
@@ -139,7 +138,6 @@ instance VC => Pure Embed ms where
 
                     in
                         as
-                            : On "click" def (\_ -> return $ Just handleClick)
                             : attributes
                             )
                             [ Icon icon
@@ -198,33 +196,28 @@ instance HasProp DefaultActive Embed where
     getProp _ = defaultActive
     setProp _ da e = e { defaultActive = da }
 
-pattern HD :: Embed ms -> Embed ms
+pattern HD :: Embed -> Embed
 pattern HD e <- (hd &&& Prelude.id -> (True,e)) where
     HD e = e { hd = True }
 
-pattern EmbedIcon :: Icon ms -> Embed ms -> Embed ms
+pattern EmbedIcon :: Icon -> Embed -> Embed
 pattern EmbedIcon i e <- (icon &&& Prelude.id -> (i,e)) where
     EmbedIcon i e = e { icon = i }
 
-pattern EmbedId :: Txt -> Embed ms -> Embed ms
+pattern EmbedId :: Txt -> Embed -> Embed
 pattern EmbedId i e <- (id &&& Prelude.id -> (i,e)) where
     EmbedId i e = e { id = i }
 
-pattern EmbedIframe :: Features -> Embed ms -> Embed ms
+pattern EmbedIframe :: Features -> Embed -> Embed
 pattern EmbedIframe fs e <- (iframe &&& Prelude.id -> (fs,e)) where
     EmbedIframe fs e = e { iframe = fs }
-
-instance HasProp OnClick Embed where
-    type Prop OnClick Embed = Ef ms IO ()
-    getProp _ = onClick
-    setProp _ oc e = e { onClick = oc }
 
 instance HasProp Placeholder Embed where
     type Prop Placeholder Embed = Txt
     getProp _ = placeholder
     setProp _ p e = e { placeholder = p }
 
-pattern EmbedSource :: EmbedSource -> Embed ms -> Embed ms
+pattern EmbedSource :: EmbedSource -> Embed -> Embed
 pattern EmbedSource es e <- (source &&& Prelude.id -> (Just es,e)) where
     EmbedSource es e = e { source = Just es }
 

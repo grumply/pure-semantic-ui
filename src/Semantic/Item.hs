@@ -58,7 +58,7 @@ instance Default Item where
 pattern Item :: Item -> Item
 pattern Item i = i
 
-instance Pure Item ms where
+instance Pure Item where
     render Item_ {..} =
         let
             cs =
@@ -97,7 +97,7 @@ instance Default Content where
 pattern Content :: Content -> Content
 pattern Content ic = ic
 
-instance Pure Content ms where
+instance Pure Content where
     render Content_ {..} =
         let
             cs =
@@ -141,7 +141,7 @@ instance Default Description where
 pattern Description :: Description -> Description
 pattern Description id = id
 
-instance Pure Description ms where
+instance Pure Description where
     render Description_ {..} =
         let
             cs =
@@ -179,7 +179,7 @@ instance Default Extra where
 pattern Extra :: Extra -> Extra
 pattern Extra ie = ie
 
-instance Pure Extra ms where
+instance Pure Extra where
     render Extra_ {..} =
         let
             cs =
@@ -221,7 +221,7 @@ instance Default Group where
 pattern Group :: Group -> Group
 pattern Group ig = ig
 
-instance Pure Group ms where
+instance Pure Group where
     render Group_ {..} =
         let
             cs =
@@ -284,7 +284,7 @@ instance Default Header where
 pattern Header :: Header -> Header
 pattern Header ih = ih
 
-instance Pure Header ms where
+instance Pure Header where
     render Header_ {..} =
         let
             cs =
@@ -336,7 +336,7 @@ instance Default Image where
 pattern Image :: Image -> Image
 pattern Image i = i
 
-instance Pure Image ms where
+instance Pure Image where
     render Image_ {..} =
         let
             cs =
@@ -458,7 +458,7 @@ instance Default Meta where
 pattern Meta :: Meta -> Meta
 pattern Meta im = im
 
-instance Pure Meta ms where
+instance Pure Meta where
     render Meta_ {..} =
         let
             cs =

@@ -13,7 +13,6 @@ module Semantic.List
   ) where
 
 import GHC.Generics as G
-import Pure.View hiding (horizontal,onClick,verticalAlign,disabled,active,color,name,Content,Description,Header,Value)
 import qualified Pure.View as HTML
 
 import Semantic.Utils
@@ -32,7 +31,6 @@ import Semantic.Properties as Properties
   , pattern Horizontal, Horizontal(..)
   , pattern Inverted, Inverted(..)
   , pattern Link, Link(..)
-  , pattern OnClick, OnClick(..)
   , pattern Ordered, Ordered(..)
   , pattern Relaxed, Relaxed(..)
   , pattern Selection, Selection(..)
@@ -67,7 +65,6 @@ data List = List_
     , horizontal :: Bool
     , inverted :: Bool
     , link :: Bool
-    , onItemClick :: Item ms -> Ef ms IO ()
     , ordered :: Bool
     , relaxed :: Maybe Txt
     , selection :: Bool
@@ -81,12 +78,9 @@ instance Default List where
 pattern List :: VC => List -> VC
 pattern List l = l
 
-instance VC => Pure List ms where
+instance VC => Pure List where
     render List_ {..} =
         let
-            children' =
-                mapPures (\li@(Item_ {}) -> li { onClick = onClick li >> onItemClick li }) children
-
             cs =
                 ( "ui"
                 : size
@@ -108,7 +102,7 @@ instance VC => Pure List ms where
             as
                 : attributes
                 )
-                children'
+                children
 
 instance HasProp Animated List where
     type Prop Animated List = Bool
@@ -143,11 +137,6 @@ instance HasProp Divided List where
     type Prop Divided List = Bool
     getProp _ = divided
     setProp _ d l = l { divided = d }
-
-instance HasProp OnClick List where
-    type Prop OnClick List = Item ms -> Ef ms IO ()
-    getProp _ = onItemClick
-    setProp _ oc l = l { onItemClick = oc }
 
 instance HasProp Floated List where
     type Prop Floated List = Txt
@@ -208,7 +197,7 @@ instance Default Content where
 pattern Content :: Content -> Content
 pattern Content lc = lc
 
-instance Pure Content ms where
+instance Pure Content where
     render Content_ {..} =
         let
             cs =
@@ -258,7 +247,7 @@ instance Default Description where
 pattern Description :: Description -> Description
 pattern Description ld = ld
 
-instance Pure Description ms where
+instance Pure Description where
     render Description_ {..} =
 
 instance HasProp As Description where
@@ -287,7 +276,7 @@ instance Default Header where
 pattern Header :: Header -> Header
 pattern Header lh = lh
 
-instance Pure Header ms where
+instance Pure Header where
     render Header_ {..} =
 
 instance HasProp As Header where
@@ -329,7 +318,7 @@ instance Default Icon where
 pattern Icon :: Icon -> Icon
 pattern Icon li = li
 
-instance Pure Icon ms where
+instance Pure Icon where
     render Icon_ {..} =
         let
             cs =
@@ -441,7 +430,6 @@ data Item = Item_
     , children :: [View]
     , active :: Bool
     , disabled :: Bool
-    , onClick :: Ef ms IO ()
     , value :: Txt
     } deriving (Generic)
 
@@ -451,7 +439,7 @@ instance Default Item where
 pattern Item :: Item -> Item
 pattern Item li = li
 
-instance Pure Item ms where
+instance Pure Item where
     render Item_ {..} =
         let
             li =
@@ -492,12 +480,6 @@ instance HasChildren Item where
     getChildren = children
     setChildren cs li = li { children = cs }
 
-
-instance HasProp OnClick Item where
-    type Prop OnClick Item = Ef ms IO ()
-    getProp _ = onClick
-    setProp _ oc li = li { onClick = oc }
-
 instance HasProp Disabled Item where
     type Prop Disabled Item = Bool
     getProp _ = disabled
@@ -520,7 +502,7 @@ instance Default Sublist where
 pattern Sublist :: Sublist -> Sublist
 pattern Sublist ll = ll
 
-instance Pure Sublist ms where
+instance Pure Sublist where
     render Sublist_ {..} =
         let
             proxy =
@@ -561,7 +543,7 @@ data Keyed = Keyed_
     , horizontal :: Bool
     , inverted :: Bool
     , link :: Bool
-    , onItemClick :: (Int,Item ms) -> Ef ms IO ()
+    , onItemClick :: (Int,Item) -> IO ()
     , ordered :: Bool
     , relaxed :: Maybe Txt
     , selection :: Bool
@@ -575,15 +557,9 @@ instance Default Keyed where
 pattern Keyed :: Keyed -> Keyed
 pattern Keyed l = l
 
-instance VC => Pure Keyed ms where
+instance VC => Pure Keyed where
     render Keyed_ {..} =
         let
-            children' =
-                flip map children $ \(n,c) ->
-                    case c of
-                        View li@Item_ {} -> (n,View li { onClick = onClick li >> onItemClick (n,li) })
-                        _                    -> (n,c)
-
             cs =
                 ( "ui"
                 : size
@@ -605,7 +581,7 @@ instance VC => Pure Keyed ms where
             as
                 : attributes
                 )
-                children'
+                children
 
 instance HasProp Animated Keyed where
     type Prop Animated Keyed = Bool
@@ -640,11 +616,6 @@ instance HasProp Divided Keyed where
     type Prop Divided Keyed = Bool
     getProp _ = divided
     setProp _ d l = l { divided = d }
-
-instance HasProp OnClick Keyed where
-    type Prop OnClick Keyed = (Int,Item ms) -> Ef ms IO ()
-    getProp _ = onItemClick
-    setProp _ oc l = l { onItemClick = oc }
 
 instance HasProp Floated Keyed where
     type Prop Floated Keyed = Txt

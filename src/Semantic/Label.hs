@@ -138,7 +138,7 @@ instance HasProp Circular Label where
 
 
 instance HasProp OnClick Label where
-    type Prop OnClick Label = Ef ms IO ()
+    type Prop OnClick Label = IO ()
     getProp _ = onClick
     setProp _ oc l = l { onClick = oc }
 
@@ -199,7 +199,7 @@ instance Default Detail where
 pattern Detail :: Detail -> Detail
 pattern Detail ld = ld
 
-instance Pure Detail ms where
+instance Pure Detail where
     render Detail_ {..} =
         as
             : attributes
@@ -236,7 +236,7 @@ instance Default Group where
 pattern Group :: Group -> Group
 pattern Group lg = lg
 
-instance Pure Group ms where
+instance Pure Group where
     render Group_ {..} =
         let
             cs =

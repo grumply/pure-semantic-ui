@@ -44,7 +44,7 @@ instance Default Rail where
 pattern Rail :: Rail -> Rail
 pattern Rail r = r
 
-instance Pure Rail ms where
+instance Pure Rail where
     render Rail_ {..} =
         let
             cs =

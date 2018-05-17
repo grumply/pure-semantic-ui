@@ -53,7 +53,7 @@ data Form = Form_
     , error :: Bool
     , inverted :: Bool
     , loading :: Bool
-    , onSubmit :: Ef ms IO ()
+    , onSubmit :: IO ()
     , reply :: Bool
     , size :: Txt
     , success :: Bool
@@ -68,7 +68,7 @@ instance Default Form where
 pattern Form :: Form -> Form
 pattern Form f = f
 
-instance Pure Form ms where
+instance Pure Form where
     render Form_ {..} =
         let
             cs =
@@ -127,7 +127,7 @@ instance HasProp Loading Form where
     setProp _ l f = f { loading = l }
 
 instance HasProp OnSubmit Form where
-    type Prop OnSubmit Form = Ef ms IO ()
+    type Prop OnSubmit Form = IO ()
     getProp _ = onSubmit
     setProp _ os f = f { onSubmit = os }
 
@@ -179,7 +179,7 @@ instance Default Field where
 pattern Field :: Field -> Field
 pattern Field ff = ff
 
-instance Pure Field ms where
+instance Pure Field where
     render Field_ {..} =
         let
             cs =
@@ -257,7 +257,7 @@ instance Default Group where
 pattern Group :: Group -> Group
 pattern Group fg = fg
 
-instance Pure Group ms where
+instance Pure Group where
     render Group_ {..} =
         let
             cs =

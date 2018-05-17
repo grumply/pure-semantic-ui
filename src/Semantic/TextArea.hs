@@ -23,8 +23,6 @@ import Semantic.Properties as Properties
   ( pattern As, As(..)
   , pattern Attributes, Attributes(..)
   , pattern AutoHeight, AutoHeight(..)
-  , pattern OnChange, OnChange(..)
-  , pattern OnInput, OnInput(..)
   , pattern Rows, Rows(..)
   , pattern Styles, Styles(..)
   , pattern Value, Value(..)
@@ -38,8 +36,6 @@ data TextArea = TextArea_
     { as         :: Features -> [View] -> View
     , features :: Features
     , autoHeight :: Bool
-    , onChange   :: Txt -> Ef ms IO ()
-    , onInput    :: Txt -> Ef ms IO ()
     , rows       :: Int
     , styles     :: [(Txt,Txt)]
     , value      :: Txt
@@ -56,7 +52,7 @@ data TextAreaState = TAS
     { ref :: IORef (Maybe JSV)
     }
 
-instance VC => Pure TextArea ms where
+instance VC => Pure TextArea where
     render ta =
         Component "Semantic.Addons.TextArea" ta $ \self ->
             let
@@ -93,13 +89,7 @@ instance VC => Pure TextArea ms where
                                 setStyle r height (pxs (max mh' sh'))
                                 setStyle r "overflowY" mempty
 
-                handleChange txt = do
-                    TextArea_ {..} <- getProps self
-                    onChange txt
-
                 handleInput txt = do
-                    TextArea_ {..} <- getProps self
-                    onInput txt
                     liftIO updateHeight
 
                 handleFocus = do
@@ -133,7 +123,6 @@ instance VC => Pure TextArea ms where
 
                 , renderer = \TextArea_ {..} TAS {..} ->
                     as
-                        : HTML.onInputChange handleChange
                         : HTML.onInput handleInput
                         : HostRef handleRef
                         : HTML.Rows rows
@@ -159,16 +148,6 @@ instance HasProp AutoHeight TextArea where
     type Prop AutoHeight TextArea = Bool
     getProp _ = autoHeight
     setProp _ ah ta = ta { autoHeight = ah }
-
-instance HasProp OnChange TextArea where
-    type Prop OnChange TextArea = Txt -> Ef ms IO ()
-    getProp _ = onChange
-    setProp _ oc ta = ta { onChange = oc }
-
-instance HasProp OnInput TextArea where
-    type Prop OnInput TextArea = Txt -> Ef ms IO ()
-    getProp _ = onInput
-    setProp _ oi ta = ta { onInput = oi }
 
 instance HasProp Rows TextArea where
     type Prop Rows TextArea = Int

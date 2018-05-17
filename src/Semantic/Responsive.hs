@@ -36,7 +36,7 @@ data Responsive = Responsive_
     , fireOnMount :: Bool
     , maxWidth    :: Int
     , minWidth    :: Int
-    , onUpdate    :: Ef ms IO ()
+    , onUpdate    :: IO ()
     } deriving (Generic)
 
 instance Default Responsive where
@@ -66,7 +66,7 @@ data ResponsiveState = RS
     , ticking :: IORef Bool
     }
 
-instance Pure Responsive ms where
+instance Pure Responsive where
     render r =
         Component "Semantic.Addons.Responsive" r $ \self ->
             let
@@ -137,6 +137,6 @@ instance HasProp MinWidth Responsive where
     setProp _ mw r = r { minWidth = mw }
 
 instance HasProp OnUpdate Responsive where
-    type Prop OnUpdate Responsive = Ef ms IO ()
+    type Prop OnUpdate Responsive = IO ()
     getProp _ = onUpdate
     setProp _ ou r = r { onUpdate = ou }

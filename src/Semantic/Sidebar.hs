@@ -60,7 +60,7 @@ data SidebarState = SS
     , animator :: IORef (Maybe ThreadId)
     }
 
-instance Pure Sidebar ms where
+instance Pure Sidebar where
     render sb =
         Component "Semantic.Modules.Sidebar" sb $ \self ->
             let
@@ -152,7 +152,7 @@ instance Default Pushable where
 pattern Pushable :: Pushable -> Pushable
 pattern Pushable sp = sp
 
-instance Pure Pushable ms where
+instance Pure Pushable where
     render Pushable_ {..} =
         let
             cs =
@@ -191,7 +191,7 @@ instance Default Pusher where
 pattern Pusher :: Pusher -> Pusher
 pattern Pusher sp = sp
 
-instance Pure Pusher ms where
+instance Pure Pusher where
     render Pusher_ {..} =
         let
             cs =

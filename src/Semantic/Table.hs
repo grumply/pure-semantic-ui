@@ -96,7 +96,7 @@ instance Default Table where
 pattern Table :: Table -> Table
 pattern Table t = t
 
-instance Pure Table ms where
+instance Pure Table where
     render Table_ {..} =
         let
             cs =
@@ -261,7 +261,7 @@ instance Default Body where
 pattern Body :: Body -> Body
 pattern Body tb = tb
 
-instance Pure Body ms where
+instance Pure Body where
     render Body_ {..} =
         as
             : attributes
@@ -306,7 +306,7 @@ instance Default Cell where
 pattern Cell :: Cell -> Cell
 pattern Cell tc = tc
 
-instance Pure Cell ms where
+instance Pure Cell where
     render Cell_ {..} =
         let
             cs =
@@ -415,7 +415,7 @@ instance Default Footer where
 pattern Footer :: Footer -> Footer
 pattern Footer tf = tf
 
-instance Pure Footer ms where
+instance Pure Footer where
     render Footer_ {..} =
         as
             : attributes
@@ -449,7 +449,7 @@ instance Default Header where
 pattern Header :: Header -> Header
 pattern Header th = th
 
-instance Pure Header ms where
+instance Pure Header where
     render Header_ {..} =
         let
             cs =
@@ -505,7 +505,7 @@ instance Default HeaderCell where
 pattern HeaderCell :: HeaderCell -> HeaderCell
 pattern HeaderCell thc = thc
 
-instance Pure HeaderCell ms where
+instance Pure HeaderCell where
     render HeaderCell_ {..} =
         let
             cs =
@@ -628,7 +628,7 @@ instance Default Row where
 pattern Row :: Row -> Row
 pattern Row tr = tr
 
-instance Pure Row ms where
+instance Pure Row where
     render Row_ {..} =
         let
             cs =

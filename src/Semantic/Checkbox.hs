@@ -5,7 +5,6 @@ module Semantic.Checkbox
   ) where
 
 import GHC.Generics as G
-import Pure.View hiding (disabled,name,onClick,Checked,Name,Type,Value)
 import qualified Pure.View as HTML
 import Pure.Lifted (Node)
 
@@ -21,10 +20,6 @@ import Semantic.Properties as Properties
   , pattern Fitted, Fitted(..)
   , pattern Checked, Checked(..)
   , pattern Name, Name(..)
-  , pattern OnChange, OnChange(..)
-  , pattern OnClick, OnClick(..)
-  , pattern OnMouseDown, OnMouseDown(..)
-  , pattern WithRef, WithRef(..)
   , pattern IsRadio, IsRadio(..)
   , pattern ReadOnly, ReadOnly(..)
   , pattern Slider, Slider(..)
@@ -46,10 +41,6 @@ data Checkbox = Checkbox_
     , disabled :: Bool
     , fitted :: Bool
     , name :: Txt
-    , onChange :: Checkbox ms -> Ef ms IO ()
-    , onClick :: Checkbox ms -> Ef ms IO ()
-    , onMouseDown :: Checkbox ms -> Ef ms IO ()
-    , withRef :: Node -> Ef ms IO ()
     , radio :: Bool
     , readOnly :: Bool
     , slider :: Bool
@@ -72,7 +63,7 @@ renderChecked Nothing = HTML.Checked False
 renderChecked (Just True) = HTML.Checked True
 renderChecked (Just False) = nil
 
-instance Pure Checkbox ms where
+instance Pure Checkbox where
     render cb@Checkbox_ {..} =
         let
             cs =
@@ -90,9 +81,6 @@ instance Pure Checkbox ms where
 
         in
             as
-                : On "change" def (\_ -> return $ Just (onChange cb))
-                : On "click" def (\_ -> return $ Just (onClick cb))
-                : On "mousedown" def (\_ -> return $ Just (onMouseDown cb))
                 : attributes
                 )
                 ( HTML.Input
@@ -142,26 +130,6 @@ instance HasProp Name Checkbox where
     type Prop Name Checkbox = Txt
     getProp _ = name
     setProp _ n cb = cb { name = n }
-
-instance HasProp OnChange Checkbox where
-    type Prop OnChange Checkbox = Checkbox ms -> Ef ms IO ()
-    getProp _ = onChange
-    setProp _ oc cb = cb { onChange = oc }
-
-instance HasProp OnClick Checkbox where
-    type Prop OnClick Checkbox = Checkbox ms -> Ef ms IO ()
-    getProp _ = onClick
-    setProp _ oc cb = cb { onClick = oc }
-
-instance HasProp OnMouseDown Checkbox where
-    type Prop OnMouseDown Checkbox = Checkbox ms -> Ef ms IO ()
-    getProp _ = onMouseDown
-    setProp _ omd cb = cb { onMouseDown = omd }
-
-instance HasProp WithRef Checkbox where
-    type Prop WithRef Checkbox = Node -> Ef ms IO ()
-    getProp _ = withRef
-    setProp _ wr cb = cb { withRef = wr }
 
 instance HasProp IsRadio Checkbox where
     type Prop IsRadio Checkbox = Bool

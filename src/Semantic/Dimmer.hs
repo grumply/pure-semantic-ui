@@ -47,8 +47,8 @@ data Dimmer = Dimmer_
     , children :: [View]
     , active :: Bool
     , disabled :: Bool
-    , onClick :: Ef ms IO ()
-    , onClickOutside :: Ef ms IO ()
+    , onClick :: IO ()
+    , onClickOutside :: IO ()
     , inverted :: Bool
     , page :: Bool
     , simple :: Bool
@@ -57,10 +57,10 @@ data Dimmer = Dimmer_
 instance Default Dimmer where
     def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
-pattern Dimmer :: VC => Dimmer -> VC
+pattern Dimmer :: Dimmer -> Dimmer
 pattern Dimmer d = d
 
-instance VC => Pure Dimmer ms where
+instance Pure Dimmer where
     render d =
         Component "Semantic.Modules.Dimmer" d $ \self ->
             let
@@ -151,12 +151,12 @@ instance HasProp Disabled Dimmer where
     setProp _ d a = a { disabled = d }
 
 instance HasProp OnClick Dimmer where
-    type Prop OnClick Dimmer = Ef ms IO ()
+    type Prop OnClick Dimmer = IO ()
     getProp _ = onClick
     setProp _ oc d = d { onClick = oc }
 
 instance HasProp OnClickOutside Dimmer where
-    type Prop OnClickOutside Dimmer = Ef ms IO ()
+    type Prop OnClickOutside Dimmer = IO ()
     getProp _ = onClickOutside
     setProp _ oco d = d { onClickOutside = oco }
 
@@ -189,7 +189,7 @@ instance Default Dimmable where
 pattern Dimmable :: Dimmable -> Dimmable
 pattern Dimmable dd = dd
 
-instance Pure Dimmable ms where
+instance Pure Dimmable where
     render Dimmable_ {..} =
         let
             cs =

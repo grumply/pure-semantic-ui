@@ -61,15 +61,15 @@ data Modal = Modal_
     , defaultOpen :: Bool
     , dimmer :: Maybe Txt
     , mountNode :: Maybe JSV
-    , onClose :: Ef ms IO ()
-    , onMount :: Ef ms IO ()
-    , onOpen :: Ef ms IO ()
-    , onUnmount :: Ef ms IO ()
+    , onClose :: IO ()
+    , onMount :: IO ()
+    , onOpen :: IO ()
+    , onUnmount :: IO ()
     , open :: Bool
     , scrollable :: Bool
     , size :: Txt
     , styles :: [(Txt,Txt)]
-    , withPortal :: Portal.Portal ms -> Portal.Portal ms
+    , withPortal :: Portal.Portal -> Portal.Portal
     , trigger :: View
     } deriving (Generic)
 
@@ -85,7 +85,7 @@ instance Default Modal where
 pattern Modal :: Modal -> Modal
 pattern Modal m = m
 
-data ModalState = MS
+data ModalState =
     { topMargin :: Maybe Int
     , scrolling :: Maybe Bool
     , active :: Bool
@@ -93,7 +93,7 @@ data ModalState = MS
     , pendingAnimation :: IORef (IO ())
     }
 
-instance VC => Pure Modal ms where
+instance VC => Pure Modal where
     render m =
         Component "Semantic.Modules.Modal" m $ \self ->
             let
@@ -102,39 +102,39 @@ instance VC => Pure Modal ms where
                     return $ fromMaybe (toJSV body) mountNode
 
                 handleRef (Node n) = do
-                    MS {..} <- getState self
+                    {..} <- getState self
                     writeIORef ref (Just n)
                     return Nothing
 
                 handleClose = do
                     Modal_ {..} <- getProps self
                     onClose
-                    void $ setState self $ \_ MS {..} ->
-                        MS { active = False, .. }
+                    void $ setState self $ \_ {..} ->
+                        { active = False, .. }
 
                 handleOpen _ = do
                     Modal_ {..} <- getProps self
                     onOpen
-                    void $ setState self $ \_ MS {..} ->
-                        MS { active = True, .. }
+                    void $ setState self $ \_ {..} ->
+                        { active = True, .. }
 
                 handlePortalMount = do
                     Modal_ {..} <- getProps self
-                    setState self $ \_ MS {..} ->
-                        MS { scrolling = Just False, .. }
+                    setState self $ \_ {..} ->
+                        { scrolling = Just False, .. }
                     liftIO setPositionAndClassNames
                     onMount
 
                 handlePortalUnmount = do
                     Modal_ {..} <- getProps self
-                    MS     {..} <- getState self
+                        {..} <- getState self
                     n <- getMountNode
                     traverse_ (removeClass n) ["blurring","dimmable","dimmed","scrolling"]
                     writeIORef pendingAnimation def
 
                 setPositionAndClassNames = do
                     Modal_ {..} <- getProps self
-                    MS     {..} <- getState self
+                        {..} <- getState self
                     n           <- getMountNode
 
                     dimmer # traverse_ (addClass n) ["dimmable","dimmed"]
@@ -158,8 +158,8 @@ instance VC => Pure Modal ms where
                           "scrolling"
 
                       (scrollingChange || topMarginChange) #
-                        setState self $ \_ MS {..} ->
-                          MS { topMargin = Just topMargin'
+                        setState self $ \_ {..} ->
+                          { topMargin = Just topMargin'
                              , scrolling = Just scrolling'
                              , ..
                              }
@@ -170,7 +170,7 @@ instance VC => Pure Modal ms where
             in def
                 { construct = do
                     Modal_ {..} <- getProps self
-                    MS def def (open || defaultOpen) <$> newIORef def <*> newIORef def
+                    def def (open || defaultOpen) <$> newIORef def <*> newIORef def
                 , receiveProps = \newprops oldstate -> return $
                     (open newprops /= active oldstate)
                       ? oldstate { active = open newprops }
@@ -179,7 +179,7 @@ instance VC => Pure Modal ms where
                     Modal_ {..} <- getProps self
                     handlePortalUnmount
                     parent self onUnmount
-                , renderer = \Modal_ {..} MS {..} ->
+                , renderer = \Modal_ {..} {..} ->
                     let
                             dimmer #
                                 [ "ui"
@@ -270,22 +270,22 @@ instance HasProp MountNode Modal where
     setProp _ mn m = m { mountNode = mn }
 
 instance HasProp OnClose Modal where
-    type Prop OnClose Modal = Ef ms IO ()
+    type Prop OnClose Modal = IO ()
     getProp _ = onClose
     setProp _ oc m = m { onClose = oc }
 
 instance HasProp OnMount Modal where
-    type Prop OnMount Modal = Ef ms IO ()
+    type Prop OnMount Modal = IO ()
     getProp _ = onMount
     setProp _ om m = m { onMount = om }
 
 instance HasProp OnOpen Modal where
-    type Prop OnOpen Modal = Ef ms IO ()
+    type Prop OnOpen Modal = IO ()
     getProp _ = onOpen
     setProp _ oo m = m { onOpen = oo }
 
 instance HasProp OnUnmount Modal where
-    type Prop OnUnmount Modal = Ef ms IO ()
+    type Prop OnUnmount Modal = IO ()
     getProp _ = onUnmount
     setProp _ ou m = m { onUnmount = ou }
 
@@ -310,7 +310,7 @@ instance HasProp Styles Modal where
     setProp _ ss m = m { styles = ss }
 
 instance HasProp WithPortal Modal where
-    type Prop WithPortal Modal = Portal.Portal ms -> Portal.Portal ms
+    type Prop WithPortal Modal = Portal.Portal -> Portal.Portal
     getProp _ = withPortal
     setProp _ wp m = m { withPortal = wp }
 
@@ -331,7 +331,7 @@ instance Default Actions where
 pattern Actions :: Actions -> Actions
 pattern Actions ma = ma
 
-instance Pure Actions ms where
+instance Pure Actions where
     render Actions_ {..} =
         as
             : attributes
@@ -366,7 +366,7 @@ instance Default Content where
 pattern Content :: Content -> Content
 pattern Content mc = mc
 
-instance Pure Content ms where
+instance Pure Content where
     render Content_ {..} =
         let
                 [ image # "image"
@@ -416,7 +416,7 @@ instance Default Description where
 pattern Description :: Description -> Description
 pattern Description md = md
 
-instance Pure Description ms where
+instance Pure Description where
     render Description_ {..} =
         let
             cs =
@@ -455,7 +455,7 @@ instance Default Header where
 pattern Header :: Header -> Header
 pattern Header mh = mh
 
-instance Pure Header ms where
+instance Pure Header where
     render Header_ {..} =
         let
 

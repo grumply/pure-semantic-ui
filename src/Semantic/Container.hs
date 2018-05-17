@@ -53,7 +53,7 @@ setTextContainer c =
         View Container_ {..} -> View Container_ { text = True, .. }
         _                    -> c
 
-instance Pure Container ms where
+instance Pure Container where
     render Container_ {..} =
         let cs =
               ( "ui"

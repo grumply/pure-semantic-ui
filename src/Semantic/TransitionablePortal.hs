@@ -38,15 +38,15 @@ import Pure.Data.Default as Tools
 
 data TransitionablePortal = TransitionablePortal_
     { children       :: [View]
-    , onClose        :: Ef ms IO ()
-    , onHide         :: TransitionStatus -> Ef ms IO ()
-    , onOpen         :: Ef ms IO ()
-    , onStart        :: TransitionStatus -> Ef ms IO ()
+    , onClose        :: IO ()
+    , onHide         :: TransitionStatus -> IO ()
+    , onOpen         :: IO ()
+    , onStart        :: TransitionStatus -> IO ()
     , open           :: Maybe Bool
     , animation      :: Txt
     , duration       :: AnimationDuration
-    , withPortal     :: Portal ms -> Portal ms
-    , withTransition :: Transition ms -> Transition ms
+    , withPortal     :: Portal -> Portal
+    , withTransition :: Transition -> Transition
     } deriving (Generic)
 
 instance Default TransitionablePortal where
@@ -65,7 +65,7 @@ data TransitionablePortalState = TPS
     , transitionVisible :: Bool
     }
 
-instance VC => Pure TransitionablePortal ms where
+instance VC => Pure TransitionablePortal where
     render tp =
         Component "Semantic.Addons.TransitionablePortal" tp $ \self ->
             let
@@ -97,7 +97,7 @@ instance VC => Pure TransitionablePortal ms where
                 { construct = return (TPS def def)
 
                 , receiveProps = \newprops oldstate -> return $
-                    case open (newprops :: TransitionablePortal ms) of
+                    case open (newprops :: TransitionablePortal) of
                         Just o -> oldstate { portalOpen = o }
                         _      -> oldstate
 
@@ -123,22 +123,22 @@ instance HasChildren TransitionablePortal where
     setChildren cs tp = tp { children = cs }
 
 instance HasProp OnClose TransitionablePortal where
-    type Prop OnClose TransitionablePortal = Ef ms IO ()
+    type Prop OnClose TransitionablePortal = IO ()
     getProp _ = onClose
     setProp _ oc tp = tp { onClose = oc }
 
 instance HasProp OnHide TransitionablePortal where
-    type Prop OnHide TransitionablePortal = TransitionStatus -> Ef ms IO ()
+    type Prop OnHide TransitionablePortal = TransitionStatus -> IO ()
     getProp _ = onHide
     setProp _ oh tp = tp { onHide = oh }
 
 instance HasProp OnOpen TransitionablePortal where
-    type Prop OnOpen TransitionablePortal = Ef ms IO ()
+    type Prop OnOpen TransitionablePortal = IO ()
     getProp _ = onOpen
     setProp _ oo tp = tp { onOpen = oo }
 
 instance HasProp OnStart TransitionablePortal where
-    type Prop OnStart TransitionablePortal = TransitionStatus -> Ef ms IO ()
+    type Prop OnStart TransitionablePortal = TransitionStatus -> IO ()
     getProp _ = onStart
     setProp _ os tp = tp { onStart = os }
 
@@ -158,11 +158,11 @@ instance HasProp AnimationDuration TransitionablePortal where
     setProp _ ad tp = tp { duration = ad }
 
 instance HasProp WithPortal TransitionablePortal where
-    type Prop WithPortal TransitionablePortal = Portal ms -> Portal ms
+    type Prop WithPortal TransitionablePortal = Portal -> Portal
     getProp _ = withPortal
     setProp _ wp tp = tp { withPortal = wp }
 
 instance HasProp WithTransition TransitionablePortal where
-    type Prop WithTransition TransitionablePortal = Transition ms -> Transition ms
+    type Prop WithTransition TransitionablePortal = Transition -> Transition
     getProp _ = withTransition
     setProp _ wt tp = tp { withTransition = wt }

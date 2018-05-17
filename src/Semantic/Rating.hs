@@ -16,8 +16,6 @@ import Semantic.Properties as Tools ( HasProp(..) )
 import Semantic.Properties as Properties
   ( pattern Active, Active(..)
   , pattern Index, Index(..)
-  , pattern OnClick, OnClick(..)
-  , pattern OnMouseEnter, OnMouseEnter(..)
   , pattern Selected, Selected(..)
   , pattern As, As(..)
   , pattern Attributes, Attributes(..)
@@ -45,7 +43,7 @@ data Rating = Rating_
     , disabled :: Bool
     , icon :: Txt
     , maxRating :: Int
-    , onRate :: Maybe Int -> Ef ms IO ()
+    , onRate :: Maybe Int -> IO ()
     , rating :: Maybe Int
     , size :: Txt
     } deriving (Generic)
@@ -62,7 +60,7 @@ data RatingState = RS
     , isSelecting :: Bool
     }
 
-instance VC => Pure Rating ms where
+instance Pure Rating where
     render r =
         Component "Semantic.Modules.Rating" r $ \self ->
             let
@@ -175,7 +173,7 @@ instance HasProp MaxRating Rating where
     setProp _ mr r = r { maxRating = mr }
 
 instance HasProp OnRate Rating where
-    type Prop OnRate Rating = Maybe Int -> Ef ms IO ()
+    type Prop OnRate Rating = Maybe Int -> IO ()
     getProp _ = onRate
     setProp _ or r = r { onRate = or }
 
@@ -194,19 +192,19 @@ data Icon = Icon_
     , features :: Features
     , active :: Bool
     , index :: Int
-    , onClick :: Int -> Ef ms IO ()
-    , onKeyUp :: Int -> Evt -> Ef ms IO ()
-    , onMouseEnter :: Int -> Ef ms IO ()
+    , onClick :: Int -> IO ()
+    , onKeyUp :: Int -> Evt -> IO ()
+    , onMouseEnter :: Int -> IO ()
     , selected :: Bool
     } deriving (Generic)
 
 instance Default Icon where
     def = (G.to gdef) { as = \fs cs -> I & Features fs & Children cs }
 
-pattern Icon :: VC ms => Icon ms -> View
+pattern Icon :: VC => Icon -> View
 pattern Icon ri = View ri
 
-instance VC ms => Pure Icon ms where
+instance VC => Pure Icon where
     render Icon_ {..} =
         let
             handleClick _ =
@@ -263,17 +261,17 @@ instance HasProp Index Icon where
     setProp _ i ri = ri { index = i }
 
 instance HasProp OnClick Icon where
-    type Prop OnClick Icon = Int -> Ef ms IO ()
+    type Prop OnClick Icon = Int -> IO ()
     getProp _ = onClick
     setProp _ oc ri = ri { onClick = oc }
 
 instance HasProp OnKeyUp Icon where
-    type Prop OnKeyUp Icon = Int -> Evt -> Ef ms IO ()
+    type Prop OnKeyUp Icon = Int -> Evt -> IO ()
     getProp _ = onKeyUp
     setProp _ oku ri = ri { onKeyUp = oku }
 
 instance HasProp OnMouseEnter Icon where
-    type Prop OnMouseEnter Icon = Int -> Ef ms IO ()
+    type Prop OnMouseEnter Icon = Int -> IO ()
     getProp _ = onMouseEnter
     setProp _ ome ri = ri { onMouseEnter = ome }
 

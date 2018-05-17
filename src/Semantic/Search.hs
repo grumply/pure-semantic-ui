@@ -24,9 +24,6 @@ import Semantic.Properties as Properties
   , pattern Fluid, Fluid(..)
   , pattern Focus, Focus(..)
   , pattern Loading, Loading(..)
-  , pattern OnBlur, OnBlur(..)
-  , pattern OnFocus, OnFocus(..)
-  , pattern OnMouseDown, OnMouseDown(..)
   , pattern Open, Open(..)
   , pattern Size, Size(..)
   , pattern Active, Active(..)
@@ -57,9 +54,6 @@ data Search = Search_
     , fluid :: Bool
     , focus :: Bool
     , loading :: Bool
-    , onBlur :: Ef ms IO ()
-    , onFocus :: Ef ms IO ()
-    , onMouseDown :: Ef ms IO ()
     , open :: Bool
     , size :: Txt
     } deriving (Generic)
@@ -70,7 +64,7 @@ instance Default Search where
 pattern Search :: Search -> Search
 pattern Search s = s
 
-instance Pure Search ms where
+instance Pure Search where
     render Search_ {..} =
         let
             cs = ( "ui"
@@ -85,9 +79,6 @@ instance Pure Search ms where
                  )
 
         in as
-               : onMouseDown # On "mousedown" def (\_ -> return $ Just onMouseDown)
-               : onFocus # On "focusin" def (\_ -> return $ Just onFocus)
-               : onBlur # On "focusout" def (\_ -> return $ Just onBlur)
                : attributes
                )
                children
@@ -132,17 +123,17 @@ instance HasProp Loading Search where
     setProp _ l s = s { loading = l }
 
 instance HasProp OnBlur Search where
-    type Prop OnBlur Search = Ef ms IO ()
+    type Prop OnBlur Search = IO ()
     getProp _ = onBlur
     setProp _ ob s = s { onBlur = ob }
 
 instance HasProp OnFocus Search where
-    type Prop OnFocus Search = Ef ms IO ()
+    type Prop OnFocus Search = IO ()
     getProp _ = onFocus
     setProp _ onf s = s { onFocus = onf }
 
 instance HasProp OnMouseDown Search where
-    type Prop OnMouseDown Search = Ef ms IO ()
+    type Prop OnMouseDown Search = IO ()
     getProp _ = onMouseDown
     setProp _ omd s = s { onMouseDown = omd }
 
@@ -172,7 +163,7 @@ instance Default Categorized where
 pattern Categorized :: Categorized -> Categorized
 pattern Categorized sc = sc
 
-instance Pure Categorized ms where
+instance Pure Categorized where
     render sc@Categorized_ {..} =
         let
             cs =
@@ -214,7 +205,7 @@ data Result = Result_
     , features :: Features
     , children :: [View]
     , active :: Bool
-    , onClick :: Ef ms IO ()
+    , onClick :: IO ()
     } deriving (Generic)
 
 instance Default Result where
@@ -223,7 +214,7 @@ instance Default Result where
 pattern Result :: Result -> Result
 pattern Result sr = sr
 
-instance Pure Result ms where
+instance Pure Result where
     render sr@Result_ {..} =
         let
             cs =
@@ -257,7 +248,7 @@ instance HasProp Active Result where
     setProp _ a sr = sr { active = a }
 
 instance HasProp OnClick Result where
-    type Prop OnClick Result = Ef ms IO ()
+    type Prop OnClick Result = IO ()
     getProp _ = onClick
     setProp _ oc sr = sr { onClick = oc }
 
@@ -273,7 +264,7 @@ instance Default Results where
 pattern Results :: Results -> Results
 pattern Results sr = sr
 
-instance Pure Results ms where
+instance Pure Results where
     render Results_ {..} =
         let
             cs =

@@ -55,21 +55,21 @@ data Visibility = Visibility_
     , continuous             :: Bool
     , fireOnMount            :: Bool
     , offset                 :: (Double,Double)
-    , onBottomPassed         :: Maybe (Calculations -> Ef ms IO ())
-    , onBottomPassedReverse  :: Maybe (Calculations -> Ef ms IO ())
-    , onBottomVisible        :: Maybe (Calculations -> Ef ms IO ())
-    , onBottomVisibleReverse :: Maybe (Calculations -> Ef ms IO ())
+    , onBottomPassed         :: Maybe (Calculations -> IO ())
+    , onBottomPassedReverse  :: Maybe (Calculations -> IO ())
+    , onBottomVisible        :: Maybe (Calculations -> IO ())
+    , onBottomVisibleReverse :: Maybe (Calculations -> IO ())
     , once                   :: Bool
-    , onOffScreen            :: Maybe (Calculations -> Ef ms IO ())
-    , onOnScreen             :: Maybe (Calculations -> Ef ms IO ())
-    , onPassed               :: [(Calculations -> Ef ms IO (),Passed)]
-    , onPassing              :: Maybe (Calculations -> Ef ms IO ())
-    , onPassingReverse       :: Maybe (Calculations -> Ef ms IO ())
-    , onTopPassed            :: Maybe (Calculations -> Ef ms IO ())
-    , onTopPassedReverse     :: Maybe (Calculations -> Ef ms IO ())
-    , onTopVisible           :: Maybe (Calculations -> Ef ms IO ())
-    , onTopVisibleReverse    :: Maybe (Calculations -> Ef ms IO ())
-    , onUpdate               :: Maybe (Calculations -> Ef ms IO ())
+    , onOffScreen            :: Maybe (Calculations -> IO ())
+    , onOnScreen             :: Maybe (Calculations -> IO ())
+    , onPassed               :: [(Calculations -> IO (),Passed)]
+    , onPassing              :: Maybe (Calculations -> IO ())
+    , onPassingReverse       :: Maybe (Calculations -> IO ())
+    , onTopPassed            :: Maybe (Calculations -> IO ())
+    , onTopPassedReverse     :: Maybe (Calculations -> IO ())
+    , onTopVisible           :: Maybe (Calculations -> IO ())
+    , onTopVisibleReverse    :: Maybe (Calculations -> IO ())
+    , onUpdate               :: Maybe (Calculations -> IO ())
     } deriving (Generic)
 
 instance Default Visibility where
@@ -120,7 +120,7 @@ data Calculations = Calculations
     , topVisible       :: Bool
     } deriving (Generic,Default)
 
-instance Pure Visibility ms where
+instance Pure Visibility where
     render v =
         Component "Semantic.Behaviors.Visibility" v $ \self ->
             let
@@ -315,22 +315,22 @@ instance HasProp FireOnMount Visibility where
     setProp _ fom v = v { fireOnMount = fom }
 
 instance HasProp OnBottomPassed Visibility where
-    type Prop OnBottomPassed Visibility = Maybe (Calculations -> Ef ms IO ())
+    type Prop OnBottomPassed Visibility = Maybe (Calculations -> IO ())
     getProp _ = onBottomPassed
     setProp _ obp v = v { onBottomPassed = obp }
 
 instance HasProp OnBottomPassedReverse Visibility where
-    type Prop OnBottomPassedReverse Visibility = Maybe (Calculations -> Ef ms IO ())
+    type Prop OnBottomPassedReverse Visibility = Maybe (Calculations -> IO ())
     getProp _ = onBottomPassedReverse
     setProp _ obpr v = v { onBottomPassedReverse = obpr }
 
 instance HasProp OnBottomVisible Visibility where
-    type Prop OnBottomVisible Visibility = Maybe (Calculations -> Ef ms IO ())
+    type Prop OnBottomVisible Visibility = Maybe (Calculations -> IO ())
     getProp _ = onBottomVisible
     setProp _ obv v = v { onBottomVisible = obv }
 
 instance HasProp OnBottomVisibleReverse Visibility where
-    type Prop OnBottomVisibleReverse Visibility = Maybe (Calculations -> Ef ms IO ())
+    type Prop OnBottomVisibleReverse Visibility = Maybe (Calculations -> IO ())
     getProp _ = onBottomVisibleReverse
     setProp _ obvr v = v { onBottomVisibleReverse = obvr }
 
@@ -345,51 +345,51 @@ instance HasProp Once Visibility where
     setProp _ o v = v { once = o }
 
 instance HasProp OnPassed Visibility where
-    type Prop OnPassed Visibility = [(Calculations -> Ef ms IO (),Passed)]
+    type Prop OnPassed Visibility = [(Calculations -> IO (),Passed)]
     getProp _ = onPassed
     setProp _ op v = v { onPassed = op }
 
 instance HasProp OnPassing Visibility where
-    type Prop OnPassing Visibility = Maybe (Calculations -> Ef ms IO ())
+    type Prop OnPassing Visibility = Maybe (Calculations -> IO ())
     getProp _ = onPassing
     setProp _ op v = v { onPassing = op }
 
 instance HasProp OnPassingReverse Visibility where
-    type Prop OnPassingReverse Visibility = Maybe (Calculations -> Ef ms IO ())
+    type Prop OnPassingReverse Visibility = Maybe (Calculations -> IO ())
     getProp _ = onPassingReverse
     setProp _ opr v = v { onPassingReverse = opr }
 
 instance HasProp OnOffScreen Visibility where
-    type Prop OnOffScreen Visibility = Maybe (Calculations -> Ef ms IO ())
+    type Prop OnOffScreen Visibility = Maybe (Calculations -> IO ())
     getProp _ = onOffScreen
     setProp _ oos v = v { onOffScreen = oos }
 
 instance HasProp OnOnScreen Visibility where
-    type Prop OnOnScreen Visibility = Maybe (Calculations -> Ef ms IO ())
+    type Prop OnOnScreen Visibility = Maybe (Calculations -> IO ())
     getProp _ = onOnScreen
     setProp _ oos v = v { onOnScreen = oos }
 
 instance HasProp OnTopPassed Visibility where
-    type Prop OnTopPassed Visibility = Maybe (Calculations -> Ef ms IO ())
+    type Prop OnTopPassed Visibility = Maybe (Calculations -> IO ())
     getProp _ = onTopPassed
     setProp _ otp v = v { onTopPassed = otp }
 
 instance HasProp OnTopPassedReverse Visibility where
-    type Prop OnTopPassedReverse Visibility = Maybe (Calculations -> Ef ms IO ())
+    type Prop OnTopPassedReverse Visibility = Maybe (Calculations -> IO ())
     getProp _ = onTopPassedReverse
     setProp _ otpr v = v { onTopPassedReverse = otpr }
 
 instance HasProp OnTopVisible Visibility where
-    type Prop OnTopVisible Visibility = Maybe (Calculations -> Ef ms IO ())
+    type Prop OnTopVisible Visibility = Maybe (Calculations -> IO ())
     getProp _ = onTopVisible
     setProp _ otv v = v { onTopVisible = otv }
 
 instance HasProp OnTopVisibleReverse Visibility where
-    type Prop OnTopVisibleReverse Visibility = Maybe (Calculations -> Ef ms IO ())
+    type Prop OnTopVisibleReverse Visibility = Maybe (Calculations -> IO ())
     getProp _ = onTopVisibleReverse
     setProp _ otvr v = v { onTopVisibleReverse = otvr }
 
 instance HasProp OnUpdate Visibility where
-    type Prop OnUpdate Visibility = Maybe (Calculations -> Ef ms IO ())
+    type Prop OnUpdate Visibility = Maybe (Calculations -> IO ())
     getProp _ = onUpdate
     setProp _ ou v = v { onUpdate = ou }

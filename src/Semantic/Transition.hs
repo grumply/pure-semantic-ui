@@ -53,10 +53,10 @@ data Transition = Transition_
     , duration :: AnimationDuration
     , visible :: Bool
     , mountOnShow :: Bool
-    , onComplete :: TransitionStatus -> Ef ms IO ()
-    , onHide :: TransitionStatus -> Ef ms IO ()
-    , onShow :: TransitionStatus -> Ef ms IO ()
-    , onStart :: TransitionStatus -> Ef ms IO ()
+    , onComplete :: TransitionStatus -> IO ()
+    , onHide :: TransitionStatus -> IO ()
+    , onShow :: TransitionStatus -> IO ()
+    , onStart :: TransitionStatus -> IO ()
     , transitionOnMount :: Bool
     , unmountOnHide :: Bool
     } deriving (Generic)
@@ -81,7 +81,7 @@ data TransitionState = TS
     , transitionTimeout :: IORef (Maybe ThreadId)
     }
 
-instance Pure Transition ms where
+instance Pure Transition where
     render t =
         Component "Semantic.Modules.Transition" t $ \self ->
             let
@@ -255,22 +255,22 @@ instance HasProp MountOnShow Transition where
     setProp _ mos t = t { mountOnShow = mos }
 
 instance HasProp OnComplete Transition where
-    type Prop OnComplete Transition = TransitionStatus -> Ef ms IO ()
+    type Prop OnComplete Transition = TransitionStatus -> IO ()
     getProp _ = onComplete
     setProp _ oc t = t { onComplete = oc }
 
 instance HasProp OnHide Transition where
-    type Prop OnHide Transition = TransitionStatus -> Ef ms IO ()
+    type Prop OnHide Transition = TransitionStatus -> IO ()
     getProp _ = onHide
     setProp _ oh t = t { onHide = oh }
 
 instance HasProp OnShow Transition where
-    type Prop OnShow Transition = TransitionStatus -> Ef ms IO ()
+    type Prop OnShow Transition = TransitionStatus -> IO ()
     getProp _ = onShow
     setProp _ os t = t { onShow = os }
 
 instance HasProp OnStart Transition where
-    type Prop OnStart Transition = TransitionStatus -> Ef ms IO ()
+    type Prop OnStart Transition = TransitionStatus -> IO ()
     getProp _ = onStart
     setProp _ os t = t { onStart = os }
 
@@ -294,7 +294,7 @@ data Group = Group_
     } deriving (Generic)
 
 instance Default Group where
-    def = (G.to gdef :: Group ms)
+    def = (G.to gdef :: Group)
         { as = list Div
         , animation = "fade"
         , duration = Uniform 500
@@ -307,7 +307,7 @@ data GroupState = TGS
     { buffer :: [(Int,View)]
     }
 
-instance VC => Pure Group ms where
+instance VC => Pure Group where
     render tg =
         Component "Semantic.Modules.Transition.Group" tg $ \self ->
             let
