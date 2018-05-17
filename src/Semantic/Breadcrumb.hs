@@ -6,30 +6,21 @@ module Semantic.Breadcrumb
   , Section(..), pattern Section
   ) where
 
-import GHC.Generics as G
-import Pure.View hiding ((!),Ref,name,active,onClick,Section)
+import GHC.Generics as G (Generic,to)
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML hiding (Section)
 
 import Semantic.Utils
 
-import Semantic.Properties ((!))
-
-import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!), (%) )
+import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)
-  , pattern Attributes, Attributes(..)
-  , pattern Children, Children(..)
-  , pattern Classes, Classes(..)
   , pattern Size, Size(..)
   , pattern Active, Active(..)
-  , pattern Ref, Ref(..)
   , pattern Link, Link(..)
-  , pattern OnClick, OnClick(..)
-  )
-
-import Semantic.Properties
-  ( pattern Ref, Ref(..)
-  , pattern Active, Active(..)
   )
 
 import qualified Data.List as List
@@ -37,179 +28,119 @@ import qualified Data.List as List
 import Data.Function as Tools ((&))
 import Pure.Data.Default as Tools
 
-data Breadcrumb ms = Breadcrumb_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
-    , size :: Txt
+data Breadcrumb = Breadcrumb_
+    { as       :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
+    , size     :: Txt
     } deriving (Generic)
 
-instance Default (Breadcrumb ms) where
-    def = (G.to gdef) { as = Div }
+instance Default Breadcrumb where
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
-pattern Breadcrumb :: Breadcrumb ms -> View ms
+pattern Breadcrumb :: Breadcrumb -> View
 pattern Breadcrumb bc = View bc
 
-instance Pure Breadcrumb ms where
-    render Breadcrumb_ {..} =
+instance Pure Breadcrumb where
+    view Breadcrumb_ {..} =
         let
             cs =
-                ( "ui"
-                : size
-                : "breadcrumb"
-                : classes
-                )
+                [ "ui"
+                , size
+                , "breadcrumb"
+                ]
         in
-            as
-                ( mergeClasses $ ClassList cs
-                : attributes
-                )
-                children
+            as (features & AddClasses cs) children
 
-instance HasProp As (Breadcrumb ms) where
-    type Prop As (Breadcrumb ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Breadcrumb where
+    type Prop As Breadcrumb = Features -> [View] -> View
     getProp _ = as
     setProp _ a bc = bc { as = a }
 
-instance HasProp Attributes (Breadcrumb ms) where
-    type Prop Attributes (Breadcrumb ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ as bc = bc { attributes = as }
+instance HasFeatures Breadcrumb where
+    getFeatures = features
+    setFeatures fs bc = bc { features = fs }
 
-instance HasProp Children (Breadcrumb ms) where
-    type Prop Children (Breadcrumb ms) = [View ms]
-    getProp _ = children
-    setProp _ cs bc = bc { children = cs }
+instance HasChildren Breadcrumb where
+    getChildren = children
+    setChildren cs bc = bc { children = cs }
 
-instance HasProp Classes (Breadcrumb ms) where
-    type Prop Classes (Breadcrumb ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs bc = bc { classes = cs }
-
-instance HasProp Size (Breadcrumb ms) where
-    type Prop Size (Breadcrumb ms) = Txt
+instance HasProp Size Breadcrumb where
+    type Prop Size Breadcrumb = Txt
     getProp _ = size
     setProp _ sz bc = bc { size = sz }
 
-data Divider ms = Divider_
-    { as         :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children   :: [View ms]
-    , classes    :: [Txt]
+data Divider = Divider_
+    { as       :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     } deriving (Generic)
 
-instance Default (Divider ms) where
-    def = (G.to gdef) { as = Div }
+instance Default Divider where
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
-pattern Divider :: Divider ms -> View ms
-pattern Divider bcd = View bcd
+pattern Divider :: Divider -> Divider
+pattern Divider bcd = bcd
 
-instance Pure Divider ms where
-    render Divider_ {..} =
-        let
-            cs =
-                ( "divider"
-                : classes
-                )
-        in
-            as
-                ( mergeClasses $ ClassList cs
-                : attributes
-                )
-                (children ? children $ "/")
+instance Pure Divider where
+    view Divider_ {..} = as (features & Class "divider") (Prelude.null children ? [ "/" ] $ children)
 
-instance HasProp As (Divider ms) where
-    type Prop As (Divider ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Divider where
+    type Prop As Divider = Features -> [View] -> View
     getProp _ = as
     setProp _ a bcd = bcd { as = a }
 
-instance HasProp Attributes (Divider ms) where
-    type Prop Attributes (Divider ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ as bcd = bcd { attributes = as }
+instance HasFeatures Divider where
+    getFeatures = features
+    setFeatures fs bcd = bcd { features = fs }
 
-instance HasProp Children (Divider ms) where
-    type Prop Children (Divider ms) = [View ms]
-    getProp _ = children
-    setProp _ cs bcd = bcd { children = cs }
+instance HasChildren Divider where
+    getChildren = children
+    setChildren cs bcd = bcd { children = cs }
 
-instance HasProp Classes (Divider ms) where
-    type Prop Classes (Divider ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs bcd = bcd { classes = cs }
-
-data Section ms = Section_
-    { as         :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children   :: [View ms]
-    , classes    :: [Txt]
+data Section = Section_
+    { as         :: Features -> [View] -> View
+    , features   :: Features
+    , children   :: [View]
     , active     :: Bool
-    , ref        :: Feature ms
     , link       :: Bool
-    , onClick    :: Ef ms IO ()
     } deriving (Generic)
 
-instance Default (Section ms) where
-    def = (G.to gdef) { as = Div }
+instance Default Section where
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
-pattern Section :: Section ms -> View ms
-pattern Section bcs = View bcs
+pattern Section :: Section -> Section
+pattern Section bcs = bcs
 
-instance Pure Section ms where
-    render Section_ {..} =
+instance Pure Section where
+    view Section_ {..} =
         let
-            e = link ? A $ ref ? A $ as
             cs =
-                ( active # "active"
-                : "section"
-                : classes
-                )
+                [ active # "active"
+                , "section"
+                ]
         in
-            e
-                ( mergeClasses $ ClassList cs
-                : ref
-                : onClick # (On "click" def (\_ -> return $ Just onClick))
-                : attributes
-                )
-                children
+            as (features & AddClasses cs) children
 
-instance HasProp As (Section ms) where
-    type Prop As (Section ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Section where
+    type Prop As Section = Features -> [View] -> View
     getProp _ = as
     setProp _ a bcs = bcs { as = a }
 
-instance HasProp Attributes (Section ms) where
-    type Prop Attributes (Section ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ as bcs = bcs { attributes = as }
+instance HasFeatures Section where
+    getFeatures = features
+    setFeatures fs bcs = bcs { features = fs }
 
-instance HasProp Children (Section ms) where
-    type Prop Children (Section ms) = [View ms]
-    getProp _ = children
-    setProp _ cs bcs = bcs { children = cs }
+instance HasChildren Section where
+    getChildren = children
+    setChildren cs bcs = bcs { children = cs }
 
-instance HasProp Classes (Section ms) where
-    type Prop Classes (Section ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs bcs = bcs { classes = cs }
-
-instance HasProp Active (Section ms) where
-    type Prop Active (Section ms) = Bool
+instance HasProp Active Section where
+    type Prop Active Section = Bool
     getProp _ = active
     setProp _ a bcs = bcs { active = a }
 
-instance HasProp Ref (Section ms) where
-    type Prop Ref (Section ms) = Feature ms
-    getProp _ = ref
-    setProp _ r bcs = bcs { ref = r }
-
-instance HasProp Link (Section ms) where
-    type Prop Link (Section ms) = Bool
+instance HasProp Link Section where
+    type Prop Link Section = Bool
     getProp _ = link
     setProp _ l bcs = bcs { link = l }
-
-instance HasProp OnClick (Section ms) where
-    type Prop OnClick (Section ms) = Ef ms IO ()
-    getProp _ = onClick
-    setProp _ oc bcs = bcs { onClick = oc }

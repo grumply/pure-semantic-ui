@@ -1,6 +1,10 @@
 module Main where
 
-import Pure.DOM (body)
-import Test.Proxy
+import Test.Shared
 
-main = body proxyTest
+import Test.Proxy
+import Test.Header
+import Test.Icon
+import Test.Image
+
+main = test headerTest

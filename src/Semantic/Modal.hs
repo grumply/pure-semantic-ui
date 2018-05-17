@@ -20,7 +20,7 @@ import Semantic.Utils
 
 import qualified Semantic.Portal as Portal
 
-import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!), (%) )
+import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern CloseOnDocumentClick, CloseOnDocumentClick(..)
@@ -36,7 +36,6 @@ import Semantic.Properties as Properties
   , pattern As, As(..)
   , pattern Attributes, Attributes(..)
   , pattern Children, Children(..)
-  , pattern Classes, Classes(..)
   , pattern Basic, Basic(..)
   , pattern CloseOnDimmerClick, CloseOnDimmerClick(..)
   , pattern DefaultOpen, DefaultOpen(..)
@@ -52,11 +51,10 @@ import Semantic.Properties as Properties
 import Data.Function as Tools ((&))
 import Pure.Data.Default as Tools
 
-data Modal ms = Modal_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data Modal = Modal_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     , basic :: Bool
     , closeOnDimmerClick :: Bool
     , closeOnDocumentClick :: Bool
@@ -72,10 +70,10 @@ data Modal ms = Modal_
     , size :: Txt
     , styles :: [(Txt,Txt)]
     , withPortal :: Portal.Portal ms -> Portal.Portal ms
-    , trigger :: View ms
+    , trigger :: View
     } deriving (Generic)
 
-instance Default (Modal ms) where
+instance Default Modal where
     def = (G.to gdef)
         { as = Div
         , dimmer = Just ""
@@ -84,8 +82,8 @@ instance Default (Modal ms) where
         , withPortal = id
         }
 
-pattern Modal :: VC ms => Modal ms -> View ms
-pattern Modal m = View m
+pattern Modal :: Modal -> Modal
+pattern Modal m = m
 
 data ModalState = MS
     { topMargin :: Maybe Int
@@ -95,7 +93,7 @@ data ModalState = MS
     , pendingAnimation :: IORef (IO ())
     }
 
-instance VC ms => Pure Modal ms where
+instance VC => Pure Modal ms where
     render m =
         Component "Semantic.Modules.Modal" m $ \self ->
             let
@@ -183,7 +181,6 @@ instance VC ms => Pure Modal ms where
                     parent self onUnmount
                 , renderer = \Modal_ {..} MS {..} ->
                     let
-                        dimmerClasses =
                             dimmer #
                                 [ "ui"
                                 , (dimmer == Just "inverted") # "inverted"
@@ -200,7 +197,6 @@ instance VC ms => Pure Modal ms where
                                     : basic # "basic"
                                     : (scrolling == Just True) # "scrolling"
                                     : "modal transition visible active"
-                                    : classes
                                     )
 
                                 children' = flip map children $ \c ->
@@ -210,7 +206,6 @@ instance VC ms => Pure Modal ms where
 
                             in
                                 as
-                                    ( mergeClasses $ ClassList cs
                                     : StyleList ss
                                     : HostRef handleRef
                                     : attributes
@@ -221,7 +216,6 @@ instance VC ms => Pure Modal ms where
                         & (closeOnDocumentClick ? CloseOnDocumentClick True $ id)
                         & (closeOnDimmerClick   ? CloseOnRootNodeClick True $ id)
                         & Trigger trigger
-                        & Classes dimmerClasses
                         & MountNode mountNode
                         & Open active
                         & OnClose handleClose
@@ -231,166 +225,150 @@ instance VC ms => Pure Modal ms where
                         & Children [ renderContent ]
                 }
 
-instance HasProp As (Modal ms) where
-    type Prop As (Modal ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Modal where
+    type Prop As Modal = Features -> [View] -> View
     getProp _ = as
     setProp _ a m = m { as = a }
 
-instance HasProp Attributes (Modal ms) where
-    type Prop Attributes (Modal ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ as m = m { attributes = as }
+instance HasFeatures Modal where
+    getFeatures = features
+    setFeatures as m = m { features = as }
 
-instance HasProp Children (Modal ms) where
-    type Prop Children (Modal ms) = [View ms]
-    getProp _ = children
-    setProp _ cs m = m { children = cs }
+instance HasChildren Modal where
+    getChildren = children
+    setChildren cs m = m { children = cs }
 
-instance HasProp Classes (Modal ms) where
-    type Prop Classes (Modal ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs m = m { classes = cs }
 
-instance HasProp Basic (Modal ms) where
-    type Prop Basic (Modal ms) = Bool
+instance HasProp Basic Modal where
+    type Prop Basic Modal = Bool
     getProp _ = basic
     setProp _ b m = m { basic = b }
 
-instance HasProp CloseOnDimmerClick (Modal ms) where
-    type Prop CloseOnDimmerClick (Modal ms) = Bool
+instance HasProp CloseOnDimmerClick Modal where
+    type Prop CloseOnDimmerClick Modal = Bool
     getProp _ = closeOnDimmerClick
     setProp _ codc m = m { closeOnDimmerClick = codc }
 
-instance HasProp CloseOnDocumentClick (Modal ms) where
-    type Prop CloseOnDocumentClick (Modal ms) = Bool
+instance HasProp CloseOnDocumentClick Modal where
+    type Prop CloseOnDocumentClick Modal = Bool
     getProp _ = closeOnDocumentClick
     setProp _ codc m = m { closeOnDocumentClick = codc }
 
-instance HasProp DefaultOpen (Modal ms) where
-    type Prop DefaultOpen (Modal ms) = Bool
+instance HasProp DefaultOpen Modal where
+    type Prop DefaultOpen Modal = Bool
     getProp _ = defaultOpen
     setProp _ o m = m { defaultOpen = o }
 
-instance HasProp DimmerType (Modal ms) where
-    type Prop DimmerType (Modal ms) = Maybe Txt
+instance HasProp DimmerType Modal where
+    type Prop DimmerType Modal = Maybe Txt
     getProp _ = dimmer
     setProp _ d m = m { dimmer = d }
 
-instance HasProp MountNode (Modal ms) where
-    type Prop MountNode (Modal ms) = Maybe JSV
+instance HasProp MountNode Modal where
+    type Prop MountNode Modal = Maybe JSV
     getProp _ = mountNode
     setProp _ mn m = m { mountNode = mn }
 
-instance HasProp OnClose (Modal ms) where
-    type Prop OnClose (Modal ms) = Ef ms IO ()
+instance HasProp OnClose Modal where
+    type Prop OnClose Modal = Ef ms IO ()
     getProp _ = onClose
     setProp _ oc m = m { onClose = oc }
 
-instance HasProp OnMount (Modal ms) where
-    type Prop OnMount (Modal ms) = Ef ms IO ()
+instance HasProp OnMount Modal where
+    type Prop OnMount Modal = Ef ms IO ()
     getProp _ = onMount
     setProp _ om m = m { onMount = om }
 
-instance HasProp OnOpen (Modal ms) where
-    type Prop OnOpen (Modal ms) = Ef ms IO ()
+instance HasProp OnOpen Modal where
+    type Prop OnOpen Modal = Ef ms IO ()
     getProp _ = onOpen
     setProp _ oo m = m { onOpen = oo }
 
-instance HasProp OnUnmount (Modal ms) where
-    type Prop OnUnmount (Modal ms) = Ef ms IO ()
+instance HasProp OnUnmount Modal where
+    type Prop OnUnmount Modal = Ef ms IO ()
     getProp _ = onUnmount
     setProp _ ou m = m { onUnmount = ou }
 
-instance HasProp Open (Modal ms) where
-    type Prop Open (Modal ms) = Bool
+instance HasProp Open Modal where
+    type Prop Open Modal = Bool
     getProp _ = open
     setProp _ o m = m { open = o }
 
-instance HasProp Scrollable (Modal ms) where
-    type Prop Scrollable (Modal ms) = Bool
+instance HasProp Scrollable Modal where
+    type Prop Scrollable Modal = Bool
     getProp _ = scrollable
     setProp _ s m = m { scrollable = s }
 
-instance HasProp Size (Modal ms) where
-    type Prop Size (Modal ms) = Txt
+instance HasProp Size Modal where
+    type Prop Size Modal = Txt
     getProp _ = size
     setProp _ s m = m { size = s }
 
-instance HasProp Styles (Modal ms) where
-    type Prop Styles (Modal ms) = [(Txt,Txt)]
+instance HasProp Styles Modal where
+    type Prop Styles Modal = [(Txt,Txt)]
     getProp _ = styles
     setProp _ ss m = m { styles = ss }
 
-instance HasProp WithPortal (Modal ms) where
-    type Prop WithPortal (Modal ms) = Portal.Portal ms -> Portal.Portal ms
+instance HasProp WithPortal Modal where
+    type Prop WithPortal Modal = Portal.Portal ms -> Portal.Portal ms
     getProp _ = withPortal
     setProp _ wp m = m { withPortal = wp }
 
-instance HasProp Trigger (Modal ms) where
-    type Prop Trigger (Modal ms) = View ms
+instance HasProp Trigger Modal where
+    type Prop Trigger Modal = View
     getProp _ = trigger
     setProp _ t m = m { trigger = t }
 
-data Actions ms = Actions_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data Actions = Actions_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     } deriving (Generic)
 
-instance Default (Actions ms) where
-    def = (G.to gdef) { as = Div }
+instance Default Actions where
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
-pattern Actions :: Actions ms -> View ms
-pattern Actions ma = View ma
+pattern Actions :: Actions -> Actions
+pattern Actions ma = ma
 
 instance Pure Actions ms where
     render Actions_ {..} =
         as
-            ( ClassList ( "actions" : classes )
             : attributes
             )
             children
 
-instance HasProp As (Actions ms) where
-    type Prop As (Actions ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Actions where
+    type Prop As Actions = Features -> [View] -> View
     getProp _ = as
     setProp _ f ma = ma { as = f }
 
-instance HasProp Attributes (Actions ms) where
-    type Prop Attributes (Actions ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ cs ma = ma { attributes = cs }
+instance HasFeatures Actions where
+    getFeatures = features
+    setFeatures cs ma = ma { features = cs }
 
-instance HasProp Children (Actions ms) where
-    type Prop Children (Actions ms) = [View ms]
-    getProp _ = children
-    setProp _ cs ma = ma { children = cs }
+instance HasChildren Actions where
+    getChildren = children
+    setChildren cs ma = ma { children = cs }
 
-instance HasProp Classes (Actions ms) where
-    type Prop Classes (Actions ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs ma = ma { classes = cs }
 
-data Content ms = Content_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data Content = Content_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     , image :: Bool
     , scrolling :: Bool
     } deriving (Generic)
 
-instance Default (Content ms) where
-    def = (G.to gdef) { as = Div }
+instance Default Content where
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
-pattern Content :: Content ms -> View ms
-pattern Content mc = View mc
+pattern Content :: Content -> Content
+pattern Content mc = mc
 
 instance Pure Content ms where
     render Content_ {..} =
         let
-            cs = classes ++
                 [ image # "image"
                 , scrolling # "scrolling"
                 , "content"
@@ -398,130 +376,105 @@ instance Pure Content ms where
 
         in
             as
-                ( mergeClasses $ ClassList cs
                 : attributes
                 )
                 children
 
-instance HasProp As (Content ms) where
-    type Prop As (Content ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Content where
+    type Prop As Content = Features -> [View] -> View
     getProp _ = as
     setProp _ f mc = mc { as = f }
 
-instance HasProp Attributes (Content ms) where
-    type Prop Attributes (Content ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ cs mc = mc { attributes = cs }
+instance HasFeatures Content where
+    getFeatures = features
+    setFeatures cs mc = mc { features = cs }
 
-instance HasProp Children (Content ms) where
-    type Prop Children (Content ms) = [View ms]
-    getProp _ = children
-    setProp _ cs mc = mc { children = cs }
+instance HasChildren Content where
+    getChildren = children
+    setChildren cs mc = mc { children = cs }
 
-instance HasProp Classes (Content ms) where
-    type Prop Classes (Content ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs mc = mc { classes = cs }
 
-instance HasProp IsImage (Content ms) where
-    type Prop IsImage (Content ms) = Bool
+instance HasProp IsImage Content where
+    type Prop IsImage Content = Bool
     getProp _ = image
     setProp _ ii mc = mc { image = ii }
 
-instance HasProp Scrolling (Content ms) where
-    type Prop Scrolling (Content ms) = Bool
+instance HasProp Scrolling Content where
+    type Prop Scrolling Content = Bool
     getProp _ = scrolling
     setProp _ s mc = mc { scrolling = s }
 
-data Description ms = Description_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data Description = Description_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     } deriving (Generic)
 
-instance Default (Description ms) where
-    def = (G.to gdef) { as = Div }
+instance Default Description where
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
-pattern Description :: Description ms -> View ms
-pattern Description md = View md
+pattern Description :: Description -> Description
+pattern Description md = md
 
 instance Pure Description ms where
     render Description_ {..} =
         let
             cs =
                 ( "description"
-                : classes
                 )
 
         in
             as
-                ( mergeClasses $ ClassList cs
                 : attributes
                 )
                 children
 
-instance HasProp As (Description ms) where
-    type Prop As (Description ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Description where
+    type Prop As Description = Features -> [View] -> View
     getProp _ = as
     setProp _ f md = md { as = f }
 
-instance HasProp Attributes (Description ms) where
-    type Prop Attributes (Description ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ cs md = md { attributes = cs }
+instance HasFeatures Description where
+    getFeatures = features
+    setFeatures cs md = md { features = cs }
 
-instance HasProp Children (Description ms) where
-    type Prop Children (Description ms) = [View ms]
-    getProp _ = children
-    setProp _ cs md = md { children = cs }
+instance HasChildren Description where
+    getChildren = children
+    setChildren cs md = md { children = cs }
 
-instance HasProp Classes (Description ms) where
-    type Prop Classes (Description ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs md = md { classes = cs }
 
-data Header ms = Header_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data Header = Header_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     } deriving (Generic)
 
-instance Default (Header ms) where
-    def = (G.to gdef) { as = Div }
+instance Default Header where
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
-pattern Header :: Header ms -> View ms
-pattern Header mh = View mh
+pattern Header :: Header -> Header
+pattern Header mh = mh
 
 instance Pure Header ms where
     render Header_ {..} =
         let
-            cs = classes <> [ "header" ]
 
         in
             as
-                ( mergeClasses $ ClassList cs
                 : attributes
                 )
                 children
 
-instance HasProp As (Header ms) where
-    type Prop As (Header ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Header where
+    type Prop As Header = Features -> [View] -> View
     getProp _ = as
     setProp _ f mh = mh { as = f }
 
-instance HasProp Attributes (Header ms) where
-    type Prop Attributes (Header ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ cs mh = mh { attributes = cs }
+instance HasFeatures Header where
+    getFeatures = features
+    setFeatures cs mh = mh { features = cs }
 
-instance HasProp Children (Header ms) where
-    type Prop Children (Header ms) = [View ms]
-    getProp _ = children
-    setProp _ cs mh = mh { children = cs }
+instance HasChildren Header where
+    getChildren = children
+    setChildren cs mh = mh { children = cs }
 
-instance HasProp Classes (Header ms) where
-    type Prop Classes (Header ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs mh = mh { classes = cs }

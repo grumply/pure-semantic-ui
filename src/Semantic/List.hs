@@ -18,7 +18,7 @@ import qualified Pure.View as HTML
 
 import Semantic.Utils
 
-import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!), (%) )
+import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern Animated, Animated(..)
@@ -27,7 +27,6 @@ import Semantic.Properties as Properties
   , pattern Bulleted, Bulleted(..)
   , pattern Celled, Celled(..)
   , pattern Children, Children(..)
-  , pattern Classes, Classes(..)
   , pattern Divided, Divided(..)
   , pattern Floated, Floated(..)
   , pattern Horizontal, Horizontal(..)
@@ -56,11 +55,10 @@ import Semantic.Properties as Properties
 import Data.Function as Tools ((&))
 import Pure.Data.Default as Tools
 
-data List ms = List_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data List = List_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     , animated :: Bool
     , bulleted :: Bool
     , celled :: Bool
@@ -77,13 +75,13 @@ data List ms = List_
     , verticalAlign :: Txt
     } deriving (Generic)
 
-instance Default (List ms) where
-    def = (G.to gdef) { as = Div }
+instance Default List where
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
-pattern List :: VC ms => List ms -> View ms
-pattern List l = View l
+pattern List :: VC => List -> VC
+pattern List l = l
 
-instance VC ms => Pure List ms where
+instance VC => Pure List ms where
     render List_ {..} =
         let
             children' =
@@ -105,119 +103,110 @@ instance VC ms => Pure List ms where
                 : floated # (floated <>> "floated")
                 : verticalAlign # (verticalAlign <>> "aligned")
                 : "list"
-                : classes
                 )
         in
             as
-                ( mergeClasses $ ClassList cs
                 : attributes
                 )
                 children'
 
-instance HasProp Animated (List ms) where
-    type Prop Animated (List ms) = Bool
+instance HasProp Animated List where
+    type Prop Animated List = Bool
     getProp _ = animated
     setProp _ anim l = l { animated = anim }
 
-instance HasProp As (List ms) where
-    type Prop As (List ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As List where
+    type Prop As List = Features -> [View] -> View
     getProp _ = as
     setProp _ f l = l { as = f }
 
-instance HasProp Attributes (List ms) where
-    type Prop Attributes (List ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ cs l = l { attributes = cs }
+instance HasFeatures List where
+    getFeatures = features
+    setFeatures cs l = l { features = cs }
 
-instance HasProp Bulleted (List ms) where
-    type Prop Bulleted (List ms) = Bool
+instance HasProp Bulleted List where
+    type Prop Bulleted List = Bool
     getProp _ = bulleted
     setProp _ b l = l { bulleted = b }
 
-instance HasProp Celled (List ms) where
-    type Prop Celled (List ms) = Bool
+instance HasProp Celled List where
+    type Prop Celled List = Bool
     getProp _ = celled
     setProp _ c l = l { celled = c }
 
-instance HasProp Children (List ms) where
-    type Prop Children (List ms) = [View ms]
-    getProp _ = children
-    setProp _ cs l = l { children = cs }
+instance HasChildren List where
+    getChildren = children
+    setChildren cs l = l { children = cs }
 
-instance HasProp Classes (List ms) where
-    type Prop Classes (List ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs l = l { classes = cs }
 
-instance HasProp Divided (List ms) where
-    type Prop Divided (List ms) = Bool
+instance HasProp Divided List where
+    type Prop Divided List = Bool
     getProp _ = divided
     setProp _ d l = l { divided = d }
 
-instance HasProp OnClick (List ms) where
-    type Prop OnClick (List ms) = Item ms -> Ef ms IO ()
+instance HasProp OnClick List where
+    type Prop OnClick List = Item ms -> Ef ms IO ()
     getProp _ = onItemClick
     setProp _ oc l = l { onItemClick = oc }
 
-instance HasProp Floated (List ms) where
-    type Prop Floated (List ms) = Txt
+instance HasProp Floated List where
+    type Prop Floated List = Txt
     getProp _ = floated
     setProp _ f l = l { floated = f }
 
-instance HasProp Horizontal (List ms) where
-    type Prop Horizontal (List ms) = Bool
+instance HasProp Horizontal List where
+    type Prop Horizontal List = Bool
     getProp _ = horizontal
     setProp _ h l = l { horizontal = h }
 
-instance HasProp Inverted (List ms) where
-    type Prop Inverted (List ms) = Bool
+instance HasProp Inverted List where
+    type Prop Inverted List = Bool
     getProp _ = inverted
     setProp _ i l = l { inverted = i }
 
-instance HasProp Link (List ms) where
-    type Prop Link (List ms) = Bool
+instance HasProp Link List where
+    type Prop Link List = Bool
     getProp _ = link
     setProp _ lnk l = l { link = lnk }
 
-instance HasProp Ordered (List ms) where
-    type Prop Ordered (List ms) = Bool
+instance HasProp Ordered List where
+    type Prop Ordered List = Bool
     getProp _ = ordered
     setProp _ o l = l { ordered = o }
 
-instance HasProp Relaxed (List ms) where
-    type Prop Relaxed (List ms) = Maybe Txt
+instance HasProp Relaxed List where
+    type Prop Relaxed List = Maybe Txt
     getProp _ = relaxed
     setProp _ r l = l { relaxed = r }
 
-instance HasProp Selection (List ms) where
-    type Prop Selection (List ms) = Bool
+instance HasProp Selection List where
+    type Prop Selection List = Bool
     getProp _ = selection
     setProp _ s l = l { selection = s }
 
-instance HasProp Size (List ms) where
-    type Prop Size (List ms) = Txt
+instance HasProp Size List where
+    type Prop Size List = Txt
     getProp _ = size
     setProp _ s l = l { size = s }
 
-instance HasProp VerticalAlign (List ms) where
-    type Prop VerticalAlign (List ms) = Txt
+instance HasProp VerticalAlign List where
+    type Prop VerticalAlign List = Txt
     getProp _ = verticalAlign
     setProp _ va l = l { verticalAlign = va }
 
-data Content ms = Content_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data Content = Content_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     , floated :: Txt
     , verticalAlign :: Txt
     } deriving (Generic)
 
-instance Default (Content ms) where
-    def = (G.to gdef) { as = Div }
+instance Default Content where
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
-pattern Content :: Content ms -> View ms
-pattern Content lc = View lc
+pattern Content :: Content -> Content
+pattern Content lc = lc
 
 instance Pure Content ms where
     render Content_ {..} =
@@ -226,125 +215,100 @@ instance Pure Content ms where
                 ( floated # (floated <>> "floated")
                 : verticalAlign # (verticalAlign <>> "aligned")
                 : "content"
-                : classes
                 )
         in
             as
-                ( mergeClasses $ ClassList cs
                 : attributes
                 )
                 children
 
-instance HasProp As (Content ms) where
-    type Prop As (Content ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Content where
+    type Prop As Content = Features -> [View] -> View
     getProp _ = as
     setProp _ f lc = lc { as = f }
 
-instance HasProp Attributes (Content ms) where
-    type Prop Attributes (Content ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ cs lc = lc { attributes = cs }
+instance HasFeatures Content where
+    getFeatures = features
+    setFeatures cs lc = lc { features = cs }
 
-instance HasProp Children (Content ms) where
-    type Prop Children (Content ms) = [View ms]
-    getProp _ = children
-    setProp _ cs lc = lc { children = cs }
+instance HasChildren Content where
+    getChildren = children
+    setChildren cs lc = lc { children = cs }
 
-instance HasProp Classes (Content ms) where
-    type Prop Classes (Content ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs lc = lc { classes = cs }
 
-instance HasProp Floated (Content ms) where
-    type Prop Floated (Content ms) = Txt
+instance HasProp Floated Content where
+    type Prop Floated Content = Txt
     getProp _ = floated
     setProp _ f lc = lc { floated = f }
 
-instance HasProp VerticalAlign (Content ms) where
-    type Prop VerticalAlign (Content ms) = Txt
+instance HasProp VerticalAlign Content where
+    type Prop VerticalAlign Content = Txt
     getProp _ = verticalAlign
     setProp _ va lc = lc { verticalAlign = va }
 
-data Description ms = Description_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data Description = Description_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     } deriving (Generic)
 
-instance Default (Description ms) where
-    def = (G.to gdef) { as = Div }
+instance Default Description where
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
-pattern Description :: Description ms -> View ms
-pattern Description ld = View ld
+pattern Description :: Description -> Description
+pattern Description ld = ld
 
 instance Pure Description ms where
     render Description_ {..} =
-        as ( ClassList (classes ++ [ "description" ]) : attributes ) children
 
-instance HasProp As (Description ms) where
-    type Prop As (Description ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Description where
+    type Prop As Description = Features -> [View] -> View
     getProp _ = as
     setProp _ f ld = ld { as = f }
 
-instance HasProp Attributes (Description ms) where
-    type Prop Attributes (Description ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ cs ld = ld { attributes = cs }
+instance HasFeatures Description where
+    getFeatures = features
+    setFeatures cs ld = ld { features = cs }
 
-instance HasProp Children (Description ms) where
-    type Prop Children (Description ms) = [View ms]
-    getProp _ = children
-    setProp _ cs ld = ld { children = cs }
+instance HasChildren Description where
+    getChildren = children
+    setChildren cs ld = ld { children = cs }
 
-instance HasProp Classes (Description ms) where
-    type Prop Classes (Description ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs ld = ld { classes = cs }
 
-data Header ms = Header_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data Header = Header_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     } deriving (Generic)
 
-instance Default (Header ms) where
+instance Default Header where
     def = (G.to gdef) { as = Div }
 
-pattern Header :: Header ms -> View ms
-pattern Header lh = View lh
+pattern Header :: Header -> Header
+pattern Header lh = lh
 
 instance Pure Header ms where
     render Header_ {..} =
-        as ( ClassList ( "header" : classes ) : attributes ) children
 
-instance HasProp As (Header ms) where
-    type Prop As (Header ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Header where
+    type Prop As Header = Features -> [View] -> View
     getProp _ = as
     setProp _ f lh = lh { as = f }
 
-instance HasProp Attributes (Header ms) where
-    type Prop Attributes (Header ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ cs lh = lh { attributes = cs }
+instance HasFeatures Header where
+    getFeatures = features
+    setFeatures cs lh = lh { features = cs }
 
-instance HasProp Children (Header ms) where
-    type Prop Children (Header ms) = [View ms]
-    getProp _ = children
-    setProp _ cs lh = lh { children = cs }
+instance HasChildren Header where
+    getChildren = children
+    setChildren cs lh = lh { children = cs }
 
-instance HasProp Classes (Header ms) where
-    type Prop Classes (Header ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs lh = lh { classes = cs }
 
-data Icon ms = Icon_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
+data Icon = Icon_
+    { as :: Features -> [View] -> View
+    , features :: Features
     , bordered :: Bool
     , circular :: Bool
-    , classes :: [Txt]
     , color :: Txt
     , corner :: Bool
     , disabled :: Bool
@@ -359,11 +323,11 @@ data Icon ms = Icon_
     , verticalAlign :: Txt
     } deriving (Generic)
 
-instance Default (Icon ms) where
+instance Default Icon where
     def = (G.to gdef) { as = I }
 
-pattern Icon :: Icon ms -> View ms
-pattern Icon li = View li
+pattern Icon :: Icon -> Icon
+pattern Icon li = li
 
 instance Pure Icon ms where
     render Icon_ {..} =
@@ -384,116 +348,108 @@ instance Pure Icon ms where
                 : rotated # ("rotated" <<>> rotated)
                 : verticalAlign # (verticalAlign <>> "aligned")
                 : "icon"
-                : classes
                 )
         in
             as
-                ( mergeClasses $ ClassList cs
                 : attributes
                 )
                 []
 
-instance HasProp As (Icon ms) where
-    type Prop As (Icon ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Icon where
+    type Prop As Icon = Features -> [View] -> View
     getProp _ = as
     setProp _ f li = li { as = f }
 
-instance HasProp Attributes (Icon ms) where
-    type Prop Attributes (Icon ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ cs li = li { attributes = cs }
+instance HasFeatures Icon where
+    getFeatures = features
+    setFeatures cs li = li { features = cs }
 
-instance HasProp Bordered (Icon ms) where
-    type Prop Bordered (Icon ms) = Bool
+instance HasProp Bordered Icon where
+    type Prop Bordered Icon = Bool
     getProp _ = bordered
     setProp _ b li = li { bordered = b }
 
-instance HasProp Circular (Icon ms) where
-    type Prop Circular (Icon ms) = Bool
+instance HasProp Circular Icon where
+    type Prop Circular Icon = Bool
     getProp _ = circular
     setProp _ c li = li { circular = c }
 
-instance HasProp Name (Icon ms) where
-    type Prop Name (Icon ms) = Txt
+instance HasProp Name Icon where
+    type Prop Name Icon = Txt
     getProp _ = name
     setProp _ n li = li { name = n }
 
-instance HasProp Classes (Icon ms) where
-    type Prop Classes (Icon ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs li = li { classes = cs }
 
-instance HasProp Color (Icon ms) where
-    type Prop Color (Icon ms) = Txt
+instance HasProp Color Icon where
+    type Prop Color Icon = Txt
     getProp _ = color
     setProp _ c li = li { color = c }
 
-instance HasProp Corner (Icon ms) where
-    type Prop Corner (Icon ms) = Bool
+instance HasProp Corner Icon where
+    type Prop Corner Icon = Bool
     getProp _ = corner
     setProp _ c li = li { corner = c }
 
-instance HasProp Disabled (Icon ms) where
-    type Prop Disabled (Icon ms) = Bool
+instance HasProp Disabled Icon where
+    type Prop Disabled Icon = Bool
     getProp _ = disabled
     setProp _ d li = li { disabled = d }
 
-instance HasProp Fitted (Icon ms) where
-    type Prop Fitted (Icon ms) = Bool
+instance HasProp Fitted Icon where
+    type Prop Fitted Icon = Bool
     getProp _ = fitted
     setProp _ f li = li { fitted = f }
 
-instance HasProp Flipped (Icon ms) where
-    type Prop Flipped (Icon ms) = Txt
+instance HasProp Flipped Icon where
+    type Prop Flipped Icon = Txt
     getProp _ = flipped
     setProp _ f li = li { flipped = f }
 
-instance HasProp Inverted (Icon ms) where
-    type Prop Inverted (Icon ms) = Bool
+instance HasProp Inverted Icon where
+    type Prop Inverted Icon = Bool
     getProp _ = inverted
     setProp _ i li = li { inverted = i }
 
-instance HasProp Link (Icon ms) where
-    type Prop Link (Icon ms) = Bool
+instance HasProp Link Icon where
+    type Prop Link Icon = Bool
     getProp _ = link
     setProp _ l li = li { link = l }
 
-instance HasProp Loading (Icon ms) where
-    type Prop Loading (Icon ms) = Bool
+instance HasProp Loading Icon where
+    type Prop Loading Icon = Bool
     getProp _ = loading
     setProp _ l li = li { loading = l }
 
-instance HasProp Rotated (Icon ms) where
-    type Prop Rotated (Icon ms) = Txt
+instance HasProp Rotated Icon where
+    type Prop Rotated Icon = Txt
     getProp _ = rotated
     setProp _ r li = li { rotated = r }
 
-instance HasProp Size (Icon ms) where
-    type Prop Size (Icon ms) = Txt
+instance HasProp Size Icon where
+    type Prop Size Icon = Txt
     getProp _ = size
     setProp _ s li = li { size = s }
 
-instance HasProp VerticalAlign (Icon ms) where
-    type Prop VerticalAlign (Icon ms) = Txt
+instance HasProp VerticalAlign Icon where
+    type Prop VerticalAlign Icon = Txt
     getProp _ = verticalAlign
     setProp _ va li = li { verticalAlign = va }
 
-data Item ms = Item_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data Item = Item_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     , active :: Bool
     , disabled :: Bool
     , onClick :: Ef ms IO ()
     , value :: Txt
     } deriving (Generic)
 
-instance Default (Item ms) where
+instance Default Item where
     def = (G.to gdef) { as = Div }
 
-pattern Item :: Item ms -> View ms
-pattern Item li = View li
+pattern Item :: Item -> Item
+pattern Item li = li
 
 instance Pure Item ms where
     render Item_ {..} =
@@ -506,13 +462,11 @@ instance Pure Item ms where
                 ( active # "active"
                 : disabled # "disabled"
                 : (not li) # "item"
-                : classes
                 )
 
             valueProp = li ? HTML.Value value $ Prop "data-value" value
         in
             as
-                ( mergeClasses $ HTML.onClick onClick
                 : valueProp
                 : ClassList cs
                 : Role "listitem"
@@ -520,58 +474,51 @@ instance Pure Item ms where
                 )
                 children
 
-instance HasProp Active (Item ms) where
-    type Prop Active (Item ms) = Bool
+instance HasProp Active Item where
+    type Prop Active Item = Bool
     getProp _ = active
     setProp _ a li = li { active = a }
 
-instance HasProp As (Item ms) where
-    type Prop As (Item ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Item where
+    type Prop As Item = Features -> [View] -> View
     getProp _ = as
     setProp _ f li = li { as = f }
 
-instance HasProp Attributes (Item ms) where
-    type Prop Attributes (Item ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ cs li = li { attributes = cs }
+instance HasFeatures Item where
+    getFeatures = features
+    setFeatures cs li = li { features = cs }
 
-instance HasProp Children (Item ms) where
-    type Prop Children (Item ms) = [View ms]
-    getProp _ = children
-    setProp _ cs li = li { children = cs }
+instance HasChildren Item where
+    getChildren = children
+    setChildren cs li = li { children = cs }
 
-instance HasProp Classes (Item ms) where
-    type Prop Classes (Item ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs li = li { classes = cs }
 
-instance HasProp OnClick (Item ms) where
-    type Prop OnClick (Item ms) = Ef ms IO ()
+instance HasProp OnClick Item where
+    type Prop OnClick Item = Ef ms IO ()
     getProp _ = onClick
     setProp _ oc li = li { onClick = oc }
 
-instance HasProp Disabled (Item ms) where
-    type Prop Disabled (Item ms) = Bool
+instance HasProp Disabled Item where
+    type Prop Disabled Item = Bool
     getProp _ = disabled
     setProp _ d li = li { disabled = d }
 
-instance HasProp Value (Item ms) where
-    type Prop Value (Item ms) = Txt
+instance HasProp Value Item where
+    type Prop Value Item = Txt
     getProp _ = value
     setProp _ v li = li { value = v }
 
-data Sublist ms = Sublist_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data Sublist = Sublist_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     } deriving (Generic)
 
-instance Default (Sublist ms) where
+instance Default Sublist where
     def = (G.to gdef) { as = Div }
 
-pattern Sublist :: Sublist ms -> View ms
-pattern Sublist ll = View ll
+pattern Sublist :: Sublist -> Sublist
+pattern Sublist ll = ll
 
 instance Pure Sublist ms where
     render Sublist_ {..} =
@@ -584,36 +531,28 @@ instance Pure Sublist ms where
 
         in
             as
-                ( ClassList ( proxy # "list" : classes )
                 : attributes
                 )
                 children
 
-instance HasProp As (Sublist ms) where
-    type Prop As (Sublist ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Sublist where
+    type Prop As Sublist = Features -> [View] -> View
     getProp _ = as
     setProp _ f ll = ll { as = f }
 
-instance HasProp Attributes (Sublist ms) where
-    type Prop Attributes (Sublist ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ cs ll = ll { attributes = cs }
+instance HasFeatures Sublist where
+    getFeatures = features
+    setFeatures cs ll = ll { features = cs }
 
-instance HasProp Children (Sublist ms) where
-    type Prop Children (Sublist ms) = [View ms]
-    getProp _ = children
-    setProp _ cs ll = ll { children = cs }
+instance HasChildren Sublist where
+    getChildren = children
+    setChildren cs ll = ll { children = cs }
 
-instance HasProp Classes (Sublist ms) where
-    type Prop Classes (Sublist ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs ll = ll { classes = cs }
 
-data Keyed ms = Keyed_
-    { as :: [Feature ms] -> [(Int,View ms)] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [(Int,View ms)]
-    , classes :: [Txt]
+data Keyed = Keyed_
+    { as :: Features -> [(Int,View)] -> View
+    , features :: Features
+    , children :: [(Int,View)]
     , animated :: Bool
     , bulleted :: Bool
     , celled :: Bool
@@ -630,13 +569,13 @@ data Keyed ms = Keyed_
     , verticalAlign :: Txt
     } deriving (Generic)
 
-instance Default (Keyed ms) where
+instance Default Keyed where
     def = (G.to gdef) { as = list Div }
 
-pattern Keyed :: VC ms => Keyed ms -> View ms
-pattern Keyed l = View l
+pattern Keyed :: Keyed -> Keyed
+pattern Keyed l = l
 
-instance VC ms => Pure Keyed ms where
+instance VC => Pure Keyed ms where
     render Keyed_ {..} =
         let
             children' =
@@ -661,101 +600,93 @@ instance VC ms => Pure Keyed ms where
                 : floated # (floated <>> "floated")
                 : verticalAlign # (verticalAlign <>> "aligned")
                 : "list"
-                : classes
                 )
         in
             as
-                ( mergeClasses $ ClassList cs
                 : attributes
                 )
                 children'
 
-instance HasProp Animated (Keyed ms) where
-    type Prop Animated (Keyed ms) = Bool
+instance HasProp Animated Keyed where
+    type Prop Animated Keyed = Bool
     getProp _ = animated
     setProp _ anim l = l { animated = anim }
 
-instance HasProp As (Keyed ms) where
-    type Prop As (Keyed ms) = [Feature ms] -> [(Int,View ms)] -> View ms
+instance HasProp As Keyed where
+    type Prop As Keyed = Features -> [(Int,View)] -> View
     getProp _ = as
     setProp _ f l = l { as = f }
 
-instance HasProp Attributes (Keyed ms) where
-    type Prop Attributes (Keyed ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ cs l = l { attributes = cs }
+instance HasFeatures Keyed where
+    getFeatures = features
+    setFeatures cs l = l { features = cs }
 
-instance HasProp Bulleted (Keyed ms) where
-    type Prop Bulleted (Keyed ms) = Bool
+instance HasProp Bulleted Keyed where
+    type Prop Bulleted Keyed = Bool
     getProp _ = bulleted
     setProp _ b l = l { bulleted = b }
 
-instance HasProp Celled (Keyed ms) where
-    type Prop Celled (Keyed ms) = Bool
+instance HasProp Celled Keyed where
+    type Prop Celled Keyed = Bool
     getProp _ = celled
     setProp _ c l = l { celled = c }
 
-instance HasProp Children (Keyed ms) where
-    type Prop Children (Keyed ms) = [(Int,View ms)]
-    getProp _ = children
-    setProp _ cs l = l { children = cs }
+instance HasChildren Keyed where
+    getChildren = children
+    setChildren cs l = l { children = cs }
 
-instance HasProp Classes (Keyed ms) where
-    type Prop Classes (Keyed ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs l = l { classes = cs }
 
-instance HasProp Divided (Keyed ms) where
-    type Prop Divided (Keyed ms) = Bool
+instance HasProp Divided Keyed where
+    type Prop Divided Keyed = Bool
     getProp _ = divided
     setProp _ d l = l { divided = d }
 
-instance HasProp OnClick (Keyed ms) where
-    type Prop OnClick (Keyed ms) = (Int,Item ms) -> Ef ms IO ()
+instance HasProp OnClick Keyed where
+    type Prop OnClick Keyed = (Int,Item ms) -> Ef ms IO ()
     getProp _ = onItemClick
     setProp _ oc l = l { onItemClick = oc }
 
-instance HasProp Floated (Keyed ms) where
-    type Prop Floated (Keyed ms) = Txt
+instance HasProp Floated Keyed where
+    type Prop Floated Keyed = Txt
     getProp _ = floated
     setProp _ f l = l { floated = f }
 
-instance HasProp Horizontal (Keyed ms) where
-    type Prop Horizontal (Keyed ms) = Bool
+instance HasProp Horizontal Keyed where
+    type Prop Horizontal Keyed = Bool
     getProp _ = horizontal
     setProp _ h l = l { horizontal = h }
 
-instance HasProp Inverted (Keyed ms) where
-    type Prop Inverted (Keyed ms) = Bool
+instance HasProp Inverted Keyed where
+    type Prop Inverted Keyed = Bool
     getProp _ = inverted
     setProp _ i l = l { inverted = i }
 
-instance HasProp Link (Keyed ms) where
-    type Prop Link (Keyed ms) = Bool
+instance HasProp Link Keyed where
+    type Prop Link Keyed = Bool
     getProp _ = link
     setProp _ lnk l = l { link = lnk }
 
-instance HasProp Ordered (Keyed ms) where
-    type Prop Ordered (Keyed ms) = Bool
+instance HasProp Ordered Keyed where
+    type Prop Ordered Keyed = Bool
     getProp _ = ordered
     setProp _ o l = l { ordered = o }
 
-instance HasProp Relaxed (Keyed ms) where
-    type Prop Relaxed (Keyed ms) = Maybe Txt
+instance HasProp Relaxed Keyed where
+    type Prop Relaxed Keyed = Maybe Txt
     getProp _ = relaxed
     setProp _ r l = l { relaxed = r }
 
-instance HasProp Selection (Keyed ms) where
-    type Prop Selection (Keyed ms) = Bool
+instance HasProp Selection Keyed where
+    type Prop Selection Keyed = Bool
     getProp _ = selection
     setProp _ s l = l { selection = s }
 
-instance HasProp Size (Keyed ms) where
-    type Prop Size (Keyed ms) = Txt
+instance HasProp Size Keyed where
+    type Prop Size Keyed = Txt
     getProp _ = size
     setProp _ s l = l { size = s }
 
-instance HasProp VerticalAlign (Keyed ms) where
-    type Prop VerticalAlign (Keyed ms) = Txt
+instance HasProp VerticalAlign Keyed where
+    type Prop VerticalAlign Keyed = Txt
     getProp _ = verticalAlign
     setProp _ va l = l { verticalAlign = va }

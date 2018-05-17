@@ -15,7 +15,7 @@ import Semantic.Utils
 
 import Semantic.Portal
 
-import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!), (%) )
+import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern CloseOnEscape, CloseOnEscape(..)
@@ -27,7 +27,6 @@ import Semantic.Properties as Properties
   , pattern As, As(..)
   , pattern Attributes, Attributes(..)
   , pattern Children, Children(..)
-  , pattern Classes, Classes(..)
   , pattern Active, Active(..)
   , pattern Disabled, Disabled(..)
   , pattern OnClick, OnClick(..)
@@ -42,11 +41,10 @@ import Semantic.Properties as Properties
 import Data.Function as Tools ((&))
 import Pure.Data.Default as Tools
 
-data Dimmer ms = Dimmer_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data Dimmer = Dimmer_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     , active :: Bool
     , disabled :: Bool
     , onClick :: Ef ms IO ()
@@ -56,13 +54,13 @@ data Dimmer ms = Dimmer_
     , simple :: Bool
     } deriving (Generic)
 
-instance Default (Dimmer ms) where
-    def = (G.to gdef) { as = Div }
+instance Default Dimmer where
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
-pattern Dimmer :: VC ms => Dimmer ms -> View ms
-pattern Dimmer d = View d
+pattern Dimmer :: VC => Dimmer -> VC
+pattern Dimmer d = d
 
-instance VC ms => Pure Dimmer ms where
+instance VC => Pure Dimmer ms where
     render d =
         Component "Semantic.Modules.Dimmer" d $ \self ->
             let
@@ -104,12 +102,10 @@ instance VC ms => Pure Dimmer ms where
                                 : page # "page"
                                 : simple # "simple"
                                 : "dimmer"
-                                : classes
                                 )
 
                             dimmer =
                                 as
-                                    ( mergeClasses $ ClassList cs
                                     : On "click" def (return . Just . handleClick)
                                     : attributes
                                     )
@@ -130,75 +126,68 @@ instance VC ms => Pure Dimmer ms where
                             else dimmer
                     }
 
-instance HasProp As (Dimmer ms) where
-    type Prop As (Dimmer ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Dimmer where
+    type Prop As Dimmer = Features -> [View] -> View
     getProp _ = as
     setProp _ a d = d { as = a }
 
-instance HasProp Attributes (Dimmer ms) where
-    type Prop Attributes (Dimmer ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ as d = d { attributes = as }
+instance HasFeatures Dimmer where
+    getFeatures = features
+    setFeatures as d = d { features = as }
 
-instance HasProp Children (Dimmer ms) where
-    type Prop Children (Dimmer ms) = [View ms]
-    getProp _ = children
-    setProp _ cs d = d { children = cs }
+instance HasChildren Dimmer where
+    getChildren = children
+    setChildren cs d = d { children = cs }
 
-instance HasProp Classes (Dimmer ms) where
-    type Prop Classes (Dimmer ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs d = d { classes = cs }
 
-instance HasProp Active (Dimmer ms) where
-    type Prop Active (Dimmer ms) = Bool
+instance HasProp Active Dimmer where
+    type Prop Active Dimmer = Bool
     getProp _ = active
     setProp _ a d = d { active = a }
 
-instance HasProp Disabled (Dimmer ms) where
-    type Prop Disabled (Dimmer ms) = Bool
+instance HasProp Disabled Dimmer where
+    type Prop Disabled Dimmer = Bool
     getProp _ = disabled
     setProp _ d a = a { disabled = d }
 
-instance HasProp OnClick (Dimmer ms) where
-    type Prop OnClick (Dimmer ms) = Ef ms IO ()
+instance HasProp OnClick Dimmer where
+    type Prop OnClick Dimmer = Ef ms IO ()
     getProp _ = onClick
     setProp _ oc d = d { onClick = oc }
 
-instance HasProp OnClickOutside (Dimmer ms) where
-    type Prop OnClickOutside (Dimmer ms) = Ef ms IO ()
+instance HasProp OnClickOutside Dimmer where
+    type Prop OnClickOutside Dimmer = Ef ms IO ()
     getProp _ = onClickOutside
     setProp _ oco d = d { onClickOutside = oco }
 
-instance HasProp Inverted (Dimmer ms) where
-    type Prop Inverted (Dimmer ms) = Bool
+instance HasProp Inverted Dimmer where
+    type Prop Inverted Dimmer = Bool
     getProp _ = inverted
     setProp _ i d = d { inverted = i }
 
-instance HasProp Page (Dimmer ms) where
-    type Prop Page (Dimmer ms) = Bool
+instance HasProp Page Dimmer where
+    type Prop Page Dimmer = Bool
     getProp _ = page
     setProp _ p d = d { page = p }
 
-instance HasProp Simple (Dimmer ms) where
-    type Prop Simple (Dimmer ms) = Bool
+instance HasProp Simple Dimmer where
+    type Prop Simple Dimmer = Bool
     getProp _ = simple
     setProp _ s d = d { simple = s }
 
-data Dimmable ms = Dimmable_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data Dimmable = Dimmable_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     , blurring :: Bool
     , dimmed :: Bool
     } deriving (Generic)
 
-instance Default (Dimmable ms) where
-    def = (G.to gdef) { as = Div }
+instance Default Dimmable where
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
-pattern Dimmable :: Dimmable ms -> View ms
-pattern Dimmable dd = View dd
+pattern Dimmable :: Dimmable -> Dimmable
+pattern Dimmable dd = dd
 
 instance Pure Dimmable ms where
     render Dimmable_ {..} =
@@ -207,41 +196,33 @@ instance Pure Dimmable ms where
                 ( blurring # "blurring"
                 : dimmed # "dimmed"
                 : "dimmable"
-                : classes
                 )
         in
             as
-                ( mergeClasses $ ClassList cs
                 : attributes
                 )
                 children
 
-instance HasProp As (Dimmable ms) where
-    type Prop As (Dimmable ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Dimmable where
+    type Prop As Dimmable = Features -> [View] -> View
     getProp _ = as
     setProp _ a dd = dd { as = a }
 
-instance HasProp Attributes (Dimmable ms) where
-    type Prop Attributes (Dimmable ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ as dd = dd { attributes = as }
+instance HasFeatures Dimmable where
+    getFeatures = features
+    setFeatures as dd = dd { features = as }
 
-instance HasProp Children (Dimmable ms) where
-    type Prop Children (Dimmable ms) = [View ms]
-    getProp _ = children
-    setProp _ cs dd = dd { children = cs }
+instance HasChildren Dimmable where
+    getChildren = children
+    setChildren cs dd = dd { children = cs }
 
-instance HasProp Classes (Dimmable ms) where
-    type Prop Classes (Dimmable ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs dd = dd { classes = cs }
 
-instance HasProp Blurring (Dimmable ms) where
-    type Prop Blurring (Dimmable ms) = Bool
+instance HasProp Blurring Dimmable where
+    type Prop Blurring Dimmable = Bool
     getProp _ = blurring
     setProp _ b dd = dd { blurring = b }
 
-instance HasProp Dimmed (Dimmable ms) where
-    type Prop Dimmed (Dimmable ms) = Bool
+instance HasProp Dimmed Dimmable where
+    type Prop Dimmed Dimmable = Bool
     getProp _ = dimmed
     setProp _ d dd = dd { dimmed = d }

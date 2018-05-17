@@ -70,13 +70,13 @@ pattern As :: HasProp As a => Prop As a -> a -> a
 pattern As p a <- (getProp As_ &&& id -> (p,a)) where
     As p a = setProp As_ p a
 
--- instance HasProp As (View ms) where
---     type Prop As (View ms) = [Feature ms] -> [View ms] -> View ms
+-- instance HasProp As (View) where
+--     type Prop As (View) = Features -> [View] -> View
 
 --     -- Note: For Managed, Component, Text, Null, and Raw views, this
 --     -- method just extracts a reinjector that ignores its arguments.
 --     -- For keyed nodes, KHTML and KSVG, this method will create a
---     -- `Constructor (View ms)` that adds indexes with (zip [0..]).
+--     -- `Constructor (View)` that adds indexes with (zip [0..]).
 --     getProp _ v = (As_,r)
 --       where
 --         r = case v of
@@ -190,11 +190,6 @@ data Circular = Circular_
 pattern Circular :: HasProp Circular a => Prop Circular a -> a -> a
 pattern Circular p a <- (getProp Circular_ &&& id -> (p,a)) where
     Circular p a = setProp Circular_ p a
-
-data Classes = Classes_
-pattern Classes :: (HasProp Classes a,Prop Classes a ~ [Txt]) => [Txt] -> a -> a
-pattern Classes p a <- (getProp Classes_ &&& id -> (p,a)) where
-    Classes p a = setProp Classes_ (getProp Classes_ a ++ p) a
 
 data Clearable = Clearable_
 pattern Clearable :: HasProp Clearable a => Prop Clearable a -> a -> a

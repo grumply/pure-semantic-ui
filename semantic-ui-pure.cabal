@@ -27,9 +27,13 @@ test-suite test
     pure-events >= 0.7 && < 1,
     pure-html >= 0.7 && < 1,
     pure-lifted >= 0.7 && < 1,
+    pure-styles >= 0.7 && < 1,
     pure-txt >= 0.7 && < 1
 
   default-language: Haskell2010
+
+  default-extensions:
+    OverloadedStrings
 
 library
   hs-source-dirs:
@@ -43,6 +47,7 @@ library
     pure-events >= 0.7 && < 1,
     pure-html >= 0.7 && < 1,
     pure-lifted >= 0.7 && < 1,
+    pure-styles >= 0.7 && < 1,
     pure-txt >= 0.7 && < 1
 
   default-extensions:
@@ -78,17 +83,17 @@ library
     -- Semantic.TextArea
     -- Semantic.TransitionablePortal
     -- Semantic.Visibility
-    -- Semantic.Breadcrumb
+    Semantic.Breadcrumb
     -- Semantic.Form
     -- Semantic.Grid
     -- Semantic.Menu
     -- Semantic.Message
     -- Semantic.Table
-    -- Semantic.Button
+    Semantic.Button
     -- Semantic.Container
     -- Semantic.Divider
     -- Semantic.Flag
-    -- Semantic.Header
+    Semantic.Header
     Semantic.Icon
     Semantic.Image
     -- Semantic.Input
@@ -99,7 +104,7 @@ library
     -- Semantic.Reveal
     -- Semantic.Segment
     -- Semantic.Step
-    -- Semantic.Accordion
+    Semantic.Accordion
     -- Semantic.Checkbox
     -- Semantic.Dimmer
     -- Semantic.Dropdown
@@ -115,7 +120,7 @@ library
     -- Semantic.Transition
     Semantic.Properties
     Semantic.Utils
-    -- Semantic.Advertisement
+    Semantic.Advertisement
     -- Semantic.Card
     -- Semantic.Comment
     -- Semantic.Feed

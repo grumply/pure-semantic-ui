@@ -13,13 +13,12 @@ import Pure.View hiding (animation,direction,visible,width)
 
 import Semantic.Utils
 
-import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!), (%) )
+import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)
   , pattern Attributes, Attributes(..)
   , pattern Children, Children(..)
-  , pattern Classes, Classes(..)
   , pattern Animation, Animation(..)
   , pattern Direction, Direction(..)
   , pattern Visible, Visible(..)
@@ -35,11 +34,10 @@ import Semantic.Properties as Properties
 import Data.Function as Tools ((&))
 import Pure.Data.Default as Tools
 
-data Sidebar ms = Sidebar_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data Sidebar = Sidebar_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     , animation :: Txt
     , direction :: Txt
     , duration :: AnimationDuration
@@ -47,15 +45,15 @@ data Sidebar ms = Sidebar_
     , width :: Txt
     } deriving (Generic)
 
-instance Default (Sidebar ms) where
+instance Default Sidebar where
     def = (G.to gdef)
         { as = Div
         , direction = "left"
         , duration = Uniform 500
         }
 
-pattern Sidebar :: Sidebar ms -> View ms
-pattern Sidebar sb = View sb
+pattern Sidebar :: Sidebar -> Sidebar
+pattern Sidebar sb = sb
 
 data SidebarState = SS
     { animating :: Bool
@@ -95,121 +93,103 @@ instance Pure Sidebar ms where
                             : animating # "animating"
                             : visible # "visible"
                             : "sidebar"
-                            : classes
                             )
                     in
                         as
-                            ( mergeClasses $ ClassList cs
                             : attributes
                             )
                             children
                 }
 
-instance HasProp As (Sidebar ms) where
-    type Prop As (Sidebar ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Sidebar where
+    type Prop As Sidebar = Features -> [View] -> View
     getProp _ = as
     setProp _ f sb = sb { as = f }
 
-instance HasProp Attributes (Sidebar ms) where
-    type Prop Attributes (Sidebar ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ cs sb = sb { attributes = cs }
+instance HasFeatures Sidebar where
+    getFeatures = features
+    setFeatures cs sb = sb { features = cs }
 
-instance HasProp Children (Sidebar ms) where
-    type Prop Children (Sidebar ms) = [View ms]
-    getProp _ = children
-    setProp _ cs sb = sb { children = cs }
+instance HasChildren Sidebar where
+    getChildren = children
+    setChildren cs sb = sb { children = cs }
 
-instance HasProp Classes (Sidebar ms) where
-    type Prop Classes (Sidebar ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs sb = sb { classes = cs }
 
-instance HasProp Animation (Sidebar ms) where
-    type Prop Animation (Sidebar ms) = Txt
+instance HasProp Animation Sidebar where
+    type Prop Animation Sidebar = Txt
     getProp _ = animation
     setProp _ a sb = sb { animation = a }
 
-instance HasProp Direction (Sidebar ms) where
-    type Prop Direction (Sidebar ms) = Txt
+instance HasProp Direction Sidebar where
+    type Prop Direction Sidebar = Txt
     getProp _ = direction
     setProp _ d sb = sb { direction = d }
 
-instance HasProp AnimationDuration (Sidebar ms) where
-    type Prop AnimationDuration (Sidebar ms) = AnimationDuration
+instance HasProp AnimationDuration Sidebar where
+    type Prop AnimationDuration Sidebar = AnimationDuration
     getProp _ = duration
     setProp _ d sb = sb { duration = d }
 
-instance HasProp Visible (Sidebar ms) where
-    type Prop Visible (Sidebar ms) = Bool
+instance HasProp Visible Sidebar where
+    type Prop Visible Sidebar = Bool
     getProp _ = visible
     setProp _ v sb = sb { visible = v }
 
-instance HasProp Width (Sidebar ms) where
-    type Prop Width (Sidebar ms) = Txt
+instance HasProp Width Sidebar where
+    type Prop Width Sidebar = Txt
     getProp _ = width
     setProp _ w sb = sb { width = w }
 
-data Pushable ms = Pushable_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data Pushable = Pushable_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     } deriving (Generic)
 
-instance Default (Pushable ms) where
-    def = (G.to gdef) { as = Div }
+instance Default Pushable where
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
-pattern Pushable :: Pushable ms -> View ms
-pattern Pushable sp = View sp
+pattern Pushable :: Pushable -> Pushable
+pattern Pushable sp = sp
 
 instance Pure Pushable ms where
     render Pushable_ {..} =
         let
             cs =
                 ( "pushable"
-                : classes
                 )
         in
             as
-                ( mergeClasses $ ClassList cs
                 : attributes
                 )
                 children
 
-instance HasProp As (Pushable ms) where
-    type Prop As (Pushable ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Pushable where
+    type Prop As Pushable = Features -> [View] -> View
     getProp _ = as
     setProp _ a sp = sp { as = a }
 
-instance HasProp Attributes (Pushable ms) where
-    type Prop Attributes (Pushable ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ as sp = sp { attributes = as }
+instance HasFeatures Pushable where
+    getFeatures = features
+    setFeatures as sp = sp { features = as }
 
-instance HasProp Children (Pushable ms) where
-    type Prop Children (Pushable ms) = [View ms]
-    getProp _ = children
-    setProp _ cs sp = sp { children = cs }
+instance HasChildren Pushable where
+    getChildren = children
+    setChildren cs sp = sp { children = cs }
 
-instance HasProp Classes (Pushable ms) where
-    type Prop Classes (Pushable ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs sp = sp { classes = cs }
 
-data Pusher ms = Pusher_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data Pusher = Pusher_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     , dimmed :: Bool
     } deriving (Generic)
 
-instance Default (Pusher ms) where
-    def = (G.to gdef) { as = Div }
+instance Default Pusher where
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
-pattern Pusher :: Pusher ms -> View ms
-pattern Pusher sp = View sp
+pattern Pusher :: Pusher -> Pusher
+pattern Pusher sp = sp
 
 instance Pure Pusher ms where
     render Pusher_ {..} =
@@ -217,36 +197,28 @@ instance Pure Pusher ms where
             cs =
                 ( "pusher"
                 : dimmed # "dimmed"
-                : classes
                 )
         in
             as
-                ( mergeClasses $ ClassList cs
                 : attributes
                 )
                 children
 
-instance HasProp As (Pusher ms) where
-    type Prop As (Pusher ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Pusher where
+    type Prop As Pusher = Features -> [View] -> View
     getProp _ = as
     setProp _ a sp = sp { as = a }
 
-instance HasProp Attributes (Pusher ms) where
-    type Prop Attributes (Pusher ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ as sp = sp { attributes = as }
+instance HasFeatures Pusher where
+    getFeatures = features
+    setFeatures as sp = sp { features = as }
 
-instance HasProp Children (Pusher ms) where
-    type Prop Children (Pusher ms) = [View ms]
-    getProp _ = children
-    setProp _ cs sp = sp { children = cs }
+instance HasChildren Pusher where
+    getChildren = children
+    setChildren cs sp = sp { children = cs }
 
-instance HasProp Classes (Pusher ms) where
-    type Prop Classes (Pusher ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs sp = sp { classes = cs }
 
-instance HasProp Dimmed (Pusher ms) where
-    type Prop Dimmed (Pusher ms) = Bool
+instance HasProp Dimmed Pusher where
+    type Prop Dimmed Pusher = Bool
     getProp _ = dimmed
     setProp _ d sp = sp { dimmed = d }

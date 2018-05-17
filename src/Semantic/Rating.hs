@@ -11,7 +11,7 @@ import Pure.View hiding (disabled,OnClick,OnMouseEnter,Selected,onKeyUp,onClick,
 
 import Semantic.Utils
 
-import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!), (%) )
+import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern Active, Active(..)
@@ -22,7 +22,6 @@ import Semantic.Properties as Properties
   , pattern As, As(..)
   , pattern Attributes, Attributes(..)
   , pattern Children, Children(..)
-  , pattern Classes, Classes(..)
   , pattern Clearable, Clearable(..)
   , pattern CurrentRating, CurrentRating(..)
   , pattern DefaultRating, DefaultRating(..)
@@ -37,11 +36,10 @@ import Semantic.Properties as Properties
 import Data.Function as Tools ((&))
 import Pure.Data.Default as Tools
 
-data Rating ms = Rating_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data Rating = Rating_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     , clearable :: Maybe Txt
     , defaultRating :: Maybe Int
     , disabled :: Bool
@@ -52,11 +50,11 @@ data Rating ms = Rating_
     , size :: Txt
     } deriving (Generic)
 
-instance Default (Rating ms) where
-    def = (G.to gdef) { as = Div, clearable = Just "auto", maxRating = 1 }
+instance Default Rating where
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs, clearable = Just "auto", maxRating = 1 }
 
-pattern Rating :: VC ms => Rating ms -> View ms
-pattern Rating r = View r
+pattern Rating :: Rating -> Rating
+pattern Rating r = r
 
 data RatingState = RS
     { currentRating :: Maybe Int
@@ -64,7 +62,7 @@ data RatingState = RS
     , isSelecting :: Bool
     }
 
-instance VC ms => Pure Rating ms where
+instance VC => Pure Rating ms where
     render r =
         Component "Semantic.Modules.Rating" r $ \self ->
             let
@@ -120,11 +118,9 @@ instance VC ms => Pure Rating ms where
                             : disabled # "disabled"
                             : (isSelecting && not disabled && selectedIndex >= Just 1) # "selected"
                             : "rating"
-                            : classes
                             )
                     in
                         as
-                            ( mergeClasses $ ClassList cs
                             : Role "radiogroup"
                             : On "mouseleave" def (\_ -> handleMouseLeave)
                             : attributes
@@ -139,70 +135,63 @@ instance VC ms => Pure Rating ms where
                             )
                 }
 
-instance HasProp As (Rating ms) where
-    type Prop As (Rating ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Rating where
+    type Prop As Rating = Features -> [View] -> View
     getProp _ = as
     setProp _ a r = r { as = a }
 
-instance HasProp Attributes (Rating ms) where
-    type Prop Attributes (Rating ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ as r = r { attributes = as }
+instance HasFeatures Rating where
+    getFeatures = features
+    setFeatures as r = r { features = as }
 
-instance HasProp Children (Rating ms) where
-    type Prop Children (Rating ms) = [View ms]
-    getProp _ = children
-    setProp _ cs r = r { children = cs }
+instance HasChildren Rating where
+    getChildren = children
+    setChildren cs r = r { children = cs }
 
-instance HasProp Classes (Rating ms) where
-    type Prop Classes (Rating ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs r = r { classes = cs }
 
-instance HasProp Clearable (Rating ms) where
-    type Prop Clearable (Rating ms) = Maybe Txt
+instance HasProp Clearable Rating where
+    type Prop Clearable Rating = Maybe Txt
     getProp _ = clearable
     setProp _ c r = r { clearable = c }
 
-instance HasProp DefaultRating (Rating ms) where
-    type Prop DefaultRating (Rating ms) = Maybe Int
+instance HasProp DefaultRating Rating where
+    type Prop DefaultRating Rating = Maybe Int
     getProp _ = defaultRating
     setProp _ dr r = r { defaultRating = dr }
 
-instance HasProp Disabled (Rating ms) where
-    type Prop Disabled (Rating ms) = Bool
+instance HasProp Disabled Rating where
+    type Prop Disabled Rating = Bool
     getProp _ = disabled
     setProp _ d r = r { disabled = d }
 
-instance HasProp IsIcon (Rating ms) where
-    type Prop IsIcon (Rating ms) = Txt
+instance HasProp IsIcon Rating where
+    type Prop IsIcon Rating = Txt
     getProp _ = icon
     setProp _ i r = r { icon = i }
 
-instance HasProp MaxRating (Rating ms) where
-    type Prop MaxRating (Rating ms) = Int
+instance HasProp MaxRating Rating where
+    type Prop MaxRating Rating = Int
     getProp _ = maxRating
     setProp _ mr r = r { maxRating = mr }
 
-instance HasProp OnRate (Rating ms) where
-    type Prop OnRate (Rating ms) = Maybe Int -> Ef ms IO ()
+instance HasProp OnRate Rating where
+    type Prop OnRate Rating = Maybe Int -> Ef ms IO ()
     getProp _ = onRate
     setProp _ or r = r { onRate = or }
 
-instance HasProp CurrentRating (Rating ms) where
-    type Prop CurrentRating (Rating ms) = Maybe Int
+instance HasProp CurrentRating Rating where
+    type Prop CurrentRating Rating = Maybe Int
     getProp _ = rating
     setProp _ cr r = r { rating = cr }
 
-instance HasProp Size (Rating ms) where
-    type Prop Size (Rating ms) = Txt
+instance HasProp Size Rating where
+    type Prop Size Rating = Txt
     getProp _ = size
     setProp _ s r = r { size = s }
 
-data Icon ms = Icon_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , classes :: [Txt]
+data Icon = Icon_
+    { as :: Features -> [View] -> View
+    , features :: Features
     , active :: Bool
     , index :: Int
     , onClick :: Int -> Ef ms IO ()
@@ -211,10 +200,10 @@ data Icon ms = Icon_
     , selected :: Bool
     } deriving (Generic)
 
-instance Default (Icon ms) where
-    def = (G.to gdef) { as = I }
+instance Default Icon where
+    def = (G.to gdef) { as = \fs cs -> I & Features fs & Children cs }
 
-pattern Icon :: VC ms => Icon ms -> View ms
+pattern Icon :: VC ms => Icon ms -> View
 pattern Icon ri = View ri
 
 instance VC ms => Pure Icon ms where
@@ -240,12 +229,10 @@ instance VC ms => Pure Icon ms where
                 ( active # "active"
                 : selected # "selected"
                 : "icon"
-                : classes
                 )
 
         in
             as
-                ( mergeClasses $ ClassList cs
                 : On "click" def handleClick
                 : On "keyup" def handleKeyUp
                 : On "mouseenter" def handleMouseEnter
@@ -255,47 +242,42 @@ instance VC ms => Pure Icon ms where
                 )
                 []
 
-instance HasProp As (Icon ms) where
-    type Prop As (Icon ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Icon where
+    type Prop As Icon = Features -> [View] -> View
     getProp _ = as
     setProp _ a ri = ri { as = a }
 
-instance HasProp Attributes (Icon ms) where
-    type Prop Attributes (Icon ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ as ri = ri { attributes = as }
+instance HasFeatures Icon where
+    getFeatures = features
+    setFeatures as ri = ri { features = as }
 
-instance HasProp Classes (Icon ms) where
-    type Prop Classes (Icon ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs ri = ri { classes = cs }
 
-instance HasProp Active (Icon ms) where
-    type Prop Active (Icon ms) = Bool
+instance HasProp Active Icon where
+    type Prop Active Icon = Bool
     getProp _ = active
     setProp _ a ri = ri { active = a }
 
-instance HasProp Index (Icon ms) where
-    type Prop Index (Icon ms) = Int
+instance HasProp Index Icon where
+    type Prop Index Icon = Int
     getProp _ = index
     setProp _ i ri = ri { index = i }
 
-instance HasProp OnClick (Icon ms) where
-    type Prop OnClick (Icon ms) = Int -> Ef ms IO ()
+instance HasProp OnClick Icon where
+    type Prop OnClick Icon = Int -> Ef ms IO ()
     getProp _ = onClick
     setProp _ oc ri = ri { onClick = oc }
 
-instance HasProp OnKeyUp (Icon ms) where
-    type Prop OnKeyUp (Icon ms) = Int -> Evt -> Ef ms IO ()
+instance HasProp OnKeyUp Icon where
+    type Prop OnKeyUp Icon = Int -> Evt -> Ef ms IO ()
     getProp _ = onKeyUp
     setProp _ oku ri = ri { onKeyUp = oku }
 
-instance HasProp OnMouseEnter (Icon ms) where
-    type Prop OnMouseEnter (Icon ms) = Int -> Ef ms IO ()
+instance HasProp OnMouseEnter Icon where
+    type Prop OnMouseEnter Icon = Int -> Ef ms IO ()
     getProp _ = onMouseEnter
     setProp _ ome ri = ri { onMouseEnter = ome }
 
-instance HasProp Selected (Icon ms) where
-    type Prop Selected (Icon ms) = Bool
+instance HasProp Selected Icon where
+    type Prop Selected Icon = Bool
     getProp _ = selected
     setProp _ s ri = ri { selected = s }

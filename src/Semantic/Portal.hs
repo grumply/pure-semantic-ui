@@ -19,12 +19,11 @@ import Semantic.Utils
 
 import Semantic.Proxy
 
-import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!), (%) )
+import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern Attributes, Attributes(..)
   , pattern Children, Children(..)
-  , pattern Classes, Classes(..)
   , pattern CloseOnDocumentClick, CloseOnDocumentClick(..)
   , pattern CloseOnEscape, CloseOnEscape(..)
   , pattern CloseOnPortalMouseLeave, CloseOnPortalMouseLeave(..)
@@ -55,10 +54,9 @@ import Pure.Data.Default as Tools
 -- used safely
 import Unsafe.Coerce
 
-data Portal ms = Portal_
-    { attributes               :: [Feature ms]
-    , children                 :: [View ms]
-    , classes                  :: [Txt]
+data Portal = Portal_
+    { attributes               :: Features
+    , children                 :: [View]
     , closeOnDocumentClick     :: Bool
     , closeOnEscape            :: Bool
     , closeOnPortalMouseLeave  :: Bool
@@ -79,25 +77,25 @@ data Portal ms = Portal_
     , openOnTriggerFocus       :: Bool
     , openOnTriggerMouseEnter  :: Bool
     , prepend                  :: Bool
-    , trigger                  :: View ms
+    , trigger                  :: View
     } deriving (Generic)
 
-instance Default (Portal ms) where
+instance Default Portal where
     def = (G.to gdef)
             { closeOnDocumentClick = True
             , closeOnEscape        = True
             , openOnTriggerClick   = True
             }
 
-pattern Portal :: Portal ms -> View ms
-pattern Portal p = View p
+pattern Portal :: Portal -> Portal
+pattern Portal p = p
 
-data PortalState ms = PS
+data PortalState = PS
     { active   :: Bool
     , nodes    :: IORef PortalStateNodes
     , timers   :: IORef PortalStateTimers
     , handlers :: IORef PortalStateHandlers
-    , liveView :: IORef (View ms,View ms)
+    , liveView :: IORef (View,View)
     }
 
 data PortalStateHandlers = PSH
@@ -219,7 +217,6 @@ instance Pure Portal ms where
                         PSN {..} <- readIORef nodes
                         PSH {..} <- readIORef handlers
                         for_ rootNode $ \n ->
-                            classes # setProperty (Element n) "className" (Txt.unwords classes)
                         mouseLeaveHandler
                         mouseEnterHandler
                         let chld = only children
@@ -242,13 +239,10 @@ instance Pure Portal ms where
                                 , ..
                                 }
 
-                diffPortal updateRootClasses = do
                     PS {..} <- getState self
                     Portal_ {..} <- getProps self
-                    updateRootClasses # do
                         PSN {..} <- readIORef nodes
                         for_ rootNode $ \n ->
-                            classes # setProperty (Element n) "className" (Txt.unwords classes)
                     active # do
                         (mid,old) <- readIORef liveView
                         mtd  <- newIORef (return ())
@@ -329,8 +323,6 @@ instance Pure Portal ms where
                           (open newprops /= open oldprops)
                             ? oldstate { active = open newprops }
                             $ oldstate
-                    , updated = \(classes -> oldCs) (active -> wasOpen@(not -> wasClosed)) _ -> do
-                        (classes -> newCs) <- getProps self
                         (active -> nowOpen@(not -> nowClosed)) <- getState self
                         if | wasClosed && nowOpen -> renderPortal
                            | wasOpen && nowClosed -> unmountPortal
@@ -356,122 +348,116 @@ instance Pure Portal ms where
                             )
                     }
 
-instance HasProp Attributes (Portal ms) where
-    type Prop Attributes (Portal ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ as p = p { attributes = as }
+instance HasFeatures Portal where
+    getFeatures = features
+    setFeatures as p = p { features = as }
 
-instance HasProp Children (Portal ms) where
-    type Prop Children (Portal ms) = [View ms]
-    getProp _ = children
-    setProp _ cs p = p { children = cs }
+instance HasChildren Portal where
+    getChildren = children
+    setChildren cs p = p { children = cs }
 
-instance HasProp Classes (Portal ms) where
-    type Prop Classes (Portal ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs p = p { classes = cs }
 
-instance HasProp CloseOnDocumentClick (Portal ms) where
-    type Prop CloseOnDocumentClick (Portal ms) = Bool
+instance HasProp CloseOnDocumentClick Portal where
+    type Prop CloseOnDocumentClick Portal = Bool
     getProp _ = closeOnDocumentClick
     setProp _ codc p = p { closeOnDocumentClick = codc }
 
-instance HasProp CloseOnEscape (Portal ms) where
-    type Prop CloseOnEscape (Portal ms) = Bool
+instance HasProp CloseOnEscape Portal where
+    type Prop CloseOnEscape Portal = Bool
     getProp _ = closeOnEscape
     setProp _ coe p = p { closeOnEscape = coe }
 
-instance HasProp CloseOnPortalMouseLeave (Portal ms) where
-    type Prop CloseOnPortalMouseLeave (Portal ms) = Bool
+instance HasProp CloseOnPortalMouseLeave Portal where
+    type Prop CloseOnPortalMouseLeave Portal = Bool
     getProp _ = closeOnPortalMouseLeave
     setProp _ copml p = p { closeOnPortalMouseLeave = copml }
 
-instance HasProp CloseOnRootNodeClick (Portal ms) where
-    type Prop CloseOnRootNodeClick (Portal ms) = Bool
+instance HasProp CloseOnRootNodeClick Portal where
+    type Prop CloseOnRootNodeClick Portal = Bool
     getProp _ = closeOnRootNodeClick
     setProp _ cornc p = p { closeOnRootNodeClick = cornc }
 
-instance HasProp CloseOnTriggerBlur (Portal ms) where
-    type Prop CloseOnTriggerBlur (Portal ms) = Bool
+instance HasProp CloseOnTriggerBlur Portal where
+    type Prop CloseOnTriggerBlur Portal = Bool
     getProp _ = closeOnTriggerBlur
     setProp _ cotb p = p { closeOnTriggerBlur = cotb }
 
-instance HasProp CloseOnTriggerClick (Portal ms) where
-    type Prop CloseOnTriggerClick (Portal ms) = Bool
+instance HasProp CloseOnTriggerClick Portal where
+    type Prop CloseOnTriggerClick Portal = Bool
     getProp _ = closeOnTriggerClick
     setProp _ cotc p = p { closeOnTriggerClick = cotc }
 
-instance HasProp CloseOnTriggerMouseLeave (Portal ms) where
-    type Prop CloseOnTriggerMouseLeave (Portal ms) = Bool
+instance HasProp CloseOnTriggerMouseLeave Portal where
+    type Prop CloseOnTriggerMouseLeave Portal = Bool
     getProp _ = closeOnTriggerMouseLeave
     setProp _ cotml p = p { closeOnTriggerMouseLeave = cotml }
 
-instance HasProp DefaultOpen (Portal ms) where
-    type Prop DefaultOpen (Portal ms) = Bool
+instance HasProp DefaultOpen Portal where
+    type Prop DefaultOpen Portal = Bool
     getProp _ = defaultOpen
     setProp _ o p = p { defaultOpen = o }
 
-instance HasProp MountNode (Portal ms) where
-    type Prop MountNode (Portal ms) = Maybe JSV
+instance HasProp MountNode Portal where
+    type Prop MountNode Portal = Maybe JSV
     getProp _ = mountNode
     setProp _ mn p = p { mountNode = mn }
 
-instance HasProp MouseEnterDelay (Portal ms) where
-    type Prop MouseEnterDelay (Portal ms) = Int
+instance HasProp MouseEnterDelay Portal where
+    type Prop MouseEnterDelay Portal = Int
     getProp _ = mouseEnterDelay
     setProp _ med p = p { mouseEnterDelay = med }
 
-instance HasProp MouseLeaveDelay (Portal ms) where
-    type Prop MouseLeaveDelay (Portal ms) = Int
+instance HasProp MouseLeaveDelay Portal where
+    type Prop MouseLeaveDelay Portal = Int
     getProp _ = mouseLeaveDelay
     setProp _ mld p = p { mouseLeaveDelay = mld }
 
-instance HasProp OnClose (Portal ms) where
-    type Prop OnClose (Portal ms) = Ef ms IO ()
+instance HasProp OnClose Portal where
+    type Prop OnClose Portal = Ef ms IO ()
     getProp _ = onClose
     setProp _ oc p = p { onClose = oc }
 
-instance HasProp OnMount (Portal ms) where
-    type Prop OnMount (Portal ms) = Ef ms IO ()
+instance HasProp OnMount Portal where
+    type Prop OnMount Portal = Ef ms IO ()
     getProp _ = onMount
     setProp _ om p = p { onMount = om }
 
-instance HasProp OnOpen (Portal ms) where
-    type Prop OnOpen (Portal ms) = Evt -> Ef ms IO ()
+instance HasProp OnOpen Portal where
+    type Prop OnOpen Portal = Evt -> Ef ms IO ()
     getProp _ = onOpen
     setProp _ oo p = p { onOpen = oo }
 
-instance HasProp OnUnmount (Portal ms) where
-    type Prop OnUnmount (Portal ms) = Ef ms IO ()
+instance HasProp OnUnmount Portal where
+    type Prop OnUnmount Portal = Ef ms IO ()
     getProp _ = onUnmount
     setProp _ ou p = p { onUnmount = ou }
 
-instance HasProp Open (Portal ms) where
-    type Prop Open (Portal ms) = Bool
+instance HasProp Open Portal where
+    type Prop Open Portal = Bool
     getProp _ = open
     setProp _ o p = p { open = o }
 
-instance HasProp OpenOnTriggerClick (Portal ms) where
-    type Prop OpenOnTriggerClick (Portal ms) = Bool
+instance HasProp OpenOnTriggerClick Portal where
+    type Prop OpenOnTriggerClick Portal = Bool
     getProp _ = openOnTriggerClick
     setProp _ ootc p = p { openOnTriggerClick = ootc }
 
-instance HasProp OpenOnTriggerFocus (Portal ms) where
-    type Prop OpenOnTriggerFocus (Portal ms) = Bool
+instance HasProp OpenOnTriggerFocus Portal where
+    type Prop OpenOnTriggerFocus Portal = Bool
     getProp _ = openOnTriggerFocus
     setProp _ ootf p = p { openOnTriggerFocus = ootf }
 
-instance HasProp OpenOnTriggerMouseEnter (Portal ms) where
-    type Prop OpenOnTriggerMouseEnter (Portal ms) = Bool
+instance HasProp OpenOnTriggerMouseEnter Portal where
+    type Prop OpenOnTriggerMouseEnter Portal = Bool
     getProp _ = openOnTriggerMouseEnter
     setProp _ ootme p = p { openOnTriggerMouseEnter = ootme }
 
-instance HasProp Prepend (Portal ms) where
-    type Prop Prepend (Portal ms) = Bool
+instance HasProp Prepend Portal where
+    type Prop Prepend Portal = Bool
     getProp _ = prepend
     setProp _ pre p = p { prepend = pre }
 
-instance HasProp Trigger (Portal ms) where
-    type Prop Trigger (Portal ms) = View ms
+instance HasProp Trigger Portal where
+    type Prop Trigger Portal = View
     getProp _ = trigger
     setProp _ t p = p { trigger = t }

@@ -6,24 +6,23 @@ module Semantic.Header
   , Subheader(..), pattern Subheader
   ) where
 
-import GHC.Generics as G
-import Pure.View hiding (block,color,disabled,textAlign,Header,Content)
-import qualified Pure.View as HTML
+import GHC.Generics as G (Generic,to)
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML hiding (Header)
 
 import Semantic.Utils
 
 import Semantic.Icon
 import Semantic.Image
 
-import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!), (%) )
+import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)
   , pattern Attached, Attached(..)
-  , pattern Attributes, Attributes(..)
   , pattern Block, Block(..)
-  , pattern Children, Children(..)
-  , pattern Classes, Classes(..)
   , pattern Color, Color(..)
   , pattern Disabled, Disabled(..)
   , pattern Dividing, Dividing(..)
@@ -37,206 +36,165 @@ import Semantic.Properties as Properties
 import Data.Function as Tools ((&))
 import Pure.Data.Default as Tools
 
-data Header ms = Header_
-    { as :: [Feature ms] -> [View ms] -> View ms
+data Header = Header_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     , attached :: Maybe Txt
-    , attributes :: [Feature ms]
     , block :: Bool
-    , children :: [View ms]
-    , classes :: [Txt]
     , color :: Txt
     , disabled :: Bool
     , dividing :: Bool
     , floated :: Txt
+    , icon :: Bool
+    , image :: Bool
     , inverted :: Bool
     , size :: Txt
     , sub :: Bool
     , textAlign :: Txt
     } deriving (Generic)
 
-instance Default (Header ms) where
-    def = (G.to gdef) { as = Div }
+instance Default Header where
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
-pattern Header :: Header ms -> View ms
-pattern Header h = View h
+pattern Header :: Header -> Header
+pattern Header h = h
 
-instance Pure Header ms where
-    render Header_ {..} =
+instance Pure Header where
+    view Header_ {..} =
         let
-            icon = foldPures (\Icon_{} -> const True) False children
-            image = foldPures (\Image_{} -> const True) False children
-
             cs =
-                ( "ui"
-                : color
-                : size
-                : block # "block"
-                : disabled # "disabled"
-                : dividing # "dividing"
-                : floated # (floated <<>> "floated")
-                : icon # "icon"
-                : image # "image"
-                : inverted # "inverted"
-                : sub # "sub"
-                : may (<>> "attached") attached
-                : textAlign
-                : "header"
-                : classes
-                )
+                [ "ui"
+                , color
+                , size
+                , block # "block"
+                , disabled # "disabled"
+                , dividing # "dividing"
+                , (floated /= def) # (floated <<>> "floated")
+                , icon # "icon"
+                , image # "image"
+                , inverted # "inverted"
+                , sub # "sub"
+                , maybe def (<>> "attached") attached
+                , textAlign
+                , "header"
+                ]
         in
-            as ( mergeClasses $ ClassList cs
-               : attributes
-               )
-               children
 
-instance HasProp As (Header ms) where
-    type Prop As (Header ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Header where
+    type Prop As Header = Features -> [View] -> View
     getProp _ = as
     setProp _ f h = h { as = f }
 
-instance HasProp Attached (Header ms) where
-    type Prop Attached (Header ms) = Maybe Txt
+instance HasProp Attached Header where
+    type Prop Attached Header = Maybe Txt
     getProp _ = attached
     setProp _ attach h = h { attached = attach }
 
-instance HasProp Attributes (Header ms) where
-    type Prop Attributes (Header ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ cs h = h { attributes = cs }
+instance HasFeatures Header where
+    getFeatures = features
+    setFeatures fs h = h { features = fs }
 
-instance HasProp Block (Header ms) where
-    type Prop Block (Header ms) = Bool
+instance HasProp Block Header where
+    type Prop Block Header = Bool
     getProp _ = block
     setProp _ b h = h { block = b }
 
-instance HasProp Children (Header ms) where
-    type Prop Children (Header ms) = [View ms]
-    getProp _ = children
-    setProp _ cs h = h { children = cs }
+instance HasChildren Header where
+    getChildren = children
+    setChildren cs h = h { children = cs }
 
-instance HasProp Classes (Header ms) where
-    type Prop Classes (Header ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs h = h { classes = cs }
-
-instance HasProp Color (Header ms) where
-    type Prop Color (Header ms) = Txt
+instance HasProp Color Header where
+    type Prop Color Header = Txt
     getProp _ = color
     setProp _ c h = h { color = c }
 
-instance HasProp Disabled (Header ms) where
-    type Prop Disabled (Header ms) = Bool
+instance HasProp Disabled Header where
+    type Prop Disabled Header = Bool
     getProp _ = disabled
     setProp _ d h = h { disabled = d }
 
-instance HasProp Dividing (Header ms) where
-    type Prop Dividing (Header ms) = Bool
+instance HasProp Dividing Header where
+    type Prop Dividing Header = Bool
     getProp _ = dividing
     setProp _ d h = h { dividing = d }
 
-instance HasProp Floated (Header ms) where
-    type Prop Floated (Header ms) = Txt
+instance HasProp Floated Header where
+    type Prop Floated Header = Txt
     getProp _ = floated
     setProp _ f h = h { floated = f }
 
-instance HasProp Inverted (Header ms) where
-    type Prop Inverted (Header ms) = Bool
+instance HasProp Inverted Header where
+    type Prop Inverted Header = Bool
     getProp _ = inverted
     setProp _ i h = h { inverted = i }
 
-instance HasProp Size (Header ms) where
-    type Prop Size (Header ms) = Txt
+instance HasProp Size Header where
+    type Prop Size Header = Txt
     getProp _ = size
     setProp _ s h = h { size = s }
 
-instance HasProp Sub (Header ms) where
-    type Prop Sub (Header ms) = Bool
+instance HasProp Sub Header where
+    type Prop Sub Header = Bool
     getProp _ = sub
     setProp _ s h = h { sub = s }
 
-instance HasProp TextAlign (Header ms) where
-    type Prop TextAlign (Header ms) = Txt
+instance HasProp TextAlign Header where
+    type Prop TextAlign Header = Txt
     getProp _ = textAlign
     setProp _ ta h = h { textAlign = ta }
 
-data Content ms = Content_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data Content = Content_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     } deriving (Generic)
 
-instance Default (Content ms) where
-    def = (G.to gdef) { as = Div }
+instance Default Content where
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
-pattern Content :: Content ms -> View ms
-pattern Content hc = View hc
+pattern Content :: Content -> Content
+pattern Content hc = hc
 
-instance Pure Content ms where
-    render Content_ {..} =
-        as
-            ( ClassList ( "content" : classes)
-            : attributes
-            )
-            children
+instance Pure Content where
+    view Content_ {..} = as (features & Class "content") children
 
-instance HasProp As (Content ms) where
-    type Prop As (Content ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Content where
+    type Prop As Content = Features -> [View] -> View
     getProp _ = as
     setProp _ f hc = hc { as = f }
 
-instance HasProp Attributes (Content ms) where
-    type Prop Attributes (Content ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ cs hc = hc { attributes = cs }
+instance HasFeatures Content where
+    getFeatures = features
+    setFeatures fs hc = hc { features = fs }
 
-instance HasProp Children (Content ms) where
-    type Prop Children (Content ms) = [View ms]
-    getProp _ = children
-    setProp _ cs hc = hc { children = cs }
+instance HasChildren Content where
+    getChildren = children
+    setChildren cs hc = hc { children = cs }
 
-instance HasProp Classes (Content ms) where
-    type Prop Classes (Content ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs hc = hc { classes = cs }
-
-data Subheader ms = Subheader_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data Subheader = Subheader_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     } deriving (Generic)
 
-instance Default (Subheader ms) where
-    def = (G.to gdef) { as = Div }
+instance Default Subheader where
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
-pattern Subheader :: Subheader ms -> View ms
-pattern Subheader hs = View hs
+pattern Subheader :: Subheader -> Subheader
+pattern Subheader hs = hs
 
-instance Pure Subheader ms where
-    render Subheader_ {..} =
-        as
-            ( ClassList ( "sub" : "header" : classes )
-            : attributes
-            )
-            children
+instance Pure Subheader where
 
-instance HasProp As (Subheader ms) where
-    type Prop As (Subheader ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Subheader where
+    type Prop As Subheader = Features -> [View] -> View
     getProp _ = as
     setProp _ f hs = hs { as = f }
 
-instance HasProp Attributes (Subheader ms) where
-    type Prop Attributes (Subheader ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ cs hs = hs { attributes = cs }
+instance HasFeatures Subheader where
+    getFeatures = features
+    setFeatures fs hs = hs { features = fs }
 
-instance HasProp Children (Subheader ms) where
-    type Prop Children (Subheader ms) = [View ms]
-    getProp _ = children
-    setProp _ cs hs = hs { children = cs }
-
-instance HasProp Classes (Subheader ms) where
-    type Prop Classes (Subheader ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs hs = hs { classes = cs }
+instance HasChildren Subheader where
+    getChildren = children
+    setChildren cs hs = hs { children = cs }

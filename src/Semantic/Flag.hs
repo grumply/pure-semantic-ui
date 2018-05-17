@@ -9,30 +9,28 @@ import Pure.View hiding (name)
 
 import Semantic.Utils
 
-import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!), (%) )
+import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)
   , pattern Attributes, Attributes(..)
-  , pattern Classes, Classes(..)
   , pattern Name, Name(..)
   )
 
 import Data.Function as Tools ((&))
 import Pure.Data.Default as Tools
 
-data Flag ms = Flag_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , classes :: [Txt]
+data Flag = Flag_
+    { as :: Features -> [View] -> View
+    , features :: Features
     , name :: Txt
     } deriving (Generic)
 
-instance Default (Flag ms) where
-    def = (G.to gdef) { as = I }
+instance Default Flag where
+    def = (G.to gdef) { as = \fs cs -> I & Features fs & Children cs }
 
-pattern Flag :: Flag ms -> View ms
-pattern Flag f = View f
+pattern Flag :: Flag -> Flag
+pattern Flag f = f
 
 instance Pure Flag ms where
     render Flag_ {..} =
@@ -40,31 +38,24 @@ instance Pure Flag ms where
             cs =
                 ( name
                 : "flag"
-                : classes
                 )
         in
             as
-                ( mergeClasses $ ClassList cs
                 : attributes
                 )
                 []
 
-instance HasProp As (Flag ms) where
-    type Prop As (Flag ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Flag where
+    type Prop As Flag = Features -> [View] -> View
     getProp _ = as
     setProp _ a f = f { as = a }
 
-instance HasProp Attributes (Flag ms) where
-    type Prop Attributes (Flag ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ as f = f { attributes = as }
+instance HasFeatures Flag where
+    getFeatures = features
+    setFeatures as f = f { features = as }
 
-instance HasProp Classes (Flag ms) where
-    type Prop Classes (Flag ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs f = f { classes = cs }
 
-instance HasProp Name (Flag ms) where
-    type Prop Name (Flag ms) = Txt
+instance HasProp Name Flag where
+    type Prop Name Flag = Txt
     getProp _ = name
     setProp _ n f = f { name = n }

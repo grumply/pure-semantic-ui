@@ -17,7 +17,7 @@ import qualified Semantic.Button as Button
 
 import qualified Semantic.Modal as Modal
 
-import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!), (%) )
+import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern OnClick, OnClick(..)
@@ -36,7 +36,7 @@ import Semantic.Properties as Properties
 import Data.Function as Tools ((&))
 import Pure.Data.Default as Tools
 
-data Confirm ms = Confirm_
+data Confirm = Confirm_
     { cancelButton  :: Button.Button ms
     , confirmButton :: Button.Button ms
     , header        :: Modal.Header ms
@@ -47,7 +47,7 @@ data Confirm ms = Confirm_
     , withModal     :: Modal.Modal ms -> Modal.Modal ms
     } deriving (Generic)
 
-instance Default (Confirm ms) where
+instance Default Confirm where
     def = (G.to gdef)
         { cancelButton  = def & Children [ "Cancel" ]
         , confirmButton = def & Children [ "OK" ]
@@ -55,10 +55,10 @@ instance Default (Confirm ms) where
         , withModal     = id
         }
 
-pattern Confirm :: VC ms => Confirm ms -> View ms
-pattern Confirm c = View c
+pattern Confirm :: Confirm -> VC
+pattern Confirm c = c
 
-instance VC ms => Pure Confirm ms where
+instance VC => Pure Confirm ms where
     render Confirm_ {..} =
         let handleCancel = do
                 Button.onClick cancelButton
@@ -75,18 +75,18 @@ instance VC ms => Pure Confirm ms where
                 ]
             ]
 
-instance HasProp Open (Confirm ms) where
-    type Prop Open (Confirm ms) = Bool
+instance HasProp Open Confirm where
+    type Prop Open Confirm = Bool
     getProp _ = open
     setProp _ o c = c { open = o }
 
-instance HasProp CancelButton (Confirm ms) where
-    type Prop CancelButton (Confirm ms) = Button.Button ms
+instance HasProp CancelButton Confirm where
+    type Prop CancelButton Confirm = Button.Button ms
     getProp _ = cancelButton
     setProp _ cb c = c { cancelButton = cb }
 
-instance HasProp ConfirmButton (Confirm ms) where
-    type Prop ConfirmButton (Confirm ms) = Button.Button ms
+instance HasProp ConfirmButton Confirm where
+    type Prop ConfirmButton Confirm = Button.Button ms
     getProp _ = confirmButton
     setProp _ cb c = c { confirmButton = cb }
 
@@ -98,17 +98,17 @@ pattern ConfirmContent :: Modal.Content ms -> Confirm ms -> Confirm ms
 pattern ConfirmContent mc c <- (content &&& id -> (mc,c)) where
     ConfirmContent mc c = c { content = mc }
 
-instance HasProp OnCancel (Confirm ms) where
-    type Prop OnCancel (Confirm ms) = Ef ms IO ()
+instance HasProp OnCancel Confirm where
+    type Prop OnCancel Confirm = Ef ms IO ()
     getProp _ = onCancel
     setProp _ oc c = c { onCancel = oc }
 
-instance HasProp OnConfirm (Confirm ms) where
-    type Prop OnConfirm (Confirm ms) = Ef ms IO ()
+instance HasProp OnConfirm Confirm where
+    type Prop OnConfirm Confirm = Ef ms IO ()
     getProp _ = onConfirm
     setProp _ oc c = c { onConfirm = oc }
 
-instance HasProp WithModal (Confirm ms) where
-    type Prop WithModal (Confirm ms) = Modal.Modal ms -> Modal.Modal ms
+instance HasProp WithModal Confirm where
+    type Prop WithModal Confirm = Modal.Modal ms -> Modal.Modal ms
     getProp _ = withModal
     setProp _ wm c = c { withModal = wm }

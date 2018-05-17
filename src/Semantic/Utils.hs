@@ -29,6 +29,9 @@ import Pure.Data.Events as Ev
 (<<>>) :: Txt -> Txt -> Txt
 (<<>>) x y = x `Txt.append` " " `Txt.append` y
 
+(#) :: Bool -> Txt -> Txt
+(#) b t = b ? t $ def
+
 useKeyOrValueAndKey val key =
   case val of
     Just "" -> key
@@ -83,8 +86,8 @@ extractInputListeners = partition (\(Ev.On ev _) -> ev `elem` inputEvents)
       ,"select","touchcancel","touchend","touchmove","touchstart"
       ]
 
-extractInputAttributes :: [Attribute] -> ([Attribute],[Attribute])
-extractInputAttributes = partition (\(Attribute (k,_)) -> k `elem` inputAttrs)
+extractInputAttributes :: [(Txt,Txt)] -> ([(Txt,Txt)],[(Txt,Txt)])
+extractInputAttributes = partition (\(k,_) -> k `elem` inputAttrs)
   where
     inputAttrs =
       ["autocapitalize","autocomplete","autocorrect","autofocus"
@@ -93,8 +96,8 @@ extractInputAttributes = partition (\(Attribute (k,_)) -> k `elem` inputAttrs)
       ,"readonly","required","step","type","value"
       ]
 
-extractInputProperties :: [Property] -> ([Property],[Property])
-extractInputProperties = partition (\(Property (k,_)) -> k `elem` inputProps)
+extractInputProperties :: [(Txt,Txt)] -> ([(Txt,Txt)],[(Txt,Txt)])
+extractInputProperties = partition (\(k,_) -> k `elem` inputProps)
   where
     inputProps =
       ["autocapitalize","autocomplete","autocorrect","autofocus"

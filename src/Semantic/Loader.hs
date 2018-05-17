@@ -9,14 +9,13 @@ import Pure.View hiding (active,disabled,inline,verticalAlign)
 
 import Semantic.Utils
 
-import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!), (%) )
+import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern Active, Active(..)
   , pattern As, As(..)
   , pattern Attributes, Attributes(..)
   , pattern Children, Children(..)
-  , pattern Classes, Classes(..)
   , pattern Disabled, Disabled(..)
   , pattern Inline, Inline(..)
   , pattern Inverted, Inverted(..)
@@ -27,11 +26,10 @@ import Semantic.Properties as Properties
 import Data.Function as Tools ((&))
 import Pure.Data.Default as Tools
 
-data Loader ms = Loader_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data Loader = Loader_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     , active :: Bool
     , disabled :: Bool
     , indeterminate :: Bool
@@ -40,11 +38,11 @@ data Loader ms = Loader_
     , size :: Txt
     } deriving (Generic)
 
-instance Default (Loader ms) where
-    def = (G.to gdef) { as = Div }
+instance Default Loader where
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
-pattern Loader :: Loader ms -> View ms
-pattern Loader l = View l
+pattern Loader :: Loader -> Loader
+pattern Loader l = l
 
 instance Pure Loader ms where
     render Loader_ {..} =
@@ -59,61 +57,53 @@ instance Pure Loader ms where
                 : children # "text"
                 : may (<>> "inline") inline
                 : "loader"
-                : classes
                 )
         in
             as
-                ( mergeClasses $ ClassList cs
                 : attributes
                 )
                 children
 
-instance HasProp Active (Loader ms) where
-    type Prop Active (Loader ms) = Bool
+instance HasProp Active Loader where
+    type Prop Active Loader = Bool
     getProp _ = active
     setProp _ a l = l { active = a }
 
-instance HasProp As (Loader ms) where
-    type Prop As (Loader ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Loader where
+    type Prop As Loader = Features -> [View] -> View
     getProp _ = as
     setProp _ f l = l { as = f }
 
-instance HasProp Attributes (Loader ms) where
-    type Prop Attributes (Loader ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ cs l = l { attributes = cs }
+instance HasFeatures Loader where
+    getFeatures = features
+    setFeatures cs l = l { features = cs }
 
-instance HasProp Children (Loader ms) where
-    type Prop Children (Loader ms) = [View ms]
-    getProp _ = children
-    setProp _ cs l = l { children = cs }
+instance HasChildren Loader where
+    getChildren = children
+    setChildren cs l = l { children = cs }
 
-instance HasProp Classes (Loader ms) where
-    type Prop Classes (Loader ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs l = l { classes = cs }
 
-instance HasProp Disabled (Loader ms) where
-    type Prop Disabled (Loader ms) = Bool
+instance HasProp Disabled Loader where
+    type Prop Disabled Loader = Bool
     getProp _ = disabled
     setProp _ d l = l { disabled = d }
 
-instance HasProp Inline (Loader ms) where
-    type Prop Inline (Loader ms) = Maybe Txt
+instance HasProp Inline Loader where
+    type Prop Inline Loader = Maybe Txt
     getProp _ = inline
     setProp _ i l = l { inline = i }
 
-instance HasProp IsIndeterminate (Loader ms) where
-    type Prop IsIndeterminate (Loader ms) = Bool
+instance HasProp IsIndeterminate Loader where
+    type Prop IsIndeterminate Loader = Bool
     getProp _ = indeterminate
     setProp _ i l = l { indeterminate = i }
 
-instance HasProp Inverted (Loader ms) where
-    type Prop Inverted (Loader ms) = Bool
+instance HasProp Inverted Loader where
+    type Prop Inverted Loader = Bool
     getProp _ = inverted
     setProp _ i l = l { inverted = i }
 
-instance HasProp Size (Loader ms) where
-    type Prop Size (Loader ms) = Txt
+instance HasProp Size Loader where
+    type Prop Size Loader = Txt
     getProp _ = size
     setProp _ s l = l { size = s }

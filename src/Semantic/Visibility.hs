@@ -14,13 +14,12 @@ import Pure.DOM (addAnimation)
 
 import Semantic.Utils
 
-import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!), (%) )
+import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)
   , pattern Attributes, Attributes(..)
   , pattern Children, Children(..)
-  , pattern Classes, Classes(..)
   , pattern Context, Context(..)
   , pattern Continuous, Continuous(..)
   , pattern FireOnMount, FireOnMount(..)
@@ -48,11 +47,10 @@ import Pure.Data.Default as Tools
 data Passed = PixelsPassed Double | PercentPassed Double
     deriving (Generic,Default,Ord,Eq)
 
-data Visibility ms = Visibility_
-    { as                     :: [Feature ms] -> [View ms] -> View ms
-    , attributes             :: [Feature ms]
-    , children               :: [View ms]
-    , classes                :: [Txt]
+data Visibility = Visibility_
+    { as                     :: Features -> [View] -> View
+    , attributes             :: Features
+    , children               :: [View]
     , context                :: Maybe JSV
     , continuous             :: Bool
     , fireOnMount            :: Bool
@@ -74,11 +72,11 @@ data Visibility ms = Visibility_
     , onUpdate               :: Maybe (Calculations -> Ef ms IO ())
     } deriving (Generic)
 
-instance Default (Visibility ms) where
-    def = (G.to gdef) { as = Div, context = Just (coerce window), once = True }
+instance Default Visibility where
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs, context = Just (coerce window), once = True }
 
-pattern Visibility :: Visibility ms -> View ms
-pattern Visibility v = View v
+pattern Visibility :: Visibility -> Visibility
+pattern Visibility v = v
 
 data VisibilityState = VS
     { oldCalculations :: IORef Calculations
@@ -280,7 +278,6 @@ instance Pure Visibility ms where
 
                 , renderer = \Visibility_ {..} _ ->
                     as
-                        ( mergeClasses $ ClassList classes
                         : HostRef handleRef
                         : attributes
                         )
@@ -288,117 +285,111 @@ instance Pure Visibility ms where
 
                 }
 
-instance HasProp As (Visibility ms) where
-    type Prop As (Visibility ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Visibility where
+    type Prop As Visibility = Features -> [View] -> View
     getProp _ = as
     setProp _ a v = v { as = a }
 
-instance HasProp Attributes (Visibility ms) where
-    type Prop Attributes (Visibility ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ as v = v { attributes = as }
+instance HasFeatures Visibility where
+    getFeatures = features
+    setFeatures as v = v { features = as }
 
-instance HasProp Children (Visibility ms) where
-    type Prop Children (Visibility ms) = [View ms]
-    getProp _ = children
-    setProp _ cs v = v { children = cs }
+instance HasChildren Visibility where
+    getChildren = children
+    setChildren cs v = v { children = cs }
 
-instance HasProp Classes (Visibility ms) where
-    type Prop Classes (Visibility ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs v = v { classes = cs }
 
-instance HasProp Context (Visibility ms) where
-    type Prop Context (Visibility ms) = Maybe JSV
+instance HasProp Context Visibility where
+    type Prop Context Visibility = Maybe JSV
     getProp _ = context
     setProp _ c v = v { context = c }
 
-instance HasProp Continuous (Visibility ms) where
-    type Prop Continuous (Visibility ms) = Bool
+instance HasProp Continuous Visibility where
+    type Prop Continuous Visibility = Bool
     getProp _ = continuous
     setProp _ c v = v { continuous = c }
 
-instance HasProp FireOnMount (Visibility ms) where
-    type Prop FireOnMount (Visibility ms) = Bool
+instance HasProp FireOnMount Visibility where
+    type Prop FireOnMount Visibility = Bool
     getProp _ = fireOnMount
     setProp _ fom v = v { fireOnMount = fom }
 
-instance HasProp OnBottomPassed (Visibility ms) where
-    type Prop OnBottomPassed (Visibility ms) = Maybe (Calculations -> Ef ms IO ())
+instance HasProp OnBottomPassed Visibility where
+    type Prop OnBottomPassed Visibility = Maybe (Calculations -> Ef ms IO ())
     getProp _ = onBottomPassed
     setProp _ obp v = v { onBottomPassed = obp }
 
-instance HasProp OnBottomPassedReverse (Visibility ms) where
-    type Prop OnBottomPassedReverse (Visibility ms) = Maybe (Calculations -> Ef ms IO ())
+instance HasProp OnBottomPassedReverse Visibility where
+    type Prop OnBottomPassedReverse Visibility = Maybe (Calculations -> Ef ms IO ())
     getProp _ = onBottomPassedReverse
     setProp _ obpr v = v { onBottomPassedReverse = obpr }
 
-instance HasProp OnBottomVisible (Visibility ms) where
-    type Prop OnBottomVisible (Visibility ms) = Maybe (Calculations -> Ef ms IO ())
+instance HasProp OnBottomVisible Visibility where
+    type Prop OnBottomVisible Visibility = Maybe (Calculations -> Ef ms IO ())
     getProp _ = onBottomVisible
     setProp _ obv v = v { onBottomVisible = obv }
 
-instance HasProp OnBottomVisibleReverse (Visibility ms) where
-    type Prop OnBottomVisibleReverse (Visibility ms) = Maybe (Calculations -> Ef ms IO ())
+instance HasProp OnBottomVisibleReverse Visibility where
+    type Prop OnBottomVisibleReverse Visibility = Maybe (Calculations -> Ef ms IO ())
     getProp _ = onBottomVisibleReverse
     setProp _ obvr v = v { onBottomVisibleReverse = obvr }
 
-instance HasProp Offset (Visibility ms) where
-    type Prop Offset (Visibility ms) = (Double,Double)
+instance HasProp Offset Visibility where
+    type Prop Offset Visibility = (Double,Double)
     getProp _ = offset
     setProp _ o v = v { offset = o }
 
-instance HasProp Once (Visibility ms) where
-    type Prop Once (Visibility ms) = Bool
+instance HasProp Once Visibility where
+    type Prop Once Visibility = Bool
     getProp _ = once
     setProp _ o v = v { once = o }
 
-instance HasProp OnPassed (Visibility ms) where
-    type Prop OnPassed (Visibility ms) = [(Calculations -> Ef ms IO (),Passed)]
+instance HasProp OnPassed Visibility where
+    type Prop OnPassed Visibility = [(Calculations -> Ef ms IO (),Passed)]
     getProp _ = onPassed
     setProp _ op v = v { onPassed = op }
 
-instance HasProp OnPassing (Visibility ms) where
-    type Prop OnPassing (Visibility ms) = Maybe (Calculations -> Ef ms IO ())
+instance HasProp OnPassing Visibility where
+    type Prop OnPassing Visibility = Maybe (Calculations -> Ef ms IO ())
     getProp _ = onPassing
     setProp _ op v = v { onPassing = op }
 
-instance HasProp OnPassingReverse (Visibility ms) where
-    type Prop OnPassingReverse (Visibility ms) = Maybe (Calculations -> Ef ms IO ())
+instance HasProp OnPassingReverse Visibility where
+    type Prop OnPassingReverse Visibility = Maybe (Calculations -> Ef ms IO ())
     getProp _ = onPassingReverse
     setProp _ opr v = v { onPassingReverse = opr }
 
-instance HasProp OnOffScreen (Visibility ms) where
-    type Prop OnOffScreen (Visibility ms) = Maybe (Calculations -> Ef ms IO ())
+instance HasProp OnOffScreen Visibility where
+    type Prop OnOffScreen Visibility = Maybe (Calculations -> Ef ms IO ())
     getProp _ = onOffScreen
     setProp _ oos v = v { onOffScreen = oos }
 
-instance HasProp OnOnScreen (Visibility ms) where
-    type Prop OnOnScreen (Visibility ms) = Maybe (Calculations -> Ef ms IO ())
+instance HasProp OnOnScreen Visibility where
+    type Prop OnOnScreen Visibility = Maybe (Calculations -> Ef ms IO ())
     getProp _ = onOnScreen
     setProp _ oos v = v { onOnScreen = oos }
 
-instance HasProp OnTopPassed (Visibility ms) where
-    type Prop OnTopPassed (Visibility ms) = Maybe (Calculations -> Ef ms IO ())
+instance HasProp OnTopPassed Visibility where
+    type Prop OnTopPassed Visibility = Maybe (Calculations -> Ef ms IO ())
     getProp _ = onTopPassed
     setProp _ otp v = v { onTopPassed = otp }
 
-instance HasProp OnTopPassedReverse (Visibility ms) where
-    type Prop OnTopPassedReverse (Visibility ms) = Maybe (Calculations -> Ef ms IO ())
+instance HasProp OnTopPassedReverse Visibility where
+    type Prop OnTopPassedReverse Visibility = Maybe (Calculations -> Ef ms IO ())
     getProp _ = onTopPassedReverse
     setProp _ otpr v = v { onTopPassedReverse = otpr }
 
-instance HasProp OnTopVisible (Visibility ms) where
-    type Prop OnTopVisible (Visibility ms) = Maybe (Calculations -> Ef ms IO ())
+instance HasProp OnTopVisible Visibility where
+    type Prop OnTopVisible Visibility = Maybe (Calculations -> Ef ms IO ())
     getProp _ = onTopVisible
     setProp _ otv v = v { onTopVisible = otv }
 
-instance HasProp OnTopVisibleReverse (Visibility ms) where
-    type Prop OnTopVisibleReverse (Visibility ms) = Maybe (Calculations -> Ef ms IO ())
+instance HasProp OnTopVisibleReverse Visibility where
+    type Prop OnTopVisibleReverse Visibility = Maybe (Calculations -> Ef ms IO ())
     getProp _ = onTopVisibleReverse
     setProp _ otvr v = v { onTopVisibleReverse = otvr }
 
-instance HasProp OnUpdate (Visibility ms) where
-    type Prop OnUpdate (Visibility ms) = Maybe (Calculations -> Ef ms IO ())
+instance HasProp OnUpdate Visibility where
+    type Prop OnUpdate Visibility = Maybe (Calculations -> Ef ms IO ())
     getProp _ = onUpdate
     setProp _ ou v = v { onUpdate = ou }

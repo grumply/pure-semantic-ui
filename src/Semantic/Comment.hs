@@ -18,13 +18,12 @@ import qualified Pure.View as HTML
 
 import Semantic.Utils
 
-import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!), (%) )
+import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)
   , pattern Attributes, Attributes(..)
   , pattern Children, Children(..)
-  , pattern Classes, Classes(..)
   , pattern Collapsed, Collapsed(..)
   , pattern Active, Active(..)
   , pattern Minimal, Minimal(..)
@@ -36,19 +35,18 @@ import Semantic.Properties as Properties
 import Data.Function as Tools ((&))
 import Pure.Data.Default as Tools
 
-data Comment ms = Comment_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data Comment = Comment_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     , collapsed :: Bool
     } deriving (Generic)
 
-instance Default (Comment ms) where
-    def = (G.to gdef) { as = Div }
+instance Default Comment where
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
-pattern Comment :: Comment ms -> View ms
-pattern Comment a = View a
+pattern Comment :: Comment -> Comment
+pattern Comment a = a
 
 instance Pure Comment ms where
     render Comment_ {..} =
@@ -56,297 +54,244 @@ instance Pure Comment ms where
             cs =
                 ( collapsed # "collapsed"
                 : "comment"
-                : classes
                 )
         in
             as
-                ( mergeClasses $ ClassList cs
                 : attributes
                 )
                 children
 
-instance HasProp As (Comment ms) where
-    type Prop As (Comment ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Comment where
+    type Prop As Comment = Features -> [View] -> View
     getProp _ = as
     setProp _ a c = c { as = a }
 
-instance HasProp Attributes (Comment ms) where
-    type Prop Attributes (Comment ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ as c = c { attributes = as }
+instance HasFeatures Comment where
+    getFeatures = features
+    setFeatures as c = c { features = as }
 
-instance HasProp Children (Comment ms) where
-    type Prop Children (Comment ms) = [View ms]
-    getProp _ = children
-    setProp _ cs c = c { children = cs }
+instance HasChildren Comment where
+    getChildren = children
+    setChildren cs c = c { children = cs }
 
-instance HasProp Classes (Comment ms) where
-    type Prop Classes (Comment ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs c = c { classes = cs }
 
-instance HasProp Collapsed (Comment ms) where
-    type Prop Collapsed (Comment ms) = Bool
+instance HasProp Collapsed Comment where
+    type Prop Collapsed Comment = Bool
     getProp _ = collapsed
     setProp _ c com = com { collapsed = c }
 
-data Action ms = Action_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data Action = Action_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     , active :: Bool
     } deriving (Generic)
 
-instance Default (Action ms) where
-    def = (G.to gdef) { as = A }
+instance Default Action where
+    def = (G.to gdef) { as = \fs cs -> A & Features fs & Children cs }
 
-pattern Action :: Action ms -> View ms
-pattern Action ca = View ca
+pattern Action :: Action -> Action
+pattern Action ca = ca
 
 instance Pure Action ms where
     render Action_ {..} =
         let
             cs =
                 ( active # "active"
-                : classes
                 )
         in
             as
-                ( mergeClasses $ ClassList cs
                 : attributes
                 )
                 children
 
-instance HasProp As (Action ms) where
-    type Prop As (Action ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Action where
+    type Prop As Action = Features -> [View] -> View
     getProp _ = as
     setProp _ a ca = ca { as = a }
 
-instance HasProp Attributes (Action ms) where
-    type Prop Attributes (Action ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ as ca = ca { attributes = as }
+instance HasFeatures Action where
+    getFeatures = features
+    setFeatures as ca = ca { features = as }
 
-instance HasProp Children (Action ms) where
-    type Prop Children (Action ms) = [View ms]
-    getProp _ = children
-    setProp _ cs ca = ca { children = cs }
+instance HasChildren Action where
+    getChildren = children
+    setChildren cs ca = ca { children = cs }
 
-instance HasProp Classes (Action ms) where
-    type Prop Classes (Action ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs ca = ca { classes = cs }
 
-instance HasProp Active (Action ms) where
-    type Prop Active (Action ms) = Bool
+instance HasProp Active Action where
+    type Prop Active Action = Bool
     getProp _ = active
     setProp _ a ca = ca { active = a }
 
-data Actions ms = Actions_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data Actions = Actions_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     } deriving (Generic)
 
-instance Default (Actions ms) where
-    def = (G.to gdef) { as = Div }
+instance Default Actions where
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
-pattern Actions :: Actions ms -> View ms
-pattern Actions ca = View ca
+pattern Actions :: Actions -> Actions
+pattern Actions ca = ca
 
 instance Pure Actions ms where
     render Actions_ {..} =
         let
             cs =
                 ( "Actionss"
-                : classes
                 )
         in
             as
-                ( mergeClasses $ ClassList cs
                 : attributes
                 )
                 children
 
-instance HasProp As (Actions ms) where
-    type Prop As (Actions ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Actions where
+    type Prop As Actions = Features -> [View] -> View
     getProp _ = as
     setProp _ a ca = ca { as = a }
 
-instance HasProp Attributes (Actions ms) where
-    type Prop Attributes (Actions ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ as ca = ca { attributes = as }
+instance HasFeatures Actions where
+    getFeatures = features
+    setFeatures as ca = ca { features = as }
 
-instance HasProp Children (Actions ms) where
-    type Prop Children (Actions ms) = [View ms]
-    getProp _ = children
-    setProp _ cs ca = ca { children = cs }
+instance HasChildren Actions where
+    getChildren = children
+    setChildren cs ca = ca { children = cs }
 
-instance HasProp Classes (Actions ms) where
-    type Prop Classes (Actions ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs ca = ca { classes = cs }
 
-data Author ms = Author_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data Author = Author_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     } deriving (Generic)
 
-instance Default (Author ms) where
-    def = (G.to gdef) { as = Div }
+instance Default Author where
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
-pattern Author :: Author ms -> View ms
-pattern Author ca = View ca
+pattern Author :: Author -> Author
+pattern Author ca = ca
 
 instance Pure Author ms where
     render Author_ {..} =
         let
             cs =
                 ( "author"
-                : classes
                 )
         in
             as
-                ( mergeClasses $ ClassList cs
                 : attributes
                 )
                 children
 
-instance HasProp As (Author ms) where
-    type Prop As (Author ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Author where
+    type Prop As Author = Features -> [View] -> View
     getProp _ = as
     setProp _ a ca = ca { as = a }
 
-instance HasProp Attributes (Author ms) where
-    type Prop Attributes (Author ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ as ca = ca { attributes = as }
+instance HasFeatures Author where
+    getFeatures = features
+    setFeatures as ca = ca { features = as }
 
-instance HasProp Children (Author ms) where
-    type Prop Children (Author ms) = [View ms]
-    getProp _ = children
-    setProp _ cs ca = ca { children = cs }
+instance HasChildren Author where
+    getChildren = children
+    setChildren cs ca = ca { children = cs }
 
-instance HasProp Classes (Author ms) where
-    type Prop Classes (Author ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs ca = ca { classes = cs }
 
-data Avatar ms = Avatar_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , classes :: [Txt]
+data Avatar = Avatar_
+    { as :: Features -> [View] -> View
+    , features :: Features
     , src :: Txt
     } deriving (Generic)
 
-instance Default (Avatar ms) where
-    def = (G.to gdef) { as = Div }
+instance Default Avatar where
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
-pattern Avatar :: Avatar ms -> View ms
-pattern Avatar ca = View ca
+pattern Avatar :: Avatar -> Avatar
+pattern Avatar ca = ca
 
 instance Pure Avatar ms where
     render Avatar_ {..} =
         let
             cs =
                 ( "avatar"
-                : classes
                 )
         in
             as
-                ( mergeClasses $ ClassList cs
                 : attributes
                 )
                 [Img [ HTML.Src src ] []]
 
-instance HasProp As (Avatar ms) where
-    type Prop As (Avatar ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Avatar where
+    type Prop As Avatar = Features -> [View] -> View
     getProp _ = as
     setProp _ a ca = ca { as = a }
 
-instance HasProp Attributes (Avatar ms) where
-    type Prop Attributes (Avatar ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ as ca = ca { attributes = as }
+instance HasFeatures Avatar where
+    getFeatures = features
+    setFeatures as ca = ca { features = as }
 
-instance HasProp Classes (Avatar ms) where
-    type Prop Classes (Avatar ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs ca = ca { classes = cs }
 
-instance HasProp Src (Avatar ms) where
-    type Prop Src (Avatar ms) = Txt
+instance HasProp Src Avatar where
+    type Prop Src Avatar = Txt
     getProp _ = src
     setProp _ s ca = ca { src = s }
 
-data Content ms = Content_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data Content = Content_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     } deriving (Generic)
 
-instance Default (Content ms) where
-    def = (G.to gdef) { as = Div }
+instance Default Content where
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
-pattern Content :: Content ms -> View ms
-pattern Content cc = View cc
+pattern Content :: Content -> Content
+pattern Content cc = cc
 
 instance Pure Content ms where
     render Content_ {..} =
         let
             cs =
                 ( "content"
-                : classes
                 )
         in
             as
-                ( mergeClasses $ ClassList cs
                 : attributes
                 )
                 children
 
-instance HasProp As (Content ms) where
-    type Prop As (Content ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Content where
+    type Prop As Content = Features -> [View] -> View
     getProp _ = as
     setProp _ a cc = cc { as = a }
 
-instance HasProp Attributes (Content ms) where
-    type Prop Attributes (Content ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ as cc = cc { attributes = as }
+instance HasFeatures Content where
+    getFeatures = features
+    setFeatures as cc = cc { features = as }
 
-instance HasProp Children (Content ms) where
-    type Prop Children (Content ms) = [View ms]
-    getProp _ = children
-    setProp _ cs cc = cc { children = cs }
+instance HasChildren Content where
+    getChildren = children
+    setChildren cs cc = cc { children = cs }
 
-instance HasProp Classes (Content ms) where
-    type Prop Classes (Content ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs cc = cc { classes = cs }
 
-data Group ms = Group_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data Group = Group_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     , collapsed :: Bool
     , minimal :: Bool
     , size :: Txt
     , threaded :: Bool
     } deriving (Generic)
 
-instance Default (Group ms) where
-    def = (G.to gdef) { as = Div }
+instance Default Group where
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
-pattern Group :: Group ms -> View ms
-pattern Group cg = View cg
+pattern Group :: Group -> Group
+pattern Group cg = cg
 
 instance Pure Group ms where
     render Group_ {..} =
@@ -358,145 +303,119 @@ instance Pure Group ms where
                 : minimal # "minimal"
                 : threaded # "threaded"
                 : "comments"
-                : classes
                 )
         in
             as
-                ( mergeClasses $ ClassList cs
                 : attributes
                 )
                 children
 
-instance HasProp As (Group ms) where
-    type Prop As (Group ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Group where
+    type Prop As Group = Features -> [View] -> View
     getProp _ = as
     setProp _ a cg = cg { as = a }
 
-instance HasProp Attributes (Group ms) where
-    type Prop Attributes (Group ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ as cg = cg { attributes = as }
+instance HasFeatures Group where
+    getFeatures = features
+    setFeatures as cg = cg { features = as }
 
-instance HasProp Children (Group ms) where
-    type Prop Children (Group ms) = [View ms]
-    getProp _ = children
-    setProp _ cs cg = cg { children = cs }
+instance HasChildren Group where
+    getChildren = children
+    setChildren cs cg = cg { children = cs }
 
-instance HasProp Classes (Group ms) where
-    type Prop Classes (Group ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs cg = cg { classes = cs }
 
-instance HasProp Collapsed (Group ms) where
-    type Prop Collapsed (Group ms) = Bool
+instance HasProp Collapsed Group where
+    type Prop Collapsed Group = Bool
     getProp _ = collapsed
     setProp _ c cg = cg { collapsed = c }
 
-instance HasProp Minimal (Group ms) where
-    type Prop Minimal (Group ms) = Bool
+instance HasProp Minimal Group where
+    type Prop Minimal Group = Bool
     getProp _ = minimal
     setProp _ m cg = cg { minimal = m }
 
-instance HasProp Size (Group ms) where
-    type Prop Size (Group ms) = Txt
+instance HasProp Size Group where
+    type Prop Size Group = Txt
     getProp _ = size
     setProp _ s cg = cg { size = s }
 
-instance HasProp Threaded (Group ms) where
-    type Prop Threaded (Group ms) = Bool
+instance HasProp Threaded Group where
+    type Prop Threaded Group = Bool
     getProp _ = threaded
     setProp _ t cg = cg { threaded = t }
 
-data Metadata ms = Metadata_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data Metadata = Metadata_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     } deriving (Generic)
 
-instance Default (Metadata ms) where
-    def = (G.to gdef) { as = A }
+instance Default Metadata where
+    def = (G.to gdef) { as = \fs cs -> A & Features fs & Children cs }
 
-pattern Metadata :: Metadata ms -> View ms
-pattern Metadata cm = View cm
+pattern Metadata :: Metadata -> Metadata
+pattern Metadata cm = cm
 
 instance Pure Metadata ms where
     render Metadata_ {..} =
         let
             cs =
                 ( "metadata"
-                : classes
                 )
         in
             as
-                ( mergeClasses $ ClassList cs
                 : attributes
                 )
                 children
 
-instance HasProp As (Metadata ms) where
-    type Prop As (Metadata ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Metadata where
+    type Prop As Metadata = Features -> [View] -> View
     getProp _ = as
     setProp _ a cm = cm { as = a }
 
-instance HasProp Attributes (Metadata ms) where
-    type Prop Attributes (Metadata ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ as cm = cm { attributes = as }
+instance HasFeatures Metadata where
+    getFeatures = features
+    setFeatures as cm = cm { features = as }
 
-instance HasProp Children (Metadata ms) where
-    type Prop Children (Metadata ms) = [View ms]
-    getProp _ = children
-    setProp _ cs cm = cm { children = cs }
+instance HasChildren Metadata where
+    getChildren = children
+    setChildren cs cm = cm { children = cs }
 
-instance HasProp Classes (Metadata ms) where
-    type Prop Classes (Metadata ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs cm = cm { classes = cs }
 
-data Text ms = Text_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data Text = Text_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     } deriving (Generic)
 
-instance Default (Text ms) where
-    def = (G.to gdef) { as = A }
+instance Default Text where
+    def = (G.to gdef) { as = \fs cs -> A & Features fs & Children cs }
 
-pattern Text :: Text ms -> View ms
-pattern Text ct = View ct
+pattern Text :: Text -> Text
+pattern Text ct = ct
 
 instance Pure Text ms where
     render Text_ {..} =
         let
             cs =
                 ( "text"
-                : classes
                 )
         in
             as
-                ( mergeClasses $ ClassList cs
                 : attributes
                 )
                 children
 
-instance HasProp As (Text ms) where
-    type Prop As (Text ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Text where
+    type Prop As Text = Features -> [View] -> View
     getProp _ = as
     setProp _ a ct = ct { as = a }
 
-instance HasProp Attributes (Text ms) where
-    type Prop Attributes (Text ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ as ct = ct { attributes = as }
+instance HasFeatures Text where
+    getFeatures = features
+    setFeatures as ct = ct { features = as }
 
-instance HasProp Children (Text ms) where
-    type Prop Children (Text ms) = [View ms]
-    getProp _ = children
-    setProp _ cs ct = ct { children = cs }
+instance HasChildren Text where
+    getChildren = children
+    setChildren cs ct = ct { children = cs }
 
-instance HasProp Classes (Text ms) where
-    type Prop Classes (Text ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs ct = ct { classes = cs }

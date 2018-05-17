@@ -14,13 +14,12 @@ import Pure.DOM (addAnimation)
 
 import Semantic.Utils hiding (body)
 
-import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!), (%) )
+import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)
   , pattern Attributes, Attributes(..)
   , pattern Children, Children(..)
-  , pattern Classes, Classes(..)
   , pattern Active, Active(..)
   , pattern BottomOffset, BottomOffset(..)
   , pattern Context, Context(..)
@@ -36,11 +35,10 @@ import Semantic.Properties as Properties
 import Data.Function as Tools ((&))
 import Pure.Data.Default as Tools
 
-data Sticky ms = Sticky_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data Sticky = Sticky_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     , active :: Bool
     , bottomOffset :: Double
     , context :: Maybe JSV
@@ -53,7 +51,7 @@ data Sticky ms = Sticky_
     , scrollContext :: Maybe JSV
     } deriving (Generic)
 
-instance Default (Sticky ms) where
+instance Default Sticky where
     def = (G.to gdef)
         { as = Div
         , active = True
@@ -62,8 +60,8 @@ instance Default (Sticky ms) where
         , scrollContext = Just (toJSV window)
         }
 
-pattern Sticky :: VC ms => Sticky ms -> View ms
-pattern Sticky s = View s
+pattern Sticky :: Sticky -> Sticky
+pattern Sticky s = s
 
 data StickyState = SS
     { isSticking :: Bool
@@ -78,7 +76,7 @@ data StickyState = SS
     , scrollListener :: IORef (IO ())
     }
 
-instance VC ms => Pure Sticky ms where
+instance VC => Pure Sticky ms where
     render s =
         Component "Semantic.Modules.Sticky" s $ \self ->
             let
@@ -237,7 +235,6 @@ instance VC ms => Pure Sticky ms where
                             ]
                     in
                         as
-                            ( mergeClasses $ ClassList classes
                             : attributes
                             )
                             [ Div [ HostRef handleTriggerRef ] []
@@ -246,72 +243,66 @@ instance VC ms => Pure Sticky ms where
 
                 }
 
-instance HasProp As (Sticky ms) where
-    type Prop As (Sticky ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Sticky where
+    type Prop As Sticky = Features -> [View] -> View
     getProp _ = as
     setProp _ f s = s { as = f }
 
-instance HasProp Attributes (Sticky ms) where
-    type Prop Attributes (Sticky ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ cs s = s { attributes = cs }
+instance HasFeatures Sticky where
+    getFeatures = features
+    setFeatures cs s = s { features = cs }
 
-instance HasProp Children (Sticky ms) where
-    type Prop Children (Sticky ms) = [View ms]
-    getProp _ = children
-    setProp _ cs s = s { children = cs }
+instance HasChildren Sticky where
+    getChildren = children
+    setChildren cs s = s { children = cs }
 
-instance HasProp Classes (Sticky ms) where
-    type Prop Classes (Sticky ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs s = s { classes = cs }
 
-instance HasProp Active (Sticky ms) where
-    type Prop Active (Sticky ms) = Bool
+instance HasProp Active Sticky where
+    type Prop Active Sticky = Bool
     getProp _ = active
     setProp _ a s = s { active = a }
 
-instance HasProp BottomOffset (Sticky ms) where
-    type Prop BottomOffset (Sticky ms) = Double
+instance HasProp BottomOffset Sticky where
+    type Prop BottomOffset Sticky = Double
     getProp _ = bottomOffset
     setProp _ bo s = s { bottomOffset = bo }
 
-instance HasProp Context (Sticky ms) where
-    type Prop Context (Sticky ms) = Maybe JSV
+instance HasProp Context Sticky where
+    type Prop Context Sticky = Maybe JSV
     getProp _ = context
     setProp _ c s = s { context = c }
 
-instance HasProp Offset (Sticky ms) where
-    type Prop Offset (Sticky ms) = Double
+instance HasProp Offset Sticky where
+    type Prop Offset Sticky = Double
     getProp _ = offset
     setProp _ o s = s { offset = o }
 
-instance HasProp OnBottom (Sticky ms) where
-    type Prop OnBottom (Sticky ms) = Ef ms IO ()
+instance HasProp OnBottom Sticky where
+    type Prop OnBottom Sticky = Ef ms IO ()
     getProp _ = onBottom
     setProp _ ob s = s { onBottom = ob }
 
-instance HasProp OnStick (Sticky ms) where
-    type Prop OnStick (Sticky ms) = Ef ms IO ()
+instance HasProp OnStick Sticky where
+    type Prop OnStick Sticky = Ef ms IO ()
     getProp _ = onStick
     setProp _ os s = s { onStick = os }
 
-instance HasProp OnTop (Sticky ms) where
-    type Prop OnTop (Sticky ms) = Ef ms IO ()
+instance HasProp OnTop Sticky where
+    type Prop OnTop Sticky = Ef ms IO ()
     getProp _ = onTop
     setProp _ ot s = s { onTop = ot }
 
-instance HasProp OnUnstick (Sticky ms) where
-    type Prop OnUnstick (Sticky ms) = Ef ms IO ()
+instance HasProp OnUnstick Sticky where
+    type Prop OnUnstick Sticky = Ef ms IO ()
     getProp _ = onUnstick
     setProp _ ou s = s { onUnstick = ou }
 
-instance HasProp Pushing (Sticky ms) where
-    type Prop Pushing (Sticky ms) = Bool
+instance HasProp Pushing Sticky where
+    type Prop Pushing Sticky = Bool
     getProp _ = pushing
     setProp _ p s = s { pushing = p }
 
-instance HasProp ScrollContext (Sticky ms) where
-    type Prop ScrollContext (Sticky ms) = Maybe JSV
+instance HasProp ScrollContext Sticky where
+    type Prop ScrollContext Sticky = Maybe JSV
     getProp _ = scrollContext
     setProp _ sc s = s { scrollContext = sc }

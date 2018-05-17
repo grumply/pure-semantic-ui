@@ -7,10 +7,7 @@ import Pure.Data.View
 import Pure.Data.View.Patterns
 import Pure.DOM
 
-import Semantic.Utils
-import Semantic.Properties
-
-import Semantic.Proxy
+import Semantic.Proxy as Proxy
 
 proxyTest =
   Proxy def <| InnerRef (\_ -> print "Outer") |>
