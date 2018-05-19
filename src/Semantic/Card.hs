@@ -3,10 +3,10 @@ module Semantic.Card
   , module Tools
   , Card(..), pattern Card
   , Content(..), pattern Content
-  , Description(..), pattern Description
+  , Description(..), pattern Semantic.Card.Description
   , Group(..), pattern Group
-  , Header(..), pattern Header
-  , Meta(..), pattern Meta
+  , Header(..), pattern Semantic.Card.Header
+  , Meta(..), pattern Semantic.Card.Meta
   ) where
 
 import GHC.Generics as G hiding (Meta)
@@ -21,8 +21,6 @@ import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)
-  , pattern Attributes, Attributes(..)
-  , pattern Children, Children(..)
   , pattern Centered, Centered(..)
   , pattern Color, Color(..)
   , pattern Fluid, Fluid(..)
@@ -46,7 +44,6 @@ data Card = Card_
     , centered :: Bool
     , color :: Txt
     , fluid :: Bool
-    , ref :: Feature
     , link :: Bool
     , raised :: Bool
     } deriving (Generic)
@@ -70,11 +67,7 @@ instance Pure Card where
                 , "card"
                 ]
         in
-            e
-                : ref
-                : attributes
-                )
-                children
+            as (features & AddClasses cs) children
 
 instance HasProp As Card where
     type Prop As Card = Features -> [View] -> View
@@ -103,11 +96,6 @@ instance HasProp Fluid Card where
     type Prop Fluid Card = Bool
     getProp _ = fluid
     setProp _ f c = c { fluid = f }
-
-instance HasProp Ref Card where
-    type Prop Ref Card = Feature
-    getProp _ = ref
-    setProp _ r c = c { ref = r }
 
 instance HasProp Link Card where
     type Prop Link Card = Bool
@@ -142,10 +130,7 @@ instance Pure Content where
                 , "content"
                 ]
         in
-            as
-                : attributes
-                )
-                children
+            as (features & AddClasses cs) children
 
 instance HasProp As Content where
     type Prop As Content = Features -> [View] -> View
@@ -184,17 +169,7 @@ pattern Description :: Description -> Description
 pattern Description cd = cd
 
 instance Pure Description where
-    view Description_ {..} =
-        let
-            cs =
-                [ textAlign
-                , "description"
-                ]
-        in
-            as
-                : attributes
-                )
-                children
+    view Description_ {..} = as (features & AddClasses [ textAlign, "description" ]) children
 
 instance HasProp As Description where
     type Prop As Description = Features -> [View] -> View
@@ -238,14 +213,11 @@ instance Pure Group where
                 , doubling # "doubling"
                 , stackable # "stackable"
                 , textAlign
-                , widthProp def width def
+                , widthProp def "width" def
                 , "cards"
                 ]
         in
-            as
-                : attributes
-                )
-                children
+            as (features & AddClasses cs) children
 
 instance HasProp As Group where
     type Prop As Group = Features -> [View] -> View
@@ -294,17 +266,7 @@ pattern Header :: Header -> Header
 pattern Header ch = ch
 
 instance Pure Header where
-    view Header_ {..} =
-        let
-            cs =
-                [ textAlign
-                , "header"
-                ]
-        in
-            as
-                : attributes
-                )
-                children
+    view Header_ {..} = as (features & AddClasses [ textAlign, "header" ]) children
 
 instance HasProp As Header where
     type Prop As Header = Features -> [View] -> View
@@ -338,17 +300,7 @@ pattern Meta :: Meta -> Meta
 pattern Meta cm = cm
 
 instance Pure Meta where
-    view Meta_ {..} =
-        let
-            cs =
-                [ textAlign
-                , "meta"
-                ]
-        in
-            as
-                : attributes
-                )
-                children
+    view Meta_ {..} = as (features & AddClasses [ textAlign, "meta" ]) children
 
 instance HasProp As Meta where
     type Prop As Meta = Features -> [View] -> View

@@ -6,18 +6,21 @@ module Semantic.Dimmer
   , Dimmable(..), pattern Dimmable
   ) where
 
+import Control.Monad (unless)
+import Data.Coerce
 import Data.IORef
+import Data.List as List
 import GHC.Generics as G
 import Pure.Data.View
 import Pure.Data.View.Patterns
 import Pure.Data.Txt
 import Pure.Data.HTML
-import Pure.Data.Event
-import Pure.Lifted (Node(..))
+import qualified Pure.Data.Events as Events
+import Pure.Data.Lifted
 
 import Semantic.Utils
 
-import Semantic.Portal
+import Semantic.Proxy
 
 import Semantic.Properties as Tools ( HasProp(..) )
 
@@ -25,12 +28,8 @@ import Semantic.Properties as Properties
   ( pattern CloseOnEscape, CloseOnEscape(..)
   , pattern CloseOnDocumentClick, CloseOnDocumentClick(..)
   , pattern OpenOnTriggerClick, OpenOnTriggerClick(..)
-  , pattern OnMount, OnMount(..)
-  , pattern OnUnmount, OnUnmount(..)
   , pattern Open, Open(..)
   , pattern As, As(..)
-  , pattern Attributes, Attributes(..)
-  , pattern Children, Children(..)
   , pattern Active, Active(..)
   , pattern Disabled, Disabled(..)
   , pattern OnClick, OnClick(..)
@@ -78,25 +77,25 @@ instance Pure Dimmer where
 
                 handleClick e = do
                     Dimmer_ {..} <- getProps self
-                    center <- liftIO $ readIORef =<< getState self
+                    center       <- readIORef =<< getState self
                     onClick
                     case center of
                         Nothing       -> onClickOutside
                         Just (Node c) -> do
-                            targetNotCenter <- liftIO $ unequalTargets c (evtTarget e)
-                            inside          <- liftIO $ c `contains`     (evtTarget e)
+                            targetNotCenter <- unequalTargets c (evtTarget e)
+                            inside          <- c `contains`     (evtTarget e)
                             unless (targetNotCenter && inside) onClickOutside
 
                 handleCenterRef n = do
                     centerRef <- getState self
                     writeIORef centerRef (Just n)
-                    return Nothing
 
             in
                 def
                     { construct = do
                         centerRef <- newIORef Nothing
                         return centerRef
+
                     , render = \Dimmer_ {..} _ ->
                         let cs =
                                 [ "ui"
@@ -109,25 +108,25 @@ instance Pure Dimmer where
                                 ]
 
                             dimmer =
-                                as
-                                    : On "click" def (return . Just . handleClick)
-                                    : attributes
-                                    )
-                                    ( children # [
-                                        Div [ ClassList [ "content" ] ]
-                                            [ Div [ ClassList [ "center" ], HostRef handleCenterRef ]
-                                                children
+                                Proxy def <| OnMount handlePortalMount . OnUnmount handlePortalUnmount |>
+                                  [ as (features & AddClasses cs & Events.OnClick handleClick)
+                                      ( (not $ List.null children)
+                                          ? [ Div <| Class "content" |>
+                                                [ Div <| Class "center" . Lifecycle (HostRef handleCenterRef) |>
+                                                    children
+                                                ]
                                             ]
-                                        ]
-                                    )
+                                          $ [ ]
+                                      )
+                                  ]
 
-                        in if page
-                            then Portal $ def
-                                    & CloseOnEscape False & CloseOnDocumentClick False & OpenOnTriggerClick False
-                                    & OnMount handlePortalMount & OnUnmount handlePortalUnmount
-                                    & Open active
-                                    & Children [ dimmer ]
-                            else dimmer
+                            view
+                              | active && page = Portal (coerce Pure.Data.Lifted.body) dimmer
+                              | active         = dimmer
+                              | otherwise      = Null
+
+                        in
+                            view
                     }
 
 instance HasProp As Dimmer where
@@ -201,10 +200,7 @@ instance Pure Dimmable where
                 , "dimmable"
                 ]
         in
-            as
-                : attributes
-                )
-                children
+            as (features & AddClasses cs) children
 
 instance HasProp As Dimmable where
     type Prop As Dimmable = Features -> [View] -> View

@@ -4,8 +4,8 @@ module Semantic.Proxy
   , Proxy(..), pattern Proxy
   )where
 
-import Pure.DOM
-import Pure.Data.View hiding (children)
+import Pure.Data.Lifted (Node,IsNode(..))
+import Pure.Data.View hiding (children,getHost)
 import Pure.Data.Default
 import Pure.Data.View.Patterns
 
@@ -22,6 +22,10 @@ import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern InnerRef, InnerRef(..)
+  , pattern OnMount, OnMount(..)
+  , pattern OnMounted, OnMounted(..)
+  , pattern OnUnmount, OnUnmount(..)
+  , pattern OnUnmounted, OnUnmounted(..)
   )
 
 import Pure.Data.Default as Tools
@@ -29,11 +33,14 @@ import Pure.Data.Default as Tools
 data Proxy = Proxy_
     { child :: View
     , innerRef :: Node -> IO ()
+    , onMount :: IO ()
+    , onMounted :: IO ()
+    , onUnmount :: IO ()
+    , onUnmounted :: IO ()
     } deriving (Generic)
 
 instance Default Proxy
 
--- Proxy def <| ...
 pattern Proxy :: Proxy -> Proxy
 pattern Proxy a = a
 
@@ -46,7 +53,19 @@ instance Pure Proxy where
         in
             def
                 { construct = return ()
-                , mounted   = getView self >>= withRef
+                , mount     = \_ -> do
+                    p <- getProps self
+                    onMount p
+                , mounted   = do
+                    p <- getProps self
+                    onMounted p
+                    getView self >>= withRef
+                , unmount   = do
+                    p <- getProps self
+                    onUnmount p
+                , unmounted = do
+                    p <- getProps self
+                    onUnmounted p
                 , updated   = \_ _ -> withRef
                 , render    = \ref _ -> child ref
                 }
@@ -59,6 +78,26 @@ instance HasProp InnerRef Proxy where
     type Prop InnerRef Proxy = Node -> IO ()
     getProp _ = innerRef
     setProp _ ir p = p { innerRef = ir }
+
+instance HasProp OnMount Proxy where
+    type Prop OnMount Proxy = IO ()
+    getProp _ = onMount
+    setProp _ om p = p { onMount = om }
+
+instance HasProp OnMounted Proxy where
+    type Prop OnMounted Proxy = IO ()
+    getProp _ = onMount
+    setProp _ om p = p { onMounted = om }
+
+instance HasProp OnUnmount Proxy where
+    type Prop OnUnmount Proxy = IO ()
+    getProp _ = onUnmount
+    setProp _ om p = p { onUnmount = om }
+
+instance HasProp OnUnmounted Proxy where
+    type Prop OnUnmounted Proxy = IO ()
+    getProp _ = onUnmounted
+    setProp _ om p = p { onUnmounted = om }
 
 -- TODO: expose this in pure-dom
 getHost :: View -> Maybe Node

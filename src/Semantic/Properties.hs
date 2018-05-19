@@ -5,7 +5,7 @@ import GHC.Generics
 
 import Control.Arrow ((&&&))
 
-import Pure.Data.View (JSV)
+import Pure.Data.Lifted (JSV)
 import Pure.Data.Txt (Txt)
 import Pure.Data.Default (Default(..))
 
@@ -761,6 +761,11 @@ pattern OnMount :: HasProp OnMount a => Prop OnMount a -> a -> a
 pattern OnMount p a <- (getProp OnMount_ &&& id -> (p,a)) where
     OnMount p a = setProp OnMount_ p a
 
+data OnMounted = OnMounted_
+pattern OnMounted :: HasProp OnMounted a => Prop OnMounted a -> a -> a
+pattern OnMounted p a <- (getProp OnMounted_ &&& id -> (p,a)) where
+    OnMounted p a = setProp OnMounted_ p a
+
 data OnMouseDown = OnMouseDown_
 pattern OnMouseDown :: HasProp OnMouseDown a => Prop OnMouseDown a -> a -> a
 pattern OnMouseDown p a <- (getProp OnMouseDown_ &&& id -> (p,a)) where
@@ -861,6 +866,11 @@ pattern OnUnmount :: HasProp OnUnmount a => Prop OnUnmount a -> a -> a
 pattern OnUnmount p a <- (getProp OnUnmount_ &&& id -> (p,a)) where
     OnUnmount p a = setProp OnUnmount_ p a
 
+data OnUnmounted = OnUnmounted_
+pattern OnUnmounted :: HasProp OnUnmounted a => Prop OnUnmounted a -> a -> a
+pattern OnUnmounted p a <- (getProp OnUnmounted_ &&& id -> (p,a)) where
+    OnUnmounted p a = setProp OnUnmounted_ p a
+
 data OnUnstick = OnUnstick_
 pattern OnUnstick :: HasProp OnUnstick a => Prop OnUnstick a -> a -> a
 pattern OnUnstick p a <- (getProp OnUnstick_ &&& id -> (p,a)) where
@@ -936,6 +946,11 @@ pattern Pointing :: HasProp Pointing a => Prop Pointing a -> a -> a
 pattern Pointing p a <- (getProp Pointing_ &&& id -> (p,a)) where
     Pointing p a = setProp Pointing_ p a
 
+data PortalNode = PortalNode_
+pattern PortalNode :: HasProp PortalNode a => Prop PortalNode a -> a -> a
+pattern PortalNode p a <- (getProp PortalNode_ &&& id -> (p,a)) where
+    PortalNode p a = setProp PortalNode_ p a
+
 data Position = Position_
 pattern Position :: HasProp Position a => Prop Position a -> a -> a
 pattern Position p a <- (getProp Position_ &&& id -> (p,a)) where
@@ -950,11 +965,6 @@ data Precision = Precision_
 pattern Precision :: HasProp Precision a => Prop Precision a -> a -> a
 pattern Precision p a <- (getProp Precision_ &&& id -> (p,a)) where
     Precision p a = setProp Precision_ p a
-
-data Prepend = Prepend_
-pattern Prepend :: HasProp Prepend a => Prop Prepend a -> a -> a
-pattern Prepend p a <- (getProp Prepend_ &&& id -> (p,a)) where
-    Prepend p a = setProp Prepend_ p a
 
 data Primary = Primary_
 pattern Primary :: HasProp Primary a => Prop Primary a -> a -> a

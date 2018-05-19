@@ -8,8 +8,9 @@ import GHC.Generics as G
 import Pure.Data.View
 import Pure.Data.View.Patterns
 import Pure.Data.Txt
-import Pure.Data.HTML
-import Pure.Lifted (Node)
+import Pure.Data.HTML as HTML
+import qualified Pure.Data.HTML.Properties as HTML
+import Pure.Data.Lifted
 
 import Semantic.Utils
 
@@ -17,8 +18,6 @@ import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)
-  , pattern Attributes, Attributes(..)
-  , pattern Children, Children(..)
   , pattern Disabled, Disabled(..)
   , pattern Fitted, Fitted(..)
   , pattern Checked, Checked(..)
@@ -30,6 +29,7 @@ import Semantic.Properties as Properties
   , pattern Toggle, Toggle(..)
   , pattern Type, Type(..)
   , pattern Value, Value(..)
+  , pattern WithRef, WithRef(..)
   , Checked(..)
   )
 
@@ -48,6 +48,7 @@ data Checkbox = Checkbox_
     , readOnly :: Bool
     , slider :: Bool
     , tabIndex :: Maybe Int
+    , withRef :: Node -> IO ()
     , toggle :: Bool
     , _type :: Txt
     , value :: Txt
@@ -62,9 +63,9 @@ pattern Checkbox c = c
 pattern Radio :: Checkbox -> Checkbox
 pattern Radio r = (Type "radio" (IsRadio True r))
 
-viewChecked Nothing = HTML.Checked False
-viewChecked (Just True) = HTML.Checked True
-viewChecked (Just False) = nil
+viewChecked Nothing = HTML.Checked "false"
+viewChecked (Just True) = HTML.Checked "true"
+viewChecked (Just False) = id
 
 instance Pure Checkbox where
     view cb@Checkbox_ {..} =
@@ -83,22 +84,20 @@ instance Pure Checkbox where
                 ]
 
         in
-            as
-                : attributes
-                )
-                ( HTML.Input
-                    [ ClassList [ "hidden" ]
-                    , HostRef (return . Just . withRef)
-                    , viewChecked checked
-                    , HTML.Name name
-                    , Readonly readOnly
-                    , may (\ti -> Tabindex (disabled ? (-1) $ ti)) tabIndex
-                    , HTML.Type _type
-                    , HTML.Value value
-                    ]
-                    []
-                : children
-                )
+            as (features & AddClasses cs)
+               -- TODO: pull this out into its own component
+               ( (HTML.Input
+                   <| Class "hidden"
+                    . Lifecycle (HostRef withRef)
+                    . viewChecked checked
+                    . HTML.Name name
+                    . (readOnly ? HTML.ReadOnly "true" $ id)
+                    . maybe id (\ti -> HTML.TabIndex (disabled ? "-1" $ toTxt ti)) tabIndex
+                    . HTML.Type _type
+                    . HTML.Value value
+                 )
+               : children
+               )
 
 instance HasProp As Checkbox where
     type Prop As Checkbox = Features -> [View] -> View
@@ -168,3 +167,7 @@ instance HasProp Value Checkbox where
     getProp _ = value
     setProp _ v cb = cb { value = v }
 
+instance HasProp WithRef Checkbox where
+    type Prop WithRef Checkbox = Node -> IO ()
+    getProp _ = withRef
+    setProp _ wr cb = cb { withRef = wr }

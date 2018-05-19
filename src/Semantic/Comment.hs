@@ -13,10 +13,11 @@ module Semantic.Comment
   ) where
 
 import GHC.Generics as G
-import Pure.Data.View
+import Pure.Data.View hiding (Text)
 import Pure.Data.View.Patterns
 import Pure.Data.Txt
-import Pure.Data.HTML
+import Pure.Data.HTML as HTML
+import qualified Pure.Data.HTML.Properties as HTML (pattern Src)
 
 import Semantic.Utils
 
@@ -24,8 +25,6 @@ import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)
-  , pattern Attributes, Attributes(..)
-  , pattern Children, Children(..)
   , pattern Collapsed, Collapsed(..)
   , pattern Active, Active(..)
   , pattern Minimal, Minimal(..)
@@ -58,10 +57,7 @@ instance Pure Comment where
                 , "comment"
                 ]
         in
-            as
-                : attributes
-                )
-                children
+            as (features & AddClasses cs) children
 
 instance HasProp As Comment where
     type Prop As Comment = Features -> [View] -> View
@@ -95,16 +91,7 @@ pattern Action :: Action -> Action
 pattern Action ca = ca
 
 instance Pure Action where
-    view Action_ {..} =
-        let
-            cs =
-                ( active # "active"
-                )
-        in
-            as
-                : attributes
-                )
-                children
+    view Action_ {..} = as (features & Class (active # "active")) children
 
 instance HasProp As Action where
     type Prop As Action = Features -> [View] -> View
@@ -137,16 +124,7 @@ pattern Actions :: Actions -> Actions
 pattern Actions ca = ca
 
 instance Pure Actions where
-    view Actions_ {..} =
-        let
-            cs =
-                ( "Actionss"
-                )
-        in
-            as
-                : attributes
-                )
-                children
+    view Actions_ {..} = as (features & Class "actions") children
 
 instance HasProp As Actions where
     type Prop As Actions = Features -> [View] -> View
@@ -174,16 +152,7 @@ pattern Author :: Author -> Author
 pattern Author ca = ca
 
 instance Pure Author where
-    view Author_ {..} =
-        let
-            cs =
-                ( "author"
-                )
-        in
-            as
-                : attributes
-                )
-                children
+    view Author_ {..} = as (features & Class "author") children
 
 instance HasProp As Author where
     type Prop As Author = Features -> [View] -> View
@@ -211,16 +180,7 @@ pattern Avatar :: Avatar -> Avatar
 pattern Avatar ca = ca
 
 instance Pure Avatar where
-    view Avatar_ {..} =
-        let
-            cs =
-                ( "avatar"
-                )
-        in
-            as
-                : attributes
-                )
-                [Img [ HTML.Src src ] []]
+    view Avatar_ {..} = as (features & Class "avatar") [ HTML.Img <| HTML.Src src ]
 
 instance HasProp As Avatar where
     type Prop As Avatar = Features -> [View] -> View
@@ -249,16 +209,7 @@ pattern Content :: Content -> Content
 pattern Content cc = cc
 
 instance Pure Content where
-    view Content_ {..} =
-        let
-            cs =
-                ( "content"
-                )
-        in
-            as
-                : attributes
-                )
-                children
+    view Content_ {..} = as (features & Class "content") children
 
 instance HasProp As Content where
     type Prop As Content = Features -> [View] -> View
@@ -301,10 +252,7 @@ instance Pure Group where
                 , "comments"
                 ]
         in
-            as
-                : attributes
-                )
-                children
+            as (features & AddClasses cs) children
 
 instance HasProp As Group where
     type Prop As Group = Features -> [View] -> View
@@ -352,16 +300,7 @@ pattern Metadata :: Metadata -> Metadata
 pattern Metadata cm = cm
 
 instance Pure Metadata where
-    view Metadata_ {..} =
-        let
-            cs =
-                ( "metadata"
-                )
-        in
-            as
-                : attributes
-                )
-                children
+    view Metadata_ {..} = as (features & Class "metadata") children
 
 instance HasProp As Metadata where
     type Prop As Metadata = Features -> [View] -> View
@@ -389,16 +328,7 @@ pattern Text :: Text -> Text
 pattern Text ct = ct
 
 instance Pure Text where
-    view Text_ {..} =
-        let
-            cs =
-                ( "text"
-                )
-        in
-            as
-                : attributes
-                )
-                children
+    view Text_ {..} = as (features & Class "text") children
 
 instance HasProp As Text where
     type Prop As Text = Features -> [View] -> View

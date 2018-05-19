@@ -14,7 +14,7 @@ test-suite test
 
   main-is: Main.hs
 
-  ghc-options: -dedupe -O2
+  ghc-options: -threaded -with-rtsopts=-N -dedupe -O2 -DGHCJS_BUSY_YIELD=1 -DGHCJS_GC_INTERVAL=30000 -DGHCJS_BROWSER
 
   hs-source-dirs: test
 
@@ -22,13 +22,17 @@ test-suite test
     base >=4.8,
     semantic-ui-pure >= 0.3 && < 0.4,
     pure-core >= 0.7 && < 1,
-    pure-default >= 0.7 && < 1,
     pure-dom >= 0.7 && < 1,
+    pure-default >= 0.7 && < 1,
     pure-events >= 0.7 && < 1,
     pure-html >= 0.7 && < 1,
     pure-lifted >= 0.7 && < 1,
     pure-styles >= 0.7 && < 1,
-    pure-txt >= 0.7 && < 1
+    pure-txt >= 0.7 && < 1,
+    containers,
+    unordered-containers,
+    hashable,
+    vector
 
   default-language: Haskell2010
 
@@ -43,7 +47,6 @@ library
     base >=4.8,
     pure-core >= 0.7 && < 1,
     pure-default >= 0.7 && < 1,
-    pure-dom >= 0.7 && < 1,
     pure-events >= 0.7 && < 1,
     pure-html >= 0.7 && < 1,
     pure-lifted >= 0.7 && < 1,
@@ -77,8 +80,8 @@ library
 
   exposed-modules:
     -- Semantic.Confirm
-    -- Semantic.Portal
     Semantic.Proxy
+    -- Semantic.Portal
     -- Semantic.Responsive
     -- Semantic.TextArea
     -- Semantic.TransitionablePortal
@@ -105,8 +108,8 @@ library
     -- Semantic.Segment
     -- Semantic.Step
     Semantic.Accordion
-    -- Semantic.Checkbox
-    -- Semantic.Dimmer
+    Semantic.Checkbox
+    Semantic.Dimmer
     -- Semantic.Dropdown
     -- Semantic.Embed
     -- Semantic.Modal
@@ -121,8 +124,8 @@ library
     Semantic.Properties
     Semantic.Utils
     Semantic.Advertisement
-    -- Semantic.Card
-    -- Semantic.Comment
+    Semantic.Card
+    Semantic.Comment
     -- Semantic.Feed
     -- Semantic.Item
     -- Semantic.Statistic

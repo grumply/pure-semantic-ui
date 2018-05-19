@@ -5,19 +5,22 @@ module Semantic.Portal
   ) where
 
 import Control.Concurrent
+import Control.Monad (when,void)
+import Data.Coerce (coerce)
 import Data.IORef
+import Data.Foldable (for_)
 import Data.List as List
-import Data.Maybe (fromMaybe)
+import Data.Maybe (isJust,fromMaybe)
 import qualified Data.List as List
+import Data.Traversable (for)
 import GHC.Generics as G
+import Pure.Data.Lifted as Lifted (body)
 import Pure.Data.View
 import Pure.Data.View.Patterns
 import Pure.Data.Txt
 import Pure.Data.HTML
-import Pure.Data.Event
+import Pure.Data.Events
 import Pure.Data.Txt as Txt (unwords)
-import Pure.Lifted (getDocument,append,getChild,removeNode,setProperty,create,insertAt,body,IsJSV(..),JSV,Node(..),Element(..),Doc(..),(.#))
-import Pure.DOM (onRaw)
 
 import Semantic.Utils
 
@@ -26,8 +29,7 @@ import Semantic.Proxy
 import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
-  ( pattern Attributes, Attributes(..)
-  , pattern Children, Children(..)
+  ( pattern As, As(..)
   , pattern CloseOnDocumentClick, CloseOnDocumentClick(..)
   , pattern CloseOnEscape, CloseOnEscape(..)
   , pattern CloseOnPortalMouseLeave, CloseOnPortalMouseLeave(..)
@@ -47,20 +49,18 @@ import Semantic.Properties as Properties
   , pattern OpenOnTriggerClick, OpenOnTriggerClick(..)
   , pattern OpenOnTriggerFocus, OpenOnTriggerFocus(..)
   , pattern OpenOnTriggerMouseEnter, OpenOnTriggerMouseEnter(..)
-  , pattern Prepend, Prepend(..)
-  , pattern Trigger, Trigger(..)
-  , pattern InnerRef, InnerRef(..)
+  , pattern PortalNode, PortalNode(..)
   )
 
 import Data.Function as Tools ((&))
 import Pure.Data.Default as Tools
 
--- used safely
-import Unsafe.Coerce
-
 data Portal = Portal_
-    { attributes               :: Features
+    { as                       :: Features -> [View] -> View
+    , features                 :: Features
     , children                 :: [View]
+    , portal                   :: (Features -> Features) -> View
+    , mountNode                :: Maybe Element -- ^ Will not work correctly with pure-managed keyed nodes!
     , closeOnDocumentClick     :: Bool
     , closeOnEscape            :: Bool
     , closeOnPortalMouseLeave  :: Bool
@@ -69,7 +69,6 @@ data Portal = Portal_
     , closeOnTriggerClick      :: Bool
     , closeOnTriggerMouseLeave :: Bool
     , defaultOpen              :: Bool
-    , mountNode                :: Maybe JSV
     , mouseEnterDelay          :: Int
     , mouseLeaveDelay          :: Int
     , onClose                  :: IO ()
@@ -80,8 +79,6 @@ data Portal = Portal_
     , openOnTriggerClick       :: Bool
     , openOnTriggerFocus       :: Bool
     , openOnTriggerMouseEnter  :: Bool
-    , prepend                  :: Bool
-    , trigger                  :: View
     } deriving (Generic)
 
 instance Default Portal where
@@ -98,16 +95,8 @@ data PortalState = PS
     { active   :: Bool
     , nodes    :: IORef PortalStateNodes
     , timers   :: IORef PortalStateTimers
-    , handlers :: IORef PortalStateHandlers
     , liveView :: IORef (View,View)
     }
-
-data PortalStateHandlers = PSH
-    { mouseLeaveHandler :: IO ()
-    , mouseEnterHandler :: IO ()
-    , clickHandler      :: IO ()
-    , keydownHandler    :: IO ()
-    } deriving (Generic,Default)
 
 data PortalStateTimers = PST
     { mouseEnterTimer :: Maybe ThreadId
@@ -115,8 +104,7 @@ data PortalStateTimers = PST
     } deriving (Generic,Default)
 
 data PortalStateNodes = PSN
-    { rootNode    :: Maybe JSV
-    , portalNode  :: Maybe JSV
+    { portalNode  :: Maybe JSV
     , triggerNode :: Maybe JSV
     } deriving (Generic,Default)
 
@@ -125,20 +113,40 @@ instance Pure Portal where
         LibraryComponentIO $ \self ->
             let
 
-                handleDocumentClick ((.# "target") -> Just (target :: JSV)) = do
+                toRoot = maybe (coerce body) Element
+
+                contained Nothing  _ = return False
+                contained (Just s) t = s `contains` t
+
+                handleDocumentClick (Target t) = do
                     PS      {..} <- getState self
                     Portal_ {..} <- getProps self
                     PSN     {..} <- readIORef nodes
-                    let check = maybe (return False) (`contains` (unsafeCoerce target))
-                    inTrigger <- check triggerNode
-                    inPortal  <- check portalNode
-                    inRoot    <- check rootNode
-                    unless ( isNil rootNode || isNil portalNode || inTrigger || inPortal ) $
-                        when ( (closeOnDocumentClick && not inRoot) || (closeOnRootNodeClick && inRoot) )
-                            closePortal
+
+                    inTrigger <- contained triggerNode t
+                    inPortal  <- contained portalNode t
+                    inRoot    <- contained (toRoot mountNode) t
+
+                    let
+                        -- the conditions for checking if the event should close the portal
+                        shouldCheck = alive && handleable
+                          where
+                            alive      = isJust portalNode
+                            handleable = not inTrigger && not inPortal
+
+                        -- the two cases in which the portal should close
+                        shouldClose = cond1 || cond2
+                          where
+                            cond1 = closeOnDocumentClick && not inRoot
+                            cond2 = closeOnRootNodeClick &&     inRoot
+
+                        eventShouldClosePortal = shouldCheck && shouldClose
+
+                    when eventShouldClosePortal closePortal
+
                 handleDocumentClick _ = return ()
 
-                handleEscape ((.# "keyCode") -> Just (27 :: Int)) = do
+                handleEscape Escape = do
                     Portal_ {..} <- getProps self
                     when closeOnEscape closePortal
                 handleEscape _ = return ()
@@ -160,12 +168,12 @@ instance Pure Portal where
                     when closeOnPortalMouseLeave $
                         for_ mouseLeaveTimer killThread
 
-                handleTriggerBlur ((.# "relatedTarget") . evtObj -> Just (related :: JSV)) = do
+                handleTriggerBlur (RelatedTarget r) = do
                     Portal_ {..} <- getProps self
                     PS {..} <- getState self
                     PSN {..} <- readIORef nodes
-                    didFocusPortal <- maybe (return False) (`contains` (unsafeCoerce related)) rootNode
-                    unless (not closeOnTriggerBlur || didFocusPortal)
+                    didFocusPortal <- contained (toRoot mountNode) r
+                    when (closeOnTriggerBlur && not didFocusPortal)
                         closePortal
                 handleTriggerBlur _ = return ()
 
@@ -204,153 +212,74 @@ instance Pure Portal where
 
                 openPortal e = do
                     Portal_ {..} <- getProps self
-                    setState self $ \_ PS {..} -> PS { active = True, .. }
+                    setState self $ \_ PS {..} -> return (PS { active = True, .. },return())
                     onOpen e
 
                 closePortal = do
                     Portal_ {..} <- getProps self
-                    setState self $ \_ PS {..} -> PS { active = False, .. }
+                    setState self $ \_ PS {..} -> return (PS { active = False, .. },return ())
                     onClose
 
-                viewPortal = do
-                    PS {..} <- getState self
-                    active # do
-                        mountPortal
-                        Portal_ {..} <- getProps self
-                        PS {..} <- getState self
-                        PSN {..} <- readIORef nodes
-                        PSH {..} <- readIORef handlers
-                        for_ rootNode $ \n ->
-                        mouseLeaveHandler
-                        mouseEnterHandler
-                        let chld = only children
-                        mtd <- newIORef (return ())
-                        new <- Pure.DOM.build mtd Nothing chld
-                        writeIORef liveView (chld,new)
-                        let Just n = getHost new
-                        addAnimation $ do
-                            for_ rootNode $ \rn -> append (Node rn) n
-                            join $ readIORef mtd
-                        mlh <- onRaw n "mouseleave" def (\_ _ -> handlePortalMouseLeave)
-                        meh <- onRaw n "mouseenter" def (\_ _ -> handlePortalMouseEnter)
-                        modifyIORef handlers $ \PSH {..} ->
-                            PSH { mouseLeaveHandler = mlh
-                                , mouseEnterHandler = meh
-                                , ..
-                                }
-                        modifyIORef nodes $ \PSN {..} ->
-                            PSN { portalNode = Just $ toJSV n
-                                , ..
-                                }
-
-                    PS {..} <- getState self
-                    Portal_ {..} <- getProps self
-                        PSN {..} <- readIORef nodes
-                        for_ rootNode $ \n ->
-                    active # do
-                        (mid,old) <- readIORef liveView
-                        mtd  <- newIORef (return ())
-                        let new = only children
-                            (plan,newLive) = buildPlan (\p -> diffDeferred mtd p old mid new)
-                        m <- plan `seq` readIORef mtd
-                        unless (List.null plan) $ do
-                            barrier <- newEmptyMVar
-                            addAnimation $ runPlan (putMVar barrier ():plan)
-                            takeMVar barrier
-                        writeIORef liveView (new,newLive)
-                        m
-
-                mountPortal = do
-                    Portal_ {..} <- getProps self
-                    PS {..} <- getState self
-                    PSN {..} <- readIORef nodes
-                    when (isNil rootNode) $ do
-                        let mn = fromMaybe (toJSV body) mountNode
-                        Element root <- create "div"
-                        if prepend
-                            then insertAt (Element mn) (Node root) 0
-                            else append   (Node mn) (Node root)
-                        Doc d <- getDocument
-                        ch <- onRaw (Node d) "click" def (\_ -> handleDocumentClick)
-                        kh <- onRaw (Node d) "keydown" def (\_ -> handleEscape)
-
-                        modifyIORef nodes $ \PSN {..} ->
-                            PSN { rootNode = Just root
-                                , ..
-                                }
-                        modifyIORef handlers $ \PSH {..} ->
-                            PSH { clickHandler = ch
-                                , keydownHandler = kh
-                                , ..
-                                }
-
-                        onMount
-
-                unmountPortal = do
-                    PS {..} <- getState self
-                    Portal_ {..} <- getProps self
-                    PSN {..} <- readIORef nodes
-                    PSH {..} <- readIORef handlers
-                    (_,live) <- readIORef liveView
-
-                    cleanup live
-                    for_ rootNode (removeNode . Node)
-
-                    mouseLeaveHandler
-                    mouseEnterHandler
-                    keydownHandler
-                    clickHandler
-
-                    writeIORef handlers def
-                    writeIORef nodes PSN { rootNode = def, portalNode = def, .. }
-
-                    onUnmount
-
-                    writeIORef liveView (nil,nil)
-
-                handleRef (Node r) = do
+                handleTriggerRef (Node r) = do
                     PS {..} <- getState self
                     modifyIORef nodes $ \PSN {..} ->
                         PSN { triggerNode = Just r, .. }
 
+                handlePortalRef (Node r) = do
+                    PS {..} <- getState self
+                    modifyIORef nodes $ \PSN {..} ->
+                        PSN { portalNode = Just r, .. }
+
             in
                 def
-                    { construct = PS (defaultOpen p)
-                                    <$> newIORef def
-                                    <*> newIORef def
-                                    <*> newIORef def
-                                    <*> newIORef def
-                    , mounted = viewPortal
-                    , receiveProps = \newprops oldstate -> do
+                    { construct = do
+                        Portal_ {..} <- getProps self
+                        PS defaultOpen
+                          <$> newIORef def
+                          <*> newIORef def
+                          <*> newIORef def
+
+                    , receive = \newprops oldstate -> do
                         oldprops <- getProps self
                         return $
                           (open newprops /= open oldprops)
                             ? oldstate { active = open newprops }
                             $ oldstate
-                        (active -> nowOpen@(not -> nowClosed)) <- getState self
-                        if | wasClosed && nowOpen -> viewPortal
-                           | wasOpen && nowClosed -> unmountPortal
-                           | nowOpen              -> diffPortal (oldCs /= newCs)
-                           | otherwise            -> return ()
+
                     , unmount = void $ do
-                        PS {..} <- getState self
+                        PS  {..} <- getState self
                         PST {..} <- readIORef timers
-                        unmountPortal
                         for mouseEnterTimer killThread
                         for mouseLeaveTimer killThread
+
                     , render = \Portal_ {..} ps ->
-                        trigger #
-                            (Proxy $ def & InnerRef handleRef & Children
-                                [ cloneWithProps trigger
-                                    [ On "blur" def (\e -> handleTriggerBlur e >> return Nothing)
-                                    , On "click" def (\e -> handleTriggerClick e >> return Nothing)
-                                    , On "focus" def (\e -> handleTriggerFocus e >> return Nothing)
-                                    , On "mouseleave" def (\_ -> handleTriggerMouseLeave >> return Nothing)
-                                    , On "mouseenter" def (\e -> handleTriggerMouseEnter e >> return Nothing)
-                                    ]
-                                ]
-                            )
+                        let
+                            p | active ps = PortalView (maybe (coerce body) Element mountNode) $ portal
+                                          $ Lifecycle (HostRef handlePortalRef)
+                                          . OnMouseEnter handlePortalMouseEnter
+                                          . OnMouseLeave handlePortalMouseLeave
+                                          . OnDoc "click" handleDocumentClick
+                                          . OnDoc "keydown" handleEscape
+                              | otherwise = Null
+
+                            addTriggerHandlers =
+                                Lifecycle (HostRef handleRef)
+                              . OnBlur handleTriggerBlur
+                              . OnClick handleTriggerClick
+                              . OnFocus handleTriggerFocus
+                              . OnMouseLeave handleTriggerMouseLeave
+                              . OnMouseEnter handleTriggerMouseEnter
+
+                        in
+                            as
+                                (features & addTriggerHandlers)
+                                (p : children)
                     }
+
+instance HasProp As Portal where
+    type Prop As Portal = Features -> [View] -> View
+    getProp _ = as
+    setProp _ a p = p { as = a }
 
 instance HasFeatures Portal where
     getFeatures = features
@@ -359,6 +288,11 @@ instance HasFeatures Portal where
 instance HasChildren Portal where
     getChildren = children
     setChildren cs p = p { children = cs }
+
+instance HasProp PortalNode Portal where
+    type Prop PortalNode Portal = (Features -> Features) -> View
+    getProp _ = portal
+    setProp _ pn p = p { portal = pn }
 
 instance HasProp CloseOnDocumentClick Portal where
     type Prop CloseOnDocumentClick Portal = Bool
@@ -454,13 +388,3 @@ instance HasProp OpenOnTriggerMouseEnter Portal where
     type Prop OpenOnTriggerMouseEnter Portal = Bool
     getProp _ = openOnTriggerMouseEnter
     setProp _ ootme p = p { openOnTriggerMouseEnter = ootme }
-
-instance HasProp Prepend Portal where
-    type Prop Prepend Portal = Bool
-    getProp _ = prepend
-    setProp _ pre p = p { prepend = pre }
-
-instance HasProp Trigger Portal where
-    type Prop Trigger Portal = View
-    getProp _ = trigger
-    setProp _ t p = p { trigger = t }
