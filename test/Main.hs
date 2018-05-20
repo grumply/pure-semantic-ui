@@ -42,7 +42,7 @@
 
 -- main = do
 --   inject L.body (fromTxt "Hello, World!")
-
+{-# LANGUAGE PatternSynonyms, RecordWildCards, FlexibleInstances #-}
 module Main where
 
 -- from pure-dom
@@ -82,23 +82,19 @@ import qualified Data.HashMap.Strict as HM
 import qualified Data.Vector as V
 import qualified Data.Vector.Mutable as MV
 
-import qualified Data.Map.Strict as Map
-import Data.Monoid
-import Debug.Trace
-
 foreign import javascript unsafe
   "$r = Math.round(Math.random()*1000)%$1"
     rand :: Int -> IO Int
 
 data Row = Row
-  { ident    :: {-# UNPACK #-} !Int
-  , label    :: {-# UNPACK #-} !Txt
-  , selected :: !Bool
+  { ident    :: Int
+  , label    :: Txt
+  , selected :: Bool
   } deriving Eq
 
 data Model = Model
-  { rows    :: ![Row]
-  , lastId  :: !Int
+  { rows    :: [Row]
+  , lastId  :: Int
   , hashmap :: HM.HashMap Int Int
   }
 
@@ -168,13 +164,13 @@ update msg mdl =
       return mdl { rows = [] }
 
     SwapM ->
-      return mdl { rows = swap 4 9 (rows mdl) }
+      return mdl { rows = swap 1 998 (rows mdl) }
 
     RemoveM i ->
       return mdl { rows = removeIndex (i - 1) (rows mdl) }
 
     SelectM i ->
-      return mdl { rows = L.map (selectRow i) (rows mdl) }
+      return mdl { rows = updateOne (i - 1) (\(Row i l s) -> Row i l (not s)) (rows mdl) }
 
 bang :: Row -> Row
 bang row = row { label = label row <> " !!!" }
@@ -190,18 +186,17 @@ updateEvery n f = V.toList . update . V.fromList
       in
         V.accumulate (flip ($)) vector patches
 
-selectRow :: Int -> Row -> Row
-selectRow i row
-  | i == ident row = row { selected = True }
-  | selected row   = row { selected = False }
-  | otherwise      = row
+updateOne :: Int -> (a -> a) -> [a] -> [a]
+updateOne i f = V.toList . update . V.fromList
+  where
+    update = V.modify $ \v -> do
+      r <- MV.unsafeRead v i
+      MV.unsafeWrite v i (f r)
 
 swap :: Int -> Int -> [a] -> [a]
 swap i j = V.toList . swapped . V.fromList
   where
-    swapped v
-      | V.length v > 10 = V.modify (\v -> MV.swap v i j) v
-      | otherwise       = v
+    swapped = V.modify (\v -> MV.swap v i j)
 
 removeIndex :: Int -> [a] -> [a]
 removeIndex i = uncurry (<>) . fmap (L.drop 1) . L.splitAt i
@@ -219,8 +214,8 @@ buttons =
     , ( "swaprows", "Swap Rows", SwapM )
     ]
 
-tbody :: [(View)] -> View
-tbody kcs = trace "Keyed Tbody" $ Tbody <||> kcs
+tbody :: [(Int,View)] -> View
+tbody kcs = (Keyed Tbody) <||#> kcs
 
 buttonPrimaryBlock :: Updater -> (Txt,Txt,Msg) -> View
 buttonPrimaryBlock f (ident,label,msg) =
@@ -229,8 +224,8 @@ buttonPrimaryBlock f (ident,label,msg) =
           [ fromTxt label ]
       ]
 
-keyedRow :: Updater -> Row -> (View)
-keyedRow f = trace "keyedRow" $ row
+keyedRow :: Updater -> Row -> (Int,View)
+keyedRow f = ident &&& row
   where
     row = ComponentIO $ \self ->
       let select _ = do
@@ -243,13 +238,10 @@ keyedRow f = trace "keyedRow" $ row
       in
           def
               { construct = return ()
-              , force = \newprops _ -> do
-                  oldprops <- getProps self
-                  return (newprops /= oldprops)
               , render = \r _ ->
                   Tr <| ((selected r) ? Classes ["danger"] $ id) |>
-                      [ Td <| Classes ["col-md-1"] |> [ fromTxt (toTxt (ident r)) ]
-                      , Td <| Classes ["col-md-4"] |> [ A <| OnClick select |> [ fromTxt (label r) ] ]
+                      [ Td <| Classes ["col-md-1"] |> (fromTxt (toTxt (ident r)))
+                      , Td <| Classes ["col-md-4"] |> [ A <| OnClick select |> (fromTxt (label r)) ]
                       , Td <| Classes ["col-md-1"] |>
                           [ A <| OnClick remove |>
                               [ HTML.Span <| Classes ["glyphicon glyphicon-remove"] . Property ("aria-hidden","true") ]
@@ -270,10 +262,9 @@ instance Pure Main.Body where
           return (mdl',return ())
     in
         def
-            { construct = return (Model mempty 1 mempty)
-            , render = trace "Rendering Body" $ \_ model ->
-                HTMLView Nothing "div" (Features_ mempty mempty mempty (Map.fromList [("id","main")]) [] [])
-                -- Div <<| setProperties [ ("id","main") ] |>>
+            { construct = return (Model [] 1 HM.empty)
+            , render = \_ model ->
+                Div <| Id "main" |>
                   [ Div <| Class "container" |>
                       [ Div <| Class "jumbotron" |>
                           [ Div <| Class "row" |>
@@ -289,22 +280,3 @@ instance Pure Main.Body where
                       ]
                   ]
             }
-
-infixr 9 |>>
-(|>>) f cs a =
-  let a' = setChildren cs a
-      b = f a'
-  in a' `seq` b `seq` b
-
-infixl 0 <<|
-(<<|) a f =
-  let b = f a
-      v = toView b
-  in b `seq` v `seq` v
-
-div :: View
-div = HTMLView Nothing "div" mempty []
-
-addProperty' (k,v) x = x { features = (features x) { properties = Map.insert k v (properties (features x)) } }
-
-setProperties kvs x = x { features = (features x) { properties = Map.fromList kvs } }
