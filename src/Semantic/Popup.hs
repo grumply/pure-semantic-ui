@@ -4,29 +4,33 @@ module Semantic.Popup
   , module Tools
   , Popup(..), pattern Popup
   , Content(..), pattern Content
-  , Header(..), pattern Header
+  , Header(..), pattern Semantic.Popup.Header
   ) where
 
 import Control.Arrow ((&&&))
 import Control.Concurrent
+import Control.Monad (void,join)
+import Data.Foldable (for_)
 import Data.IORef
+import Data.List hiding (isInfixOf)
 import Data.Maybe
 import GHC.Generics as G
-import Pure.Data.Txt (isInfixOf)
-import Pure.View hiding (position,offset,round,trigger,OnClose,Content,Header,Offset,Styles)
-import Pure.Lifted (JSV,Node(..),Element(..),(.#),window,IsJSV(..))
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Styles (left,right,bottom,top,auto,pxs)
+import Pure.Data.Txt hiding (filter)
+import Pure.Data.HTML
+import Pure.Data.Events
+import Pure.Data.Lifted
 
 import Semantic.Utils hiding (on)
 
-import Semantic.Portal hiding (PS)
+import Semantic.Portal as Portal
 
-import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!), (%) )
+import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)
-  , pattern Attributes, Attributes(..)
-  , pattern Children, Children(..)
-  , pattern Classes, Classes(..)
   , pattern Basic, Basic(..)
   , pattern Flowing, Flowing(..)
   , pattern HideOnScroll, HideOnScroll(..)
@@ -59,42 +63,41 @@ import Semantic.Properties as Properties
 import Data.Function as Tools ((&))
 import Pure.Data.Default as Tools
 
-data Popup ms = Popup_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data Popup = Popup_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
+    , trigger :: View
     , basic :: Bool
     , flowing :: Bool
     , hideOnScroll :: Bool
     , hoverable :: Bool
     , inverted :: Bool
     , offset :: Double
-    , onClose :: Ef ms IO ()
-    , onMount :: Ef ms IO ()
-    , onOpen :: Ef ms IO ()
-    , onUnmount :: Ef ms IO ()
+    , onClose :: IO ()
+    , onMount :: IO ()
+    , onOpen :: IO ()
+    , onUnmount :: IO ()
     , position :: Txt
     , size :: Txt
     , styles :: [(Txt,Txt)]
-    , trigger :: View ms
     , triggerOn :: [Txt]
     , wide :: Maybe Txt
-    , withPortal :: Portal ms -> Portal ms
+    , withPortal :: Portal.Portal -> Portal.Portal
     } deriving (Generic)
 
-instance Default (Popup ms) where
+instance Default Popup where
     def = (G.to gdef)
-        { as = Div
+        { as = \fs cs -> Div & Features fs & Children cs
         , position = "top left"
         , triggerOn = [ "hover" ]
         , withPortal = id
         }
 
-pattern Popup :: VC ms => Popup ms -> View ms
-pattern Popup p = View p
+pattern Popup :: Popup -> Popup
+pattern Popup p = p
 
-data PopupState = PS
+data PopupState = WPS
     { closed :: Bool
     , currentStyles :: [(Txt,Txt)]
     , currentPosition :: Txt
@@ -103,9 +106,9 @@ data PopupState = PS
     , scrollHandler :: IORef (IO ())
     }
 
-instance VC ms => Pure Popup ms where
-    render p =
-        Component "Semantic.Modules.Popup" p $ \self ->
+instance Pure Popup where
+    view =
+        LibraryComponentIO $ \self ->
             let
                 bounds = do
                     let fi = fromIntegral :: Int -> Double
@@ -180,14 +183,14 @@ instance VC ms => Pure Popup ms where
                     in visibleTop && visibleBottom && visibleLeft && visibleRight
 
                 setPopupStyles = do
-                    PS {..} <- getState self
+                    WPS {..} <- getState self
                     Popup_ {..} <- getProps self
                     mcbr <- readIORef coords
                     mpbr <- readIORef popupCoords
                     for_ ((,) <$> mcbr <*> mpbr) $ \(cbr,pbr) -> do
                         bs  <- bounds
                         let
-                            render d x = (d,maybe auto (pxs . round) x)
+                            view d x = (d,maybe auto (pxs . round) x)
 
                             compute = computePopupStyle offset pbr cbr bs
 
@@ -204,7 +207,7 @@ instance VC ms => Pure Popup ms where
                                 , "left center"
                                 ]
 
-                            ps = (position,s) : map (id &&& compute) (filter (/= position) positions)
+                            ps = (position,s) : fmap (id &&& compute) (filter (/= position) positions)
 
                             findValid [] = (position,s)
                             findValid ((p,c) : cs)
@@ -213,54 +216,55 @@ instance VC ms => Pure Popup ms where
 
                             (p,(l,r,t,b)) = findValid ps
 
-                        let ss = [("position","absolute"),render left l,render right r,render top t,render bottom b]
+                        let ss = [("position","absolute"),view left l,view right r,view top t,view bottom b]
 
-                        setState self $ \_ PS {..} ->
-                            PS { currentStyles  = ss
+                        setState self $ \_ WPS {..} -> return
+                            ( WPS { currentStyles  = ss
                                , currentPosition = p
                                , ..
                                }
+                            , return ()
+                            )
 
                 handleOpen (evtTarget -> t) = do
                     Popup_ {..} <- getProps self
-                    PS {..} <- getState self
+                    WPS {..} <- getState self
                     br <- boundingRect (Element t)
-                    liftIO $ writeIORef coords (Just br)
+                    writeIORef coords (Just br)
                     onOpen
 
                 handlePortalMount = do
                     Popup_ {..} <- getProps self
-                    PS {..} <- getState self
-                    sh <- liftIO $ onRaw (Node $ toJSV window) "scroll" def $ \_ _ -> liftIO $ do
+                    WPS {..} <- getState self
+                    sh <- onRaw (Node $ toJSV window) "scroll" def $ \_ _ -> do
                         Popup_ {..} <- getProps self
-                        PS {..} <- getState self
-                        setState self $ \_ PS {..} -> PS { closed = True, .. }
+                        WPS {..} <- getState self
+                        setState self $ \_ WPS {..} -> return (WPS { closed = True, .. }, return ())
                         join $ readIORef scrollHandler
                         forkIO $ do
                             threadDelay 50000
-                            void $ setState self $ \_ PS {..} -> PS { closed = False, .. }
-                        void $ parent self onClose
-                    liftIO $ writeIORef scrollHandler sh
+                            void $ setState self $ \_ WPS {..} -> return (WPS { closed = False, .. }, return ())
+                        onClose
+                    writeIORef scrollHandler sh
                     onMount
 
                 handlePortalUnmount = do
                     Popup_ {..} <- getProps self
-                    PS {..} <- getState self
-                    liftIO $ join $ readIORef scrollHandler
+                    WPS {..} <- getState self
+                    join $ readIORef scrollHandler
                     onUnmount
 
                 handlePopupRef (Node n) = do
-                    setStateIO self $ \_ PS {..} ->
-                        return (PS {..},do
+                    void $ setState self $ \_ WPS {..} ->
+                        return (WPS {..},do
                             br <- boundingRect (Element n)
-                            liftIO $ writeIORef popupCoords (isNull n ? Nothing $ Just br)
-                            liftIO setPopupStyles
+                            writeIORef popupCoords (isNull n ? Nothing $ Just br)
+                            setPopupStyles
                           )
-                    return Nothing
 
             in def
-                { construct = PS def def "top left" <$> newIORef def <*> newIORef def <*> newIORef def
-                , renderer = \Popup_ {..} PS {..} ->
+                { construct = WPS def def "top left" <$> newIORef def <*> newIORef def <*> newIORef def
+                , render = \Popup_ {..} WPS {..} ->
                     let
                         applyPortalProps =
                             let
@@ -272,231 +276,178 @@ instance VC ms => Pure Popup ms where
                                 hoverProps . focusProps . clickProps . hoverableProps
 
                         cs =
-                            ( "ui"
-                            : currentPosition
-                            : size
-                            : wide # "wide"
-                            : basic # "basic"
-                            : flowing # "flowing"
-                            : inverted # "inverted"
-                            : "popup transition visible"
-                            : classes
-                            )
+                            [ "ui"
+                            , currentPosition
+                            , size
+                            , maybe "" (<>> "wide") wide
+                            , basic # "basic"
+                            , flowing # "flowing"
+                            , inverted # "inverted"
+                            , "popup transition visible"
+                            ]
                     in
                         closed
                             ? trigger
-                            $ Portal $ withPortal $ applyPortalProps $ def
-                                & OnClose onClose
+                            $ View $ Portal.Portal $ withPortal $ applyPortalProps $ def
+                                & Portal.OnClose onClose
                                 & OnMount handlePortalMount
                                 & OnOpen handleOpen
                                 & OnUnmount handlePortalUnmount
-                                & Trigger trigger
-                                & Children
-                                    [ as
-                                        ( mergeClasses $ ClassList cs
-                                        : StyleList currentStyles
-                                        : HostRef handlePopupRef
-                                        : attributes
-                                        )
-                                        children
-                                    ]
+                                & PortalNode (\f -> as (f $ features & Classes cs & Pure.Data.View.Patterns.Styles currentStyles & Lifecycle (HostRef handlePopupRef)) children)
+                                & Children [ trigger ]
                 }
 
-instance HasProp As (Popup ms) where
-    type Prop As (Popup ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Popup where
+    type Prop As Popup = Features -> [View] -> View
     getProp _ = as
     setProp _ f p = p { as = f }
 
-instance HasProp Attributes (Popup ms) where
-    type Prop Attributes (Popup ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ cs p = p { attributes = cs }
+instance HasFeatures Popup where
+    getFeatures = features
+    setFeatures cs p = p { features = cs }
 
-instance HasProp Children (Popup ms) where
-    type Prop Children (Popup ms) = [View ms]
-    getProp _ = children
-    setProp _ cs p = p { children = cs }
+instance HasChildren Popup where
+    getChildren = children
+    setChildren cs p = p { children = cs }
 
-instance HasProp Classes (Popup ms) where
-    type Prop Classes (Popup ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs p = p { classes = cs }
-
-instance HasProp Basic (Popup ms) where
-    type Prop Basic (Popup ms) = Bool
+instance HasProp Basic Popup where
+    type Prop Basic Popup = Bool
     getProp _ = basic
     setProp _ b p = p { basic = b }
 
-instance HasProp Flowing (Popup ms) where
-    type Prop Flowing (Popup ms) = Bool
+instance HasProp Flowing Popup where
+    type Prop Flowing Popup = Bool
     getProp _ = flowing
     setProp _ f p = p { flowing = f }
 
-instance HasProp HideOnScroll (Popup ms) where
-    type Prop HideOnScroll (Popup ms) = Bool
+instance HasProp HideOnScroll Popup where
+    type Prop HideOnScroll Popup = Bool
     getProp _ = hideOnScroll
     setProp _ hos p = p { hideOnScroll = hos }
 
-instance HasProp Hoverable (Popup ms) where
-    type Prop Hoverable (Popup ms) = Bool
+instance HasProp Hoverable Popup where
+    type Prop Hoverable Popup = Bool
     getProp _ = hoverable
     setProp _ h p = p { hoverable = h }
 
-instance HasProp Inverted (Popup ms) where
-    type Prop Inverted (Popup ms) = Bool
+instance HasProp Inverted Popup where
+    type Prop Inverted Popup = Bool
     getProp _ = inverted
     setProp _ i p = p { inverted = i }
 
-instance HasProp Offset (Popup ms) where
-    type Prop Offset (Popup ms) = Double
+instance HasProp Offset Popup where
+    type Prop Offset Popup = Double
     getProp _ = offset
     setProp _ o p = p { offset = o }
 
-instance HasProp OnClose (Popup ms) where
-    type Prop OnClose (Popup ms) = Ef ms IO ()
+instance HasProp OnClose Popup where
+    type Prop OnClose Popup = IO ()
     getProp _ = onClose
     setProp _ oc p = p { onClose = oc }
 
-instance HasProp OnMount (Popup ms) where
-    type Prop OnMount (Popup ms) = Ef ms IO ()
+instance HasProp OnMount Popup where
+    type Prop OnMount Popup = IO ()
     getProp _ = onMount
     setProp _ om p = p { onMount = om }
 
-instance HasProp OnOpen (Popup ms) where
-    type Prop OnOpen (Popup ms) = Ef ms IO ()
+instance HasProp OnOpen Popup where
+    type Prop OnOpen Popup = IO ()
     getProp _ = onOpen
     setProp _ oo p = p { onOpen = oo }
 
-instance HasProp OnUnmount (Popup ms) where
-    type Prop OnUnmount (Popup ms) = Ef ms IO ()
+instance HasProp OnUnmount Popup where
+    type Prop OnUnmount Popup = IO ()
     getProp _ = onUnmount
     setProp _ ou p = p { onUnmount = ou }
 
-instance HasProp Position (Popup ms) where
-    type Prop Position (Popup ms) = Txt
+instance HasProp Position Popup where
+    type Prop Position Popup = Txt
     getProp _ = position
     setProp _ pos p = p { position = pos }
 
-instance HasProp Size (Popup ms) where
-    type Prop Size (Popup ms) = Txt
+instance HasProp Size Popup where
+    type Prop Size Popup = Txt
     getProp _ = size
     setProp _ sz p = p { size = sz }
 
-instance HasProp Styles (Popup ms) where
-    type Prop Styles (Popup ms) = [(Txt,Txt)]
+instance HasProp Styles Popup where
+    type Prop Styles Popup = [(Txt,Txt)]
     getProp _ = styles
     setProp _ s p = p { styles = s }
 
-instance HasProp Trigger (Popup ms) where
-    type Prop Trigger (Popup ms) = View ms
+instance HasProp Trigger Popup where
+    type Prop Trigger Popup = View
     getProp _ = trigger
     setProp _ t p = p { trigger = t }
 
-instance HasProp TriggerOn (Popup ms) where
-    type Prop TriggerOn (Popup ms) = [Txt]
+instance HasProp TriggerOn Popup where
+    type Prop TriggerOn Popup = [Txt]
     getProp _ = triggerOn
     setProp _ to p = p { triggerOn = to }
 
-instance HasProp Wide (Popup ms) where
-    type Prop Wide (Popup ms) = Maybe Txt
+instance HasProp Wide Popup where
+    type Prop Wide Popup = Maybe Txt
     getProp _ = wide
     setProp _ w p = p { wide = w }
 
-instance HasProp WithPortal (Popup ms) where
-    type Prop WithPortal (Popup ms) = Portal ms -> Portal ms
+instance HasProp WithPortal Popup where
+    type Prop WithPortal Popup = Portal -> Portal
     getProp _ = withPortal
     setProp _ wp p = p { withPortal = wp }
 
-data Content ms = Content_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data Content = Content_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     } deriving (Generic)
 
-instance Default (Content ms) where
-    def = (G.to gdef) { as = Div }
+instance Default Content where
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
-pattern Content :: Content ms -> View ms
-pattern Content pc = View pc
+pattern Content :: Content -> Content
+pattern Content pc = pc
 
-instance Pure Content ms where
-    render Content_ {..} =
-        let
-            cs =
-                ( "content"
-                : classes
-                )
-        in
-            as
-                ( mergeClasses $ ClassList cs
-                : attributes
-                )
-                children
+instance Pure Content where
+    view Content_ {..} = as (features & Class "content") children
 
-instance HasProp As (Content ms) where
-    type Prop As (Content ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Content where
+    type Prop As Content = Features -> [View] -> View
     getProp _ = as
     setProp _ f pc = pc { as = f }
 
-instance HasProp Attributes (Content ms) where
-    type Prop Attributes (Content ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ cs pc = pc { attributes = cs }
+instance HasFeatures Content where
+    getFeatures = features
+    setFeatures cs pc = pc { features = cs }
 
-instance HasProp Children (Content ms) where
-    type Prop Children (Content ms) = [View ms]
-    getProp _ = children
-    setProp _ cs pc = pc { children = cs }
+instance HasChildren Content where
+    getChildren = children
+    setChildren cs pc = pc { children = cs }
 
-instance HasProp Classes (Content ms) where
-    type Prop Classes (Content ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs pc = pc { classes = cs }
-
-data Header ms = Header_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data Header = Header_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     } deriving (Generic)
 
-instance Default (Header ms) where
-    def = (G.to gdef) { as = Div }
+instance Default Header where
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
-pattern Header :: Header ms -> View ms
-pattern Header ph = View ph
+pattern Header :: Header -> Header
+pattern Header ph = ph
 
-instance Pure Header ms where
-    render Header_ {..} =
-        let
-            cs =
-                ( "header"
-                : classes
-                )
-        in
-            as
-                ( mergeClasses $ ClassList cs
-                : attributes
-                )
-                children
+instance Pure Header where
+    view Header_ {..} = as (features & Class "header") children
 
-instance HasProp As (Header ms) where
-    type Prop As (Header ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Header where
+    type Prop As Header = Features -> [View] -> View
     getProp _ = as
     setProp _ f ph = ph { as = f }
 
-instance HasProp Attributes (Header ms) where
-    type Prop Attributes (Header ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ cs ph = ph { attributes = cs }
+instance HasFeatures Header where
+    getFeatures = features
+    setFeatures cs ph = ph { features = cs }
 
-instance HasProp Children (Header ms) where
-    type Prop Children (Header ms) = [View ms]
-    getProp _ = children
-    setProp _ cs ph = ph { children = cs }
+instance HasChildren Header where
+    getChildren = children
+    setChildren cs ph = ph { children = cs }
 
-instance HasProp Classes (Header ms) where
-    type Prop Classes (Header ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs ph = ph { classes = cs }

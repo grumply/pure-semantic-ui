@@ -5,17 +5,17 @@ module Semantic.Container
   ) where
 
 import GHC.Generics as G
-import Pure.View hiding (textAlign,text)
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML
 
 import Semantic.Utils
 
-import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!), (%) )
+import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)
-  , pattern Attributes, Attributes(..)
-  , pattern Children, Children(..)
-  , pattern Classes, Classes(..)
   , pattern Fluid, Fluid(..)
   , pattern TextAlign, TextAlign(..)
   , pattern IsText, IsText(..)
@@ -24,21 +24,20 @@ import Semantic.Properties as Properties
 import Data.Function as Tools ((&))
 import Pure.Data.Default as Tools
 
-data Container ms = Container_
-  { as :: [Feature ms] -> [View ms] -> View ms
-  , children :: [View ms]
-  , attributes :: [Feature ms]
-  , classes :: [Txt]
+data Container = Container_
+  { as :: Features -> [View] -> View
+  , children :: [View]
+  , features :: Features
   , fluid :: Bool
   , text :: Bool
   , textAlign :: Txt
   } deriving (Generic)
 
-instance Default (Container ms) where
-    def = (G.to gdef) { as = Div }
+instance Default Container where
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
-pattern Container :: Container ms -> View ms
-pattern Container c = View c
+pattern Container :: Container -> Container
+pattern Container c = c
 
 pattern TextContainer c <- (getTextContainer -> (True,c)) where
     TextContainer c = setTextContainer c
@@ -55,49 +54,41 @@ setTextContainer c =
         View Container_ {..} -> View Container_ { text = True, .. }
         _                    -> c
 
-instance Pure Container ms where
-    render Container_ {..} =
+instance Pure Container where
+    view Container_ {..} =
         let cs =
-              ( "ui"
-              : text # "text"
-              : fluid # "fluid"
-              : textAlign
-              : "container"
-              : classes
-              )
-        in as (ClassList cs : attributes) children
+              [ "ui"
+              , text # "text"
+              , fluid # "fluid"
+              , textAlign
+              , "container"
+              ]
+        in as (features & Classes cs) children
 
-instance HasProp As (Container ms) where
-    type Prop As (Container ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Container where
+    type Prop As Container = Features -> [View] -> View
     getProp _ = as
     setProp _ f c = c { as = f }
 
-instance HasProp Attributes (Container ms) where
-    type Prop Attributes (Container ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ cs c = c { attributes = cs }
+instance HasFeatures Container where
+    getFeatures = features
+    setFeatures cs c = c { features = cs }
 
-instance HasProp Children (Container ms) where
-    type Prop Children (Container ms) = [View ms]
-    getProp _ = children
-    setProp _ cs c = c { children = cs }
+instance HasChildren Container where
+    getChildren = children
+    setChildren cs c = c { children = cs }
 
-instance HasProp Classes (Container ms) where
-    type Prop Classes (Container ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs c = c { classes = cs }
-
-instance HasProp Fluid (Container ms) where
-    type Prop Fluid (Container ms) = Bool
+instance HasProp Fluid Container where
+    type Prop Fluid Container = Bool
     getProp _ = fluid
     setProp _ f c = c { fluid = f }
 
-instance HasProp IsText (Container ms) where
-    type Prop IsText (Container ms) = Bool
+instance HasProp IsText Container where
+    type Prop IsText Container = Bool
     getProp _ = text
     setProp _ t c = c { text = t }
 
-instance HasProp TextAlign (Container ms) where
-    type Prop TextAlign (Container ms) = Txt
+instance HasProp TextAlign Container where
+    type Prop TextAlign Container = Txt
     getProp _ = textAlign
     setProp _ ta c = c { textAlign = ta }

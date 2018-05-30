@@ -8,20 +8,24 @@ module Semantic.Transition
   ) where
 
 import Control.Concurrent
+import Control.Monad (void)
+import Data.Foldable (for_)
 import Data.IORef
 import Data.Maybe
+import Data.Monoid
 import GHC.Generics as G
-import Pure.View hiding (animation,onComplete,visible,lookup)
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Styles (ms)
+import Pure.Data.Txt
+import Pure.Data.HTML
 
 import Semantic.Utils
 
-import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!), (%) )
+import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)
-  , pattern Attributes, Attributes(..)
-  , pattern Children, Children(..)
-  , pattern Classes, Classes(..)
   , pattern Animation, Animation(..)
   , pattern AnimationDuration, AnimationDuration(..)
   , pattern Visible, Visible(..)
@@ -46,32 +50,33 @@ calculateTransitionDuration _        (Uniform d) = d
 calculateTransitionDuration Exiting  Skewed {..} = hide
 calculateTransitionDuration _        Skewed {..} = show
 
-data Transition ms = Transition_
-    { as :: Maybe ([Feature ms] -> [View ms] -> View ms)
-    , children :: [View ms]
+data Transition = Transition_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     , animation :: Txt
     , duration :: AnimationDuration
     , visible :: Bool
     , mountOnShow :: Bool
-    , onComplete :: TransitionStatus -> Ef ms IO ()
-    , onHide :: TransitionStatus -> Ef ms IO ()
-    , onShow :: TransitionStatus -> Ef ms IO ()
-    , onStart :: TransitionStatus -> Ef ms IO ()
+    , onComplete :: TransitionStatus -> IO ()
+    , onHide :: TransitionStatus -> IO ()
+    , onShow :: TransitionStatus -> IO ()
+    , onStart :: TransitionStatus -> IO ()
     , transitionOnMount :: Bool
     , unmountOnHide :: Bool
     } deriving (Generic)
 
-instance Default (Transition ms) where
+instance Default Transition where
     def = (G.to gdef)
-        { as = Just Div
+        { as = \fs cs -> Div & Features fs & Children cs
         , animation = "fade"
         , duration = Uniform 500
         , visible = True
         , mountOnShow = True
         }
 
-pattern Transition :: Transition ms -> View ms
-pattern Transition t = View t
+pattern Transition :: Transition -> Transition
+pattern Transition t = t
 
 data TransitionState = TS
     { status :: TransitionStatus
@@ -81,15 +86,15 @@ data TransitionState = TS
     , transitionTimeout :: IORef (Maybe ThreadId)
     }
 
-instance Pure Transition ms where
-    render t =
-        Component "Semantic.Modules.Transition" t $ \self ->
+instance Pure Transition where
+    view =
+        LibraryComponentIO $ \self ->
             let
 
                 setSafeState f = do
                     TS {..} <- getState self
                     mtd <- readIORef mounted
-                    mtd # void (setStateIO self (\_ -> return . f))
+                    mtd # void (setState self (\_ st -> return (f st)))
 
                 handleStart = do
                     Transition_ {..} <- getProps self
@@ -104,7 +109,7 @@ instance Pure Transition ms where
                              , ..
                              }
                         , for_ upcoming $ \s -> do
-                            parent self (onStart s)
+                            onStart s
                             tid <- forkIO $ do
                                 threadDelay (calculateTransitionDuration s duration * 1000)
                                 handleComplete
@@ -114,20 +119,20 @@ instance Pure Transition ms where
                 handleComplete = do
                     Transition_ {..} <- getProps self
                     TS          {..} <- getState self
-                    parent self (onComplete status)
+                    onComplete status
                     maybe (return ()) (const handleStart) =<< readIORef next
                     s <- computeCompletedStatus
                     let callback = (status == Entering) ? onShow $ onHide
                     setSafeState $ \TS {..} ->
                         ( TS { status = s, animating = False, .. }
-                        , void (parent self (callback s))
+                        , callback s
                         )
 
                 updateStatus = do
                     Transition_ {..} <- getProps self
                     TS          {..} <- getState self
                     upcoming <- readIORef next
-                    upcoming # do
+                    (isJust upcoming) # do
                         writeIORef next . Just =<< computeNextStatus
                         (not animating) # handleStart
 
@@ -175,7 +180,7 @@ instance Pure Transition ms where
                         writeIORef mounted True
                         updateStatus
 
-                    , receiveProps = \newprops oldstate -> do
+                    , receive = \newprops oldstate -> do
                         oldprops <- getProps self
                         TS {..}  <- getState self
                         let (current,upcoming) = computeStatuses (visible newprops) status
@@ -193,7 +198,7 @@ instance Pure Transition ms where
                         TS {..} <- getState self
                         writeIORef mounted False
 
-                    , renderer = \Transition_ {..} TS {..} ->
+                    , render = \Transition_ {..} TS {..} ->
                           let
                               animationClasses cs =
                                   ( animation : cs ) ++
@@ -219,105 +224,108 @@ instance Pure Transition ms where
                                               _        -> def
                                   in styles <> [ ad ]
 
-                              headMay [] = nil
-                              headMay (x : _) = x
-
                           in
                               (status /= Unmounted) #
-                                  case as of
-                                    Nothing -> updateStylesAndClasses animationStyles animationClasses $ headMay children
-                                    Just w  -> w [ ClassList (animationClasses []), StyleList (animationStyles [])] children
+                                    as (features & Classes (animationClasses []) & Styles (animationStyles [])) children
 
                     }
 
-instance HasProp Children (Transition ms) where
-    type Prop Children (Transition ms) = [View ms]
-    getProp _ = children
-    setProp _ cs t = t { children = cs }
+instance HasProp As Transition where
+    type Prop As Transition = Features -> [View] -> View
+    getProp _ = as
+    setProp _ a t = t { as = a }
 
-instance HasProp Animation (Transition ms) where
-    type Prop Animation (Transition ms) = Txt
+instance HasChildren Transition where
+    getChildren = children
+    setChildren cs t = t { children = cs }
+
+instance HasFeatures Transition where
+    getFeatures = features
+    setFeatures fs t = t { features = fs }
+
+instance HasProp Animation Transition where
+    type Prop Animation Transition = Txt
     getProp _ = animation
     setProp _ a t = t { animation = a }
 
-instance HasProp AnimationDuration (Transition ms) where
-    type Prop AnimationDuration (Transition ms) = AnimationDuration
+instance HasProp AnimationDuration Transition where
+    type Prop AnimationDuration Transition = AnimationDuration
     getProp _ = duration
     setProp _ d t = t { duration = d }
 
-instance HasProp Visible (Transition ms) where
-    type Prop Visible (Transition ms) = Bool
+instance HasProp Visible Transition where
+    type Prop Visible Transition = Bool
     getProp _ = visible
     setProp _ v t = t { visible = v }
 
-instance HasProp MountOnShow (Transition ms) where
-    type Prop MountOnShow (Transition ms) = Bool
+instance HasProp MountOnShow Transition where
+    type Prop MountOnShow Transition = Bool
     getProp _ = mountOnShow
     setProp _ mos t = t { mountOnShow = mos }
 
-instance HasProp OnComplete (Transition ms) where
-    type Prop OnComplete (Transition ms) = TransitionStatus -> Ef ms IO ()
+instance HasProp OnComplete Transition where
+    type Prop OnComplete Transition = TransitionStatus -> IO ()
     getProp _ = onComplete
     setProp _ oc t = t { onComplete = oc }
 
-instance HasProp OnHide (Transition ms) where
-    type Prop OnHide (Transition ms) = TransitionStatus -> Ef ms IO ()
+instance HasProp OnHide Transition where
+    type Prop OnHide Transition = TransitionStatus -> IO ()
     getProp _ = onHide
     setProp _ oh t = t { onHide = oh }
 
-instance HasProp OnShow (Transition ms) where
-    type Prop OnShow (Transition ms) = TransitionStatus -> Ef ms IO ()
+instance HasProp OnShow Transition where
+    type Prop OnShow Transition = TransitionStatus -> IO ()
     getProp _ = onShow
     setProp _ os t = t { onShow = os }
 
-instance HasProp OnStart (Transition ms) where
-    type Prop OnStart (Transition ms) = TransitionStatus -> Ef ms IO ()
+instance HasProp OnStart Transition where
+    type Prop OnStart Transition = TransitionStatus -> IO ()
     getProp _ = onStart
     setProp _ os t = t { onStart = os }
 
-instance HasProp TransitionOnMount (Transition ms) where
-    type Prop TransitionOnMount (Transition ms) = Bool
+instance HasProp TransitionOnMount Transition where
+    type Prop TransitionOnMount Transition = Bool
     getProp _ = transitionOnMount
     setProp _ tom t = t { transitionOnMount = tom }
 
-instance HasProp UnmountOnHide (Transition ms) where
-    type Prop UnmountOnHide (Transition ms) = Bool
+instance HasProp UnmountOnHide Transition where
+    type Prop UnmountOnHide Transition = Bool
     getProp _ = unmountOnHide
     setProp _ uoh t = t { unmountOnHide = uoh }
 
-data Group ms = Group_
-    { as :: [Feature ms] -> [(Int,View ms)] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [(Int,View ms)]
+data Group = Group_
+    { as :: Features -> [(Int,View)] -> View
+    , features :: Features
+    , children :: [(Int,View)]
     , classes :: [Txt]
     , animation :: Txt
     , duration :: AnimationDuration
     } deriving (Generic)
 
-instance Default (Group ms) where
-    def = (G.to gdef :: Group ms)
-        { as = list Div
+instance Default Group where
+    def = (G.to gdef :: Group)
+        { as = \fs cs -> (Keyed Div) & Features fs & KeyedChildren cs
         , animation = "fade"
         , duration = Uniform 500
         }
 
-pattern Group :: VC ms => Group ms -> View ms
-pattern Group tg = View tg
+pattern Group :: Group -> Group
+pattern Group tg = tg
 
-data GroupState ms = TGS
-    { buffer :: [(Int,View ms)]
+data GroupState = TGS
+    { buffer :: [(Int,View)]
     }
 
-instance VC ms => Pure Group ms where
-    render tg =
-        Component "Semantic.Modules.Transition.Group" tg $ \self ->
+instance Pure Group where
+    view =
+        LibraryComponentIO $ \self ->
             let
                 handleOnHide key _ =
-                    void $ setState self $ \_ TGS {..} ->
-                        TGS { buffer = filter ((/= key) . fst) buffer, .. }
+                    void $ setState self $ \_ TGS {..} -> return
+                        (TGS { buffer = Prelude.filter ((/= key) . fst) buffer, .. }, return ())
 
                 wrapChild anim dur vis tom (key,child) =
-                    (key,Transition def
+                    (key,View $ Transition def
                         { animation = anim
                         , duration = dur
                         , transitionOnMount = tom
@@ -327,6 +335,7 @@ instance VC ms => Pure Group ms where
                         }
                     )
 
+                hide :: View -> View
                 hide (View Transition_ {..}) = View Transition_ { visible = False, .. }
 
                 fromTransition (Just (View t@Transition_ {})) f = Just (f t)
@@ -336,11 +345,11 @@ instance VC ms => Pure Group ms where
                 { construct = do
                     tg@Group_ {..} <- getProps self
                     return TGS
-                        { buffer = map (wrapChild animation duration True False) children
+                        { buffer = fmap (wrapChild animation duration True False) children
                         }
 
-                , receiveProps = \Group_ { animation = anim, duration = dur, children = cs } TGS {..} -> return TGS
-                    { buffer = flip map (mergeMappings buffer cs) $ \(k,c) ->
+                , receive = \Group_ { animation = anim, duration = dur, children = cs } TGS {..} -> return TGS
+                    { buffer = flip fmap (mergeMappings buffer cs) $ \(k,c) ->
                         let prevChild = lookup k buffer
                             hasPrev   = isJust prevChild
                             hasNext   = isJust (lookup k cs)
@@ -356,35 +365,28 @@ instance VC ms => Pure Group ms where
                     , ..
                     }
 
-                , renderer = \Group_ {..} TGS {..} -> as attributes buffer
+                , render = \Group_ {..} TGS {..} -> as features buffer
                 }
 
-instance HasProp As (Group ms) where
-    type Prop As (Group ms) = [Feature ms] -> [(Int,View ms)] -> View ms
+instance HasProp As Group where
+    type Prop As Group = Features -> [(Int,View)] -> View
     getProp _ = as
     setProp _ a tg = tg { as = a }
 
-instance HasProp Attributes (Group ms) where
-    type Prop Attributes (Group ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ as tg = tg { attributes = as }
+instance HasFeatures Group where
+    getFeatures = features
+    setFeatures as tg = tg { features = as }
 
-instance HasProp Children (Group ms) where
-    type Prop Children (Group ms) = [(Int,View ms)]
-    getProp _ = children
-    setProp _ cs tg = tg { children = cs }
+instance HasKeyedChildren Group where
+    getKeyedChildren = children
+    setKeyedChildren cs tg = tg { children = cs }
 
-instance HasProp Classes (Group ms) where
-    type Prop Classes (Group ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs tg = tg { classes = cs }
-
-instance HasProp Animation (Group ms) where
-    type Prop Animation (Group ms) = Txt
+instance HasProp Animation Group where
+    type Prop Animation Group = Txt
     getProp _ = animation
     setProp _ a tg = tg { animation = a }
 
-instance HasProp AnimationDuration (Group ms) where
-    type Prop AnimationDuration (Group ms) = AnimationDuration
+instance HasProp AnimationDuration Group where
+    type Prop AnimationDuration Group = AnimationDuration
     getProp _ = duration
     setProp _ d tg = tg { duration = d }

@@ -7,17 +7,18 @@ module Semantic.Grid
   ) where
 
 import GHC.Generics as G
-import Pure.View hiding (name,textAlign,verticalAlign,color,width)
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML
+import Pure.Data.Events
 
 import Semantic.Utils hiding (only)
 
-import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!), (%) )
+import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)
-  , pattern Attributes, Attributes(..)
-  , pattern Children, Children(..)
-  , pattern Classes, Classes(..)
   , pattern Celled, Celled(..)
   , pattern Centered, Centered(..)
   , pattern Columns, Columns(..)
@@ -53,11 +54,10 @@ import Semantic.Properties as Properties
 import Data.Function as Tools ((&))
 import Pure.Data.Default as Tools
 
-data Grid ms = Grid_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data Grid = Grid_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     , celled :: Maybe Txt
     , centered :: Bool
     , columns :: Txt
@@ -74,137 +74,124 @@ data Grid ms = Grid_
     , verticalAlign :: Txt
     } deriving (Generic)
 
-instance Default (Grid ms) where
-    def = (G.to gdef) { as = Div }
+instance Default Grid where
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
-pattern Grid :: Grid ms -> View ms
-pattern Grid g = View g
+pattern Grid :: Grid -> Grid
+pattern Grid g = g
 
-instance Pure Grid ms where
-    render Grid_ {..} =
+instance Pure Grid where
+    view Grid_ {..} =
         let
             cs =
-                ( "ui"
-                : centered # "centered"
-                : container # "container"
-                : doubling # "doubling"
-                : inverted # "inverted"
-                : stackable # "stackable"
-                : stretched # "stretched"
-                : may (<>> "celled") celled
-                : may (<>> "divided") divided
-                : may (<>> "padded") padded
-                : may (<>> "relaxed") relaxed
-                : multiProp reversed "reversed"
-                : textAlign
-                : verticalAlign
-                : widthProp columns "column" True
-                : "grid"
-                : classes
-                )
+                [ "ui"
+                , centered # "centered"
+                , container # "container"
+                , doubling # "doubling"
+                , inverted # "inverted"
+                , stackable # "stackable"
+                , stretched # "stretched"
+                , maybe "" (<>> "celled") celled
+                , maybe "" (<>> "divided") divided
+                , maybe "" (<>> "padded") padded
+                , maybe "" (<>> "relaxed") relaxed
+                , multiProp reversed "reversed"
+                , textAlign
+                , verticalAlign
+                , widthProp columns "column" True
+                , "grid"
+                ]
         in
-            as
-                ( mergeClasses $ ClassList cs
-                : attributes
-                )
-                children
+            as (features & Classes cs) children
 
-instance HasProp As (Grid ms) where
-    type Prop As (Grid ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Grid where
+    type Prop As Grid = Features -> [View] -> View
     getProp _ = as
     setProp _ a g = g { as = a }
 
-instance HasProp Attributes (Grid ms) where
-    type Prop Attributes (Grid ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ as g = g { attributes = as }
+instance HasFeatures Grid where
+    getFeatures = features
+    setFeatures as g = g { features = as }
 
-instance HasProp Children (Grid ms) where
-    type Prop Children (Grid ms) = [View ms]
-    getProp _ = children
-    setProp _ cs g = g { children = cs }
+instance HasChildren Grid where
+    getChildren = children
+    setChildren cs g = g { children = cs }
 
-instance HasProp Classes (Grid ms) where
-    type Prop Classes (Grid ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs g = g { classes = cs }
-
-instance HasProp Celled (Grid ms) where
-    type Prop Celled (Grid ms) = Maybe Txt
+instance HasProp Celled Grid where
+    type Prop Celled Grid = Maybe Txt
     getProp _ = celled
     setProp _ c g = g { celled = c }
 
-instance HasProp Centered (Grid ms) where
-    type Prop Centered (Grid ms) = Bool
+instance HasProp Centered Grid where
+    type Prop Centered Grid = Bool
     getProp _ = centered
     setProp _ c g = g { centered = c }
 
-instance HasProp Columns (Grid ms) where
-    type Prop Columns (Grid ms) = Txt
+instance HasProp Columns Grid where
+    type Prop Columns Grid = Txt
     getProp _ = columns
     setProp _ c g = g { columns = c }
 
-instance HasProp IsContainer (Grid ms) where
-    type Prop IsContainer (Grid ms) = Bool
+instance HasProp IsContainer Grid where
+    type Prop IsContainer Grid = Bool
     getProp _ = container
     setProp _ ic g = g { container = ic }
 
-instance HasProp Divided (Grid ms) where
-    type Prop Divided (Grid ms) = Maybe Txt
+instance HasProp Divided Grid where
+    type Prop Divided Grid = Maybe Txt
     getProp _ = divided
     setProp _ d g = g { divided = d }
 
-instance HasProp Doubling (Grid ms) where
-    type Prop Doubling (Grid ms) = Bool
+instance HasProp Doubling Grid where
+    type Prop Doubling Grid = Bool
     getProp _ = doubling
     setProp _ d g = g { doubling = d }
 
-instance HasProp Inverted (Grid ms) where
-    type Prop Inverted (Grid ms) = Bool
+instance HasProp Inverted Grid where
+    type Prop Inverted Grid = Bool
     getProp _ = inverted
     setProp _ i g = g { inverted = i }
 
-instance HasProp Padded (Grid ms) where
-    type Prop Padded (Grid ms) = Maybe Txt
+instance HasProp Padded Grid where
+    type Prop Padded Grid = Maybe Txt
     getProp _ = padded
     setProp _ p g = g { padded = p }
 
-instance HasProp Relaxed (Grid ms) where
-    type Prop Relaxed (Grid ms) = Maybe Txt
+instance HasProp Relaxed Grid where
+    type Prop Relaxed Grid = Maybe Txt
     getProp _ = relaxed
     setProp _ r g = g { relaxed = r }
 
-instance HasProp Reversed (Grid ms) where
-    type Prop Reversed (Grid ms) = [Txt]
+instance HasProp Reversed Grid where
+    type Prop Reversed Grid = [Txt]
     getProp _ = reversed
     setProp _ r g = g { reversed = r }
 
-instance HasProp Stackable (Grid ms) where
-    type Prop Stackable (Grid ms) = Bool
-    type Prop Stackable (Grid ms) = Bool
+instance HasProp Stackable Grid where
+    type Prop Stackable Grid = Bool
+    type Prop Stackable Grid = Bool
     getProp _ = stackable
     setProp _ s g = g { stackable = s }
 
-instance HasProp Stretched (Grid ms) where
-    type Prop Stretched (Grid ms) = Bool
+instance HasProp Stretched Grid where
+    type Prop Stretched Grid = Bool
     getProp _ = stretched
     setProp _ s g = g { stretched = s }
 
-instance HasProp TextAlign (Grid ms) where
-    type Prop TextAlign (Grid ms) = Txt
+instance HasProp TextAlign Grid where
+    type Prop TextAlign Grid = Txt
     getProp _ = textAlign
     setProp _ t g = g { textAlign = t }
 
-instance HasProp VerticalAlign (Grid ms) where
-    type Prop VerticalAlign (Grid ms) = Txt
+instance HasProp VerticalAlign Grid where
+    type Prop VerticalAlign Grid = Txt
     getProp _ = verticalAlign
     setProp _ v g = g { verticalAlign = v }
 
-data Column ms = Column_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data Column = Column_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     , color :: Txt
     , computer :: Txt
     , floated :: Txt
@@ -219,122 +206,109 @@ data Column ms = Column_
     , width :: Txt
     } deriving (Generic)
 
-instance Default (Column ms) where
-    def = (G.to gdef) { as = Div }
+instance Default Column where
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
-pattern Column :: Column ms -> View ms
-pattern Column gc = View gc
+pattern Column :: Column -> Column
+pattern Column gc = gc
 
-instance Pure Column ms where
-    render Column_ {..} =
+instance Pure Column where
+    view Column_ {..} =
         let
             cs =
-                ( color
-                : stretched # "stretched"
-                : multiProp only "only"
-                : textAlign
-                : floated # (floated <>> "floated")
-                : verticalAlign
-                : widthProp computer "wide computer" def
-                : widthProp largeScreen "wide large screen" def
-                : widthProp mobile "wide mobile" def
-                : widthProp widescreen "wide widescreen" def
-                : widthProp width "wide" def
-                : "column"
-                : classes
-                )
+                [ color
+                , stretched # "stretched"
+                , multiProp only "only"
+                , textAlign
+                , (floated /= mempty) # (floated <>> "floated")
+                , verticalAlign
+                , widthProp computer "wide computer" def
+                , widthProp largeScreen "wide large screen" def
+                , widthProp mobile "wide mobile" def
+                , widthProp widescreen "wide widescreen" def
+                , widthProp width "wide" def
+                , "column"
+                ]
         in
-            as
-                ( mergeClasses $ ClassList cs
-                : attributes
-                )
-                children
+            as (features & Classes cs) children
 
-instance HasProp As (Column ms) where
-    type Prop As (Column ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Column where
+    type Prop As Column = Features -> [View] -> View
     getProp _ = as
     setProp _ a gc = gc { as = a }
 
-instance HasProp Attributes (Column ms) where
-    type Prop Attributes (Column ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ as gc = gc { attributes = as }
+instance HasFeatures Column where
+    getFeatures = features
+    setFeatures as gc = gc { features = as }
 
-instance HasProp Children (Column ms) where
-    type Prop Children (Column ms) = [View ms]
-    getProp _ = children
-    setProp _ cs gc = gc { children = cs }
+instance HasChildren Column where
+    getChildren = children
+    setChildren cs gc = gc { children = cs }
 
-instance HasProp Classes (Column ms) where
-    type Prop Classes (Column ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs gc = gc { classes = cs }
-
-instance HasProp Color (Column ms) where
-    type Prop Color (Column ms) = Txt
+instance HasProp Color Column where
+    type Prop Color Column = Txt
     getProp _ = color
     setProp _ c gc = gc { color = c }
 
-instance HasProp OnComputer (Column ms) where
-    type Prop OnComputer (Column ms) = Txt
+instance HasProp OnComputer Column where
+    type Prop OnComputer Column = Txt
     getProp _ = computer
     setProp _ c gc = gc { computer = c }
 
-instance HasProp Floated (Column ms) where
-    type Prop Floated (Column ms) = Txt
+instance HasProp Floated Column where
+    type Prop Floated Column = Txt
     getProp _ = floated
     setProp _ f gc = gc { floated = f }
 
-instance HasProp OnLargeScreen (Column ms) where
-    type Prop OnLargeScreen (Column ms) = Txt
+instance HasProp OnLargeScreen Column where
+    type Prop OnLargeScreen Column = Txt
     getProp _ = largeScreen
     setProp _ ls gc = gc { largeScreen = ls }
 
-instance HasProp OnMobile (Column ms) where
-    type Prop OnMobile (Column ms) = Txt
+instance HasProp OnMobile Column where
+    type Prop OnMobile Column = Txt
     getProp _ = mobile
     setProp _ m gc = gc { mobile = m }
 
-instance HasProp Only (Column ms) where
-    type Prop Only (Column ms) = [Txt]
+instance HasProp Only Column where
+    type Prop Only Column = [Txt]
     getProp _ = only
     setProp _ o gc = gc { only = o }
 
-instance HasProp Stretched (Column ms) where
-    type Prop Stretched (Column ms) = Bool
+instance HasProp Stretched Column where
+    type Prop Stretched Column = Bool
     getProp _ = stretched
     setProp _ s gc = gc { stretched = s }
 
-instance HasProp OnTablet (Column ms) where
-    type Prop OnTablet (Column ms) = Txt
+instance HasProp OnTablet Column where
+    type Prop OnTablet Column = Txt
     getProp _ = tablet
     setProp _ t gc = gc { tablet = t }
 
-instance HasProp TextAlign (Column ms) where
-    type Prop TextAlign (Column ms) = Txt
+instance HasProp TextAlign Column where
+    type Prop TextAlign Column = Txt
     getProp _ = textAlign
     setProp _ t gc = gc { textAlign = t }
 
-instance HasProp VerticalAlign (Column ms) where
-    type Prop VerticalAlign (Column ms) = Txt
+instance HasProp VerticalAlign Column where
+    type Prop VerticalAlign Column = Txt
     getProp _ = verticalAlign
     setProp _ v gc = gc { verticalAlign = v }
 
-instance HasProp OnWidescreen (Column ms) where
-    type Prop OnWidescreen (Column ms) = Txt
+instance HasProp OnWidescreen Column where
+    type Prop OnWidescreen Column = Txt
     getProp _ = widescreen
     setProp _ w gc = gc { widescreen = w }
 
-instance HasProp Width (Column ms) where
-    type Prop Width (Column ms) = Txt
+instance HasProp Width Column where
+    type Prop Width Column = Txt
     getProp _ = width
     setProp _ w gc = gc { width = w }
 
-data Row ms = Row_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data Row = Row_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     , centered :: Bool
     , color :: Txt
     , columns :: Txt
@@ -346,92 +320,80 @@ data Row ms = Row_
     , verticalAlign :: Txt
     } deriving (Generic)
 
-instance Default (Row ms) where
-    def = (G.to gdef) { as = Div }
+instance Default Row where
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
-pattern Row :: Row ms -> View ms
-pattern Row gr = View gr
+pattern Row :: Row -> Row
+pattern Row gr = gr
 
-instance Pure Row ms where
-    render Row_ {..} =
+instance Pure Row where
+    view Row_ {..} =
         let
             cs =
-                ( color
-                : centered # "centered"
-                : divided # "divided"
-                : stretched # "stretched"
-                : multiProp only "only"
-                : multiProp reversed "reversed"
-                : textAlign
-                : verticalAlign
-                : widthProp columns "columns" True
-                : "row"
-                : classes
-                )
+                [ color
+                , centered # "centered"
+                , divided # "divided"
+                , stretched # "stretched"
+                , multiProp only "only"
+                , multiProp reversed "reversed"
+                , textAlign
+                , verticalAlign
+                , widthProp columns "columns" True
+                , "row"
+                ]
         in
-            as
-                ( mergeClasses $ ClassList cs
-                : attributes
-                )
-                children
+            as (features & Classes cs) children
 
-instance HasProp As (Row ms) where
-    type Prop As (Row ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Row where
+    type Prop As Row = Features -> [View] -> View
     getProp _ = as
     setProp _ a gr = gr { as = a }
 
-instance HasProp Attributes (Row ms) where
-    type Prop Attributes (Row ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ as gr = gr { attributes = as }
+instance HasFeatures Row where
+    getFeatures = features
+    setFeatures as gr = gr { features = as }
 
-instance HasProp Children (Row ms) where
-    type Prop Children (Row ms) = [View ms]
-    getProp _ = children
-    setProp _ cs gr = gr { children = cs }
+instance HasChildren Row where
+    getChildren = children
+    setChildren cs gr = gr { children = cs }
 
-instance HasProp Classes (Row ms) where
-    type Prop Classes (Row ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs gr = gr { classes = cs }
-
-instance HasProp Color (Row ms) where
-    type Prop Color (Row ms) = Txt
+instance HasProp Color Row where
+    type Prop Color Row = Txt
     getProp _ = color
     setProp _ c gr = gr { color = c }
 
-instance HasProp Columns (Row ms) where
-    type Prop Columns (Row ms) = Txt
+instance HasProp Columns Row where
+    type Prop Columns Row = Txt
     getProp _ = columns
     setProp _ c gr = gr { columns = c }
 
-instance HasProp Divided (Row ms) where
-    type Prop Divided (Row ms) = Bool
+instance HasProp Divided Row where
+    type Prop Divided Row = Bool
     getProp _ = divided
     setProp _ d gr = gr { divided = d }
 
-instance HasProp Only (Row ms) where
-    type Prop Only (Row ms) = [Txt]
+instance HasProp Only Row where
+    type Prop Only Row = [Txt]
     getProp _ = only
     setProp _ o gr = gr { only = o }
 
-instance HasProp Reversed (Row ms) where
-    type Prop Reversed (Row ms) = [Txt]
+instance HasProp Reversed Row where
+    type Prop Reversed Row = [Txt]
     getProp _ = reversed
     setProp _ r gr = gr { reversed = r }
 
-instance HasProp Stretched (Row ms) where
-    type Prop Stretched (Row ms) = Bool
+instance HasProp Stretched Row where
+    type Prop Stretched Row = Bool
     getProp _ = stretched
     setProp _ s gr = gr { stretched = s }
 
-instance HasProp TextAlign (Row ms) where
-    type Prop TextAlign (Row ms) = Txt
+instance HasProp TextAlign Row where
+    type Prop TextAlign Row = Txt
     getProp _ = textAlign
     setProp _ t gr = gr { textAlign = t }
 
-instance HasProp VerticalAlign (Row ms) where
-    type Prop VerticalAlign (Row ms) = Txt
+instance HasProp VerticalAlign Row where
+    type Prop VerticalAlign Row = Txt
     getProp _ = verticalAlign
     setProp _ v gr = gr { verticalAlign = v }
 

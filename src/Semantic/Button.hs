@@ -1,33 +1,34 @@
+{-# LANGUAGE NoMonomorphismRestriction #-}
 module Semantic.Button
   ( module Properties
   , module Tools
-  , Button(..), pattern Button
+  , Button(..), pattern Semantic.Button.Button
   , Content(..), pattern Content
   , Group(..), pattern Group
   , Or(..), pattern Or
   ) where
 
-import GHC.Generics as G
-import Pure.View hiding (active,color,disabled,onClick,Button,Disabled,Label,Or,widths,hidden,vertical,visible,Content)
-import qualified Pure.View as HTML
+import GHC.Generics as G (Generic,to)
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML as HTML
+import qualified Pure.Data.HTML.Properties as HTML
 
 import Semantic.Utils
 
 import Semantic.Icon hiding (Group(..), pattern Group)
 import Semantic.Label hiding (Group(..), pattern Group)
 
-import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!), (%) )
+import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern Active, Active(..)
   , pattern Animated, Animated(..)
   , pattern As, As(..)
   , pattern Attached, Attached(..)
-  , pattern Attributes, Attributes(..)
   , pattern Basic, Basic(..)
-  , pattern Children, Children(..)
   , pattern Circular, Circular(..)
-  , pattern Classes, Classes(..)
   , pattern Color, Color(..)
   , pattern Compact, Compact(..)
   , pattern Disabled, Disabled(..)
@@ -38,7 +39,6 @@ import Semantic.Properties as Properties
   , pattern LabelPosition, LabelPosition(..)
   , pattern Loading, Loading(..)
   , pattern Negative, Negative(..)
-  , pattern OnClick, OnClick(..)
   , pattern Positive, Positive(..)
   , pattern Primary, Primary(..)
   , pattern Secondary, Secondary(..)
@@ -60,11 +60,12 @@ import Semantic.Properties as Properties
 import Data.Function as Tools ((&))
 import Pure.Data.Default as Tools
 
-data Button ms = Button_
-  { as :: [Feature ms] -> [View ms] -> View ms
-  , children :: [View ms]
-  , attributes :: [Feature ms]
-  , classes :: [Txt]
+import Data.List as List (null,filter,partition,head)
+
+data Button = Button_
+  { as :: Features -> [View] -> View
+  , children :: [View]
+  , features :: Features
   , active :: Bool
   , animated :: Maybe Txt
   , attached :: Maybe Txt
@@ -79,7 +80,6 @@ data Button ms = Button_
   , labelPosition :: Txt
   , loading :: Bool
   , negative :: Bool
-  , onClick :: Ef ms IO ()
   , positive :: Bool
   , primary :: Bool
   , secondary :: Bool
@@ -89,14 +89,14 @@ data Button ms = Button_
   , focus :: Bool
   } deriving (Generic)
 
-instance Default (Button ms) where
-    def = (G.to gdef) { as = HTML.Button }
+instance Default Button where
+    def = (G.to gdef) { as = \fs cs -> HTML.Button & Features fs & Children cs }
 
-pattern Button :: Button ms -> View ms
-pattern Button b = View b
+pattern Button :: Button -> Button
+pattern Button b = b
 
-instance Pure Button ms where
-    render Button_ {..} =
+instance Pure Button where
+    view Button_ {..} =
         let baseClasses xs =
               ( color
               : size
@@ -113,275 +113,236 @@ instance Pure Button ms where
               : primary # "primary"
               : secondary # "secondary"
               : toggle # "toggle"
-              : (may ("animated" <<>>) animated)
-              : (may ("attached" <<>>) attached)
+              : (maybe def ("animated" <<>>) animated)
+              : (maybe def ("attached" <<>>) attached)
               : xs
               )
 
-            hasIcon =
-                foldPures (\(Icon_ {}) -> const True) False children
+            hasIcon = not $ List.null $ List.filter isIcon children
+              where
+                isIcon (View Icon_ {}) = True
+                isIcon _ = False
 
-            (label,children') =
-                foldr (\a (st,cs) ->
-                    case a of
-                        View Label {} -> (a,cs)
-                        _             -> (st,a:cs)
-                ) (nil,nil) children
+            labels, children' :: [View]
+            (labels,children') = List.partition isLabel children
+              where
+                isLabel (View Label_ {}) = True
+                isLabel _ = False
 
-            labeledClasses xs =
-                ( (labelPosition
-                    ? (labelPosition <<>> "labeled")
-                    $ (label # "labeled")
-                  )
-                : xs
-                )
+            labeled = not $ Prelude.null labels
+
+            labeledClasses xs
+              | labelPosition /= def = (labelPosition <<>> "labeled") : xs
+              | labeled              = "labeled" : xs
+              | otherwise            = xs
 
             wrapperClasses xs =
-                ( disabled # "disabled"
-                : floated # "floated"
+                  disabled # "disabled"
+                : (floated /= def) # (floated <>> "floated")
                 : xs
-                )
-
-            index :: Feature ms
-            index =
-                disabled
-                  ? Tabindex (-1)
-                  $ may Tabindex tabIndex
 
             isButton =
-                case as [] [] of
-                    HTML.Button _ _ -> True
-                    _ -> False
+                case as def def of
+                    HTMLView _ "button" _ _ -> True
+                    _                       -> False
+
+            fs | labeled   = features & AddClasses ("ui" : labeledClasses ("button" : wrapperClasses []))
+               | otherwise = features & AddClasses ("ui" : baseClasses (wrapperClasses (labeledClasses ["button"])))
+                                      & ((disabled && isButton) ? HTML.Disabled "true" $ id)
+                                      & HTML.Role "button"
+                                      & (disabled ? HTML.TabIndex "-1"
+                                                  $ maybe id (HTML.TabIndex . toTxt) tabIndex
+                                        )
+
+            cs | not labeled = children
+               | otherwise   =
+                  [ (labelPosition == "left") # List.head labels
+                  , HTML.Button <| bfs |> children'
+                  , (labelPosition == "right") # List.head labels
+                  ]
+                  where
+                    bfs = AddClasses ("ui" : baseClasses ["button"])
+                        . HTML.Disabled (disabled ? "true" $ "false")
+                        . (disabled ? HTML.TabIndex "-1"
+                                    $ maybe id (HTML.TabIndex . toTxt) tabIndex
+                          )
 
         in
-            let cs = "ui" : baseClasses (wrapperClasses (labeledClasses ("button" : classes)))
-                buttonClasses = "ui" : baseClasses ("button" : classes)
-                containerClasses = "ui" : labeledClasses ("button" : classes ++ wrapperClasses [])
-            in
-                label
-                  ? as
-                      ( ClassList containerClasses
-                      : onClick # (On "click" def { preventDef = True } (\_ -> return $ Just onClick))
-                      : attributes
-                      )
-                      [ (labelPosition == "left") # label
-                      , HTML.Button
-                          [ ClassList buttonClasses
-                          , HTML.Disabled disabled
-                          , index
-                          ]
-                          children'
-                      , (labelPosition == "right") # label
-                      ]
-                  $ as
-                      ( mergeClasses $ ClassList cs
-                      : (disabled && isButton) # HTML.Disabled True
-                      : onClick # (On "click" def (\_ -> return $ Just onClick))
-                      : Role "button"
-                      : index
-                      : attributes
-                      )
-                      children
+            as fs cs
 
-instance HasProp Animated (Button ms) where
-    type Prop Animated (Button ms) = Maybe Txt
+instance HasProp Animated Button where
+    type Prop Animated Button = Maybe Txt
     getProp _ b = animated b
     setProp _ anim b = b { animated = anim }
 
-instance HasProp Active (Button ms) where
-    type Prop Active (Button ms) = Bool
+instance HasProp Active Button where
+    type Prop Active Button = Bool
     getProp _ = active
     setProp _ a b = b { active = a }
 
-instance HasProp As (Button ms) where
-    type Prop As (Button ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Button where
+    type Prop As Button = Features -> [View] -> View
     getProp _ = as
     setProp _ f b = b { as = f }
 
-instance HasProp Attached (Button ms) where
-    type Prop Attached (Button ms) = Maybe Txt
+instance HasProp Attached Button where
+    type Prop Attached Button = Maybe Txt
     getProp _ = attached
     setProp _ attach b = b { attached = attach }
 
-instance HasProp Attributes (Button ms) where
-    type Prop Attributes (Button ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ cs b = b { attributes = cs }
+instance HasFeatures Button where
+    getFeatures = features
+    setFeatures cs b = b { features = cs }
 
-instance HasProp Basic (Button ms) where
-    type Prop Basic (Button ms) = Bool
+instance HasProp Basic Button where
+    type Prop Basic Button = Bool
     getProp _ = basic
     setProp _ bsc b = b { basic = bsc }
 
-instance HasProp Children (Button ms) where
-    type Prop Children (Button ms) = [View ms]
-    getProp _ = children
-    setProp _ cs b = b { children = cs }
+instance HasChildren Button where
+    getChildren = children
+    setChildren cs b = b { children = cs }
 
-instance HasProp Circular (Button ms) where
-    type Prop Circular (Button ms) = Bool
+instance HasProp Circular Button where
+    type Prop Circular Button = Bool
     getProp _ = circular
     setProp _ c b = b { circular = c }
 
-instance HasProp Classes (Button ms) where
-    type Prop Classes (Button ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs b = b { classes = cs }
-
-instance HasProp Color (Button ms) where
-    type Prop Color (Button ms) = Txt
+instance HasProp Color Button where
+    type Prop Color Button = Txt
     getProp _ = color
     setProp _ c b = b { color = c }
 
-instance HasProp Compact (Button ms) where
-    type Prop Compact (Button ms) = Bool
+instance HasProp Compact Button where
+    type Prop Compact Button = Bool
     getProp _ = compact
     setProp _ c b = b { compact = c }
 
-instance HasProp Disabled (Button ms) where
-    type Prop Disabled (Button ms) = Bool
+instance HasProp Disabled Button where
+    type Prop Disabled Button = Bool
     getProp _ = disabled
     setProp _ d b = b { disabled = d }
 
-instance HasProp Floated (Button ms) where
-    type Prop Floated (Button ms) = Txt
+instance HasProp Floated Button where
+    type Prop Floated Button = Txt
     getProp _ = floated
     setProp _ f b = b { floated = f }
 
-instance HasProp Fluid (Button ms) where
-    type Prop Fluid (Button ms) = Bool
+instance HasProp Fluid Button where
+    type Prop Fluid Button = Bool
     getProp _ = fluid
     setProp _ f b = b { fluid = f }
 
-instance HasProp Focus (Button ms) where
-    type Prop Focus (Button ms) = Bool
+instance HasProp Focus Button where
+    type Prop Focus Button = Bool
     getProp _ = focus
     setProp _ f b = b { focus = f }
 
-instance HasProp OnClick (Button ms) where
-    type Prop OnClick (Button ms) = Ef ms IO ()
-    getProp _ = onClick
-    setProp _ f b = b { onClick = f }
-
-instance HasProp Inverted (Button ms) where
-    type Prop Inverted (Button ms) = Bool
+instance HasProp Inverted Button where
+    type Prop Inverted Button = Bool
     getProp _ = inverted
     setProp _ i b = b { inverted = i }
 
-instance HasProp LabelPosition (Button ms) where
-    type Prop LabelPosition (Button ms) = Txt
+instance HasProp LabelPosition Button where
+    type Prop LabelPosition Button = Txt
     getProp _ = labelPosition
     setProp _ lp b = b { labelPosition = lp }
 
-instance HasProp Loading (Button ms) where
-    type Prop Loading (Button ms) = Bool
+instance HasProp Loading Button where
+    type Prop Loading Button = Bool
     getProp _ = loading
     setProp _ l b = b { loading = l }
 
-instance HasProp Negative (Button ms) where
-    type Prop Negative (Button ms) = Bool
+instance HasProp Negative Button where
+    type Prop Negative Button = Bool
     getProp _ = negative
     setProp _ n b = b { negative = n }
 
-instance HasProp Positive (Button ms) where
-    type Prop Positive (Button ms) = Bool
+instance HasProp Positive Button where
+    type Prop Positive Button = Bool
     getProp _ = positive
     setProp _ p b = b { positive = p }
 
-instance HasProp Primary (Button ms) where
-    type Prop Primary (Button ms) = Bool
+instance HasProp Primary Button where
+    type Prop Primary Button = Bool
     getProp _ = primary
     setProp _ p b = b { primary = p }
 
-instance HasProp Secondary (Button ms) where
-    type Prop Secondary (Button ms) = Bool
+instance HasProp Secondary Button where
+    type Prop Secondary Button = Bool
     getProp _ = secondary
     setProp _ s b = b { secondary = s }
 
-instance HasProp Size (Button ms) where
-    type Prop Size (Button ms) = Txt
+instance HasProp Size Button where
+    type Prop Size Button = Txt
     getProp _ = size
     setProp _ s b = b { size = s }
 
-instance HasProp TabIndex (Button ms) where
-    type Prop TabIndex (Button ms) = Maybe Int
+instance HasProp TabIndex Button where
+    type Prop TabIndex Button = Maybe Int
     getProp _ = tabIndex
     setProp _ ti b = b { tabIndex = ti }
 
-instance HasProp Toggle (Button ms) where
-    type Prop Toggle (Button ms) = Bool
+instance HasProp Toggle Button where
+    type Prop Toggle Button = Bool
     getProp _ = toggle
     setProp _ t b = b { toggle = t }
 
-data Content ms = Content_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data Content = Content_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     , hidden :: Bool
     , visible :: Bool
     } deriving (Generic)
 
-instance Default (Content ms) where
-    def = (G.to gdef) { as = Div }
+instance Default Content where
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
-pattern Content :: Content ms -> View ms
+pattern Content :: Content -> View
 pattern Content bc = View bc
 
-instance Pure Content ms where
-    render Content_ {..} =
+instance Pure Content where
+    view Content_ {..} =
         let
             cs =
-                ( hidden # "hidden"
-                : visible # "visible"
-                : "content"
-                : classes
-                )
+                [ hidden # "hidden"
+                , visible # "visible"
+                , "content"
+                ]
 
         in
-            as
-                ( mergeClasses $ ClassList cs
-                : attributes
-                )
-                children
+            as (features & AddClasses cs) children
 
-instance HasProp As (Content ms) where
-    type Prop As (Content ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Content where
+    type Prop As Content = Features -> [View] -> View
     getProp _ = as
     setProp _ f bc = bc { as = f }
 
-instance HasProp Attributes (Content ms) where
-    type Prop Attributes (Content ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ cs bc = bc { attributes = cs }
+instance HasFeatures Content where
+    getFeatures = features
+    setFeatures fs bc = bc { features = fs }
 
-instance HasProp Children (Content ms) where
-    type Prop Children (Content ms) = [View ms]
-    getProp _ = children
-    setProp _ cs bc = bc { children = cs }
+instance HasChildren Content where
+    getChildren = children
+    setChildren cs bc = bc { children = cs }
 
-instance HasProp Classes (Content ms) where
-    type Prop Classes (Content ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs bc = bc { classes = cs }
-
-instance HasProp Hidden (Content ms) where
-    type Prop Hidden (Content ms) = Bool
+instance HasProp Hidden Content where
+    type Prop Hidden Content = Bool
     getProp _ = hidden
     setProp _ h bc = bc { hidden = h }
 
-instance HasProp Visible (Content ms) where
-    type Prop Visible (Content ms) = Bool
+instance HasProp Visible Content where
+    type Prop Visible Content = Bool
     getProp _ = visible
     setProp _ v bc = bc { visible = v }
 
-data Group ms = Group_
-    { as :: [Feature ms] -> [View ms] -> View ms
+data Group = Group_
+    { as :: Features -> [View] -> View
     , attached :: Maybe Txt
-    , attributes :: [Feature ms]
+    , features :: Features
     , basic :: Bool
-    , children :: [View ms]
-    , classes :: [Txt]
+    , children :: [View]
     , color :: Txt
     , compact :: Bool
     , floated :: Txt
@@ -398,185 +359,160 @@ data Group ms = Group_
     , widths :: Txt
     } deriving (Generic)
 
-instance Default (Group ms) where
-    def = (G.to gdef) { as = Div }
+instance Default Group where
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
-pattern Group :: Group ms -> View ms
+pattern Group :: Group -> View
 pattern Group bc = View bc
 
-instance Pure Group ms where
-    render Group_ {..} =
+instance Pure Group where
+    view Group_ {..} =
         let
             icon =
                 foldPures (\(Icon_ {}) -> const True) False children
 
             cs =
-                ( "ui"
-                : color
-                : size
-                : basic # "basic"
-                : compact # "compact"
-                : fluid # "fluid"
-                : icon # "icon"
-                : inverted # "inverted"
-                : labeled # "labeled"
-                : negative # "negative"
-                : positive # "positive"
-                : primary # "primary"
-                : secondary # "secondary"
-                : toggle # "toggle"
-                : vertical # "vertical"
-                : useKeyOrValueAndKey attached "attached"
-                : floated # ("floated" <<>> floated)
-                : widthProp widths def def
-                : "buttons"
-                : classes
-                )
+                [ "ui"
+                , color
+                , size
+                , basic # "basic"
+                , compact # "compact"
+                , fluid # "fluid"
+                , icon # "icon"
+                , inverted # "inverted"
+                , labeled # "labeled"
+                , negative # "negative"
+                , positive # "positive"
+                , primary # "primary"
+                , secondary # "secondary"
+                , toggle # "toggle"
+                , vertical # "vertical"
+                , useKeyOrValueAndKey attached "attached"
+                , (floated /= def) # ("floated" <<>> floated)
+                , widthProp widths def def
+                , "buttons"
+                ]
         in
-            as
-                ( mergeClasses $ ClassList cs
-                : attributes
-                )
-                children
+            as (features & Classes cs) children
 
-instance HasProp As (Group ms) where
-    type Prop As (Group ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Group where
+    type Prop As Group = Features -> [View] -> View
     getProp _ = as
     setProp _ f bg = bg { as = f }
 
-instance HasProp Attached (Group ms) where
-    type Prop Attached (Group ms) = Maybe Txt
+instance HasProp Attached Group where
+    type Prop Attached Group = Maybe Txt
     getProp _ = attached
     setProp _ attach bg = bg { attached = attach }
 
-instance HasProp Attributes (Group ms) where
-    type Prop Attributes (Group ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ cs bg = bg { attributes = cs }
+instance HasFeatures Group where
+    getFeatures = features
+    setFeatures fs bg = bg { features = fs }
 
-instance HasProp Basic (Group ms) where
-    type Prop Basic (Group ms) = Bool
+instance HasProp Basic Group where
+    type Prop Basic Group = Bool
     getProp _ = basic
     setProp _ b bg = bg { basic = b }
 
-instance HasProp Children (Group ms) where
-    type Prop Children (Group ms) = [View ms]
-    getProp _ = children
-    setProp _ cs bg = bg { children = cs }
+instance HasChildren Group where
+    getChildren = children
+    setChildren cs bg = bg { children = cs }
 
-instance HasProp Classes (Group ms) where
-    type Prop Classes (Group ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs bg = bg { classes = cs }
-
-instance HasProp Color (Group ms) where
-    type Prop Color (Group ms) = Txt
+instance HasProp Color Group where
+    type Prop Color Group = Txt
     getProp _ = color
     setProp _ c bg = bg { color = c }
 
-instance HasProp Compact (Group ms) where
-    type Prop Compact (Group ms) = Bool
+instance HasProp Compact Group where
+    type Prop Compact Group = Bool
     getProp _ = compact
     setProp _ c bg = bg { compact = c }
 
-instance HasProp Floated (Group ms) where
-    type Prop Floated (Group ms) = Txt
+instance HasProp Floated Group where
+    type Prop Floated Group = Txt
     getProp _ = floated
     setProp _ f bg = bg { floated = f }
 
-instance HasProp Fluid (Group ms) where
-    type Prop Fluid (Group ms) = Bool
+instance HasProp Fluid Group where
+    type Prop Fluid Group = Bool
     getProp _ = fluid
     setProp _ f bg = bg { fluid = f }
 
-instance HasProp Inverted (Group ms) where
-    type Prop Inverted (Group ms) = Bool
+instance HasProp Inverted Group where
+    type Prop Inverted Group = Bool
     getProp _ = inverted
     setProp _ i bg = bg { inverted = i }
 
-instance HasProp Labeled (Group ms) where
-    type Prop Labeled (Group ms) = Bool
+instance HasProp Labeled Group where
+    type Prop Labeled Group = Bool
     getProp _ = labeled
     setProp _ l bg = bg { labeled = l }
 
-instance HasProp Negative (Group ms) where
-    type Prop Negative (Group ms) = Bool
+instance HasProp Negative Group where
+    type Prop Negative Group = Bool
     getProp _ = negative
     setProp _ n bg = bg { negative = n }
 
-instance HasProp Positive (Group ms) where
-    type Prop Positive (Group ms) = Bool
+instance HasProp Positive Group where
+    type Prop Positive Group = Bool
     getProp _ = positive
     setProp _ p bg = bg { positive = p }
 
-instance HasProp Primary (Group ms) where
-    type Prop Primary (Group ms) = Bool
+instance HasProp Primary Group where
+    type Prop Primary Group = Bool
     getProp _ = primary
     setProp _ p bg = bg { primary = p }
 
-instance HasProp Secondary (Group ms) where
-    type Prop Secondary (Group ms) = Bool
+instance HasProp Secondary Group where
+    type Prop Secondary Group = Bool
     getProp _ = secondary
     setProp _ s bg = bg { secondary = s }
 
-instance HasProp Size (Group ms) where
-    type Prop Size (Group ms) = Txt
+instance HasProp Size Group where
+    type Prop Size Group = Txt
     getProp _ = size
     setProp _ s bg = bg { size = s }
 
-instance HasProp Toggle (Group ms) where
-    type Prop Toggle (Group ms) = Bool
+instance HasProp Toggle Group where
+    type Prop Toggle Group = Bool
     getProp _ = toggle
     setProp _ t bg = bg { toggle = t }
 
-instance HasProp Vertical (Group ms) where
-    type Prop Vertical (Group ms) = Bool
+instance HasProp Vertical Group where
+    type Prop Vertical Group = Bool
     getProp _ = vertical
     setProp _ v bg = bg { vertical = v }
 
-instance HasProp Widths (Group ms) where
-    type Prop Widths (Group ms) = Txt
+instance HasProp Widths Group where
+    type Prop Widths Group = Txt
     getProp _ = widths
     setProp _ w bg = bg { widths = w }
 
-data Or ms = Or_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , classes :: [Txt]
+data Or = Or_
+    { as :: Features -> [View] -> View
+    , features :: Features
     , localize :: Txt
     } deriving (Generic)
 
-instance Default (Or ms) where
-    def = (G.to gdef) { as = Div }
+instance Default Or where
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
-pattern Or :: Or ms -> View ms
+pattern Or :: Or -> View
 pattern Or bo = View bo
 
-instance Pure Or ms where
-    render Or_ {..} =
-        as
-            ( ClassList ( "or" : classes )
-            : localize # Attr "data-text" localize
-            : attributes
-            )
-            []
+instance Pure Or where
+    view Or_ {..} = as (features & Class "or" & Property "data-text" localize) []
 
-instance HasProp As (Or ms) where
-    type Prop As (Or ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Or where
+    type Prop As Or = Features -> [View] -> View
     getProp _ = as
     setProp _ f bo = bo { as = f }
 
-instance HasProp Attributes (Or ms) where
-    type Prop Attributes (Or ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ cs bo = bo { attributes = cs }
+instance HasFeatures Or where
+    getFeatures = features
+    setFeatures fs bo = bo { features = fs }
 
-instance HasProp Classes (Or ms) where
-    type Prop Classes (Or ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs bo = bo { classes = cs }
-
-instance HasProp Localize (Or ms) where
-    type Prop Localize (Or ms) = Txt
+instance HasProp Localize Or where
+    type Prop Localize Or = Txt
     getProp _ = localize
     setProp _ l bo = bo { localize = l }

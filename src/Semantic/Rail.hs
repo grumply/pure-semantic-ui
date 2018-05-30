@@ -5,18 +5,18 @@ module Semantic.Rail
   ) where
 
 import GHC.Generics as G
-import Pure.View hiding (position,verticalAlign)
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML
 
 import Semantic.Utils
 
-import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!), (%) )
+import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)
   , pattern Attached, Attached(..)
-  , pattern Attributes, Attributes(..)
-  , pattern Children, Children(..)
-  , pattern Classes, Classes(..)
   , pattern Close, Close(..)
   , pattern Dividing, Dividing(..)
   , pattern Internal, Internal(..)
@@ -27,11 +27,10 @@ import Semantic.Properties as Properties
 import Data.Function as Tools ((&))
 import Pure.Data.Default as Tools
 
-data Rail ms = Rail_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data Rail = Rail_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     , attached :: Bool
     , close :: Maybe Txt
     , dividing :: Bool
@@ -40,79 +39,67 @@ data Rail ms = Rail_
     , size :: Txt
     } deriving (Generic)
 
-instance Default (Rail ms) where
-    def = (G.to gdef) { as = Div }
+instance Default Rail where
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
-pattern Rail :: Rail ms -> View ms
-pattern Rail r = View r
+pattern Rail :: Rail -> Rail
+pattern Rail r = r
 
-instance Pure Rail ms where
-    render Rail_ {..} =
+instance Pure Rail where
+    view Rail_ {..} =
         let
             cs =
-                ( "ui"
-                : position
-                : size
-                : attached # "attached"
-                : dividing # "dividing"
-                : internal # "internal"
-                : may (<>> "close") close
-                : "rail"
-                : classes
-                )
+                [ "ui"
+                , position
+                , size
+                , attached # "attached"
+                , dividing # "dividing"
+                , internal # "internal"
+                , maybe "" (<>> "close") close
+                , "rail"
+                ]
         in
-            as
-                ( mergeClasses $ ClassList cs
-                : attributes
-                )
-                children
+            as (features & Classes cs) children
 
-instance HasProp As (Rail ms) where
-    type Prop As (Rail ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Rail where
+    type Prop As Rail = Features -> [View] -> View
     getProp _ = as
     setProp _ f r = r { as = f }
 
-instance HasProp Attached (Rail ms) where
-    type Prop Attached (Rail ms) = Bool
+instance HasProp Attached Rail where
+    type Prop Attached Rail = Bool
     getProp _ = attached
     setProp _ attach r = r { attached = attach }
 
-instance HasProp Attributes (Rail ms) where
-    type Prop Attributes (Rail ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ cs r = r { attributes = cs }
+instance HasFeatures Rail where
+    getFeatures = features
+    setFeatures cs r = r { features = cs }
 
-instance HasProp Children (Rail ms) where
-    type Prop Children (Rail ms) = [View ms]
-    getProp _ = children
-    setProp _ cs r = r { children = cs }
+instance HasChildren Rail where
+    getChildren = children
+    setChildren cs r = r { children = cs }
 
-instance HasProp Classes (Rail ms) where
-    type Prop Classes (Rail ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs r = r { classes = cs }
-
-instance HasProp Close (Rail ms) where
-    type Prop Close (Rail ms) = Maybe Txt
+instance HasProp Close Rail where
+    type Prop Close Rail = Maybe Txt
     getProp _ = close
     setProp _ c r = r { close = c }
 
-instance HasProp Dividing (Rail ms) where
-    type Prop Dividing (Rail ms) = Bool
+instance HasProp Dividing Rail where
+    type Prop Dividing Rail = Bool
     getProp _ = dividing
     setProp _ d r = r { dividing = d }
 
-instance HasProp Internal (Rail ms) where
-    type Prop Internal (Rail ms) = Bool
+instance HasProp Internal Rail where
+    type Prop Internal Rail = Bool
     getProp _ = internal
     setProp _ i r = r { internal = i }
 
-instance HasProp Position (Rail ms) where
-    type Prop Position (Rail ms) = Txt
+instance HasProp Position Rail where
+    type Prop Position Rail = Txt
     getProp _ = position
     setProp _ p r = r { position = p }
 
-instance HasProp Size (Rail ms) where
-    type Prop Size (Rail ms) = Txt
+instance HasProp Size Rail where
+    type Prop Size Rail = Txt
     getProp _ = size
     setProp _ s r = r { size = s }

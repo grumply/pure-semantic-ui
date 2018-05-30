@@ -1,25 +1,25 @@
 module Semantic.Form
   ( module Properties
   , module Tools
-  , Form(..), pattern Form
+  , Form(..), pattern Semantic.Form.Form
   , Field(..), pattern Field
   , Group(..), pattern Group
   ) where
 
 import GHC.Generics as G
-import Pure.View hiding (name,onSubmit,widths,Form,inline,disabled,Action)
-import qualified Pure.View as HTML
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML as HTML
+import Pure.Data.Events
 
 import Semantic.Utils
 import Prelude hiding (error)
 
-import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!), (%) )
+import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)
-  , pattern Attributes, Attributes(..)
-  , pattern Children, Children(..)
-  , pattern Classes, Classes(..)
   , pattern Action, Action(..)
   , pattern Error, Error(..)
   , pattern Inverted, Inverted(..)
@@ -46,16 +46,15 @@ import Semantic.Properties as Properties
 import Data.Function as Tools ((&))
 import Pure.Data.Default as Tools
 
-data Form ms = Form_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data Form = Form_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     , action :: Txt
     , error :: Bool
     , inverted :: Bool
     , loading :: Bool
-    , onSubmit :: Ef ms IO ()
+    , onSubmit :: IO ()
     , reply :: Bool
     , size :: Txt
     , success :: Bool
@@ -64,118 +63,107 @@ data Form ms = Form_
     , widths :: Txt
     } deriving (Generic)
 
-instance Default (Form ms) where
-    def = (G.to gdef) { as = HTML.Form }
+instance Default Form where
+    def = (G.to gdef) { as = \fs cs -> HTML.Form & Features fs & Children cs }
 
-pattern Form :: Form ms -> View ms
-pattern Form f = View f
+pattern Form :: Form -> Form
+pattern Form f = f
 
-instance Pure Form ms where
-    render Form_ {..} =
+instance Pure Form where
+    view Form_ {..} =
         let
-            cs =
-                ( "ui"
-                : size
-                : error # "error"
-                : inverted # "inverted"
-                : loading # "loading"
-                : reply # "reply"
-                : success # "success"
-                : unstackable # "unstackable"
-                : warning # "warning"
-                : widthProp widths def True
-                : "form"
-                : classes
-                )
-        in
-            as
-                ( mergeClasses $ ClassList cs
-                : Prop "action" action
-                : onSubmit # (On "submit" def { preventDef = True } (\_ -> return $ Just onSubmit))
-                : attributes
-                )
-                children
+            fs = Classes cs
+               . Property "action" action
+               . Pure.Data.Events.OnSubmit (\_ -> onSubmit)
 
-instance HasProp As (Form ms) where
-    type Prop As (Form ms) = [Feature ms] -> [View ms] -> View ms
+            cs =
+                [ "ui"
+                , size
+                , error # "error"
+                , inverted # "inverted"
+                , loading # "loading"
+                , reply # "reply"
+                , success # "success"
+                , unstackable # "unstackable"
+                , warning # "warning"
+                , widthProp widths def True
+                , "form"
+                ]
+        in
+            as (fs features) children
+
+instance HasProp As Form where
+    type Prop As Form = Features -> [View] -> View
     getProp _ = as
     setProp _ a f = f { as = a }
 
-instance HasProp Attributes (Form ms) where
-    type Prop Attributes (Form ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ as f = f { attributes = as }
+instance HasFeatures Form where
+    getFeatures = features
+    setFeatures as f = f { features = as }
 
-instance HasProp Children (Form ms) where
-    type Prop Children (Form ms) = [View ms]
-    getProp _ = children
-    setProp _ cs f = f { children = cs }
+instance HasChildren Form where
+    getChildren = children
+    setChildren cs f = f { children = cs }
 
-instance HasProp Classes (Form ms) where
-    type Prop Classes (Form ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs f = f { classes = cs }
-
-instance HasProp Action (Form ms) where
-    type Prop Action (Form ms) = Txt
+instance HasProp Action Form where
+    type Prop Action Form = Txt
     getProp _ = action
     setProp _ a f = f { action = a }
 
-instance HasProp Error (Form ms) where
-    type Prop Error (Form ms) = Bool
+instance HasProp Error Form where
+    type Prop Error Form = Bool
     getProp _ = error
     setProp _ e f = f { error = e }
 
-instance HasProp Inverted (Form ms) where
-    type Prop Inverted (Form ms) = Bool
+instance HasProp Inverted Form where
+    type Prop Inverted Form = Bool
     getProp _ = inverted
     setProp _ i f = f { inverted = i }
 
-instance HasProp Loading (Form ms) where
-    type Prop Loading (Form ms) = Bool
+instance HasProp Loading Form where
+    type Prop Loading Form = Bool
     getProp _ = loading
     setProp _ l f = f { loading = l }
 
-instance HasProp OnSubmit (Form ms) where
-    type Prop OnSubmit (Form ms) = Ef ms IO ()
+instance HasProp OnSubmit Form where
+    type Prop OnSubmit Form = IO ()
     getProp _ = onSubmit
     setProp _ os f = f { onSubmit = os }
 
-instance HasProp Reply (Form ms) where
-    type Prop Reply (Form ms) = Bool
+instance HasProp Reply Form where
+    type Prop Reply Form = Bool
     getProp _ = reply
     setProp _ r f = f { reply = r }
 
-instance HasProp Size (Form ms) where
-    type Prop Size (Form ms) = Txt
+instance HasProp Size Form where
+    type Prop Size Form = Txt
     getProp _ = size
     setProp _ sz f = f { size = sz }
 
-instance HasProp Success (Form ms) where
-    type Prop Success (Form ms) = Bool
+instance HasProp Success Form where
+    type Prop Success Form = Bool
     getProp _ = success
     setProp _ s f = f { success = s }
 
-instance HasProp Unstackable (Form ms) where
-    type Prop Unstackable (Form ms) = Bool
+instance HasProp Unstackable Form where
+    type Prop Unstackable Form = Bool
     getProp _ = unstackable
     setProp _ u f = f { unstackable = u }
 
-instance HasProp Warning (Form ms) where
-    type Prop Warning (Form ms) = Bool
+instance HasProp Warning Form where
+    type Prop Warning Form = Bool
     getProp _ = warning
     setProp _ w f = f { warning = w }
 
-instance HasProp Widths (Form ms) where
-    type Prop Widths (Form ms) = Txt
+instance HasProp Widths Form where
+    type Prop Widths Form = Txt
     getProp _ = widths
     setProp _ w f = f { widths = w }
 
-data Field ms = Field_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data Field = Field_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     , disabled :: Bool
     , error :: Bool
     , inline :: Bool
@@ -184,153 +172,128 @@ data Field ms = Field_
     , widths :: Txt
     } deriving (Generic)
 
-instance Default (Field ms) where
-    def = (G.to gdef) { as = Div }
+instance Default Field where
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
-pattern Field :: Field ms -> View ms
-pattern Field ff = View ff
+pattern Field :: Field -> Field
+pattern Field ff = ff
 
-instance Pure Field ms where
-    render Field_ {..} =
+instance Pure Field where
+    view Field_ {..} =
         let
             cs =
-                ( disabled # "disabled"
-                : error # "error"
-                : inline # "inline"
-                : required # "required"
-                : widthProp widths "wide" def
-                : "field"
-                : classes
-                )
+                [ disabled # "disabled"
+                , error # "error"
+                , inline # "inline"
+                , required # "required"
+                , widthProp widths "wide" def
+                , "field"
+                ]
         in
-            as
-                ( mergeClasses $ ClassList cs
-                : attributes
-                )
-                children
+            as (features & Classes cs) children
 
-instance HasProp As (Field ms) where
-    type Prop As (Field ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Field where
+    type Prop As Field = Features -> [View] -> View
     getProp _ = as
     setProp _ a ff = ff { as = a }
 
-instance HasProp Attributes (Field ms) where
-    type Prop Attributes (Field ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ as ff = ff { attributes = as }
+instance HasFeatures Field where
+    getFeatures = features
+    setFeatures as ff = ff { features = as }
 
-instance HasProp Children (Field ms) where
-    type Prop Children (Field ms) = [View ms]
-    getProp _ = children
-    setProp _ cs ff = ff { children = cs }
+instance HasChildren Field where
+    getChildren = children
+    setChildren cs ff = ff { children = cs }
 
-instance HasProp Classes (Field ms) where
-    type Prop Classes (Field ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs ff = ff { classes = cs }
-
-instance HasProp Disabled (Field ms) where
-    type Prop Disabled (Field ms) = Bool
+instance HasProp Disabled Field where
+    type Prop Disabled Field = Bool
     getProp _ = disabled
     setProp _ d ff = ff { disabled = d }
 
-instance HasProp Error (Field ms) where
-    type Prop Error (Field ms) = Bool
+instance HasProp Error Field where
+    type Prop Error Field = Bool
     getProp _ = error
     setProp _ e ff = ff { error = e }
 
-instance HasProp Inline (Field ms) where
-    type Prop Inline (Field ms) = Bool
-    type Prop Inline (Field ms) = Bool
+instance HasProp Inline Field where
+    type Prop Inline Field = Bool
+    type Prop Inline Field = Bool
     getProp _ = inline
     setProp _ i ff = ff { inline = i }
 
-instance HasProp Required (Field ms) where
-    type Prop Required (Field ms) = Bool
+instance HasProp Required Field where
+    type Prop Required Field = Bool
     getProp _ = required
     setProp _ r ff = ff { required = r }
 
-instance HasProp Type (Field ms) where
-    type Prop Type (Field ms) = Txt
+instance HasProp Type Field where
+    type Prop Type Field = Txt
     getProp _ = _type
     setProp _ t ff = ff { _type = t }
 
-instance HasProp Widths (Field ms) where
-    type Prop Widths (Field ms) = Txt
+instance HasProp Widths Field where
+    type Prop Widths Field = Txt
     getProp _ = widths
     setProp _ w ff = ff { widths = w }
 
-data Group ms = Group_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data Group = Group_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     , grouped :: Bool
     , inline :: Bool
     , unstackable :: Bool
     , widths :: Txt
     } deriving (Generic)
 
-instance Default (Group ms) where
-    def = (G.to gdef) { as = Div }
+instance Default Group where
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
-pattern Group :: Group ms -> View ms
-pattern Group fg = View fg
+pattern Group :: Group -> Group
+pattern Group fg = fg
 
-instance Pure Group ms where
-    render Group_ {..} =
+instance Pure Group where
+    view Group_ {..} =
         let
             cs =
-                ( grouped # "grouped"
-                : inline # "inline"
-                : unstackable # "unstackable"
-                : widthProp widths def True
-                : "fields"
-                : classes
-                )
+                [ grouped # "grouped"
+                , inline # "inline"
+                , unstackable # "unstackable"
+                , widthProp widths def True
+                , "fields"
+                ]
         in
-            as
-                ( mergeClasses $ ClassList cs
-                : attributes
-                )
-                children
+            as (features & Classes cs) children
 
-instance HasProp As (Group ms) where
-    type Prop As (Group ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Group where
+    type Prop As Group = Features -> [View] -> View
     getProp _ = as
     setProp _ a fg = fg { as = a }
 
-instance HasProp Attributes (Group ms) where
-    type Prop Attributes (Group ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ as fg = fg { attributes = as }
+instance HasFeatures Group where
+    getFeatures = features
+    setFeatures as fg = fg { features = as }
 
-instance HasProp Children (Group ms) where
-    type Prop Children (Group ms) = [View ms]
-    getProp _ = children
-    setProp _ cs fg = fg { children = cs }
+instance HasChildren Group where
+    getChildren = children
+    setChildren cs fg = fg { children = cs }
 
-instance HasProp Classes (Group ms) where
-    type Prop Classes (Group ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs fg = fg { classes = cs }
-
-instance HasProp Grouped (Group ms) where
-    type Prop Grouped (Group ms) = Bool
+instance HasProp Grouped Group where
+    type Prop Grouped Group = Bool
     getProp _ = grouped
     setProp _ g fg = fg { grouped = g }
 
-instance HasProp Inline (Group ms) where
-    type Prop Inline (Group ms) = Bool
+instance HasProp Inline Group where
+    type Prop Inline Group = Bool
     getProp _ = inline
     setProp _ i fg = fg { inline = i }
 
-instance HasProp Unstackable (Group ms) where
-    type Prop Unstackable (Group ms) = Bool
+instance HasProp Unstackable Group where
+    type Prop Unstackable Group = Bool
     getProp _ = unstackable
     setProp _ u fg = fg { unstackable = u }
 
-instance HasProp Widths (Group ms) where
-    type Prop Widths (Group ms) = Txt
+instance HasProp Widths Group where
+    type Prop Widths Group = Txt
     getProp _ = widths
     setProp _ w fg = fg { widths = w }

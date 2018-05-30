@@ -2,26 +2,30 @@
 module Semantic.Embed
   ( module Properties
   , module Tools
-  , Embed(..), pattern Embed
+  , Embed(..), pattern Semantic.Embed.Embed
   ) where
 
 import Control.Arrow ((&&&))
+import Control.Monad
+import Data.Monoid
 import GHC.Generics as G
-import Pure.View hiding (active,onClick,url,color,Name,Width,Embed)
-import Pure.Route (encodeURI)
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML as HTML
+import Pure.Data.HTML.Properties (pattern Src)
+import Pure.Data.Events
+import Pure.Data.URI
 
 import Semantic.Utils hiding (id)
 
 import Semantic.Icon
 
-import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!), (%) )
+import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern Name, Name(..)
   , pattern As, As(..)
-  , pattern Attributes, Attributes(..)
-  , pattern Children, Children(..)
-  , pattern Classes, Classes(..)
   , pattern Active, Active(..)
   , pattern AspectRatio, AspectRatio(..)
   , pattern Autoplay, Autoplay(..)
@@ -41,11 +45,10 @@ import Pure.Data.Default as Tools
 
 data EmbedSource = YouTube | Vimeo | OtherSource Txt
 
-data Embed ms = Embed_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data Embed = Embed_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     , active :: Bool
     , aspectRatio :: Txt
     , autoplay :: Bool
@@ -53,64 +56,51 @@ data Embed ms = Embed_
     , color :: Txt
     , defaultActive :: Bool
     , hd :: Bool
-    , icon :: Icon ms
+    , icon :: Icon
     , id :: Txt
-    , iframe :: [Feature ms]
-    , onClick :: Ef ms IO ()
+    , iframe :: Features
     , placeholder :: Txt
     , source :: Maybe EmbedSource
     , url :: Txt
     } deriving (Generic)
 
-instance Default (Embed ms) where
+instance Default Embed where
     def = (G.to gdef)
-        { as = Div
+        { as = \fs cs -> Div & Features fs & Children cs
         , icon = def & Name "video play"
         , hd = True
         , color = "#444444"
         }
 
-pattern Embed :: VC ms => Embed ms -> View ms
-pattern Embed e = View e
+pattern Embed :: Embed -> Embed
+pattern Embed e = e
 
-instance VC ms => Pure Embed ms where
-    render e =
-        Component "Semantic.Modules.Embed" e $ \self ->
+instance Pure Embed where
+    view =
+        LibraryComponentIO $ \self ->
             let
-                handleClick = do
+                handleClick _ = do
                     Embed_ {..} <- getProps self
                     isActive <- getState self
-                    onClick
-                    unless active (void $ setState self $ \_ -> not)
+                    unless active (void $ setState self $ \_ st -> return (not st,return ()))
 
             in def
                 { construct = do
                     Embed_ {..} <- getProps self
                     return defaultActive
 
-                , renderer = \Embed_ {..} isActive ->
+                , render = \Embed_ {..} isActive ->
                     let
                         cs =
-                            ( "ui"
-                            : aspectRatio
-                            : isActive # "active"
-                            : "embed"
-                            : classes
-                            )
-
-                        renderSource YouTube          = "YouTube"
-                        renderSource Vimeo            = "Vimeo"
-                        renderSource (OtherSource os) = os
-
-                        defaultIframeAttributes =
-                            [ Attribute "allowfullscreen" "false"
-                            , Attribute "frameborder" "0"
-                            , Attribute "height" "100%"
-                            , Attribute "scrolling" "no"
-                            , Attribute "src" src
-                            , may (\s -> Attribute "title" ("Embedded content from " <> renderSource s <> ".")) source
-                            , Attribute "width" "100%"
+                            [ "ui"
+                            , aspectRatio
+                            , isActive # "active"
+                            , "embed"
                             ]
+
+                        viewSource YouTube          = "YouTube"
+                        viewSource Vimeo            = "Vimeo"
+                        viewSource (OtherSource os) = os
 
                         src =
                             case source of
@@ -139,106 +129,99 @@ instance VC ms => Pure Embed ms where
 
                                 _ -> url
 
-
                     in
-                        as
-                            ( mergeClasses $ ClassList cs
-                            : On "click" def (\_ -> return $ Just handleClick)
-                            : attributes
-                            )
-                            [ Icon icon
-                            , placeholder # Img [ ClassList [ "placeholder" ], Src placeholder ]  [ ]
+                        as (features & Classes cs & Pure.Data.Events.OnClick handleClick)
+                            [ View $ Icon icon
+                            , (placeholder /= mempty) # (HTML.Img <| Class "placeholder" . Src placeholder)
                             , active #
-                                Div [ ClassList [ "embed" ] ]
-                                    $ children
-                                        ? children
-                                        $ [ Iframe (defaultIframeAttributes ++ iframe) [] ]
+                                (Div <| Class "embed" |>
+                                    ((not $ Prelude.null children)
+                                      ? children
+                                      $ [ Iframe <| Attribute "allowfullscreen" "false"
+                                                  . Attribute "frameborder" "0"
+                                                  . Attribute "height" "100%"
+                                                  . Attribute "scrolling" "no"
+                                                  . Attribute "src" src
+                                                  . (maybe Prelude.id (\s f -> Attribute "title" ("Embedded content from " <> viewSource s <> ".") f) source)
+                                                  . Attribute "width" "100%"
+                                                  . Features iframe
+                                        ]
+
+                                    )
+                                )
                             ]
 
                 }
 
-
-instance HasProp As (Embed ms) where
-    type Prop As (Embed ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Embed where
+    type Prop As Embed = Features -> [View] -> View
     getProp _ = as
     setProp _ a sp = sp { as = a }
 
-instance HasProp Attributes (Embed ms) where
-    type Prop Attributes (Embed ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ as sp = sp { attributes = as }
+instance HasFeatures Embed where
+    getFeatures = features
+    setFeatures as sp = sp { features = as }
 
-instance HasProp Children (Embed ms) where
-    type Prop Children (Embed ms) = [View ms]
-    getProp _ = children
-    setProp _ cs sp = sp { children = cs }
+instance HasChildren Embed where
+    getChildren = children
+    setChildren cs sp = sp { children = cs }
 
-instance HasProp Classes (Embed ms) where
-    type Prop Classes (Embed ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs sp = sp { classes = cs }
-
-instance HasProp Active (Embed ms) where
-    type Prop Active (Embed ms) = Bool
+instance HasProp Active Embed where
+    type Prop Active Embed = Bool
     getProp _ = active
     setProp _ a e = e { active = a }
 
-instance HasProp AspectRatio (Embed ms) where
-    type Prop AspectRatio (Embed ms) = Txt
+instance HasProp AspectRatio Embed where
+    type Prop AspectRatio Embed = Txt
     getProp _ = aspectRatio
     setProp _ ar e = e { aspectRatio = ar }
 
-instance HasProp Autoplay (Embed ms) where
-    type Prop Autoplay (Embed ms) = Bool
+instance HasProp Autoplay Embed where
+    type Prop Autoplay Embed = Bool
     getProp _ = autoplay
     setProp _ a e = e { autoplay = a }
 
-instance HasProp Branded (Embed ms) where
-    type Prop Branded (Embed ms) = Bool
+instance HasProp Branded Embed where
+    type Prop Branded Embed = Bool
     getProp _ = branded
     setProp _ b e = e { branded = b }
 
-instance HasProp Color (Embed ms) where
-    type Prop Color (Embed ms) = Txt
+instance HasProp Color Embed where
+    type Prop Color Embed = Txt
     getProp _ = color
     setProp _ c e = e { color = c }
 
-instance HasProp DefaultActive (Embed ms) where
-    type Prop DefaultActive (Embed ms) = Bool
+instance HasProp DefaultActive Embed where
+    type Prop DefaultActive Embed = Bool
     getProp _ = defaultActive
     setProp _ da e = e { defaultActive = da }
 
-pattern HD :: Embed ms -> Embed ms
+pattern HD :: Embed -> Embed
 pattern HD e <- (hd &&& Prelude.id -> (True,e)) where
     HD e = e { hd = True }
 
-pattern EmbedIcon :: Icon ms -> Embed ms -> Embed ms
+pattern EmbedIcon :: Icon -> Embed -> Embed
 pattern EmbedIcon i e <- (icon &&& Prelude.id -> (i,e)) where
     EmbedIcon i e = e { icon = i }
 
-pattern EmbedId :: Txt -> Embed ms -> Embed ms
+pattern EmbedId :: Txt -> Embed -> Embed
 pattern EmbedId i e <- (id &&& Prelude.id -> (i,e)) where
     EmbedId i e = e { id = i }
 
-pattern EmbedIframe :: [Feature ms] -> Embed ms -> Embed ms
+pattern EmbedIframe :: Features -> Embed -> Embed
 pattern EmbedIframe fs e <- (iframe &&& Prelude.id -> (fs,e)) where
     EmbedIframe fs e = e { iframe = fs }
 
-instance HasProp OnClick (Embed ms) where
-    type Prop OnClick (Embed ms) = Ef ms IO ()
-    getProp _ = onClick
-    setProp _ oc e = e { onClick = oc }
-
-instance HasProp Placeholder (Embed ms) where
-    type Prop Placeholder (Embed ms) = Txt
+instance HasProp Placeholder Embed where
+    type Prop Placeholder Embed = Txt
     getProp _ = placeholder
     setProp _ p e = e { placeholder = p }
 
-pattern EmbedSource :: EmbedSource -> Embed ms -> Embed ms
+pattern EmbedSource :: EmbedSource -> Embed -> Embed
 pattern EmbedSource es e <- (source &&& Prelude.id -> (Just es,e)) where
     EmbedSource es e = e { source = Just es }
 
-instance HasProp URL (Embed ms) where
-    type Prop URL (Embed ms) = Txt
+instance HasProp URL Embed where
+    type Prop URL Embed = Txt
     getProp _ = url
     setProp _ u e = e { url = u }

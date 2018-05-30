@@ -5,10 +5,9 @@ import GHC.Generics
 
 import Control.Arrow ((&&&))
 
-import Pure.Data.JSV (JSV)
+import Pure.Data.Lifted (JSV)
 import Pure.Data.Txt (Txt)
 import Pure.Data.Default (Default(..))
-import Pure.View (list,mkHTML,mkSVG,View(..),Feature,pattern StyleList)
 
 import qualified Data.Proxy as P
 
@@ -71,13 +70,13 @@ pattern As :: HasProp As a => Prop As a -> a -> a
 pattern As p a <- (getProp As_ &&& id -> (p,a)) where
     As p a = setProp As_ p a
 
--- instance HasProp As (View ms) where
---     type Prop As (View ms) = [Feature ms] -> [View ms] -> View ms
+-- instance HasProp As (View) where
+--     type Prop As (View) = Features -> [View] -> View
 
 --     -- Note: For Managed, Component, Text, Null, and Raw views, this
 --     -- method just extracts a reinjector that ignores its arguments.
 --     -- For keyed nodes, KHTML and KSVG, this method will create a
---     -- `Constructor (View ms)` that adds indexes with (zip [0..]).
+--     -- `Constructor (View)` that adds indexes with (zip [0..]).
 --     getProp _ v = (As_,r)
 --       where
 --         r = case v of
@@ -106,18 +105,6 @@ data Attached = Attached_
 pattern Attached :: HasProp Attached a => Prop Attached a -> a -> a
 pattern Attached p a <- (getProp Attached_ &&& id -> (p,a)) where
     Attached p a = setProp Attached_ p a
-
-data Attributes = Attributes_
-pattern Attributes :: HasProp Attributes a => Prop Attributes a -> a -> a
-pattern Attributes p a <- (getProp Attributes_ &&& id -> (p,a)) where
-    Attributes p a = setProp Attributes_ p a
-
-infixl 1 %
-(%) c as = c & Attributes as
-
-infixl 1 !
-(!) :: (HasProp Attributes (a ms), Prop Attributes (a ms) ~ [Feature ms]) => a ms -> [(Txt,Txt)] -> a ms
-(!) (Attributes old_cs c) styles = Attributes (StyleList styles : old_cs) c
 
 data AutoHeight = AutoHeight_
 pattern AutoHeight :: HasProp AutoHeight a => Prop AutoHeight a -> a -> a
@@ -199,23 +186,10 @@ pattern Centered :: HasProp Centered a => Prop Centered a -> a -> a
 pattern Centered p a <- (getProp Centered_ &&& id -> (p,a)) where
     Centered p a = setProp Centered_ p a
 
-data Children = Children_
-pattern Children :: HasProp Children a => Prop Children a -> a -> a
-pattern Children p a <- (getProp Children_ &&& id -> (p,a)) where
-    Children p a = setProp Children_ p a
-
-infixl 1 |>
-(|>) c cs = Children cs c
-
 data Circular = Circular_
 pattern Circular :: HasProp Circular a => Prop Circular a -> a -> a
 pattern Circular p a <- (getProp Circular_ &&& id -> (p,a)) where
     Circular p a = setProp Circular_ p a
-
-data Classes = Classes_
-pattern Classes :: (HasProp Classes a,Prop Classes a ~ [Txt]) => [Txt] -> a -> a
-pattern Classes p a <- (getProp Classes_ &&& id -> (p,a)) where
-    Classes p a = setProp Classes_ (getProp Classes_ a ++ p) a
 
 data Clearable = Clearable_
 pattern Clearable :: HasProp Clearable a => Prop Clearable a -> a -> a
@@ -787,6 +761,11 @@ pattern OnMount :: HasProp OnMount a => Prop OnMount a -> a -> a
 pattern OnMount p a <- (getProp OnMount_ &&& id -> (p,a)) where
     OnMount p a = setProp OnMount_ p a
 
+data OnMounted = OnMounted_
+pattern OnMounted :: HasProp OnMounted a => Prop OnMounted a -> a -> a
+pattern OnMounted p a <- (getProp OnMounted_ &&& id -> (p,a)) where
+    OnMounted p a = setProp OnMounted_ p a
+
 data OnMouseDown = OnMouseDown_
 pattern OnMouseDown :: HasProp OnMouseDown a => Prop OnMouseDown a -> a -> a
 pattern OnMouseDown p a <- (getProp OnMouseDown_ &&& id -> (p,a)) where
@@ -887,6 +866,11 @@ pattern OnUnmount :: HasProp OnUnmount a => Prop OnUnmount a -> a -> a
 pattern OnUnmount p a <- (getProp OnUnmount_ &&& id -> (p,a)) where
     OnUnmount p a = setProp OnUnmount_ p a
 
+data OnUnmounted = OnUnmounted_
+pattern OnUnmounted :: HasProp OnUnmounted a => Prop OnUnmounted a -> a -> a
+pattern OnUnmounted p a <- (getProp OnUnmounted_ &&& id -> (p,a)) where
+    OnUnmounted p a = setProp OnUnmounted_ p a
+
 data OnUnstick = OnUnstick_
 pattern OnUnstick :: HasProp OnUnstick a => Prop OnUnstick a -> a -> a
 pattern OnUnstick p a <- (getProp OnUnstick_ &&& id -> (p,a)) where
@@ -962,6 +946,11 @@ pattern Pointing :: HasProp Pointing a => Prop Pointing a -> a -> a
 pattern Pointing p a <- (getProp Pointing_ &&& id -> (p,a)) where
     Pointing p a = setProp Pointing_ p a
 
+data PortalNode = PortalNode_
+pattern PortalNode :: HasProp PortalNode a => Prop PortalNode a -> a -> a
+pattern PortalNode p a <- (getProp PortalNode_ &&& id -> (p,a)) where
+    PortalNode p a = setProp PortalNode_ p a
+
 data Position = Position_
 pattern Position :: HasProp Position a => Prop Position a -> a -> a
 pattern Position p a <- (getProp Position_ &&& id -> (p,a)) where
@@ -976,11 +965,6 @@ data Precision = Precision_
 pattern Precision :: HasProp Precision a => Prop Precision a -> a -> a
 pattern Precision p a <- (getProp Precision_ &&& id -> (p,a)) where
     Precision p a = setProp Precision_ p a
-
-data Prepend = Prepend_
-pattern Prepend :: HasProp Prepend a => Prop Prepend a -> a -> a
-pattern Prepend p a <- (getProp Prepend_ &&& id -> (p,a)) where
-    Prepend p a = setProp Prepend_ p a
 
 data Primary = Primary_
 pattern Primary :: HasProp Primary a => Prop Primary a -> a -> a
@@ -1341,12 +1325,6 @@ data Wrapped = Wrapped_
 pattern Wrapped :: HasProp Wrapped a => Prop Wrapped a -> a -> a
 pattern Wrapped p a <- (getProp Wrapped_ &&& id -> (p,a)) where
     Wrapped p a = setProp Wrapped_ p a
-
-infixr 0 <|
-(<|) f = f
-
-infixr 0 <||>
-(<||>) c cs = c <| def |> cs
 
 pattern ToLeft = "left"
 pattern ToRight = "right"

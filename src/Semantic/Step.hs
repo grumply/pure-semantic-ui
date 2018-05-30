@@ -3,29 +3,29 @@ module Semantic.Step
   , module Tools
   , Step(..), pattern Step
   , Content(..), pattern Content
-  , Description(..), pattern Description
+  , Description(..), pattern Semantic.Step.Description
   , Group(..), pattern Group
-  , Title(..), pattern Title
+  , Title(..), pattern Semantic.Step.Title
   ) where
 
 import GHC.Generics as G
-import Pure.View hiding (active,completed,disabled,onClick,vertical,widths,Content,Title,Description,Step,Ref)
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML
+import Pure.Data.Events
 
 import Semantic.Utils
 
-import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!), (%) )
+import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)
-  , pattern Attributes, Attributes(..)
-  , pattern Children, Children(..)
-  , pattern Classes, Classes(..)
   , pattern Active, Active(..)
   , pattern Completed, Completed(..)
   , pattern Disabled, Disabled(..)
   , pattern Ref, Ref(..)
   , pattern Link, Link(..)
-  , pattern OnClick, OnClick(..)
   , pattern Ordered, Ordered(..)
   , pattern Attached, Attached(..)
   , pattern Fluid, Fluid(..)
@@ -44,202 +44,134 @@ import Semantic.Properties as Properties
 import Data.Function as Tools ((&))
 import Pure.Data.Default as Tools
 
-data Step ms = Step_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data Step = Step_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     , active :: Bool
     , completed :: Bool
     , disabled :: Bool
-    , ref :: Feature ms
     , link :: Bool
-    , onClick :: Ef ms IO ()
     , ordered :: Bool
     } deriving (Generic)
 
-instance Default (Step ms) where
-    def = (G.to gdef) { as = Div }
+instance Default Step where
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
-pattern Step :: Step ms -> View ms
-pattern Step s = View s
+pattern Step :: Step -> Step
+pattern Step s = s
 
-instance Pure Step ms where
-    render Step_ {..} =
+instance Pure Step where
+    view Step_ {..} =
         let
-            e = onClick ? A $ as
-
             cs =
-                ( active # "active"
-                : completed # "completed"
-                : disabled # "disabled"
-                : link # "link"
-                : "step"
-                : classes
-                )
+                [ active # "active"
+                , completed # "completed"
+                , disabled # "disabled"
+                , link # "link"
+                , "step"
+                ]
         in
-            e
-                ( mergeClasses $ ClassList cs
-                : ref
-                : onClick # (disabled #! On "click" def (\_ -> return $ Just onClick))
-                : attributes
-                )
-                children
+            as (features & Classes cs) children
 
-instance HasProp As (Step ms) where
-    type Prop As (Step ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Step where
+    type Prop As Step = Features -> [View] -> View
     getProp _ = as
     setProp _ a s = s { as = a }
 
-instance HasProp Attributes (Step ms) where
-    type Prop Attributes (Step ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ as s = s { attributes = as }
+instance HasFeatures Step where
+    getFeatures = features
+    setFeatures as s = s { features = as }
 
-instance HasProp Children (Step ms) where
-    type Prop Children (Step ms) = [View ms]
-    getProp _ = children
-    setProp _ cs s = s { children = cs }
+instance HasChildren Step where
+    getChildren = children
+    setChildren cs s = s { children = cs }
 
-instance HasProp Classes (Step ms) where
-    type Prop Classes (Step ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs s = s { classes = cs }
-
-instance HasProp Active (Step ms) where
-    type Prop Active (Step ms) = Bool
+instance HasProp Active Step where
+    type Prop Active Step = Bool
     getProp _ = active
     setProp _ a s = s { active = a }
 
-instance HasProp Completed (Step ms) where
-    type Prop Completed (Step ms) = Bool
+instance HasProp Completed Step where
+    type Prop Completed Step = Bool
     getProp _ = completed
     setProp _ c s = s { completed = c }
 
-instance HasProp Disabled (Step ms) where
-    type Prop Disabled (Step ms) = Bool
+instance HasProp Disabled Step where
+    type Prop Disabled Step = Bool
     getProp _ = disabled
     setProp _ d s = s { disabled = d }
 
-instance HasProp Ref (Step ms) where
-    type Prop Ref (Step ms) = Feature ms
-    getProp _ = ref
-    setProp _ r s = s { ref = r }
-
-instance HasProp Link (Step ms) where
-    type Prop Link (Step ms) = Bool
+instance HasProp Link Step where
+    type Prop Link Step = Bool
     getProp _ = link
     setProp _ l s = s { link = l }
 
-instance HasProp OnClick (Step ms) where
-    type Prop OnClick (Step ms) = Ef ms IO ()
-    getProp _ = onClick
-    setProp _ oc s = s { onClick = oc }
-
-instance HasProp Ordered (Step ms) where
-    type Prop Ordered (Step ms) = Bool
+instance HasProp Ordered Step where
+    type Prop Ordered Step = Bool
     getProp _ = ordered
     setProp _ o s = s { ordered = o }
 
-data Content ms = Content_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data Content = Content_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     } deriving (Generic)
 
-instance Default (Content ms) where
-    def = (G.to gdef) { as = Div }
+instance Default Content where
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
-pattern Content :: Content ms -> View ms
-pattern Content sc = View sc
+pattern Content :: Content -> Content
+pattern Content sc = sc
 
-instance Pure Content ms where
-    render Content_ {..} =
-        let
-            cs =
-                ( "content"
-                : classes
-                )
-        in
-            as
-                ( mergeClasses $ ClassList cs
-                : attributes
-                )
-                children
+instance Pure Content where
+    view Content_ {..} = as (features & Class "content") children
 
-instance HasProp As (Content ms) where
-    type Prop As (Content ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Content where
+    type Prop As Content = Features -> [View] -> View
     getProp _ = as
     setProp _ a sc = sc { as = a }
 
-instance HasProp Attributes (Content ms) where
-    type Prop Attributes (Content ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ as sc = sc { attributes = as }
+instance HasFeatures Content where
+    getFeatures = features
+    setFeatures as sc = sc { features = as }
 
-instance HasProp Children (Content ms) where
-    type Prop Children (Content ms) = [View ms]
-    getProp _ = children
-    setProp _ cs sc = sc { children = cs }
+instance HasChildren Content where
+    getChildren = children
+    setChildren cs sc = sc { children = cs }
 
-instance HasProp Classes (Content ms) where
-    type Prop Classes (Content ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs sc = sc { classes = cs }
-
-data Description ms = Description_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data Description = Description_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     } deriving (Generic)
 
-instance Default (Description ms) where
-    def = (G.to gdef) { as = Div }
+instance Default Description where
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
-pattern Description :: Description ms -> View ms
-pattern Description sd = View sd
+pattern Description :: Description -> Description
+pattern Description sd = sd
 
-instance Pure Description ms where
-    render Description_ {..} =
-        let
-            cs =
-                ( "description"
-                : classes
-                )
-        in
-            as
-                ( mergeClasses $ ClassList cs
-                : attributes
-                )
-                children
+instance Pure Description where
+    view Description_ {..} = as (features & Class "description") children
 
-instance HasProp As (Description ms) where
-    type Prop As (Description ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Description where
+    type Prop As Description = Features -> [View] -> View
     getProp _ = as
     setProp _ a sd = sd { as = a }
 
-instance HasProp Attributes (Description ms) where
-    type Prop Attributes (Description ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ as sd = sd { attributes = as }
+instance HasFeatures Description where
+    getFeatures = features
+    setFeatures as sd = sd { features = as }
 
-instance HasProp Children (Description ms) where
-    type Prop Children (Description ms) = [View ms]
-    getProp _ = children
-    setProp _ cs sd = sd { children = cs }
+instance HasChildren Description where
+    getChildren = children
+    setChildren cs sd = sd { children = cs }
 
-instance HasProp Classes (Description ms) where
-    type Prop Classes (Description ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs sd = sd { classes = cs }
-
-data Group ms = Group_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data Group = Group_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     , attached :: Maybe Txt
     , fluid :: Bool
     , ordered :: Bool
@@ -250,139 +182,108 @@ data Group ms = Group_
     , widths :: Txt
     } deriving (Generic)
 
-instance Default (Group ms) where
-    def = (G.to gdef) { as = Div }
+instance Default Group where
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
-pattern Group :: Group ms -> View ms
-pattern Group sg = View sg
+pattern Group :: Group -> Group
+pattern Group sg = sg
 
-instance Pure Group ms where
-    render Group_ {..} =
+instance Pure Group where
+    view Group_ {..} =
         let
             cs =
-                ( "ui"
-                : size
-                : fluid # "fluid"
-                : ordered # "ordered"
-                : unstackable # "unstackable"
-                : vertical # "vertical"
-                : may (<>> "attached") attached
-                : stackable # (stackable <>> "stackable")
-                : widthProp widths def def
-                : "steps"
-                : classes
-                )
+                [ "ui"
+                , size
+                , fluid # "fluid"
+                , ordered # "ordered"
+                , unstackable # "unstackable"
+                , vertical # "vertical"
+                , maybe "" (<>> "attached") attached
+                , (stackable /= mempty) # (stackable <>> "stackable")
+                , widthProp widths def def
+                , "steps"
+                ]
         in
-            as
-                ( mergeClasses $ ClassList cs
-                : attributes
-                )
-                children
+            as (features & Classes cs) children
 
-instance HasProp As (Group ms) where
-    type Prop As (Group ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Group where
+    type Prop As Group = Features -> [View] -> View
     getProp _ = as
     setProp _ a sg = sg { as = a }
 
-instance HasProp Attributes (Group ms) where
-    type Prop Attributes (Group ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ as sg = sg { attributes = as }
+instance HasFeatures Group where
+    getFeatures = features
+    setFeatures as sg = sg { features = as }
 
-instance HasProp Children (Group ms) where
-    type Prop Children (Group ms) = [View ms]
-    getProp _ = children
-    setProp _ cs sg = sg { children = cs }
+instance HasChildren Group where
+    getChildren = children
+    setChildren cs sg = sg { children = cs }
 
-instance HasProp Classes (Group ms) where
-    type Prop Classes (Group ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs sg = sg { classes = cs }
-
-instance HasProp Attached (Group ms) where
-    type Prop Attached (Group ms) = Maybe Txt
+instance HasProp Attached Group where
+    type Prop Attached Group = Maybe Txt
     getProp _ = attached
     setProp _ a sg = sg { attached = a }
 
-instance HasProp Fluid (Group ms) where
-    type Prop Fluid (Group ms) = Bool
+instance HasProp Fluid Group where
+    type Prop Fluid Group = Bool
     getProp _ = fluid
     setProp _ f sg = sg { fluid = f }
 
-instance HasProp Ordered (Group ms) where
-    type Prop Ordered (Group ms) = Bool
+instance HasProp Ordered Group where
+    type Prop Ordered Group = Bool
     getProp _ = ordered
     setProp _ o sg = sg { ordered = o }
 
-instance HasProp Size (Group ms) where
-    type Prop Size (Group ms) = Txt
+instance HasProp Size Group where
+    type Prop Size Group = Txt
     getProp _ = size
     setProp _ s sg = sg { size = s }
 
-instance HasProp Stackable (Group ms) where
-    type Prop Stackable (Group ms) = Txt
+instance HasProp Stackable Group where
+    type Prop Stackable Group = Txt
     getProp _ = stackable
     setProp _ s sg = sg { stackable = s }
 
-instance HasProp Unstackable (Group ms) where
-    type Prop Unstackable (Group ms) = Bool
+instance HasProp Unstackable Group where
+    type Prop Unstackable Group = Bool
     getProp _ = unstackable
     setProp _ u sg = sg { unstackable = u }
 
-instance HasProp Vertical (Group ms) where
-    type Prop Vertical (Group ms) = Bool
+instance HasProp Vertical Group where
+    type Prop Vertical Group = Bool
     getProp _ = vertical
     setProp _ v sg = sg { vertical = v }
 
-instance HasProp Widths (Group ms) where
-    type Prop Widths (Group ms) = Txt
+instance HasProp Widths Group where
+    type Prop Widths Group = Txt
     getProp _ = widths
     setProp _ w sg = sg { widths = w }
 
-data Title ms = Title_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data Title = Title_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     } deriving (Generic)
 
-instance Default (Title ms) where
-    def = (G.to gdef) { as = Div }
+instance Default Title where
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
-pattern Title :: Title ms -> View ms
-pattern Title st = View st
+pattern Title :: Title -> Title
+pattern Title st = st
 
-instance Pure Title ms where
-    render Title_ {..} =
-        let
-            cs =
-                ( "title"
-                : classes
-                )
-        in
-            as
-                ( mergeClasses $ ClassList cs
-                : attributes
-                )
-                children
+instance Pure Title where
+    view Title_ {..} = as (features & Class "title") children
 
-instance HasProp As (Title ms) where
-    type Prop As (Title ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Title where
+    type Prop As Title = Features -> [View] -> View
     getProp _ = as
     setProp _ a st = st { as = a }
 
-instance HasProp Attributes (Title ms) where
-    type Prop Attributes (Title ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ as st = st { attributes = as }
+instance HasFeatures Title where
+    getFeatures = features
+    setFeatures as st = st { features = as }
 
-instance HasProp Children (Title ms) where
-    type Prop Children (Title ms) = [View ms]
-    getProp _ = children
-    setProp _ cs st = st { children = cs }
-
-instance HasProp Classes (Title ms) where
-    type Prop Classes (Title ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs st = st { classes = cs }
+instance HasChildren Title where
+    getChildren = children
+    setChildren cs st = st { children = cs }
 

@@ -5,22 +5,25 @@ module Semantic.Sticky
   , Sticky(..), pattern Sticky
   ) where
 
+import Control.Monad
 import Data.IORef
 import Data.Maybe
 import GHC.Generics as G
-import Pure.Lifted (same,window,body,IsJSV(..),JSV,Node(..),Element(..))
-import Pure.View hiding (active,bottom,offset,top,round,Offset)
-import Pure.DOM (addAnimation)
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Styles
+import Pure.Data.Txt
+import Pure.Data.HTML
+import Pure.Data.Events
+import Pure.Data.Lifted
+import Pure.Animation (addAnimation)
 
 import Semantic.Utils hiding (body)
 
-import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!), (%) )
+import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)
-  , pattern Attributes, Attributes(..)
-  , pattern Children, Children(..)
-  , pattern Classes, Classes(..)
   , pattern Active, Active(..)
   , pattern BottomOffset, BottomOffset(..)
   , pattern Context, Context(..)
@@ -36,34 +39,33 @@ import Semantic.Properties as Properties
 import Data.Function as Tools ((&))
 import Pure.Data.Default as Tools
 
-data Sticky ms = Sticky_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data Sticky = Sticky_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     , active :: Bool
     , bottomOffset :: Double
     , context :: Maybe JSV
     , offset :: Double
-    , onBottom :: Ef ms IO ()
-    , onStick :: Ef ms IO ()
-    , onTop :: Ef ms IO ()
-    , onUnstick :: Ef ms IO ()
+    , onBottom :: IO ()
+    , onStick :: IO ()
+    , onTop :: IO ()
+    , onUnstick :: IO ()
     , pushing :: Bool
     , scrollContext :: Maybe JSV
     } deriving (Generic)
 
-instance Default (Sticky ms) where
+instance Default Sticky where
     def = (G.to gdef)
-        { as = Div
+        { as = \fs cs -> Div & Features fs & Children cs
         , active = True
         , bottomOffset = 0
         , context = Just (toJSV body)
         , scrollContext = Just (toJSV window)
         }
 
-pattern Sticky :: VC ms => Sticky ms -> View ms
-pattern Sticky s = View s
+pattern Sticky :: Sticky -> Sticky
+pattern Sticky s = s
 
 data StickyState = SS
     { isSticking :: Bool
@@ -78,9 +80,9 @@ data StickyState = SS
     , scrollListener :: IORef (IO ())
     }
 
-instance VC ms => Pure Sticky ms where
-    render s =
-        Component "Semantic.Modules.Sticky" s $ \self ->
+instance Pure Sticky where
+    view =
+        LibraryComponentIO $ \self ->
             let
                 getRects = do
                     Sticky_ {..} <- getProps self
@@ -93,8 +95,8 @@ instance VC ms => Pure Sticky ms where
 
                     cr <- boundingRect (Element $ fromMaybe (toJSV body) context)
 
-                    msr <- readIORef stickyRef
-                    sr <- case msr of
+                    r <- readIORef stickyRef
+                    sr <- case r of
                         Just sr -> boundingRect (Element sr)
                         Nothing -> return def
 
@@ -106,7 +108,7 @@ instance VC ms => Pure Sticky ms where
                     writeIORef ticking False
                     ih <- innerHeight
                     (brWidth triggerRect /= triggerWidth) #
-                        void (setState self $ \_ SS {..} -> SS { triggerWidth = brWidth triggerRect, .. })
+                        void (setState self $ \_ SS {..} -> return (SS { triggerWidth = brWidth triggerRect, .. },return ()))
                     void (upd' s ss ih)
                     where
                         upd' Sticky_ {..} SS {..} (fromIntegral -> ih)
@@ -122,44 +124,53 @@ instance VC ms => Pure Sticky ms where
                             where
 
                                 setPushing p = pushing # do
-                                    void (setState self $ \_ SS {..} -> SS { isPushing = p, .. })
+                                    void (setState self $ \_ SS {..} -> return (SS { isPushing = p, .. },return ()))
 
                                 setSticking sticking = void $ do
-                                    setState self $ \_ SS {..} -> SS { isSticking = sticking, .. }
+                                    setState self $ \_ SS {..} -> return (SS { isSticking = sticking, .. },return ())
                                     sticking
-                                        ? (onStick   # parent self onStick)
-                                        $ (onUnstick # parent self onUnstick)
+                                        ? onStick
+                                        $ onUnstick
 
                                 stickToContextBottom = void $ do
-                                    onBottom # parent self onBottom
+                                    onBottom
                                     setSticking True
-                                    setState self $ \_ SS {..} -> SS
+                                    setState self $ \_ SS {..} -> return
+                                      ( SS
                                         { top = Just (brBottom contextRect - brHeight stickyRect)
                                         , bottom = Nothing
                                         , ..
                                         }
+                                      , return ()
+                                      )
                                     setPushing True
 
                                 stickToContextTop = void $ do
-                                    onTop # parent self onTop
+                                    onTop
                                     setSticking False
                                     setPushing False
 
                                 stickToScreenBottom = void $ do
                                     setSticking True
-                                    setState self $ \_ SS {..} -> SS
+                                    setState self $ \_ SS {..} -> return
+                                      ( SS
                                         { bottom = Just bottomOffset
                                         , top = Nothing
                                         , ..
                                         }
+                                      , return ()
+                                      )
 
                                 stickToScreenTop = void $ do
                                     setSticking True
-                                    setState self $ \_ SS {..} -> SS
+                                    setState self $ \_ SS {..} -> return
+                                      ( SS
                                         { top = Just offset
                                         , bottom = Nothing
                                         , ..
                                         }
+                                      , return ()
+                                      )
 
                 handleUpdate = do
                     SS {..} <- getState self
@@ -186,12 +197,10 @@ instance VC ms => Pure Sticky ms where
                 handleStickyRef (Node n) = do
                     SS {..} <- getState self
                     writeIORef stickyRef (Just n)
-                    return Nothing
 
                 handleTriggerRef (Node n) = do
                     SS {..} <- getState self
                     writeIORef triggerRef (Just n)
-                    return Nothing
 
             in def
                 { construct =
@@ -208,7 +217,7 @@ instance VC ms => Pure Sticky ms where
                         handleUpdate
                         addListeners s
 
-                , receiveProps = \newprops oldstate -> do
+                , receive = \newprops oldstate -> do
                     oldprops <- getProps self
                     let newContext =
                           case (scrollContext oldprops,scrollContext newprops) of
@@ -227,91 +236,81 @@ instance VC ms => Pure Sticky ms where
                     Sticky_ {..} <- getProps self
                     removeListeners
 
-                , renderer = \Sticky_ {..} SS {..} ->
+                , render = \Sticky_ {..} SS {..} ->
                     let
                         computedStyles = isSticking #
                             [ maybe def (\b -> ("bottom",pxs $ round b)) bottom
                             , maybe def (\t -> ("top",pxs $ round t)) top
                             , ("position","fixed")
-                            , triggerWidth # ("width",pxs $ round triggerWidth)
+                            , (triggerWidth /= 0) # ("width",pxs $ round triggerWidth)
                             ]
                     in
-                        as
-                            ( mergeClasses $ ClassList classes
-                            : attributes
-                            )
-                            [ Div [ HostRef handleTriggerRef ] []
-                            , Div [ HostRef handleStickyRef, StyleList computedStyles ] children
+                        as features
+                            [ Div <| Lifecycle (HostRef handleTriggerRef)
+                            , Div <| Lifecycle (HostRef handleStickyRef) . Styles computedStyles |> children
                             ]
 
                 }
 
-instance HasProp As (Sticky ms) where
-    type Prop As (Sticky ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Sticky where
+    type Prop As Sticky = Features -> [View] -> View
     getProp _ = as
     setProp _ f s = s { as = f }
 
-instance HasProp Attributes (Sticky ms) where
-    type Prop Attributes (Sticky ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ cs s = s { attributes = cs }
+instance HasFeatures Sticky where
+    getFeatures = features
+    setFeatures cs s = s { features = cs }
 
-instance HasProp Children (Sticky ms) where
-    type Prop Children (Sticky ms) = [View ms]
-    getProp _ = children
-    setProp _ cs s = s { children = cs }
+instance HasChildren Sticky where
+    getChildren = children
+    setChildren cs s = s { children = cs }
 
-instance HasProp Classes (Sticky ms) where
-    type Prop Classes (Sticky ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs s = s { classes = cs }
-
-instance HasProp Active (Sticky ms) where
-    type Prop Active (Sticky ms) = Bool
+instance HasProp Active Sticky where
+    type Prop Active Sticky = Bool
     getProp _ = active
     setProp _ a s = s { active = a }
 
-instance HasProp BottomOffset (Sticky ms) where
-    type Prop BottomOffset (Sticky ms) = Double
+instance HasProp BottomOffset Sticky where
+    type Prop BottomOffset Sticky = Double
     getProp _ = bottomOffset
     setProp _ bo s = s { bottomOffset = bo }
 
-instance HasProp Context (Sticky ms) where
-    type Prop Context (Sticky ms) = Maybe JSV
+instance HasProp Context Sticky where
+    type Prop Context Sticky = Maybe JSV
     getProp _ = context
     setProp _ c s = s { context = c }
 
-instance HasProp Offset (Sticky ms) where
-    type Prop Offset (Sticky ms) = Double
+instance HasProp Offset Sticky where
+    type Prop Offset Sticky = Double
     getProp _ = offset
     setProp _ o s = s { offset = o }
 
-instance HasProp OnBottom (Sticky ms) where
-    type Prop OnBottom (Sticky ms) = Ef ms IO ()
+instance HasProp OnBottom Sticky where
+    type Prop OnBottom Sticky = IO ()
     getProp _ = onBottom
     setProp _ ob s = s { onBottom = ob }
 
-instance HasProp OnStick (Sticky ms) where
-    type Prop OnStick (Sticky ms) = Ef ms IO ()
+instance HasProp OnStick Sticky where
+    type Prop OnStick Sticky = IO ()
     getProp _ = onStick
     setProp _ os s = s { onStick = os }
 
-instance HasProp OnTop (Sticky ms) where
-    type Prop OnTop (Sticky ms) = Ef ms IO ()
+instance HasProp OnTop Sticky where
+    type Prop OnTop Sticky = IO ()
     getProp _ = onTop
     setProp _ ot s = s { onTop = ot }
 
-instance HasProp OnUnstick (Sticky ms) where
-    type Prop OnUnstick (Sticky ms) = Ef ms IO ()
+instance HasProp OnUnstick Sticky where
+    type Prop OnUnstick Sticky = IO ()
     getProp _ = onUnstick
     setProp _ ou s = s { onUnstick = ou }
 
-instance HasProp Pushing (Sticky ms) where
-    type Prop Pushing (Sticky ms) = Bool
+instance HasProp Pushing Sticky where
+    type Prop Pushing Sticky = Bool
     getProp _ = pushing
     setProp _ p s = s { pushing = p }
 
-instance HasProp ScrollContext (Sticky ms) where
-    type Prop ScrollContext (Sticky ms) = Maybe JSV
+instance HasProp ScrollContext Sticky where
+    type Prop ScrollContext Sticky = Maybe JSV
     getProp _ = scrollContext
     setProp _ sc s = s { scrollContext = sc }

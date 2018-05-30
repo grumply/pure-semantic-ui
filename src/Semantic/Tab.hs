@@ -6,17 +6,17 @@ module Semantic.Tab
   ) where
 
 import GHC.Generics as G
-import Pure.View hiding (active,Tab)
+import Pure.Data.View
+import Pure.Data.View.Patterns
+import Pure.Data.Txt
+import Pure.Data.HTML
 
 import Semantic.Utils
 
-import Semantic.Properties as Tools ( HasProp(..), (<|), (<||>), (|>), (!), (%) )
+import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)
-  , pattern Attributes, Attributes(..)
-  , pattern Children, Children(..)
-  , pattern Classes, Classes(..)
   , pattern Active, Active(..)
   , pattern Loading, Loading(..)
   )
@@ -29,105 +29,79 @@ import Semantic.Segment (pattern Segment)
 import Data.Function as Tools ((&))
 import Pure.Data.Default as Tools
 
-data Tab ms = Tab_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data Tab = Tab_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     } deriving (Generic)
 
-instance Default (Tab ms) where
-    def = (G.to gdef) { as = Div }
+instance Default Tab where
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
-pattern Tab :: Tab ms -> View ms
-pattern Tab t = View t
+pattern Tab :: Tab -> Tab
+pattern Tab t = t
 
-instance Pure Tab ms where
-    render Tab_ {..} = as ( ClassList classes : attributes ) children
+instance Pure Tab where
 
-instance HasProp As (Tab ms) where
-    type Prop As (Tab ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Tab where
+    type Prop As Tab = Features -> [View] -> View
     getProp _ = as
     setProp _ f t = t { as = f }
 
-instance HasProp Attributes (Tab ms) where
-    type Prop Attributes (Tab ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ cs t = t { attributes = cs }
+instance HasFeatures Tab where
+    getFeatures = features
+    setFeatures cs t = t { features = cs }
 
-instance HasProp Children (Tab ms) where
-    type Prop Children (Tab ms) = [View ms]
-    getProp _ = children
-    setProp _ cs t = t { children = cs }
+instance HasChildren Tab where
+    getChildren = children
+    setChildren cs t = t { children = cs }
 
-instance HasProp Classes (Tab ms) where
-    type Prop Classes (Tab ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs t = t { classes = cs }
-
-data Pane ms = Pane_
-    { as :: [Feature ms] -> [View ms] -> View ms
-    , attributes :: [Feature ms]
-    , children :: [View ms]
-    , classes :: [Txt]
+data Pane = Pane_
+    { as :: Features -> [View] -> View
+    , features :: Features
+    , children :: [View]
     , active :: Bool
     , loading :: Bool
     } deriving (Generic)
 
-instance Default (Pane ms) where
+instance Default Pane where
     def = (G.to gdef)
-        { as = \fs cs ->
-            Segment $ def
-                & Attached "bottom"
-                & Attributes fs
-                & Children cs
+        { as = \fs cs -> Segment def <| Attached "bottom" . setFeatures fs |> cs
         }
 
-pattern Pane :: Pane ms -> View ms
-pattern Pane tp = View tp
+pattern Pane :: Pane -> Pane
+pattern Pane tp = tp
 
-instance Pure Pane ms where
-    render Pane_ {..} =
+instance Pure Pane where
+    view Pane_ {..} =
         let
             cs =
-                ( active # "active"
-                : loading # "loading"
-                : "tab"
-                : classes
-                )
+                [ active # "active"
+                , loading # "loading"
+                , "tab"
+                ]
         in
-            as
-                ( mergeClasses $ ClassList cs
-                : attributes
-                )
-                children
+            as (features & Classes cs) children
 
-instance HasProp As (Pane ms) where
-    type Prop As (Pane ms) = [Feature ms] -> [View ms] -> View ms
+instance HasProp As Pane where
+    type Prop As Pane = Features -> [View] -> View
     getProp _ = as
     setProp _ f tp = tp { as = f }
 
-instance HasProp Attributes (Pane ms) where
-    type Prop Attributes (Pane ms) = [Feature ms]
-    getProp _ = attributes
-    setProp _ cs tp = tp { attributes = cs }
+instance HasFeatures Pane where
+    getFeatures = features
+    setFeatures cs tp = tp { features = cs }
 
-instance HasProp Children (Pane ms) where
-    type Prop Children (Pane ms) = [View ms]
-    getProp _ = children
-    setProp _ cs tp = tp { children = cs }
+instance HasChildren Pane where
+    getChildren = children
+    setChildren cs tp = tp { children = cs }
 
-instance HasProp Classes (Pane ms) where
-    type Prop Classes (Pane ms) = [Txt]
-    getProp _ = classes
-    setProp _ cs tp = tp { classes = cs }
-
-instance HasProp Active (Pane ms) where
-    type Prop Active (Pane ms) = Bool
+instance HasProp Active Pane where
+    type Prop Active Pane = Bool
     getProp _ = active
     setProp _ a tp = tp { active = a }
 
-instance HasProp Loading (Pane ms) where
-    type Prop Loading (Pane ms) = Bool
+instance HasProp Loading Pane where
+    type Prop Loading Pane = Bool
     getProp _ = loading
     setProp _ l tp = tp { loading = l }
