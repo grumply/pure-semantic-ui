@@ -6,15 +6,16 @@ module Semantic.Responsive
   , pattern OnlyComputer, pattern OnlyLargeScreen, pattern OnlyWidescreen
   )where
 
+import Control.Monad (join,unless,void)
 import Data.IORef
 import GHC.Generics as G
 import Pure.Data.View
 import Pure.Data.View.Patterns
 import Pure.Data.Txt
 import Pure.Data.HTML
-import Pure.Data.Event
-import Pure.DOM (addAnimation,onRaw)
-import Pure.Lifted (Win(..),Node(..),getWindow)
+import Pure.Data.Events
+import Pure.Data.Lifted (Win(..),Node(..),getWindow,onRaw)
+import Pure.Animation (addAnimation)
 
 import Semantic.Utils
 
@@ -22,8 +23,6 @@ import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)
-  , pattern Attributes, Attributes(..)
-  , pattern Children, Children(..)
   , pattern MinWidth, MinWidth(..)
   , pattern MaxWidth, MaxWidth(..)
   , pattern FireOnMount, FireOnMount(..)
@@ -35,7 +34,7 @@ import Pure.Data.Default as Tools
 
 data Responsive = Responsive_
     { as          :: Features -> [View] -> View
-    , attributes  :: Features
+    , features    :: Features
     , children    :: [View]
     , fireOnMount :: Bool
     , maxWidth    :: Int
@@ -74,7 +73,7 @@ instance Pure Responsive where
     view =
         LibraryComponentIO $ \self ->
             let
-                handleResize = liftIO $ do
+                handleResize = do
                     RS {..} <- getState self
                     tick <- readIORef ticking
                     unless tick $ do
@@ -86,8 +85,8 @@ instance Pure Responsive where
                     RS {..} <- getState self
                     writeIORef ticking False
                     w <- innerWidth
-                    setState self $ \_ RS {..} -> RS { width = w, .. }
-                    void $ parent self onUpdate
+                    setState self $ \_ RS {..} -> return (RS { width = w, .. }, return ())
+                    onUpdate
 
             in def
                 { construct = RS <$> innerWidth <*> newIORef def <*> newIORef def
@@ -107,7 +106,7 @@ instance Pure Responsive where
 
                 , render = \Responsive_ {..} RS {..} ->
                      (width <= maxWidth && width >= minWidth) #
-                        as attributes children
+                        as features children
 
                 }
 

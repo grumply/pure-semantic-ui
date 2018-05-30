@@ -7,6 +7,8 @@ module Semantic.TransitionablePortal
   , TransitionablePortal(..), pattern TransitionablePortal
   ) where
 
+import Control.Monad (void)
+import Data.Maybe (isNothing)
 import GHC.Generics as G
 import Pure.Data.View
 import Pure.Data.View.Patterns
@@ -21,8 +23,7 @@ import Semantic.Transition as Transition
 import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
-  ( pattern Children, Children(..)
-  , pattern OnClose, OnClose(..)
+  ( pattern OnClose, OnClose(..)
   , pattern OnHide, OnHide(..)
   , pattern OnOpen, OnOpen(..)
   , pattern OnStart, OnStart(..)
@@ -75,15 +76,18 @@ instance Pure TransitionablePortal where
                 handlePortalClose = do
                     TransitionablePortal_ {..} <- getProps self
                     TPS {..} <- getState self
-                    isNil open # void (setState self $ \_ TPS {..} -> TPS { portalOpen = not portalOpen, .. })
+                    (isNothing open) #
+                        void (setState self $ \_ TPS {..} -> return
+                                (TPS { portalOpen = not portalOpen, .. }, return ())
+                             )
 
-                handlePortalOpen _ = void $ setState self $ \_ TPS {..} -> TPS { portalOpen = True, .. }
+                handlePortalOpen _ = void $ setState self $ \_ TPS {..} -> return (TPS { portalOpen = True, .. }, return ())
 
                 handleTransitionHide status = do
                     TransitionablePortal_ {..} <- getProps self
                     TPS {..} <- getState self
-                    setState self $ \_ TPS {..} ->
-                        TPS { transitionVisible = False, .. }
+                    setState self $ \_ TPS {..} -> return
+                        (TPS { transitionVisible = False, .. }, return ())
                     onClose
                     onHide status
 
@@ -92,25 +96,25 @@ instance Pure TransitionablePortal where
                     TPS {..} <- getState self
                     onStart status
                     (status == Entering) # do
-                        setState self $ \_ TPS {..} ->
-                            TPS { transitionVisible = True, .. }
+                        setState self $ \_ TPS {..} -> return
+                            (TPS { transitionVisible = True, .. }, return ())
                         onOpen
 
             in def
                 { construct = return (TPS def def)
 
-                , receiveProps = \newprops oldstate -> return $
+                , receive = \newprops oldstate -> return $
                     case open (newprops :: TransitionablePortal) of
                         Just o -> oldstate { portalOpen = o }
                         _      -> oldstate
 
                 , render = \TransitionablePortal_ {..} TPS {..} ->
-                    Portal $ withPortal $ def
+                    View $ Portal.Portal $ withPortal $ def
                         & Open (portalOpen || transitionVisible)
                         & OnOpen handlePortalOpen
                         & OnClose handlePortalClose
                         & Children
-                            [ Transition $ withTransition $ def
+                            [ View $ Transition $ withTransition $ def
                                 & TransitionOnMount True
                                 & OnStart handleTransitionStart
                                 & OnHide handleTransitionHide

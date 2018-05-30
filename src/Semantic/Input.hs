@@ -1,7 +1,7 @@
 module Semantic.Input
   ( module Properties
   , module Tools
-  , Input(..), pattern Input
+  , Input(..), pattern Semantic.Input.Input
   ) where
 
 import GHC.Generics as G
@@ -20,19 +20,14 @@ import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)
-  , pattern Attributes, Attributes(..)
-  , pattern Children, Children(..)
   , pattern Disabled, Disabled(..)
   , pattern Error, Error(..)
   , pattern Fluid, Fluid(..)
   , pattern Focus, Focus(..)
-  , pattern Focused, Focused(..)
   , pattern Inverted, Inverted(..)
   , pattern Loading, Loading(..)
   , pattern Size, Size(..)
-  , pattern TabIndex, TabIndex(..)
   , pattern Transparent, Transparent(..)
-  , pattern Type, Type(..)
   )
 
 import Prelude hiding (error)
@@ -48,67 +43,21 @@ data Input = Input_
     , error :: Bool
     , fluid :: Bool
     , focus :: Bool
-    , focused :: Bool
     , inverted :: Bool
     , loading :: Bool
     , size :: Txt
-    , tabIndex :: Maybe Int
     , transparent :: Bool
-    , _type :: Txt
     } deriving (Generic)
 
 instance Default Input where
-    def = (G.to gdef) { as = \fs cs -> Div & Features fss & Children cs, _type = "text" }
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
 pattern Input :: Input -> Input
 pattern Input i = i
 
-data InputFormatter = IF
-  { inputSeen :: Bool
-  , labelPosition :: Maybe Txt
-  , iconPosition :: Maybe Txt
-  , actionPosition :: Maybe Txt
-  } deriving (Generic,Default)
-
-calculatePositions :: forall.  [View] -> InputFormatter
-calculatePositions = foldl' analyze def
-    where
-        analyze :: InputFormatter -> View -> InputFormatter
-        analyze IF {..} v = let nis = not inputSeen # "left" in
-            case v of
-                HTML.Input _ _  -> IF { inputSeen      = True    , .. }
-                View Label_{}   -> IF { labelPosition  = Just nis, .. }
-                View Icon_{}    -> IF { iconPosition   = Just nis, .. }
-                View Button_{}  -> IF { actionPosition = Just nis, .. }
-                _               -> IF {..}
-
 instance Pure Input where
     view Input_ {..} =
         let
-            _focus e = do
-                focusNode e
-                return Nothing
-
-            addInputProps :: View -> View
-            addInputProps (HTML.Input fs cs) =
-                HTML.Input
-                    (( HostRef ((focused #) . _focus)
-                    : HTML.Disabled disabled
-                    : HTML.Type _type
-                    : index
-                    : onInput onChange
-                    : inputAttrs
-                    ) ++ fs)
-                    cs
-
-            addInputProps c = c
-
-            (inputAttrs,otherAttrs) = extractInputAttrs attributes
-
-            index = maybe (disabled # Tabindex (-1)) Tabindex tabIndex
-
-            IF {..} = calculatePositions children
-
             cs =
                 [ "ui"
                 , size
@@ -119,15 +68,10 @@ instance Pure Input where
                 , inverted # "inverted"
                 , loading # "loading"
                 , transparent # "transparent"
-                , may (<>> "action")  actionPosition
-                , may (<>> "icon")    iconPosition
-                , may (<>> "labeled") labelPosition
                 , "input"
                 ]
         in
-            as
-                )
-                ( map addInputProps children )
+            as (features & Classes cs) children
 
 instance HasProp As Input where
     type Prop As Input = Features -> [View] -> View
@@ -162,11 +106,6 @@ instance HasProp Focus Input where
     getProp _ = focus
     setProp _ f i = i { focus = f }
 
-instance HasProp Focused Input where
-    type Prop Focused Input = Bool
-    getProp _ = focused
-    setProp _ f i = i { focused = f }
-
 instance HasProp Inverted Input where
     type Prop Inverted Input = Bool
     getProp _ = inverted
@@ -182,17 +121,7 @@ instance HasProp Size Input where
     getProp _ = size
     setProp _ s i = i { size = s }
 
-instance HasProp TabIndex Input where
-    type Prop TabIndex Input = Maybe Int
-    getProp _ = tabIndex
-    setProp _ ti i = i { tabIndex = ti }
-
 instance HasProp Transparent Input where
     type Prop Transparent Input = Bool
     getProp _ = transparent
     setProp _ t i = i { transparent = t }
-
-instance HasProp Type Input where
-    type Prop Type Input = Txt
-    getProp _ = _type
-    setProp _ t i = i { _type = t }

@@ -5,16 +5,18 @@ module Semantic.Visibility
   , Visibility(..), pattern Visibility
   ) where
 
+import Control.Monad (unless,void,when)
 import Data.Coerce
+import Data.Foldable (for_,traverse_)
 import Data.IORef
 import GHC.Generics as G
 import Pure.Data.View
 import Pure.Data.View.Patterns
 import Pure.Data.Txt
 import Pure.Data.HTML
-import Pure.Data.Event
-import Pure.Lifted hiding (Offset)
-import Pure.DOM (onRaw,addAnimation)
+import Pure.Data.Events
+import Pure.Data.Lifted hiding (Offset)
+import Pure.Animation (addAnimation)
 
 import Semantic.Utils
 
@@ -22,8 +24,6 @@ import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)
-  , pattern Attributes, Attributes(..)
-  , pattern Children, Children(..)
   , pattern Context, Context(..)
   , pattern Continuous, Continuous(..)
   , pattern FireOnMount, FireOnMount(..)
@@ -53,7 +53,7 @@ data Passed = PixelsPassed Double | PercentPassed Double
 
 data Visibility = Visibility_
     { as                     :: Features -> [View] -> View
-    , attributes             :: Features
+    , features               :: Features
     , children               :: [View]
     , context                :: Maybe JSV
     , continuous             :: Bool
@@ -131,7 +131,6 @@ instance Pure Visibility where
                 handleRef (Node n) = do
                     VS {..} <- getState self
                     writeIORef ref (Just n)
-                    return Nothing
 
                 execute Nothing _ = return ()
                 execute (Just callback) name = do
@@ -157,7 +156,7 @@ instance Pure Visibility where
 
                     when (matchesDirection && executionPossible) (execute callback name)
 
-                    unless once $ modifyIORef fired (filter (/= name))
+                    unless once $ modifyIORef fired (Prelude.filter (/= name))
 
                 fireOnPassed = do
                     Visibility_  {..} <- getProps self
@@ -267,7 +266,7 @@ instance Pure Visibility where
                     pageYOffset >>= writeIORef verticalOffset
                     when fireOnMount update
 
-                , receiveProps = \newprops oldstate@VS{..} -> do
+                , receive = \newprops oldstate@VS{..} -> do
                     oldprops <- getProps self
                     (continuous newprops /= continuous oldprops || once newprops /= once oldprops) #
                         writeIORef fired []
@@ -280,11 +279,7 @@ instance Pure Visibility where
                     scrollHandler
 
                 , render = \Visibility_ {..} _ ->
-                    as
-                        : HostRef handleRef
-                        : attributes
-                        )
-                        children
+                    as (features & Lifecycle (HostRef handleRef)) children
 
                 }
 

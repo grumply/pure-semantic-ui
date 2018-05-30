@@ -8,11 +8,15 @@ module Semantic.Transition
   ) where
 
 import Control.Concurrent
+import Control.Monad (void)
+import Data.Foldable (for_)
 import Data.IORef
 import Data.Maybe
+import Data.Monoid
 import GHC.Generics as G
 import Pure.Data.View
 import Pure.Data.View.Patterns
+import Pure.Data.Styles (ms)
 import Pure.Data.Txt
 import Pure.Data.HTML
 
@@ -22,9 +26,6 @@ import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)
-  , pattern Attributes, Attributes(..)
-  , pattern Children, Children(..)
-  , pattern Classes, Classes(..)
   , pattern Animation, Animation(..)
   , pattern AnimationDuration, AnimationDuration(..)
   , pattern Visible, Visible(..)
@@ -50,7 +51,8 @@ calculateTransitionDuration Exiting  Skewed {..} = hide
 calculateTransitionDuration _        Skewed {..} = show
 
 data Transition = Transition_
-    { as :: Maybe (Features -> [View] -> View)
+    { as :: Features -> [View] -> View
+    , features :: Features
     , children :: [View]
     , animation :: Txt
     , duration :: AnimationDuration
@@ -66,7 +68,7 @@ data Transition = Transition_
 
 instance Default Transition where
     def = (G.to gdef)
-        { as = Just Div
+        { as = \fs cs -> Div & Features fs & Children cs
         , animation = "fade"
         , duration = Uniform 500
         , visible = True
@@ -92,7 +94,7 @@ instance Pure Transition where
                 setSafeState f = do
                     TS {..} <- getState self
                     mtd <- readIORef mounted
-                    mtd # void (setStateIO self (\_ -> return . f))
+                    mtd # void (setState self (\_ st -> return (f st)))
 
                 handleStart = do
                     Transition_ {..} <- getProps self
@@ -130,7 +132,7 @@ instance Pure Transition where
                     Transition_ {..} <- getProps self
                     TS          {..} <- getState self
                     upcoming <- readIORef next
-                    upcoming # do
+                    (isJust upcoming) # do
                         writeIORef next . Just =<< computeNextStatus
                         (not animating) # handleStart
 
@@ -178,7 +180,7 @@ instance Pure Transition where
                         writeIORef mounted True
                         updateStatus
 
-                    , receiveProps = \newprops oldstate -> do
+                    , receive = \newprops oldstate -> do
                         oldprops <- getProps self
                         TS {..}  <- getState self
                         let (current,upcoming) = computeStatuses (visible newprops) status
@@ -222,20 +224,24 @@ instance Pure Transition where
                                               _        -> def
                                   in styles <> [ ad ]
 
-                              headMay [] = nil
-                              headMay (x : _) = x
-
                           in
                               (status /= Unmounted) #
-                                  case as of
-                                    Nothing -> updateStylesAndClasses animationStyles animationClasses $ headMay children
-                                    Just w  -> w [ ClassList (animationClasses []), StyleList (animationStyles [])] children
+                                    as (features & Classes (animationClasses []) & Styles (animationStyles [])) children
 
                     }
+
+instance HasProp As Transition where
+    type Prop As Transition = Features -> [View] -> View
+    getProp _ = as
+    setProp _ a t = t { as = a }
 
 instance HasChildren Transition where
     getChildren = children
     setChildren cs t = t { children = cs }
+
+instance HasFeatures Transition where
+    getFeatures = features
+    setFeatures fs t = t { features = fs }
 
 instance HasProp Animation Transition where
     type Prop Animation Transition = Txt
@@ -298,7 +304,7 @@ data Group = Group_
 
 instance Default Group where
     def = (G.to gdef :: Group)
-        { as = list Div
+        { as = \fs cs -> (Keyed Div) & Features fs & KeyedChildren cs
         , animation = "fade"
         , duration = Uniform 500
         }
@@ -311,15 +317,15 @@ data GroupState = TGS
     }
 
 instance Pure Group where
-    view tg =
-        Component "Semantic.Modules.Transition.Group" tg $ \self ->
+    view =
+        LibraryComponentIO $ \self ->
             let
                 handleOnHide key _ =
-                    void $ setState self $ \_ TGS {..} ->
-                        TGS { buffer = filter ((/= key) . fst) buffer, .. }
+                    void $ setState self $ \_ TGS {..} -> return
+                        (TGS { buffer = Prelude.filter ((/= key) . fst) buffer, .. }, return ())
 
                 wrapChild anim dur vis tom (key,child) =
-                    (key,Transition def
+                    (key,View $ Transition def
                         { animation = anim
                         , duration = dur
                         , transitionOnMount = tom
@@ -329,6 +335,7 @@ instance Pure Group where
                         }
                     )
 
+                hide :: View -> View
                 hide (View Transition_ {..}) = View Transition_ { visible = False, .. }
 
                 fromTransition (Just (View t@Transition_ {})) f = Just (f t)
@@ -338,11 +345,11 @@ instance Pure Group where
                 { construct = do
                     tg@Group_ {..} <- getProps self
                     return TGS
-                        { buffer = map (wrapChild animation duration True False) children
+                        { buffer = fmap (wrapChild animation duration True False) children
                         }
 
-                , receiveProps = \Group_ { animation = anim, duration = dur, children = cs } TGS {..} -> return TGS
-                    { buffer = flip map (mergeMappings buffer cs) $ \(k,c) ->
+                , receive = \Group_ { animation = anim, duration = dur, children = cs } TGS {..} -> return TGS
+                    { buffer = flip fmap (mergeMappings buffer cs) $ \(k,c) ->
                         let prevChild = lookup k buffer
                             hasPrev   = isJust prevChild
                             hasNext   = isJust (lookup k cs)
@@ -358,7 +365,7 @@ instance Pure Group where
                     , ..
                     }
 
-                , render = \Group_ {..} TGS {..} -> as attributes buffer
+                , render = \Group_ {..} TGS {..} -> as features buffer
                 }
 
 instance HasProp As Group where
@@ -370,14 +377,9 @@ instance HasFeatures Group where
     getFeatures = features
     setFeatures as tg = tg { features = as }
 
-instance HasChildren Group where
-    getChildren = children
-    setChildren cs tg = tg { children = cs }
-
-instance HasProp Classes Group where
-    type Prop Classes Group = [Txt]
-    getProp _ = classes
-    setProp _ cs tg = tg { classes = cs }
+instance HasKeyedChildren Group where
+    getKeyedChildren = children
+    setKeyedChildren cs tg = tg { children = cs }
 
 instance HasProp Animation Group where
     type Prop Animation Group = Txt

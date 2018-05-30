@@ -4,33 +4,33 @@ module Semantic.Popup
   , module Tools
   , Popup(..), pattern Popup
   , Content(..), pattern Content
-  , Header(..), pattern Header
+  , Header(..), pattern Semantic.Popup.Header
   ) where
 
 import Control.Arrow ((&&&))
 import Control.Concurrent
+import Control.Monad (void,join)
+import Data.Foldable (for_)
 import Data.IORef
+import Data.List hiding (isInfixOf)
 import Data.Maybe
 import GHC.Generics as G
 import Pure.Data.View
 import Pure.Data.View.Patterns
-import Pure.Data.Txt
+import Pure.Data.Styles (left,right,bottom,top,auto,pxs)
+import Pure.Data.Txt hiding (filter)
 import Pure.Data.HTML
-import Pure.Data.Event
-import Pure.Data.Txt (isInfixOf)
-import Pure.Lifted (JSV,Node(..),Element(..),(.#),window,IsJSV(..))
-import Pure.DOM (onRaw)
+import Pure.Data.Events
+import Pure.Data.Lifted
 
 import Semantic.Utils hiding (on)
 
-import Semantic.Portal hiding (PS)
+import Semantic.Portal as Portal
 
 import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)
-  , pattern Attributes, Attributes(..)
-  , pattern Children, Children(..)
   , pattern Basic, Basic(..)
   , pattern Flowing, Flowing(..)
   , pattern HideOnScroll, HideOnScroll(..)
@@ -63,11 +63,11 @@ import Semantic.Properties as Properties
 import Data.Function as Tools ((&))
 import Pure.Data.Default as Tools
 
-data WithPopup = WithPopup_
+data Popup = Popup_
     { as :: Features -> [View] -> View
     , features :: Features
     , children :: [View]
-    , popup :: [View]
+    , trigger :: View
     , basic :: Bool
     , flowing :: Bool
     , hideOnScroll :: Bool
@@ -83,20 +83,21 @@ data WithPopup = WithPopup_
     , styles :: [(Txt,Txt)]
     , triggerOn :: [Txt]
     , wide :: Maybe Txt
+    , withPortal :: Portal.Portal -> Portal.Portal
     } deriving (Generic)
 
-instance Default WithPopup where
+instance Default Popup where
     def = (G.to gdef)
-        { as = Div
+        { as = \fs cs -> Div & Features fs & Children cs
         , position = "top left"
         , triggerOn = [ "hover" ]
         , withPortal = id
         }
 
-pattern WithPopup :: WithPopup -> WithPopup
-pattern WithPopup p = p
+pattern Popup :: Popup -> Popup
+pattern Popup p = p
 
-data WithPopupState = WPS
+data PopupState = WPS
     { closed :: Bool
     , currentStyles :: [(Txt,Txt)]
     , currentPosition :: Txt
@@ -105,7 +106,7 @@ data WithPopupState = WPS
     , scrollHandler :: IORef (IO ())
     }
 
-instance Pure WithPopup where
+instance Pure Popup where
     view =
         LibraryComponentIO $ \self ->
             let
@@ -183,7 +184,7 @@ instance Pure WithPopup where
 
                 setPopupStyles = do
                     WPS {..} <- getState self
-                    WithPopup_ {..} <- getProps self
+                    Popup_ {..} <- getProps self
                     mcbr <- readIORef coords
                     mpbr <- readIORef popupCoords
                     for_ ((,) <$> mcbr <*> mpbr) $ \(cbr,pbr) -> do
@@ -206,7 +207,7 @@ instance Pure WithPopup where
                                 , "left center"
                                 ]
 
-                            ps = (position,s) : map (id &&& compute) (filter (/= position) positions)
+                            ps = (position,s) : fmap (id &&& compute) (filter (/= position) positions)
 
                             findValid [] = (position,s)
                             findValid ((p,c) : cs)
@@ -217,54 +218,55 @@ instance Pure WithPopup where
 
                         let ss = [("position","absolute"),view left l,view right r,view top t,view bottom b]
 
-                        setState self $ \_ WPS {..} ->
-                            WPS { currentStyles  = ss
+                        setState self $ \_ WPS {..} -> return
+                            ( WPS { currentStyles  = ss
                                , currentPosition = p
                                , ..
                                }
+                            , return ()
+                            )
 
                 handleOpen (evtTarget -> t) = do
-                    WithPopup_ {..} <- getProps self
+                    Popup_ {..} <- getProps self
                     WPS {..} <- getState self
                     br <- boundingRect (Element t)
-                    liftIO $ writeIORef coords (Just br)
+                    writeIORef coords (Just br)
                     onOpen
 
                 handlePortalMount = do
-                    WithPopup_ {..} <- getProps self
+                    Popup_ {..} <- getProps self
                     WPS {..} <- getState self
-                    sh <- liftIO $ onRaw (Node $ toJSV window) "scroll" def $ \_ _ -> liftIO $ do
-                        WithPopup_ {..} <- getProps self
+                    sh <- onRaw (Node $ toJSV window) "scroll" def $ \_ _ -> do
+                        Popup_ {..} <- getProps self
                         WPS {..} <- getState self
-                        setState self $ \_ WPS {..} -> WPS { closed = True, .. }
+                        setState self $ \_ WPS {..} -> return (WPS { closed = True, .. }, return ())
                         join $ readIORef scrollHandler
                         forkIO $ do
                             threadDelay 50000
-                            void $ setState self $ \_ WPS {..} -> WPS { closed = False, .. }
+                            void $ setState self $ \_ WPS {..} -> return (WPS { closed = False, .. }, return ())
                         onClose
-                    liftIO $ writeIORef scrollHandler sh
+                    writeIORef scrollHandler sh
                     onMount
 
                 handlePortalUnmount = do
-                    WithPopup_ {..} <- getProps self
+                    Popup_ {..} <- getProps self
                     WPS {..} <- getState self
-                    liftIO $ join $ readIORef scrollHandler
+                    join $ readIORef scrollHandler
                     onUnmount
 
                 handlePopupRef (Node n) = do
-                    setStateIO self $ \_ WPS {..} ->
+                    void $ setState self $ \_ WPS {..} ->
                         return (WPS {..},do
                             br <- boundingRect (Element n)
-                            liftIO $ writeIORef popupCoords (isNull n ? Nothing $ Just br)
-                            liftIO setPopupStyles
+                            writeIORef popupCoords (isNull n ? Nothing $ Just br)
+                            setPopupStyles
                           )
-                    return Nothing
 
             in def
                 { construct = WPS def def "top left" <$> newIORef def <*> newIORef def <*> newIORef def
-                , render = \WithPopup_ {..} WPS {..} ->
+                , render = \Popup_ {..} WPS {..} ->
                     let
-                        popupProps =
+                        applyPortalProps =
                             let
                                 hoverableProps = hoverable ? (CloseOnPortalMouseLeave True . MouseLeaveDelay 300) $ id
                                 clickProps = ("click" `elem` triggerOn) ? (OpenOnTriggerClick True . CloseOnTriggerClick True . CloseOnDocumentClick True) $ id
@@ -277,154 +279,121 @@ instance Pure WithPopup where
                             [ "ui"
                             , currentPosition
                             , size
-                            , wide # "wide"
+                            , maybe "" (<>> "wide") wide
                             , basic # "basic"
                             , flowing # "flowing"
                             , inverted # "inverted"
                             , "popup transition visible"
                             ]
                     in
-                        as feature (Portal Pure.Data.Lifted.body (Popup def <| popup popupProps) : children)
                         closed
                             ? trigger
-                            $ Portal $ withPortal $ applyPortalProps $ def
-                                & OnClose onClose
+                            $ View $ Portal.Portal $ withPortal $ applyPortalProps $ def
+                                & Portal.OnClose onClose
                                 & OnMount handlePortalMount
                                 & OnOpen handleOpen
                                 & OnUnmount handlePortalUnmount
-                                & Trigger trigger
-                                & Children
-                                    [ as 
-                                        : StyleList currentStyles
-                                        : HostRef handlePopupRef
-                                        : attributes
-                                        )
-                                        children
-                                    ]
+                                & PortalNode (\f -> as (f $ features & Classes cs & Pure.Data.View.Patterns.Styles currentStyles & Lifecycle (HostRef handlePopupRef)) children)
+                                & Children [ trigger ]
                 }
-
-instance HasProp As WithPopup where
-    type Prop As WithPopup = Features -> [View] -> View
-    getProp _ = as
-    setProp _ f p = p { as = f }
-
-instance HasFeatures WithPopup where
-    getFeatures = features
-    setFeatures cs p = p { features = cs }
-
-instance HasChildren WithPopup where
-    getChildren = children
-    setChildren cs p = p { children = cs }
-
-instance HasProp Basic WithPopup where
-    type Prop Basic WithPopup = Bool
-    getProp _ = basic
-    setProp _ b p = p { basic = b }
-
-instance HasProp Flowing WithPopup where
-    type Prop Flowing WithPopup = Bool
-    getProp _ = flowing
-    setProp _ f p = p { flowing = f }
-
-instance HasProp HideOnScroll WithPopup where
-    type Prop HideOnScroll WithPopup = Bool
-    getProp _ = hideOnScroll
-    setProp _ hos p = p { hideOnScroll = hos }
-
-instance HasProp Hoverable WithPopup where
-    type Prop Hoverable WithPopup = Bool
-    getProp _ = hoverable
-    setProp _ h p = p { hoverable = h }
-
-instance HasProp Inverted WithPopup where
-    type Prop Inverted WithPopup = Bool
-    getProp _ = inverted
-    setProp _ i p = p { inverted = i }
-
-instance HasProp Offset WithPopup where
-    type Prop Offset WithPopup = Double
-    getProp _ = offset
-    setProp _ o p = p { offset = o }
-
-instance HasProp OnClose WithPopup where
-    type Prop OnClose WithPopup = IO ()
-    getProp _ = onClose
-    setProp _ oc p = p { onClose = oc }
-
-instance HasProp OnMount WithPopup where
-    type Prop OnMount WithPopup = IO ()
-    getProp _ = onMount
-    setProp _ om p = p { onMount = om }
-
-instance HasProp OnOpen WithPopup where
-    type Prop OnOpen WithPopup = IO ()
-    getProp _ = onOpen
-    setProp _ oo p = p { onOpen = oo }
-
-instance HasProp OnUnmount WithPopup where
-    type Prop OnUnmount WithPopup = IO ()
-    getProp _ = onUnmount
-    setProp _ ou p = p { onUnmount = ou }
-
-instance HasProp Position WithPopup where
-    type Prop Position WithPopup = Txt
-    getProp _ = position
-    setProp _ pos p = p { position = pos }
-
-instance HasProp Size WithPopup where
-    type Prop Size WithPopup = Txt
-    getProp _ = size
-    setProp _ sz p = p { size = sz }
-
-instance HasProp Styles WithPopup where
-    type Prop Styles WithPopup = [(Txt,Txt)]
-    getProp _ = styles
-    setProp _ s p = p { styles = s }
-
-instance HasProp Trigger WithPopup where
-    type Prop Trigger WithPopup = View
-    getProp _ = trigger
-    setProp _ t p = p { trigger = t }
-
-instance HasProp TriggerOn WithPopup where
-    type Prop TriggerOn WithPopup = [Txt]
-    getProp _ = triggerOn
-    setProp _ to p = p { triggerOn = to }
-
-instance HasProp Wide WithPopup where
-    type Prop Wide WithPopup = Maybe Txt
-    getProp _ = wide
-    setProp _ w p = p { wide = w }
-
-instance HasProp WithPortal WithPopup where
-    type Prop WithPortal WithPopup = Portal -> Portal
-    getProp _ = withPortal
-    setProp _ wp p = p { withPortal = wp }
-
-data Popup = Popup_
-    { as :: Features -> [View] -> View
-    , features :: Features
-    , children :: [View]
-    } deriving (Generic)
-
-instance Default Popup where
-  def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
-
-pattern Popup :: Popup -> Popup
-pattern Popup p = p
 
 instance HasProp As Popup where
     type Prop As Popup = Features -> [View] -> View
     getProp _ = as
-    setProp _ a p = p { as = a }
+    setProp _ f p = p { as = f }
 
 instance HasFeatures Popup where
     getFeatures = features
-    setFeatures fs p = p { features = fs }
+    setFeatures cs p = p { features = cs }
 
 instance HasChildren Popup where
     getChildren = children
     setChildren cs p = p { children = cs }
+
+instance HasProp Basic Popup where
+    type Prop Basic Popup = Bool
+    getProp _ = basic
+    setProp _ b p = p { basic = b }
+
+instance HasProp Flowing Popup where
+    type Prop Flowing Popup = Bool
+    getProp _ = flowing
+    setProp _ f p = p { flowing = f }
+
+instance HasProp HideOnScroll Popup where
+    type Prop HideOnScroll Popup = Bool
+    getProp _ = hideOnScroll
+    setProp _ hos p = p { hideOnScroll = hos }
+
+instance HasProp Hoverable Popup where
+    type Prop Hoverable Popup = Bool
+    getProp _ = hoverable
+    setProp _ h p = p { hoverable = h }
+
+instance HasProp Inverted Popup where
+    type Prop Inverted Popup = Bool
+    getProp _ = inverted
+    setProp _ i p = p { inverted = i }
+
+instance HasProp Offset Popup where
+    type Prop Offset Popup = Double
+    getProp _ = offset
+    setProp _ o p = p { offset = o }
+
+instance HasProp OnClose Popup where
+    type Prop OnClose Popup = IO ()
+    getProp _ = onClose
+    setProp _ oc p = p { onClose = oc }
+
+instance HasProp OnMount Popup where
+    type Prop OnMount Popup = IO ()
+    getProp _ = onMount
+    setProp _ om p = p { onMount = om }
+
+instance HasProp OnOpen Popup where
+    type Prop OnOpen Popup = IO ()
+    getProp _ = onOpen
+    setProp _ oo p = p { onOpen = oo }
+
+instance HasProp OnUnmount Popup where
+    type Prop OnUnmount Popup = IO ()
+    getProp _ = onUnmount
+    setProp _ ou p = p { onUnmount = ou }
+
+instance HasProp Position Popup where
+    type Prop Position Popup = Txt
+    getProp _ = position
+    setProp _ pos p = p { position = pos }
+
+instance HasProp Size Popup where
+    type Prop Size Popup = Txt
+    getProp _ = size
+    setProp _ sz p = p { size = sz }
+
+instance HasProp Styles Popup where
+    type Prop Styles Popup = [(Txt,Txt)]
+    getProp _ = styles
+    setProp _ s p = p { styles = s }
+
+instance HasProp Trigger Popup where
+    type Prop Trigger Popup = View
+    getProp _ = trigger
+    setProp _ t p = p { trigger = t }
+
+instance HasProp TriggerOn Popup where
+    type Prop TriggerOn Popup = [Txt]
+    getProp _ = triggerOn
+    setProp _ to p = p { triggerOn = to }
+
+instance HasProp Wide Popup where
+    type Prop Wide Popup = Maybe Txt
+    getProp _ = wide
+    setProp _ w p = p { wide = w }
+
+instance HasProp WithPortal Popup where
+    type Prop WithPortal Popup = Portal -> Portal
+    getProp _ = withPortal
+    setProp _ wp p = p { withPortal = wp }
 
 data Content = Content_
     { as :: Features -> [View] -> View
@@ -439,16 +408,7 @@ pattern Content :: Content -> Content
 pattern Content pc = pc
 
 instance Pure Content where
-    view Content_ {..} =
-        let
-            cs =
-                ( "content"
-                )
-        in
-            as
-                : attributes
-                )
-                children
+    view Content_ {..} = as (features & Class "content") children
 
 instance HasProp As Content where
     type Prop As Content = Features -> [View] -> View
@@ -476,16 +436,7 @@ pattern Header :: Header -> Header
 pattern Header ph = ph
 
 instance Pure Header where
-    view Header_ {..} =
-        let
-            cs =
-                ( "header"
-                )
-        in
-            as
-                : attributes
-                )
-                children
+    view Header_ {..} = as (features & Class "header") children
 
 instance HasProp As Header where
     type Prop As Header = Features -> [View] -> View
