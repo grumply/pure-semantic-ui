@@ -17,8 +17,6 @@ import Semantic.Properties as Tools ( HasProp(..) )
 import Semantic.Properties as Properties
   ( pattern As, As(..)
   , pattern Attached, Attached(..)
-  , pattern Attributes, Attributes(..)
-  , pattern Children, Children(..)
   , pattern Close, Close(..)
   , pattern Dividing, Dividing(..)
   , pattern Internal, Internal(..)
@@ -57,14 +55,11 @@ instance Pure Rail where
                 , attached # "attached"
                 , dividing # "dividing"
                 , internal # "internal"
-                , may (<>> "close") close
+                , maybe "" (<>> "close") close
                 , "rail"
                 ]
         in
-            as
-                : attributes
-                )
-                children
+            as (features & Classes cs) children
 
 instance HasProp As Rail where
     type Prop As Rail = Features -> [View] -> View

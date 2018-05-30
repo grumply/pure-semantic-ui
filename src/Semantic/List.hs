@@ -2,21 +2,22 @@
 module Semantic.List
   ( module Properties
   , module Tools
-  , List(..), pattern List
-  , Content(..), pattern Content
-  , Description(..), pattern Description
-  , Header(..), pattern Header
-  , Icon(..), pattern Icon
+  , List(..), pattern Semantic.List.List
+  , Content(..), pattern Semantic.List.Content
+  , Description(..), pattern Semantic.List.Description
+  , Header(..), pattern Semantic.List.Header
+  , Icon(..), pattern Semantic.List.Icon
   , Item(..), pattern Item
   , Sublist(..), pattern Sublist
-  , Keyed(..), pattern Keyed
+  , Keyed(..), pattern Semantic.List.Keyed
   ) where
 
 import GHC.Generics as G
 import Pure.Data.View
 import Pure.Data.View.Patterns
 import Pure.Data.Txt
-import Pure.Data.HTML
+import Pure.Data.HTML as HTML
+import Pure.Data.HTML.Properties as HTML hiding (Children)
 
 import Semantic.Utils
 
@@ -25,10 +26,8 @@ import Semantic.Properties as Tools ( HasProp(..) )
 import Semantic.Properties as Properties
   ( pattern Animated, Animated(..)
   , pattern As, As(..)
-  , pattern Attributes, Attributes(..)
   , pattern Bulleted, Bulleted(..)
   , pattern Celled, Celled(..)
-  , pattern Children, Children(..)
   , pattern Divided, Divided(..)
   , pattern Floated, Floated(..)
   , pattern Horizontal, Horizontal(..)
@@ -96,16 +95,13 @@ instance Pure List where
                 , link # "link"
                 , ordered # "ordered"
                 , selection # "selection"
-                , may (<>> "relaxed") relaxed
-                , floated # (floated <>> "floated")
-                , verticalAlign # (verticalAlign <>> "aligned")
+                , maybe "" (<>> "relaxed") relaxed
+                , (floated /= mempty) # (floated <>> "floated")
+                , (verticalAlign /= mempty) # (verticalAlign <>> "aligned")
                 , "list"
                 ]
         in
-            as
-                : attributes
-                )
-                children
+            as (features & Classes cs) children
 
 instance HasProp Animated List where
     type Prop Animated List = Bool
@@ -203,15 +199,12 @@ instance Pure Content where
     view Content_ {..} =
         let
             cs =
-                [ floated # (floated <>> "floated")
-                , verticalAlign # (verticalAlign <>> "aligned")
+                [ (floated /= mempty) # (floated <>> "floated")
+                , (verticalAlign /= mempty) # (verticalAlign <>> "aligned")
                 , "content"
                 ]
         in
-            as
-                : attributes
-                )
-                children
+            as (features & Classes cs) children
 
 instance HasProp As Content where
     type Prop As Content = Features -> [View] -> View
@@ -249,7 +242,7 @@ pattern Description :: Description -> Description
 pattern Description ld = ld
 
 instance Pure Description where
-    view Description_ {..} =
+    view Description_ {..} = as (features & Class "description") children
 
 instance HasProp As Description where
     type Prop As Description = Features -> [View] -> View
@@ -271,13 +264,13 @@ data Header = Header_
     } deriving (Generic)
 
 instance Default Header where
-    def = (G.to gdef) { as = Div }
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
 pattern Header :: Header -> Header
 pattern Header lh = lh
 
 instance Pure Header where
-    view Header_ {..} =
+    view Header_ {..} = as (features & Class "header") children
 
 instance HasProp As Header where
     type Prop As Header = Features -> [View] -> View
@@ -312,7 +305,7 @@ data Icon = Icon_
     } deriving (Generic)
 
 instance Default Icon where
-    def = (G.to gdef) { as = I }
+    def = (G.to gdef) { as = \fs cs -> I & Features fs & Children cs }
 
 pattern Icon :: Icon -> Icon
 pattern Icon li = li
@@ -323,7 +316,7 @@ instance Pure Icon where
             cs =
                 [ color
                 , name
-                , cond size
+                , (size /= mempty) # size
                 , bordered # "bordered"
                 , circular # "circular"
                 , corner # "corner"
@@ -332,16 +325,13 @@ instance Pure Icon where
                 , inverted # "inverted"
                 , link # "link"
                 , loading # "loading"
-                , flipped # ("flipped" <<>> flipped)
-                , rotated # ("rotated" <<>> rotated)
-                , verticalAlign # (verticalAlign <>> "aligned")
+                , (flipped /= mempty) # ("flipped" <<>> flipped)
+                , (rotated /= mempty) # ("rotated" <<>> rotated)
+                , (verticalAlign /= mempty) # (verticalAlign <>> "aligned")
                 , "icon"
                 ]
         in
-            as
-                : attributes
-                )
-                []
+            as (features & Classes cs) []
 
 instance HasProp As Icon where
     type Prop As Icon = Features -> [View] -> View
@@ -432,7 +422,7 @@ data Item = Item_
     } deriving (Generic)
 
 instance Default Item where
-    def = (G.to gdef) { as = Div }
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
 pattern Item :: Item -> Item
 pattern Item li = li
@@ -441,24 +431,18 @@ instance Pure Item where
     view Item_ {..} =
         let
             li =
-                case as [] [] of
-                    Li _ _ -> True
-                    _      -> False
+                case as mempty [] of
+                    HTMLView _ "li" _ _ -> True
+                    _ -> False
             cs =
                 [ active # "active"
                 , disabled # "disabled"
                 , (not li) # "item"
                 ]
 
-            valueProp = li ? HTML.Value value $ Prop "data-value" value
+            valueProp = li ? HTML.Value value $ Property "data-value" value
         in
-            as
-                : valueProp
-                : ClassList cs
-                : Role "listitem"
-                : attributes
-                )
-                children
+            as (features & Classes cs & valueProp & Role "listitem") children
 
 instance HasProp Active Item where
     type Prop Active Item = Bool
@@ -504,16 +488,13 @@ instance Pure Sublist where
     view Sublist_ {..} =
         let
             proxy =
-                case as [] [] of
-                    Ul _ _ -> False
-                    Ol _ _ -> False
-                    _      -> True
+                case as mempty [] of
+                    HTMLView _ "ul" _ _ -> False
+                    HTMLView _ "ol" _ _ -> False
+                    _ -> True
 
         in
-            as
-                : attributes
-                )
-                children
+            as (features & (if proxy then Class "list" else id)) children
 
 instance HasProp As Sublist where
     type Prop As Sublist = Features -> [View] -> View
@@ -549,7 +530,7 @@ data Keyed = Keyed_
     } deriving (Generic)
 
 instance Default Keyed where
-    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs & Keyed }
+    def = (G.to gdef) { as = \fs cs -> (Pure.Data.View.Patterns.Keyed Div) & Features fs & KeyedChildren cs }
 
 pattern Keyed :: Keyed -> Keyed
 pattern Keyed l = l
@@ -569,16 +550,13 @@ instance Pure Keyed where
                 , link # "link"
                 , ordered # "ordered"
                 , selection # "selection"
-                , may (<>> "relaxed") relaxed
-                , floated # (floated <>> "floated")
-                , verticalAlign # (verticalAlign <>> "aligned")
+                , maybe "" (<>> "relaxed") relaxed
+                , (floated /= mempty) # (floated <>> "floated")
+                , (verticalAlign /= mempty) # (verticalAlign <>> "aligned")
                 , "list"
                 ]
         in
-            as
-                : attributes
-                )
-                children
+            as (features & Classes cs) children
 
 instance HasProp Animated Keyed where
     type Prop Animated Keyed = Bool
@@ -604,9 +582,9 @@ instance HasProp Celled Keyed where
     getProp _ = celled
     setProp _ c l = l { celled = c }
 
-instance HasChildren Keyed where
-    getChildren = children
-    setChildren cs l = l { children = cs }
+instance HasKeyedChildren Keyed where
+    getKeyedChildren = children
+    setKeyedChildren cs l = l { children = cs }
 
 instance HasProp Divided Keyed where
     type Prop Divided Keyed = Bool

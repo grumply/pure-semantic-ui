@@ -20,8 +20,6 @@ import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)
-  , pattern Attributes, Attributes(..)
-  , pattern Children, Children(..)
   , pattern Aligned, Aligned(..)
   , pattern Category, Category(..)
   , pattern Fluid, Fluid(..)
@@ -77,14 +75,11 @@ instance Pure Search where
                  , focus # "focus"
                  , fluid # "fluid"
                  , loading # "loading"
-                 , aligned # "aligned"
+                 , (aligned /= mempty) # (aligned <<>> "aligned")
                  , "search"
                  ]
 
-        in as
-               : attributes
-               )
-               children
+        in as (features & Classes cs) children
 
 instance HasProp As Search where
     type Prop As Search = Features -> [View] -> View
@@ -124,21 +119,6 @@ instance HasProp Loading Search where
     getProp _ = loading
     setProp _ l s = s { loading = l }
 
-instance HasProp OnBlur Search where
-    type Prop OnBlur Search = IO ()
-    getProp _ = onBlur
-    setProp _ ob s = s { onBlur = ob }
-
-instance HasProp OnFocus Search where
-    type Prop OnFocus Search = IO ()
-    getProp _ = onFocus
-    setProp _ onf s = s { onFocus = onf }
-
-instance HasProp OnMouseDown Search where
-    type Prop OnMouseDown Search = IO ()
-    getProp _ = onMouseDown
-    setProp _ omd s = s { onMouseDown = omd }
-
 instance HasProp Open Search where
     type Prop Open Search = Bool
     getProp _ = open
@@ -159,7 +139,7 @@ data Categorized = Categorized_
 
 instance Default Categorized where
     def = (G.to gdef)
-        { as = Div
+        { as = \fs cs -> Div & Features fs & Children cs
         }
 
 pattern Categorized :: Categorized -> Categorized
@@ -173,10 +153,7 @@ instance Pure Categorized where
                 , "category"
                 ]
         in
-            as
-                : attributes
-                )
-                children
+            as (features & Classes cs) children
 
 instance HasProp As Categorized where
     type Prop As Categorized = Features -> [View] -> View
@@ -206,7 +183,6 @@ data Result = Result_
     , features :: Features
     , children :: [View]
     , active :: Bool
-    , onClick :: IO ()
     } deriving (Generic)
 
 instance Default Result where
@@ -223,11 +199,7 @@ instance Pure Result where
                 , "result"
                 ]
         in
-            as
-                : onClick # On "click" def (\_ -> return $ Just onClick)
-                : attributes
-                )
-                children
+            as (features & Classes cs) children
 
 instance HasProp As Result where
     type Prop As Result = Features -> [View] -> View
@@ -247,11 +219,6 @@ instance HasProp Active Result where
     getProp _ = active
     setProp _ a sr = sr { active = a }
 
-instance HasProp OnClick Result where
-    type Prop OnClick Result = IO ()
-    getProp _ = onClick
-    setProp _ oc sr = sr { onClick = oc }
-
 data Results = Results_
     { as :: Features -> [View] -> View
     , features :: Features
@@ -265,16 +232,7 @@ pattern Results :: Results -> Results
 pattern Results sr = sr
 
 instance Pure Results where
-    view Results_ {..} =
-        let
-            cs =
-                ( "results transition"
-                )
-        in
-            as
-                : attributes
-                )
-                children
+    view Results_ {..} = as (features & Class "results transition") children
 
 instance HasProp As Results where
     type Prop As Results = Features -> [View] -> View

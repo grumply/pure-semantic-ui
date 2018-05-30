@@ -3,9 +3,9 @@ module Semantic.Dropdown
   , module Tools
   , Dropdown(..), pattern Dropdown
   , Divider(..), pattern Divider
-  , Header(..), pattern Header
+  , Header(..), pattern Semantic.Dropdown.Header
   , Item(..), pattern Item
-  , Menu(..), pattern Menu
+  , Menu(..), pattern Semantic.Dropdown.Menu
   , SearchInput, pattern SearchInput
   ) where
 
@@ -13,9 +13,10 @@ import GHC.Generics as G
 import Pure.Data.View
 import Pure.Data.View.Patterns
 import Pure.Data.Txt
-import Pure.Data.HTML
-import Pure.Data.Event
-import Pure.Lifted (JSV,Node(..),(.#))
+import Pure.Data.HTML as HTML
+import Pure.Data.HTML.Properties as HTML hiding (Children)
+import Pure.Data.Events
+import Pure.Data.Lifted (JSV,Node(..),(.#))
 
 import Semantic.Utils
 
@@ -23,8 +24,6 @@ import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)
-  , pattern Attributes, Attributes(..)
-  , pattern Children, Children(..)
   , pattern Basic, Basic(..)
   , pattern IsButton, IsButton(..)
   , pattern Compact, Compact(..)
@@ -129,14 +128,10 @@ instance Pure Dropdown where
                 , simple # "simple"
                 , scrolling # "scrolling"
                 , upward # "upward"
-                , may (<<>> "pointing") pointing
+                , maybe "" (<<>> "pointing") pointing
                 , "dropdown"
                 ]
-        in as
-                : may Tabindex tabIndex
-                : attributes
-                )
-                children
+        in as (features & Classes cs & (maybe id (HTML.TabIndex . toTxt) tabIndex)) children
 
 instance HasProp As Dropdown where
     type Prop As Dropdown = Features -> [View] -> View
@@ -263,16 +258,7 @@ pattern Divider :: Divider -> Divider
 pattern Divider dd = dd
 
 instance Pure Divider where
-    view Divider_ {..} =
-        let
-            cs =
-                ( "divider"
-                )
-        in
-            as
-                : attributes
-                )
-                []
+    view Divider_ {..} = as (features & Class "divider") []
 
 instance HasProp As Divider where
     type Prop As Divider = Features -> [View] -> View
@@ -296,16 +282,7 @@ pattern Header :: Header -> Header
 pattern Header dh = dh
 
 instance Pure Header where
-    view Header_ {..} =
-        let
-            cs =
-                ( "header"
-                )
-        in
-            as
-                : attributes
-                )
-                children
+    view Header_ {..} = as (features & Class "header") children
 
 instance HasProp As Header where
     type Prop As Header = Features -> [View] -> View
@@ -345,11 +322,7 @@ instance Pure (Item ) where
                 , "item"
                 ]
         in
-            as
-                : Role "option"
-                : attributes
-                )
-                children
+            as (features & Classes cs & Role "option") children
 
 instance HasProp Active Item where
     type Prop Active Item = Bool
@@ -400,10 +373,7 @@ instance Pure Menu where
                 , "menu transition"
                 ]
         in
-            as
-                : attributes
-                )
-                children
+            as (features & Classes cs) children
 
 instance HasProp As Menu where
     type Prop As Menu = Features -> [View] -> View
@@ -425,7 +395,6 @@ instance HasProp Scrolling Menu where
 
 data SearchInput = SearchInput_
     { features :: Features
-    , inputRef :: JSV -> IO ()
     , tabIndex :: Maybe Int
     , _type :: Txt
     , value :: Txt
@@ -439,28 +408,16 @@ pattern SearchInput dh = dh
 
 instance Pure SearchInput where
     view SearchInput_ {..} =
-        let
-            cs =
-                ( "search"
-                )
-        in
-            Input
-                ( HTML.Value value
-                : HostRef (\(Node n) -> return . Just $ inputRef n)
-                : may Tabindex tabIndex
-                : HTML.Type _type
-                : Attribute "autoComplete" "off"
-                )
-                []
+        Input <| Class "search"
+                . HTML.Value value
+                . HTML.Type _type
+                . (maybe id (HTML.TabIndex . toTxt) tabIndex)
+                . Attribute "autoComplete" "off"
+                . setFeatures features
 
 instance HasFeatures SearchInput where
     getFeatures = features
     setFeatures cs dsi = dsi { features = cs }
-
-instance HasProp InputRef SearchInput where
-    type Prop InputRef SearchInput = JSV -> IO ()
-    getProp _ = inputRef
-    setProp _ ir dsi = dsi { inputRef = ir }
 
 instance HasProp TabIndex SearchInput where
     type Prop TabIndex SearchInput = Maybe Int

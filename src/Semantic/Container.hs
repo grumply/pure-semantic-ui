@@ -16,8 +16,6 @@ import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)
-  , pattern Attributes, Attributes(..)
-  , pattern Children, Children(..)
   , pattern Fluid, Fluid(..)
   , pattern TextAlign, TextAlign(..)
   , pattern IsText, IsText(..)
@@ -65,7 +63,7 @@ instance Pure Container where
               , textAlign
               , "container"
               ]
-        in as (ClassList cs : attributes) children
+        in as (features & Classes cs) children
 
 instance HasProp As Container where
     type Prop As Container = Features -> [View] -> View

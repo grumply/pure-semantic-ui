@@ -11,7 +11,7 @@ import Pure.Data.View
 import Pure.Data.View.Patterns
 import Pure.Data.Txt
 import Pure.Data.HTML
-import Pure.Data.Event
+import Pure.Data.Events
 
 import Semantic.Utils hiding (only)
 
@@ -19,8 +19,6 @@ import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)
-  , pattern Attributes, Attributes(..)
-  , pattern Children, Children(..)
   , pattern Celled, Celled(..)
   , pattern Centered, Centered(..)
   , pattern Columns, Columns(..)
@@ -93,10 +91,10 @@ instance Pure Grid where
                 , inverted # "inverted"
                 , stackable # "stackable"
                 , stretched # "stretched"
-                , may (<>> "celled") celled
-                , may (<>> "divided") divided
-                , may (<>> "padded") padded
-                , may (<>> "relaxed") relaxed
+                , maybe "" (<>> "celled") celled
+                , maybe "" (<>> "divided") divided
+                , maybe "" (<>> "padded") padded
+                , maybe "" (<>> "relaxed") relaxed
                 , multiProp reversed "reversed"
                 , textAlign
                 , verticalAlign
@@ -104,10 +102,7 @@ instance Pure Grid where
                 , "grid"
                 ]
         in
-            as
-                : attributes
-                )
-                children
+            as (features & Classes cs) children
 
 instance HasProp As Grid where
     type Prop As Grid = Features -> [View] -> View
@@ -225,7 +220,7 @@ instance Pure Column where
                 , stretched # "stretched"
                 , multiProp only "only"
                 , textAlign
-                , floated # (floated <>> "floated")
+                , (floated /= mempty) # (floated <>> "floated")
                 , verticalAlign
                 , widthProp computer "wide computer" def
                 , widthProp largeScreen "wide large screen" def
@@ -235,10 +230,7 @@ instance Pure Column where
                 , "column"
                 ]
         in
-            as
-                : attributes
-                )
-                children
+            as (features & Classes cs) children
 
 instance HasProp As Column where
     type Prop As Column = Features -> [View] -> View
@@ -350,10 +342,7 @@ instance Pure Row where
                 , "row"
                 ]
         in
-            as
-                : attributes
-                )
-                children
+            as (features & Classes cs) children
 
 instance HasProp As Row where
     type Prop As Row = Features -> [View] -> View

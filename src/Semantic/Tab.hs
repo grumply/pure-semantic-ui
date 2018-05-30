@@ -17,8 +17,6 @@ import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)
-  , pattern Attributes, Attributes(..)
-  , pattern Children, Children(..)
   , pattern Active, Active(..)
   , pattern Loading, Loading(..)
   )
@@ -83,10 +81,7 @@ instance Pure Pane where
                 , "tab"
                 ]
         in
-            as
-                : attributes
-                )
-                children
+            as (features & Classes cs) children
 
 instance HasProp As Pane where
     type Prop As Pane = Features -> [View] -> View

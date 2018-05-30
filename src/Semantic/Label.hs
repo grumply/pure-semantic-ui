@@ -104,7 +104,7 @@ instance Pure Label where
                 , "label"
                 ]
         in
-            as (features & AddClasses cs) children
+            as (features & Classes cs) children
 
 instance HasProp Active Label where
     type Prop Active Label = Bool
@@ -240,7 +240,7 @@ instance Pure Group where
                 , "labels"
                 ]
         in
-            as (features & AddClasses cs) children
+            as (features & Classes cs) children
 
 instance HasProp As Group where
     type Prop As Group = Features -> [View] -> View

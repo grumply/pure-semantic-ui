@@ -17,8 +17,6 @@ import Semantic.Properties as Tools ( HasProp(..) )
 import Semantic.Properties as Properties
   ( pattern Active, Active(..)
   , pattern As, As(..)
-  , pattern Attributes, Attributes(..)
-  , pattern Children, Children(..)
   , pattern Disabled, Disabled(..)
   , pattern Inline, Inline(..)
   , pattern Inverted, Inverted(..)
@@ -57,15 +55,12 @@ instance Pure Loader where
                 , disabled # "disabled"
                 , indeterminate # "indeterminate"
                 , inverted # "inverted"
-                , children # "text"
-                , may (<>> "inline") inline
+                , (not $ Prelude.null children) # "text"
+                , maybe "" (<>> "inline") inline
                 , "loader"
                 ]
         in
-            as
-                : attributes
-                )
-                children
+            as (features & Classes cs) children
 
 instance HasProp Active Loader where
     type Prop Active Loader = Bool

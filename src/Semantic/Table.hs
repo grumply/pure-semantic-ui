@@ -1,11 +1,11 @@
 module Semantic.Table
   ( module Properties
   , module Tools
-  , Table(..), pattern Table
-  , Body(..), pattern Body
+  , Table(..), pattern Semantic.Table.Table
+  , Body(..), pattern Semantic.Table.Body
   , Cell(..), pattern Cell
-  , Footer(..), pattern Footer
-  , Header(..), pattern Header
+  , Footer(..), pattern Semantic.Table.Footer
+  , Header(..), pattern Semantic.Table.Header
   , HeaderCell(..), pattern HeaderCell
   , Row(..), pattern Row
   ) where
@@ -14,7 +14,7 @@ import GHC.Generics as G
 import Pure.Data.View
 import Pure.Data.View.Patterns
 import Pure.Data.Txt
-import Pure.Data.HTML
+import Pure.Data.HTML as HTML
 
 import Semantic.Utils
 
@@ -22,8 +22,6 @@ import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)
-  , pattern Attributes, Attributes(..)
-  , pattern Children, Children(..)
   , pattern Attached, Attached(..)
   , pattern Basic, Basic(..)
   , pattern Celled, Celled(..)
@@ -117,20 +115,17 @@ instance Pure Table where
                 , striped # "striped"
                 , structured # "structured"
                 , unstackable # "unstackable"
-                , may (<>> "attached") attached
-                , may (<>> "basic") basic
-                , may (<>> "compact") compact
-                , may (<>> "padded") padded
+                , maybe "" (<>> "attached") attached
+                , maybe "" (<>> "basic") basic
+                , maybe "" (<>> "compact") compact
+                , maybe "" (<>> "padded") padded
                 , textAlign
                 , verticalAlign
                 , widthProp columns "column" def
                 , "table"
                 ]
         in
-            as
-                : attributes
-                )
-                children
+            as (features & Classes cs) children
 
 instance HasProp As Table where
     type Prop As Table = Features -> [View] -> View
@@ -263,11 +258,7 @@ pattern Body :: Body -> Body
 pattern Body tb = tb
 
 instance Pure Body where
-    view Body_ {..} =
-        as
-            : attributes
-            )
-            children
+    view Body_ {..} = as features children
 
 instance HasProp As Body where
     type Prop As Body = Features -> [View] -> View
@@ -324,10 +315,7 @@ instance Pure Cell where
                 , widthProp width "wide" def
                 ]
         in
-            as
-                : attributes
-                )
-                children
+            as (features & Classes cs) children
 
 instance HasProp As Cell where
     type Prop As Cell = Features -> [View] -> View
@@ -415,11 +403,7 @@ pattern Footer :: Footer -> Footer
 pattern Footer tf = tf
 
 instance Pure Footer where
-    view Footer_ {..} =
-        as
-            : attributes
-            )
-            children
+    view Footer_ {..} = as features children
 
 instance HasProp As Footer where
     type Prop As Footer = Features -> [View] -> View
@@ -448,16 +432,7 @@ pattern Header :: Header -> Header
 pattern Header th = th
 
 instance Pure Header where
-    view Header_ {..} =
-        let
-            cs =
-                ( fullWidth # "full-width"
-                )
-        in
-            as
-                : attributes
-                )
-                children
+    view Header_ {..} = as (features & (if fullWidth then Class "full-width" else id)) children
 
 instance HasProp As Header where
     type Prop As Header = Features -> [View] -> View
@@ -518,13 +493,10 @@ instance Pure HeaderCell where
                 , textAlign
                 , verticalAlign
                 , widthProp width "wide" def
-                , sorted # (sorted <>> "sorted")
+                , (sorted /= mempty) # (sorted <>> "sorted")
                 ]
         in
-            as
-                : attributes
-                )
-                children
+            as (features & Classes cs) children
 
 instance HasProp As HeaderCell where
     type Prop As HeaderCell = Features -> [View] -> View
@@ -638,10 +610,7 @@ instance Pure Row where
                 , verticalAlign
                 ]
         in
-            as
-                : attributes
-                )
-                children
+            as (features & Classes cs) children
 
 instance HasProp As Row where
     type Prop As Row = Features -> [View] -> View

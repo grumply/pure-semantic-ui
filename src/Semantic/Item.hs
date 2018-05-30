@@ -3,12 +3,12 @@ module Semantic.Item
   , module Tools
   , Item(..), pattern Item
   , Content(..), pattern Content
-  , Description(..), pattern Description
+  , Description(..), pattern Semantic.Item.Description
   , Extra(..), pattern Extra
   , Group(..), pattern Group
-  , Header(..), pattern Header
+  , Header(..), pattern Semantic.Item.Header
   , Image(..), pattern Image
-  , Meta(..), pattern Meta
+  , Meta(..), pattern Semantic.Item.Meta
   ) where
 
 import GHC.Generics as G hiding (Meta)
@@ -23,8 +23,6 @@ import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)
-  , pattern Attributes, Attributes(..)
-  , pattern Children, Children(..)
   , pattern VerticalAlign, VerticalAlign(..)
   , pattern Divided, Divided(..)
   , pattern Link, Link(..)
@@ -62,16 +60,7 @@ pattern Item :: Item -> Item
 pattern Item i = i
 
 instance Pure Item where
-    view Item_ {..} =
-        let
-            cs =
-                ( "item"
-                )
-        in
-            as
-                : attributes
-                )
-                children
+    view Item_ {..} = as (features & Class "item") children
 
 instance HasProp As Item where
     type Prop As Item = Features -> [View] -> View
@@ -107,10 +96,7 @@ instance Pure Content where
                 , "content"
                 ]
         in
-            as
-                : attributes
-                )
-                children
+            as (features & Classes cs) children
 
 instance HasProp As Content where
     type Prop As Content = Features -> [View] -> View
@@ -143,16 +129,7 @@ pattern Description :: Description -> Description
 pattern Description id = id
 
 instance Pure Description where
-    view Description_ {..} =
-        let
-            cs =
-                ( "description"
-                )
-        in
-            as
-                : attributes
-                )
-                children
+    view Description_ {..} = as (features & Class "description") children
 
 instance HasProp As Description where
     type Prop As Description = Features -> [View] -> View
@@ -180,16 +157,7 @@ pattern Extra :: Extra -> Extra
 pattern Extra ie = ie
 
 instance Pure Extra where
-    view Extra_ {..} =
-        let
-            cs =
-                ( "extra"
-                )
-        in
-            as
-                : attributes
-                )
-                children
+    view Extra_ {..} = as (features & Class "extra") children
 
 instance HasProp As Extra where
     type Prop As Extra = Features -> [View] -> View
@@ -228,14 +196,11 @@ instance Pure Group where
                 , divided # "divided"
                 , link # "link"
                 , unstackable # "unstackable"
-                , may (<>> "relaxed") relaxed
+                , maybe "" (<>> "relaxed") relaxed
                 , "items"
                 ]
         in
-            as
-                : attributes
-                )
-                children
+            as (features & Classes cs) children
 
 instance HasProp As Group where
     type Prop As Group = Features -> [View] -> View
@@ -283,16 +248,7 @@ pattern Header :: Header -> Header
 pattern Header ih = ih
 
 instance Pure Header where
-    view Header_ {..} =
-        let
-            cs =
-                ( "header"
-                )
-        in
-            as
-                : attributes
-                )
-                children
+    view Header_ {..} = as (features & Class "header") children
 
 instance HasProp As Header where
     type Prop As Header = Features -> [View] -> View
@@ -337,7 +293,7 @@ instance Pure Image where
     view Image_ {..} =
         let
             cs =
-                [ size # "ui"
+                [ (size /= mempty) # "ui"
                 , size
                 , avatar # "avatar"
                 , bordered # "bordered"
@@ -349,15 +305,12 @@ instance Pure Image where
                 , inline # "inline"
                 , rounded # "rounded"
                 , useKeyOrValueAndKey spaced "spaced"
-                , floated # ("floated" <<>> floated)
-                , verticalAlign # ("aligned" <<>> verticalAlign)
+                , (floated /= mempty) # ("floated" <<>> floated)
+                , (verticalAlign /= mempty) # ("aligned" <<>> verticalAlign)
                 , "image"
                 ]
         in
-            as
-                : attributes
-                )
-                children
+            as (features & Classes cs) children
 
 instance HasProp Avatar Image where
     type Prop Avatar Image = Bool
@@ -455,16 +408,7 @@ pattern Meta :: Meta -> Meta
 pattern Meta im = im
 
 instance Pure Meta where
-    view Meta_ {..} =
-        let
-            cs =
-                ( "meta"
-                )
-        in
-            as
-                : attributes
-                )
-                children
+    view Meta_ {..} = as (features & Class "meta") children
 
 instance HasProp As Meta where
     type Prop As Meta = Features -> [View] -> View

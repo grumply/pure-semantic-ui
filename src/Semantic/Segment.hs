@@ -18,9 +18,7 @@ import Semantic.Properties as Tools ( HasProp(..) )
 import Semantic.Properties as Properties
   ( pattern As, As(..)
   , pattern Attached, Attached(..)
-  , pattern Attributes, Attributes(..)
   , pattern Basic, Basic(..)
-  , pattern Children, Children(..)
   , pattern Circular, Circular(..)
   , pattern Clearing, Clearing(..)
   , pattern Color, Color(..)
@@ -95,17 +93,14 @@ instance Pure Segment where
                 , stacked # "stacked"
                 , tertiary # "tertiary"
                 , vertical # "vertical"
-                , attached # (attached <>> "attached")
-                , may (<>> "padded") padded
+                , (attached /= mempty) # (attached <>> "attached")
+                , maybe "" (<>> "padded") padded
                 , textAlign
-                , floated # ("floated" <<>> floated)
+                , (floated /= mempty) # ("floated" <<>> floated)
                 , "segment"
                 ]
         in
-            as
-                : attributes
-                )
-                children
+            as (features & Classes cs) children
 
 instance HasProp As Segment where
     type Prop As Segment = Features -> [View] -> View
@@ -247,10 +242,7 @@ instance Pure Group where
                 , "segments"
                 ]
         in
-            as
-                : attributes
-                )
-                children
+            as (features & Classes cs) children
 
 instance HasProp As Group where
     type Prop As Group = Features -> [View] -> View

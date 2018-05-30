@@ -16,7 +16,6 @@ import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)
-  , pattern Attributes, Attributes(..)
   , pattern Name, Name(..)
   )
 
@@ -36,17 +35,7 @@ pattern Flag :: Flag -> Flag
 pattern Flag f = f
 
 instance Pure Flag where
-    view Flag_ {..} =
-        let
-            cs =
-                [ name
-                , "flag"
-                ]
-        in
-            as
-                : attributes
-                )
-                []
+    view Flag_ {..} = as (features & Classes [name,"flag"]) []
 
 instance HasProp As Flag where
     type Prop As Flag = Features -> [View] -> View

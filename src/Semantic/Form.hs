@@ -1,7 +1,7 @@
 module Semantic.Form
   ( module Properties
   , module Tools
-  , Form(..), pattern Form
+  , Form(..), pattern Semantic.Form.Form
   , Field(..), pattern Field
   , Group(..), pattern Group
   ) where
@@ -10,8 +10,8 @@ import GHC.Generics as G
 import Pure.Data.View
 import Pure.Data.View.Patterns
 import Pure.Data.Txt
-import Pure.Data.HTML
-import Pure.Data.Event
+import Pure.Data.HTML as HTML
+import Pure.Data.Events
 
 import Semantic.Utils
 import Prelude hiding (error)
@@ -20,8 +20,6 @@ import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)
-  , pattern Attributes, Attributes(..)
-  , pattern Children, Children(..)
   , pattern Action, Action(..)
   , pattern Error, Error(..)
   , pattern Inverted, Inverted(..)
@@ -74,6 +72,10 @@ pattern Form f = f
 instance Pure Form where
     view Form_ {..} =
         let
+            fs = Classes cs
+               . Property "action" action
+               . Pure.Data.Events.OnSubmit (\_ -> onSubmit)
+
             cs =
                 [ "ui"
                 , size
@@ -88,12 +90,7 @@ instance Pure Form where
                 , "form"
                 ]
         in
-            as
-                : Prop "action" action
-                : onSubmit # (On "submit" def { preventDef = True } (\_ -> return $ Just onSubmit))
-                : attributes
-                )
-                children
+            as (fs features) children
 
 instance HasProp As Form where
     type Prop As Form = Features -> [View] -> View
@@ -193,10 +190,7 @@ instance Pure Field where
                 , "field"
                 ]
         in
-            as
-                : attributes
-                )
-                children
+            as (features & Classes cs) children
 
 instance HasProp As Field where
     type Prop As Field = Features -> [View] -> View
@@ -269,10 +263,7 @@ instance Pure Group where
                 , "fields"
                 ]
         in
-            as
-                : attributes
-                )
-                children
+            as (features & Classes cs) children
 
 instance HasProp As Group where
     type Prop As Group = Features -> [View] -> View

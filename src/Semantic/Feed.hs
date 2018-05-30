@@ -6,9 +6,9 @@ module Semantic.Feed
   , Date(..), pattern Date
   , Event(..), pattern Event
   , Extra(..), pattern Extra
-  , Label(..), pattern Label
+  , Label(..), pattern Semantic.Feed.Label
   , Like(..), pattern Like
-  , Meta(..), pattern Meta
+  , Meta(..), pattern Semantic.Feed.Meta
   , User(..), pattern User
   ) where
 
@@ -26,8 +26,6 @@ import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)
-  , pattern Attributes, Attributes(..)
-  , pattern Children, Children(..)
   , pattern Size, Size(..)
   , pattern IsText, IsText(..)
   )
@@ -57,10 +55,7 @@ instance Pure Feed where
                 , "feed"
                 ]
         in
-            as
-                : attributes
-                )
-                children
+            as (features & Classes cs) children
 
 instance HasProp As Feed where
     type Prop As Feed = Features -> [View] -> View
@@ -93,16 +88,7 @@ pattern Content :: Content -> Content
 pattern Content fc = fc
 
 instance Pure Content where
-    view Content_ {..} =
-        let
-            cs =
-                ( "content"
-                )
-        in
-            as
-                : attributes
-                )
-                children
+    view Content_ {..} = as (features & Class "content") children
 
 instance HasProp As Content where
     type Prop As Content = Features -> [View] -> View
@@ -130,16 +116,7 @@ pattern Date :: Date -> Date
 pattern Date fd = fd
 
 instance Pure Date where
-    view Date_ {..} =
-        let
-            cs =
-                ( "date"
-                )
-        in
-            as
-                : attributes
-                )
-                children
+    view Date_ {..} = as (features & Class "date") children
 
 instance HasProp As Date where
     type Prop As Date = Features -> [View] -> View
@@ -167,16 +144,7 @@ pattern Event :: Event -> Event
 pattern Event fe = fe
 
 instance Pure Event where
-    view Event_ {..} =
-        let
-            cs =
-                ( "event"
-                )
-        in
-            as
-                : attributes
-                )
-                children
+    view Event_ {..} = as (features & Class "event") children
 
 instance HasProp As Event where
     type Prop As Event = Features -> [View] -> View
@@ -215,10 +183,7 @@ instance Pure Extra where
                 , "extra"
                 ]
         in
-            as
-                : attributes
-                )
-                children
+            as (features & Classes cs) children
 
 instance HasProp As Extra where
     type Prop As Extra = Features -> [View] -> View
@@ -251,16 +216,7 @@ pattern Label :: Label -> Label
 pattern Label fl = fl
 
 instance Pure Label where
-    view Label_ {..} =
-        let
-            cs =
-                ( "label"
-                )
-        in
-            as
-                : attributes
-                )
-                children
+    view Label_ {..} = as (features & Class "label") children
 
 instance HasProp As Label where
     type Prop As Label = Features -> [View] -> View
@@ -288,16 +244,7 @@ pattern Like :: Like -> Like
 pattern Like fl = fl
 
 instance Pure Like where
-    view Like_ {..} =
-        let
-            cs =
-                ( "like"
-                )
-        in
-            as
-                : attributes
-                )
-                children
+    view Like_ {..} = as (features & Class "like") children
 
 instance HasProp As Like where
     type Prop As Like = Features -> [View] -> View
@@ -325,16 +272,7 @@ pattern Meta :: Meta -> Meta
 pattern Meta fm = fm
 
 instance Pure Meta where
-    view Meta_ {..} =
-        let
-            cs =
-                ( "meta"
-                )
-        in
-            as
-                : attributes
-                )
-                children
+    view Meta_ {..} = as (features & Class "meta") children
 
 instance HasProp As Meta where
     type Prop As Meta = Features -> [View] -> View
@@ -362,16 +300,7 @@ pattern Summary :: Summary -> Summary
 pattern Summary fs = fs
 
 instance Pure Summary where
-    view Summary_ {..} =
-        let
-            cs =
-                ( "summary"
-                )
-        in
-            as
-                : attributes
-                )
-                children
+    view Summary_ {..} = as (features & Class "summary") children
 
 instance HasProp As Summary where
     type Prop As Summary = Features -> [View] -> View
@@ -399,16 +328,7 @@ pattern User :: User -> User
 pattern User fu = fu
 
 instance Pure User where
-    view User_ {..} =
-        let
-            cs =
-                ( "user"
-                )
-        in
-            as
-                : attributes
-                )
-                children
+    view User_ {..} = as (features & Class "user") children
 
 instance HasProp As User where
     type Prop As User = Features -> [View] -> View

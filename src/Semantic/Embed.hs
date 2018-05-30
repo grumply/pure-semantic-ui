@@ -2,17 +2,20 @@
 module Semantic.Embed
   ( module Properties
   , module Tools
-  , Embed(..), pattern Embed
+  , Embed(..), pattern Semantic.Embed.Embed
   ) where
 
 import Control.Arrow ((&&&))
+import Control.Monad
+import Data.Monoid
 import GHC.Generics as G
 import Pure.Data.View
 import Pure.Data.View.Patterns
 import Pure.Data.Txt
-import Pure.Data.HTML
-import Pure.Data.Event
-import Pure.Route (encodeURI)
+import Pure.Data.HTML as HTML
+import Pure.Data.HTML.Properties (pattern Src)
+import Pure.Data.Events
+import Pure.Data.URI
 
 import Semantic.Utils hiding (id)
 
@@ -23,8 +26,6 @@ import Semantic.Properties as Tools ( HasProp(..) )
 import Semantic.Properties as Properties
   ( pattern Name, Name(..)
   , pattern As, As(..)
-  , pattern Attributes, Attributes(..)
-  , pattern Children, Children(..)
   , pattern Active, Active(..)
   , pattern AspectRatio, AspectRatio(..)
   , pattern Autoplay, Autoplay(..)
@@ -78,11 +79,10 @@ instance Pure Embed where
     view =
         LibraryComponentIO $ \self ->
             let
-                handleClick = do
+                handleClick _ = do
                     Embed_ {..} <- getProps self
                     isActive <- getState self
-                    onClick
-                    unless active (void $ setState self $ \_ -> not)
+                    unless active (void $ setState self $ \_ st -> return (not st,return ()))
 
             in def
                 { construct = do
@@ -101,16 +101,6 @@ instance Pure Embed where
                         viewSource YouTube          = "YouTube"
                         viewSource Vimeo            = "Vimeo"
                         viewSource (OtherSource os) = os
-
-                        defaultIframeAttributes =
-                            [ Attribute "allowfullscreen" "false"
-                            , Attribute "frameborder" "0"
-                            , Attribute "height" "100%"
-                            , Attribute "scrolling" "no"
-                            , Attribute "src" src
-                            , may (\s -> Attribute "title" ("Embedded content from " <> viewSource s <> ".")) source
-                            , Attribute "width" "100%"
-                            ]
 
                         src =
                             case source of
@@ -140,16 +130,25 @@ instance Pure Embed where
                                 _ -> url
 
                     in
-                        as
-                            : attributes
-                            )
-                            [ Icon icon
-                            , placeholder # Img [ ClassList [ "placeholder" ], Src placeholder ]  [ ]
+                        as (features & Classes cs & Pure.Data.Events.OnClick handleClick)
+                            [ View $ Icon icon
+                            , (placeholder /= mempty) # (HTML.Img <| Class "placeholder" . Src placeholder)
                             , active #
-                                Div [ ClassList [ "embed" ] ]
-                                    $ children
-                                        ? children
-                                        $ [ Iframe (defaultIframeAttributes ++ iframe) [] ]
+                                (Div <| Class "embed" |>
+                                    ((not $ Prelude.null children)
+                                      ? children
+                                      $ [ Iframe <| Attribute "allowfullscreen" "false"
+                                                  . Attribute "frameborder" "0"
+                                                  . Attribute "height" "100%"
+                                                  . Attribute "scrolling" "no"
+                                                  . Attribute "src" src
+                                                  . (maybe Prelude.id (\s f -> Attribute "title" ("Embedded content from " <> viewSource s <> ".") f) source)
+                                                  . Attribute "width" "100%"
+                                                  . Features iframe
+                                        ]
+
+                                    )
+                                )
                             ]
 
                 }

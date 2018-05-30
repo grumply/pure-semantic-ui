@@ -1,7 +1,7 @@
 module Semantic.Portal
   ( module Properties
   , module Tools
-  , Portal(..), pattern Portal
+  , Portal(..), pattern Semantic.Portal.Portal
   ) where
 
 import Control.Concurrent
@@ -14,7 +14,7 @@ import Data.Maybe (isJust,fromMaybe)
 import qualified Data.List as List
 import Data.Traversable (for)
 import GHC.Generics as G
-import Pure.Data.Lifted as Lifted (body)
+import Pure.Data.Lifted
 import Pure.Data.View
 import Pure.Data.View.Patterns
 import Pure.Data.Txt
@@ -83,7 +83,8 @@ data Portal = Portal_
 
 instance Default Portal where
     def = (G.to gdef)
-            { closeOnDocumentClick = True
+            { as                   = \fs cs -> Div & Features fs & Children cs
+            , closeOnDocumentClick = True
             , closeOnEscape        = True
             , openOnTriggerClick   = True
             }
@@ -113,12 +114,12 @@ instance Pure Portal where
         LibraryComponentIO $ \self ->
             let
 
-                toRoot = maybe (coerce body) Element
+                toRoot = Just . maybe (coerce body) id
 
                 contained Nothing  _ = return False
-                contained (Just s) t = s `contains` t
+                contained (Just s) t = toJSV s `contains` toJSV t
 
-                handleDocumentClick (Target t) = do
+                handleDocumentClick (evtTarget -> t) = do
                     PS      {..} <- getState self
                     Portal_ {..} <- getProps self
                     PSN     {..} <- readIORef nodes
@@ -144,14 +145,12 @@ instance Pure Portal where
 
                     when eventShouldClosePortal closePortal
 
-                handleDocumentClick _ = return ()
-
                 handleEscape Escape = do
                     Portal_ {..} <- getProps self
                     when closeOnEscape closePortal
                 handleEscape _ = return ()
 
-                handlePortalMouseLeave = do
+                handlePortalMouseLeave _ = do
                     Portal_ {..} <- getProps self
                     PS {..} <- getState self
                     when closeOnPortalMouseLeave $ do
@@ -161,7 +160,7 @@ instance Pure Portal where
                         modifyIORef timers $ \PST {..} ->
                             PST { mouseLeaveTimer = Just tid, .. }
 
-                handlePortalMouseEnter = do
+                handlePortalMouseEnter _ = do
                     Portal_ {..} <- getProps self
                     PS {..} <- getState self
                     PST {..} <- readIORef timers
@@ -190,7 +189,7 @@ instance Pure Portal where
                     when openOnTriggerFocus
                         (openPortal e)
 
-                handleTriggerMouseLeave = do
+                handleTriggerMouseLeave _ = do
                     Portal_ {..} <- getProps self
                     PS {..} <- getState self
                     when closeOnTriggerMouseLeave $ do
@@ -241,10 +240,14 @@ instance Pure Portal where
 
                     , receive = \newprops oldstate -> do
                         oldprops <- getProps self
-                        return $
-                          (open newprops /= open oldprops)
-                            ? oldstate { active = open newprops }
-                            $ oldstate
+                        let change = open newprops /= open oldprops
+                        if | change && open newprops -> do
+                            Semantic.Portal.onMount newprops
+                            return oldstate { active = open newprops }
+                           | change -> do
+                            Semantic.Portal.onUnmount newprops
+                            return oldstate { active = open newprops }
+                           | otherwise -> return oldstate
 
                     , unmount = void $ do
                         PS  {..} <- getState self
@@ -254,16 +257,16 @@ instance Pure Portal where
 
                     , render = \Portal_ {..} ps ->
                         let
-                            p | active ps = PortalView (maybe (coerce body) Element mountNode) $ portal
+                            p | active ps = PortalView Nothing (fromMaybe (coerce body) mountNode) $ portal
                                           $ Lifecycle (HostRef handlePortalRef)
                                           . OnMouseEnter handlePortalMouseEnter
                                           . OnMouseLeave handlePortalMouseLeave
-                                          . OnDoc "click" handleDocumentClick
-                                          . OnDoc "keydown" handleEscape
+                                          . Listener (OnDoc "click" handleDocumentClick)
+                                          . Listener (OnDoc "keydown" handleEscape)
                               | otherwise = Null
 
                             addTriggerHandlers =
-                                Lifecycle (HostRef handleRef)
+                                Lifecycle (HostRef handleTriggerRef)
                               . OnBlur handleTriggerBlur
                               . OnClick handleTriggerClick
                               . OnFocus handleTriggerFocus
@@ -335,7 +338,7 @@ instance HasProp DefaultOpen Portal where
     setProp _ o p = p { defaultOpen = o }
 
 instance HasProp MountNode Portal where
-    type Prop MountNode Portal = Maybe JSV
+    type Prop MountNode Portal = Maybe Element
     getProp _ = mountNode
     setProp _ mn p = p { mountNode = mn }
 

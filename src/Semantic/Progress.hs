@@ -1,11 +1,13 @@
 module Semantic.Progress
   ( module Properties
   , module Tools
-  , Progress(..), pattern Progress
+  , Progress(..), pattern Semantic.Progress.Progress
   ) where
 
 import Data.Maybe
+import Data.Monoid
 import GHC.Generics as G
+import Pure.Data.Styles (width,per,int)
 import Pure.Data.View
 import Pure.Data.View.Patterns
 import Pure.Data.Txt
@@ -17,8 +19,6 @@ import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)
-  , pattern Attributes, Attributes(..)
-  , pattern Children, Children(..)
   , pattern Active, Active(..)
   , pattern Attached, Attached(..)
   , pattern AutoSuccess, AutoSuccess(..)
@@ -76,13 +76,13 @@ instance Pure Progress where
             decimals p x = (fromInteger $ Prelude.round $ x * (10^p)) / (10.0^^p)
 
             totalPercent =
-                total
+                (total > 0)
                     ? (fromIntegral value / fromIntegral total * 100)
                     $ 100
 
-            isAutoSuccess = autoSuccess && (percent ? (percent >= Just 100) $ (value >= total))
+            isAutoSuccess = autoSuccess && ((isJust percent) ? (percent >= Just 100) $ (value >= total))
 
-            getPercent = (precision ? decimals precision $ id)
+            getPercent = ((precision >= 0) ? decimals precision $ id)
                 (max 0 (min 100 (fromMaybe totalPercent percent)))
 
             cs =
@@ -96,21 +96,17 @@ instance Pure Progress where
                 , inverted # "inverted"
                 , (success || isAutoSuccess) # "success"
                 , warning # "warning"
-                , attached # "attached"
+                , (attached /= mempty) # (attached <>> "attached")
                 , "progress"
                 ]
         in
-            as
-                : attributes
-                )
-                [ Div [ ClassList [ "bar" ]
-                      , StyleList [(width,per getPercent)]
-                      ]
+            as (features & Classes cs)
+                [ Div <| Class "bar" . Pure.Data.View.Patterns.Style width (per getPercent) |>
                       [ progress #
-                            Div [ ClassList [ "progress" ] ]
+                            Div <| Class "progress" |>
                                 [ fromTxt $ maybe (int value <> "/" <> int total) per percent ]
                       ]
-                , Div [ ClassList [ "label" ] ] children
+                , Div <| Class "label" |> children
                 ]
 
 instance HasProp As Progress where

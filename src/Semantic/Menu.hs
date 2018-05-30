@@ -2,8 +2,8 @@
 module Semantic.Menu
   ( module Properties
   , module Tools
-  , Menu(..), pattern Menu
-  , Header(..), pattern Header
+  , Menu(..), pattern Semantic.Menu.Menu
+  , Header(..), pattern Semantic.Menu.Header
   , Item(..), pattern Item
   , Submenu (..), pattern Submenu
   ) where
@@ -11,7 +11,7 @@ module Semantic.Menu
 import GHC.Generics as G
 import Pure.Data.View
 import Pure.Data.View.Patterns
-import Pure.Data.Txt
+import Pure.Data.Txt hiding (index)
 import Pure.Data.HTML
 
 import Semantic.Utils
@@ -20,8 +20,6 @@ import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)
-  , pattern Attributes, Attributes(..)
-  , pattern Children, Children(..)
   , pattern Attached, Attached(..)
   , pattern Borderless, Borderless(..)
   , pattern Color, Color(..)
@@ -106,19 +104,16 @@ instance Pure Menu where
                 , stackable # "stackable"
                 , text # "text"
                 , vertical # "vertical"
-                , may (<>> "attached") attached
-                , may (<>> "floated") floated
-                , may (<>> "icon") icon
-                , may (<>> "tabular") tabular
-                , fixed # (fixed <>> "fixed")
+                , maybe "" (<>> "attached") attached
+                , maybe "" (<>> "floated") floated
+                , maybe "" (<>> "icon") icon
+                , maybe "" (<>> "tabular") tabular
+                , (fixed /= mempty) # (fixed <>> "fixed")
                 , widthProp widths "item" def
                 , "menu"
                 ]
         in
-            as
-                : attributes
-                )
-                children
+            as (features & Classes cs) children
 
 instance HasProp As Menu where
     type Prop As Menu = Features -> [View] -> View
@@ -178,11 +173,6 @@ instance HasProp Inverted Menu where
     getProp _ = inverted
     setProp _ i m = m { inverted = i }
 
-instance HasProp OnClick Menu where
-    type Prop OnClick Menu = Item -> IO ()
-    getProp _ = onItemClick
-    setProp _ oc m = m { onItemClick = oc }
-
 instance HasProp Pagination Menu where
     type Prop Pagination Menu = Bool
     getProp _ = pagination
@@ -241,16 +231,7 @@ pattern Header :: Header -> Header
 pattern Header mh = mh
 
 instance Pure Header where
-    view Header_ {..} =
-        let
-            cs =
-                ( "header"
-                )
-        in
-            as
-                : attributes
-                )
-                children
+    view Header_ {..} = as (features & Class "header") children
 
 instance HasProp As Header where
     type Prop As Header = Features -> [View] -> View
@@ -290,8 +271,8 @@ instance Pure Item where
         let
             icon =
                 case children of
-                    [ Icon i ] -> True
-                    _          -> False
+                    [ View (Icon i) ] -> True
+                    _                 -> False
 
             cs =
                 [ color
@@ -301,15 +282,12 @@ instance Pure Item where
                 , icon # "icon"
                 , header # "header"
                 , link # "link"
-                , may ("fitted" <<>>) fitted
+                , maybe "" ("fitted" <<>>) fitted
                 , "item"
                 ]
 
         in
-            e
-                : attributes
-                )
-                children
+            as (features & Classes cs) children
 
 instance HasProp As Item where
     type Prop As Item = Features -> [View] -> View
@@ -378,17 +356,7 @@ pattern Submenu :: Submenu -> Submenu
 pattern Submenu mm = mm
 
 instance Pure Submenu where
-    view Submenu_ {..} =
-        let
-            cs =
-                [ position
-                , "menu"
-                ]
-        in
-            as
-                : attributes
-                )
-                children
+    view Submenu_ {..} = as (features & Classes [ position, "menu" ]) children
 
 instance HasProp As Submenu where
     type Prop As Submenu = Features -> [View] -> View

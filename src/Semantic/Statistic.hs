@@ -3,7 +3,7 @@ module Semantic.Statistic
   , module Tools
   , Statistic(..), pattern Statistic
   , Group(..), pattern Group
-  , Label(..), pattern Label
+  , Label(..), pattern Semantic.Statistic.Label
   , Value(..), pattern Value
   ) where
 
@@ -19,8 +19,6 @@ import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)
-  , pattern Attributes, Attributes(..)
-  , pattern Children, Children(..)
   , pattern Color, Color(..)
   , pattern Floated, Floated(..)
   , pattern Horizontal, Horizontal(..)
@@ -61,16 +59,13 @@ instance Pure Statistic where
                 [ "ui"
                 , color
                 , size
-                , floated # (floated <>> "floated")
+                , (floated /= mempty) # (floated <>> "floated")
                 , horizontal # "horizontal"
                 , inverted # "inverted"
                 , "statistic"
                 ]
         in
-            as
-                : attributes
-                )
-                children
+            as (features & Classes cs) children
 
 instance HasProp As Statistic where
     type Prop As Statistic = Features -> [View] -> View
@@ -140,10 +135,7 @@ instance Pure Group where
                 , "statistics"
                 ]
         in
-            as
-                : attributes
-                )
-                children
+            as (features & Classes cs) children
 
 instance HasProp As Group where
     type Prop As Group = Features -> [View] -> View
@@ -196,16 +188,7 @@ pattern Label :: Label -> Label
 pattern Label sl = sl
 
 instance Pure Label where
-    view Label_ {..} =
-        let
-            cs =
-                ( "label"
-                )
-        in
-            as
-                : attributes
-                )
-                children
+    view Label_ {..} = as (features & Class "label") children
 
 instance HasProp As Label where
     type Prop As Label = Features -> [View] -> View
@@ -241,10 +224,7 @@ instance Pure Value where
                 , "value"
                 ]
         in
-            as
-                : attributes
-                )
-                children
+            as (features & Classes cs) children
 
 instance HasProp As Value where
     type Prop As Value = Features -> [View] -> View

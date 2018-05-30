@@ -43,7 +43,7 @@ instance Pure Advertisement where
     view Advertisement_ {..} =
         let
             property
-              | test /= def = Property ("data-text",test)
+              | test /= def = Property "data-text" test
               | otherwise   = id
 
             cs =

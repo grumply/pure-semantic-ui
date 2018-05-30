@@ -3,7 +3,7 @@ module Semantic.Message
   , module Tools
   , Message(..), pattern Message
   , Content(..), pattern Content
-  , Header(..), pattern Header
+  , Header(..), pattern Semantic.Message.Header
   , Item(..), pattern Item
   , List(..), pattern List
   ) where
@@ -13,6 +13,7 @@ import Pure.Data.View
 import Pure.Data.View.Patterns
 import Pure.Data.Txt
 import Pure.Data.HTML
+import Pure.Data.Events
 
 import Semantic.Utils
 
@@ -23,8 +24,6 @@ import Semantic.Properties as Tools ( HasProp(..) )
 import Semantic.Properties as Properties
   ( pattern Name, Name(..)
   , pattern As, As(..)
-  , pattern Attributes, Attributes(..)
-  , pattern Children, Children(..)
   , pattern Attached, Attached(..)
   , pattern Color, Color(..)
   , pattern Compact, Compact(..)
@@ -58,7 +57,7 @@ data Message = Message_
     , hidden :: Bool
     , info :: Bool
     , negative :: Bool
-    , onDismiss :: IO ()
+    , onDismiss :: Maybe (IO ())
     , positive :: Bool
     , size :: Txt
     , success :: Bool
@@ -75,9 +74,13 @@ pattern Message m = m
 instance Pure Message where
     view Message_ {..} =
         let
-            icon = foldPures (\(Icon_ {}) -> const True) False children
+            icon = foldPures (\(View (Icon_ {})) -> const True) False children
 
-            dismissIcon = onDismiss # (Icon $ def & Name "close" & Attributes [ On "click" def (\_ -> return $ Just onDismiss) ])
+            dismissIcon =
+              case onDismiss of
+                Nothing -> Null
+                Just od ->
+                  View $ Icon $ def & Name "close" & OnClick (\_ -> od)
 
             cs =
                 [ "ui"
@@ -94,14 +97,11 @@ instance Pure Message where
                 , success # "success"
                 , visible # "visible"
                 , warning # "warning"
-                , may (<>> "attached") attached
+                , maybe "" (<>> "attached") attached
                 , "message"
                 ]
         in
-            as
-                : attributes
-                )
-                ( dismissIcon : children )
+            as (features & Classes cs) (dismissIcon : children)
 
 instance HasProp As Message where
     type Prop As Message = Features -> [View] -> View
@@ -157,7 +157,7 @@ instance HasProp Negative Message where
     setProp _ n m = m { negative = n }
 
 instance HasProp OnDismiss Message where
-    type Prop OnDismiss Message = IO ()
+    type Prop OnDismiss Message = Maybe (IO ())
     getProp _ = onDismiss
     setProp _ od m = m { onDismiss = od }
 
@@ -199,16 +199,7 @@ pattern Content :: Content -> Content
 pattern Content mc = mc
 
 instance Pure Content where
-    view Content_ {..} =
-        let
-            cs =
-                ( "content"
-                )
-        in
-            as
-                : attributes
-                )
-                children
+    view Content_ {..} = as (features & Class "content") children
 
 instance HasProp As Content where
     type Prop As Content = Features -> [View] -> View
@@ -236,16 +227,7 @@ pattern Header :: Header -> Header
 pattern Header mh = mh
 
 instance Pure Header where
-    view Header_ {..} =
-        let
-            cs =
-                ( "header"
-                )
-        in
-            as
-                : attributes
-                )
-                children
+    view Header_ {..} = as (features & Class "header") children
 
 instance HasProp As Header where
     type Prop As Header = Features -> [View] -> View
@@ -273,16 +255,7 @@ pattern Item :: Item -> Item
 pattern Item mi = mi
 
 instance Pure Item where
-    view Item_ {..} =
-        let
-            cs =
-                ( "content"
-                )
-        in
-            as
-                : attributes
-                )
-                children
+    view Item_ {..} = as (features & Class "content") children
 
 instance HasProp As Item where
     type Prop As Item = Features -> [View] -> View
@@ -310,16 +283,7 @@ pattern List :: List -> List
 pattern List ml = ml
 
 instance Pure List where
-    view List_ {..} =
-        let
-            cs =
-                ( "list"
-                )
-        in
-            as
-                : attributes
-                )
-                children
+    view List_ {..} = as (features & Class "list") children
 
 instance HasProp As List where
     type Prop As List = Features -> [View] -> View

@@ -5,14 +5,18 @@ module Semantic.TextArea
   , TextArea(..), pattern TextArea
   ) where
 
+import Control.Monad
+import Data.Foldable
 import Data.IORef
 import GHC.Generics as G
 import Pure.Data.View
 import Pure.Data.View.Patterns
 import Pure.Data.Txt
-import Pure.Data.HTML
-import Pure.Data.Event
-import Pure.Lifted (setStyle,removeStyle,focusNode,JSV,Node(..),Element(..),(.#))
+import Pure.Data.HTML as HTML
+import Pure.Data.HTML.Properties as HTML
+import Pure.Data.Styles (pxs)
+import Pure.Data.Events
+import Pure.Data.Lifted (setStyle,removeStyle,focusNode,JSV,Node(..),Element(..),(.#))
 import qualified Pure.Data.Txt as T
 import Data.Char (isDigit)
 import Text.Read (readMaybe)
@@ -24,7 +28,6 @@ import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)
-  , pattern Attributes, Attributes(..)
   , pattern AutoHeight, AutoHeight(..)
   , pattern Rows, Rows(..)
   , pattern Styles, Styles(..)
@@ -40,13 +43,12 @@ data TextArea = TextArea_
     , features :: Features
     , autoHeight :: Bool
     , rows       :: Int
-    , styles     :: [(Txt,Txt)]
     , value      :: Txt
     , focus      :: Bool
     } deriving (Generic)
 
 instance Default TextArea where
-    def = (G.to gdef) { as = \fs cs -> Textarea & Features fs & Children cs, rows = 3 }
+    def = (G.to gdef) { as = \fs cs -> Textarea & Features fs & Pure.Data.View.Patterns.Children cs, rows = 3 }
 
 pattern TextArea :: TextArea -> TextArea
 pattern TextArea ta = ta
@@ -71,29 +73,29 @@ instance Pure TextArea where
 
                 removeAutoHeightStyles = do
                     TAS {..} <- getState self
-                    mr <- liftIO (readIORef ref)
+                    mr <- readIORef ref
                     for_ mr $ \(Element -> r) -> do
-                        removeStyle r height
+                        removeStyle r "height"
                         removeStyle r "resize"
 
                 updateHeight = do
                     TextArea_ {..} <- getProps self
                     TAS {..} <- getState self
                     autoHeight # do
-                        mr <- liftIO (readIORef ref)
+                        mr <- readIORef ref
                         for_ mr $ \(Element -> r) -> do
                             ctas <- computedTextAreaStyles r
                             for_ ctas $ \(mh,bbw,btw) -> do
-                                setStyle r height auto
-                                setStyle r "overflowY" hidden
+                                setStyle r "height" "auto"
+                                setStyle r "overflowY" "hidden"
                                 sh <- fromIntegral <$> scrollHeight r
                                 let mh' = Prelude.round mh
                                     sh' = ceiling (sh + bbw + btw)
-                                setStyle r height (pxs (max mh' sh'))
+                                setStyle r "height" (pxs (max mh' sh'))
                                 setStyle r "overflowY" mempty
 
                 handleInput txt = do
-                    liftIO updateHeight
+                    updateHeight
 
                 handleFocus = do
                     TAS {..} <- getState self
@@ -103,14 +105,13 @@ instance Pure TextArea where
                 handleRef (Node n) = do
                     TAS {..} <- getState self
                     writeIORef ref (Just n)
-                    return Nothing
 
             in def
                 { construct = TAS <$> newIORef def
 
                 , mounted = updateHeight
 
-                , receiveProps = \newprops oldstate -> do
+                , receive = \newprops oldstate -> do
                     oldprops <- getProps self
                     when (not (focus oldprops) && focus newprops) handleFocus
                     return oldstate
@@ -125,15 +126,14 @@ instance Pure TextArea where
                         # updateHeight
 
                 , render = \TextArea_ {..} TAS {..} ->
-                    as
-                        : HTML.onInput handleInput
-                        : HostRef handleRef
-                        : HTML.Rows rows
-                        : StyleList (("resize",autoHeight # "none") : styles)
-                        : HTML.Value value
-                        : attributes
-                        )
-                        []
+                    as (features
+                          & OnInput (withInput handleInput)
+                          & Lifecycle (HostRef handleRef)
+                          & HTML.Rows (toTxt rows)
+                          & Pure.Data.View.Patterns.Styles [("resize",autoHeight # "none")]
+                          & HTML.Value value
+                       )
+                       []
 
                 }
 
@@ -155,11 +155,6 @@ instance HasProp Rows TextArea where
     type Prop Rows TextArea = Int
     getProp _ = rows
     setProp _ r ta = ta { rows = r }
-
-instance HasProp Styles TextArea where
-    type Prop Styles TextArea = [(Txt,Txt)]
-    getProp _ = styles
-    setProp _ ss ta = ta { styles = ss }
 
 instance HasProp Value TextArea where
     type Prop Value TextArea = Txt

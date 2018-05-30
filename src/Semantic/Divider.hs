@@ -16,8 +16,6 @@ import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)
-  , pattern Attributes, Attributes(..)
-  , pattern Children, Children(..)
   , pattern Clearing, Clearing(..)
   , pattern Fitted, Fitted(..)
   , pattern Hidden, Hidden(..)
@@ -64,10 +62,7 @@ instance Pure Divider where
                 , "divider"
                 ]
         in
-            as
-                : attributes
-                )
-                children
+            as (features & Classes cs) children
 
 instance HasProp As Divider where
     type Prop As Divider = Features -> [View] -> View
@@ -76,7 +71,7 @@ instance HasProp As Divider where
 
 instance HasFeatures Divider where
     getFeatures = features
-      setFeatures cs d = d { features = cs }
+    setFeatures cs d = d { features = cs }
 
 instance HasChildren Divider where
     getChildren = children

@@ -5,16 +5,18 @@ module Semantic.Sticky
   , Sticky(..), pattern Sticky
   ) where
 
+import Control.Monad
 import Data.IORef
 import Data.Maybe
 import GHC.Generics as G
 import Pure.Data.View
 import Pure.Data.View.Patterns
+import Pure.Data.Styles
 import Pure.Data.Txt
 import Pure.Data.HTML
-import Pure.Data.Event
-import Pure.Lifted (same,window,body,IsJSV(..),JSV,Node(..),Element(..))
-import Pure.DOM (addAnimation,onRaw)
+import Pure.Data.Events
+import Pure.Data.Lifted
+import Pure.Animation (addAnimation)
 
 import Semantic.Utils hiding (body)
 
@@ -22,8 +24,6 @@ import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)
-  , pattern Attributes, Attributes(..)
-  , pattern Children, Children(..)
   , pattern Active, Active(..)
   , pattern BottomOffset, BottomOffset(..)
   , pattern Context, Context(..)
@@ -57,7 +57,7 @@ data Sticky = Sticky_
 
 instance Default Sticky where
     def = (G.to gdef)
-        { as = Div
+        { as = \fs cs -> Div & Features fs & Children cs
         , active = True
         , bottomOffset = 0
         , context = Just (toJSV body)
@@ -95,8 +95,8 @@ instance Pure Sticky where
 
                     cr <- boundingRect (Element $ fromMaybe (toJSV body) context)
 
-                   r <- readIORef stickyRef
-                    sr <- caser of
+                    r <- readIORef stickyRef
+                    sr <- case r of
                         Just sr -> boundingRect (Element sr)
                         Nothing -> return def
 
@@ -108,7 +108,7 @@ instance Pure Sticky where
                     writeIORef ticking False
                     ih <- innerHeight
                     (brWidth triggerRect /= triggerWidth) #
-                        void (setState self $ \_ SS {..} -> SS { triggerWidth = brWidth triggerRect, .. })
+                        void (setState self $ \_ SS {..} -> return (SS { triggerWidth = brWidth triggerRect, .. },return ()))
                     void (upd' s ss ih)
                     where
                         upd' Sticky_ {..} SS {..} (fromIntegral -> ih)
@@ -124,10 +124,10 @@ instance Pure Sticky where
                             where
 
                                 setPushing p = pushing # do
-                                    void (setState self $ \_ SS {..} -> SS { isPushing = p, .. })
+                                    void (setState self $ \_ SS {..} -> return (SS { isPushing = p, .. },return ()))
 
                                 setSticking sticking = void $ do
-                                    setState self $ \_ SS {..} -> SS { isSticking = sticking, .. }
+                                    setState self $ \_ SS {..} -> return (SS { isSticking = sticking, .. },return ())
                                     sticking
                                         ? onStick
                                         $ onUnstick
@@ -135,11 +135,14 @@ instance Pure Sticky where
                                 stickToContextBottom = void $ do
                                     onBottom
                                     setSticking True
-                                    setState self $ \_ SS {..} -> SS
+                                    setState self $ \_ SS {..} -> return
+                                      ( SS
                                         { top = Just (brBottom contextRect - brHeight stickyRect)
                                         , bottom = Nothing
                                         , ..
                                         }
+                                      , return ()
+                                      )
                                     setPushing True
 
                                 stickToContextTop = void $ do
@@ -149,19 +152,25 @@ instance Pure Sticky where
 
                                 stickToScreenBottom = void $ do
                                     setSticking True
-                                    setState self $ \_ SS {..} -> SS
+                                    setState self $ \_ SS {..} -> return
+                                      ( SS
                                         { bottom = Just bottomOffset
                                         , top = Nothing
                                         , ..
                                         }
+                                      , return ()
+                                      )
 
                                 stickToScreenTop = void $ do
                                     setSticking True
-                                    setState self $ \_ SS {..} -> SS
+                                    setState self $ \_ SS {..} -> return
+                                      ( SS
                                         { top = Just offset
                                         , bottom = Nothing
                                         , ..
                                         }
+                                      , return ()
+                                      )
 
                 handleUpdate = do
                     SS {..} <- getState self
@@ -188,12 +197,10 @@ instance Pure Sticky where
                 handleStickyRef (Node n) = do
                     SS {..} <- getState self
                     writeIORef stickyRef (Just n)
-                    return Nothing
 
                 handleTriggerRef (Node n) = do
                     SS {..} <- getState self
                     writeIORef triggerRef (Just n)
-                    return Nothing
 
             in def
                 { construct =
@@ -210,7 +217,7 @@ instance Pure Sticky where
                         handleUpdate
                         addListeners s
 
-                , receiveProps = \newprops oldstate -> do
+                , receive = \newprops oldstate -> do
                     oldprops <- getProps self
                     let newContext =
                           case (scrollContext oldprops,scrollContext newprops) of
@@ -235,14 +242,12 @@ instance Pure Sticky where
                             [ maybe def (\b -> ("bottom",pxs $ round b)) bottom
                             , maybe def (\t -> ("top",pxs $ round t)) top
                             , ("position","fixed")
-                            , triggerWidth # ("width",pxs $ round triggerWidth)
+                            , (triggerWidth /= 0) # ("width",pxs $ round triggerWidth)
                             ]
                     in
-                        as
-                            : attributes
-                            )
-                            [ Div [ HostRef handleTriggerRef ] []
-                            , Div [ HostRef handleStickyRef, StyleList computedStyles ] children
+                        as features
+                            [ Div <| Lifecycle (HostRef handleTriggerRef)
+                            , Div <| Lifecycle (HostRef handleStickyRef) . Styles computedStyles |> children
                             ]
 
                 }

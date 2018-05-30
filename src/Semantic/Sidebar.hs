@@ -7,13 +7,15 @@ module Semantic.Sidebar
   ) where
 
 import Control.Concurrent
+import Control.Monad
+import Data.Foldable
 import Data.IORef
 import GHC.Generics as G
 import Pure.Data.View
 import Pure.Data.View.Patterns
 import Pure.Data.Txt
 import Pure.Data.HTML
-import Pure.Data.Event
+import Pure.Data.Events
 
 import Semantic.Utils
 
@@ -21,8 +23,6 @@ import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)
-  , pattern Attributes, Attributes(..)
-  , pattern Children, Children(..)
   , pattern Animation, Animation(..)
   , pattern Direction, Direction(..)
   , pattern Visible, Visible(..)
@@ -51,7 +51,7 @@ data Sidebar = Sidebar_
 
 instance Default Sidebar where
     def = (G.to gdef)
-        { as = Div
+        { as = \fs cs -> Div & Features fs & Children cs
         , direction = "left"
         , duration = Uniform 500
         }
@@ -71,7 +71,7 @@ instance Pure Sidebar where
             in def
                 { construct = SS def <$> newIORef def
 
-                , receiveProps = \newprops oldstate -> do
+                , receive = \newprops oldstate -> do
                     oldprops <- getProps self
                     if visible newprops /= visible oldprops then do
                         SS {..} <- getState self
@@ -81,7 +81,7 @@ instance Pure Sidebar where
                                         Uniform u   -> u
                                         Skewed {..} -> visible newprops ? show $ hide
                             threadDelay (1000 * d)
-                            void $ setState self $ \_ SS {..} -> SS { animating = False, .. }
+                            void $ setState self $ \_ SS {..} -> return (SS { animating = False, .. },return ())
                         writeIORef animator (Just tid)
                         return oldstate { animating = True }
                     else
@@ -99,10 +99,7 @@ instance Pure Sidebar where
                             , "sidebar"
                             ]
                     in
-                        as
-                            : attributes
-                            )
-                            children
+                        as (features & Classes cs) children
                 }
 
 instance HasProp As Sidebar where
@@ -156,16 +153,7 @@ pattern Pushable :: Pushable -> Pushable
 pattern Pushable sp = sp
 
 instance Pure Pushable where
-    view Pushable_ {..} =
-        let
-            cs =
-                ( "pushable"
-                )
-        in
-            as
-                : attributes
-                )
-                children
+    view Pushable_ {..} = as (features & Class "pushable") children
 
 instance HasProp As Pushable where
     type Prop As Pushable = Features -> [View] -> View
@@ -201,10 +189,7 @@ instance Pure Pusher where
                 , dimmed # "dimmed"
                 ]
         in
-            as
-                : attributes
-                )
-                children
+            as (features & Classes cs) children
 
 instance HasProp As Pusher where
     type Prop As Pusher = Features -> [View] -> View

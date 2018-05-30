@@ -14,7 +14,7 @@ test-suite test
 
   main-is: Main.hs
 
-  ghc-options: -threaded -with-rtsopts=-N -dedupe -O2 -DGHCJS_GC_INTERVAL=30000 -DGHCJS_BROWSER
+  ghc-options: -threaded -with-rtsopts=-N -dedupe -O2 -DGHCJS_GC_INTERVAL=10000 -DGHCJS_BROWSER
 
   hs-source-dirs: test
 
@@ -29,6 +29,7 @@ test-suite test
     pure-lifted >= 0.7 && < 1,
     pure-styles >= 0.7 && < 1,
     pure-txt >= 0.7 && < 1,
+    pure-uri >= 0.7 && < 1,
     containers,
     unordered-containers,
     hashable,
@@ -51,7 +52,8 @@ library
     pure-html >= 0.7 && < 1,
     pure-lifted >= 0.7 && < 1,
     pure-styles >= 0.7 && < 1,
-    pure-txt >= 0.7 && < 1
+    pure-txt >= 0.7 && < 1,
+    pure-uri >= 0.7 && < 1
 
   default-extensions:
     BangPatterns
@@ -79,55 +81,55 @@ library
     TupleSections
 
   exposed-modules:
-    -- -- Semantic.Confirm
-    -- Semantic.Proxy
-    -- -- Semantic.Portal
-    -- -- Semantic.Responsive
-    -- -- Semantic.TextArea
-    -- -- Semantic.TransitionablePortal
-    -- -- Semantic.Visibility
-    -- Semantic.Breadcrumb
-    -- -- Semantic.Form
-    -- -- Semantic.Grid
-    -- -- Semantic.Menu
-    -- -- Semantic.Message
-    -- -- Semantic.Table
-    -- Semantic.Button
-    -- -- Semantic.Container
-    -- -- Semantic.Divider
-    -- -- Semantic.Flag
-    -- Semantic.Header
-    -- Semantic.Icon
-    -- Semantic.Image
-    -- -- Semantic.Input
-    -- -- Semantic.Label
-    -- -- Semantic.List
-    -- -- Semantic.Loader
-    -- -- Semantic.Rail
-    -- -- Semantic.Reveal
-    -- -- Semantic.Segment
-    -- -- Semantic.Step
-    -- Semantic.Accordion
-    -- Semantic.Checkbox
-    -- Semantic.Dimmer
-    -- -- Semantic.Dropdown
-    -- -- Semantic.Embed
-    -- -- Semantic.Modal
-    -- -- Semantic.Popup
-    -- -- Semantic.Progress
-    -- -- Semantic.Rating
-    -- -- Semantic.Search
-    -- -- Semantic.Sidebar
-    -- -- Semantic.Sticky
-    -- -- Semantic.Tab
-    -- -- Semantic.Transition
-    -- Semantic.Properties
-    -- Semantic.Utils
-    -- Semantic.Advertisement
-    -- Semantic.Card
-    -- Semantic.Comment
-    -- -- Semantic.Feed
-    -- -- Semantic.Item
-    -- -- Semantic.Statistic
+    Semantic.Confirm
+    Semantic.Proxy
+    Semantic.Portal
+    -- Semantic.Responsive
+    Semantic.TextArea
+    -- Semantic.TransitionablePortal
+    -- Semantic.Visibility
+    Semantic.Breadcrumb
+    Semantic.Form
+    Semantic.Grid
+    Semantic.Menu
+    Semantic.Message
+    Semantic.Table
+    Semantic.Button
+    Semantic.Container
+    Semantic.Divider
+    Semantic.Flag
+    Semantic.Header
+    Semantic.Icon
+    Semantic.Image
+    Semantic.Input
+    Semantic.Label
+    Semantic.List
+    Semantic.Loader
+    Semantic.Rail
+    Semantic.Reveal
+    Semantic.Segment
+    Semantic.Step
+    Semantic.Accordion
+    Semantic.Checkbox
+    Semantic.Dimmer
+    Semantic.Dropdown
+    Semantic.Embed
+    Semantic.Modal
+    -- Semantic.Popup
+    Semantic.Progress
+    Semantic.Rating
+    Semantic.Search
+    Semantic.Sidebar
+    Semantic.Sticky
+    Semantic.Tab
+    -- Semantic.Transition
+    Semantic.Properties
+    Semantic.Utils
+    Semantic.Advertisement
+    Semantic.Card
+    Semantic.Comment
+    Semantic.Feed
+    Semantic.Item
+    Semantic.Statistic
 
   default-language: Haskell2010

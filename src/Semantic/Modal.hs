@@ -5,10 +5,13 @@ module Semantic.Modal
   , Modal(..), pattern Modal
   , Actions(..), pattern Actions
   , Content(..), pattern Content
-  , Description(..), pattern Description
-  , Header(..), pattern Header
+  , Description(..), pattern Semantic.Modal.Description
+  , Header(..), pattern Semantic.Modal.Header
   ) where
 
+import Control.Arrow
+import Control.Monad
+import Data.Foldable
 import Data.IORef
 import Data.Maybe
 import GHC.Generics as G
@@ -16,9 +19,10 @@ import Pure.Data.View
 import Pure.Data.View.Patterns
 import Pure.Data.Txt
 import Pure.Data.HTML
-import Pure.Data.Event
-import Pure.DOM (addAnimation)
-import Pure.Lifted (body,IsJSV(..),JSV,Node(..),Element(..))
+import Pure.Data.Events
+import Pure.Data.Lifted (body,getBody,toJSV,JSV,Body(..),Node(..),Element(..))
+import Pure.Data.Styles
+import Pure.Animation (addAnimation)
 
 import Semantic.Utils
 
@@ -38,15 +42,12 @@ import Semantic.Properties as Properties
   , pattern Trigger, Trigger(..)
   , pattern MountNode, MountNode(..)
   , pattern As, As(..)
-  , pattern Attributes, Attributes(..)
-  , pattern Children, Children(..)
   , pattern Basic, Basic(..)
   , pattern CloseOnDimmerClick, CloseOnDimmerClick(..)
   , pattern DefaultOpen, DefaultOpen(..)
   , pattern DimmerType, DimmerType(..)
   , pattern Scrollable, Scrollable(..)
   , pattern Size, Size(..)
-  , pattern Styles, Styles(..)
   , pattern WithPortal, WithPortal(..)
   , pattern IsImage, IsImage(..)
   , pattern Scrolling, Scrolling(..)
@@ -64,7 +65,7 @@ data Modal = Modal_
     , closeOnDocumentClick :: Bool
     , defaultOpen :: Bool
     , dimmer :: Maybe Txt
-    , mountNode :: Maybe JSV
+    , mountNode :: Maybe Element
     , onClose :: IO ()
     , onMount :: IO ()
     , onOpen :: IO ()
@@ -79,7 +80,7 @@ data Modal = Modal_
 
 instance Default Modal where
     def = (G.to gdef)
-        { as = Div
+        { as = \fs cs -> Div & Features fs & Children cs
         , dimmer = Just ""
         , closeOnDimmerClick = True
         , closeOnDocumentClick = True
@@ -89,7 +90,7 @@ instance Default Modal where
 pattern Modal :: Modal -> Modal
 pattern Modal m = m
 
-data ModalState =
+data ModalState = MS
     { topMargin :: Maybe Int
     , scrolling :: Maybe Bool
     , active :: Bool
@@ -103,46 +104,49 @@ instance Pure Modal where
             let
                 getMountNode = do
                     Modal_ {..} <- getProps self
-                    return $ fromMaybe (toJSV body) mountNode
+                    b <- getBody
+                    return $ fromMaybe (Element $ toJSV b) mountNode
 
                 handleRef (Node n) = do
-                    {..} <- getState self
+                    MS {..} <- getState self
                     writeIORef ref (Just n)
-                    return Nothing
-
-                handleClose = do
-                    Modal_ {..} <- getProps self
-                    onClose
-                    void $ setState self $ \_ {..} ->
-                        { active = False, .. }
 
                 handleOpen _ = do
                     Modal_ {..} <- getProps self
                     onOpen
-                    void $ setState self $ \_ {..} ->
-                        { active = True, .. }
+                    void $ setState self $ \_ MS {..} -> return
+                        (MS { active = True, .. }, return ())
+
+                handleClose = do
+                    Modal_ {..} <- getProps self
+                    onClose
+                    void $ setState self $ \_ MS {..} -> return
+                        (MS { active = False, .. }, return ())
 
                 handlePortalMount = do
                     Modal_ {..} <- getProps self
-                    setState self $ \_ {..} ->
-                        { scrolling = Just False, .. }
-                    liftIO setPositionAndClassNames
+                    setState self $ \_ MS {..} -> return
+                        (MS { scrolling = Just False, .. }, return ())
+                    setPositionAndClassNames
                     onMount
 
                 handlePortalUnmount = do
                     Modal_ {..} <- getProps self
-                        {..} <- getState self
-                    n <- getMountNode
+                    MS     {..} <- getState self
+                    n <- toJSV <$> getMountNode
                     traverse_ (removeClass n) ["blurring","dimmable","dimmed","scrolling"]
                     writeIORef pendingAnimation def
+                    onUnmount
 
                 setPositionAndClassNames = do
                     Modal_ {..} <- getProps self
-                        {..} <- getState self
-                    n           <- getMountNode
+                    MS     {..} <- getState self
+                    n           <- toJSV <$> getMountNode
 
-                    dimmer # traverse_ (addClass n) ["dimmable","dimmed"]
-                    (dimmer == Just "blurring") # addClass n "blurring"
+                    when (isJust dimmer) $
+                      traverse_ (addClass n) ["dimmable","dimmed"]
+                    when (dimmer == Just "blurring") $ do
+                      addClass n "blurring"
 
                     mr <- readIORef ref
 
@@ -157,16 +161,17 @@ instance Pure Modal where
                           scrollingChange = scrolling /= Just scrolling'
                           topMarginChange = topMargin /= Just topMargin'
 
-                      scrollingChange #
+                      when scrollingChange $
                         (scrolling' ? addClass n $ removeClass n)
                           "scrolling"
 
                       (scrollingChange || topMarginChange) #
-                        setState self $ \_ {..} ->
-                          { topMargin = Just topMargin'
+                        setState self $ \_ MS {..} -> return
+                          (MS { topMargin = Just topMargin'
                              , scrolling = Just scrolling'
                              , ..
                              }
+                          , return ())
 
                     writeIORef pendingAnimation setPositionAndClassNames
                     void $ addAnimation (join $ readIORef pendingAnimation)
@@ -174,26 +179,27 @@ instance Pure Modal where
             in def
                 { construct = do
                     Modal_ {..} <- getProps self
-                    def def (open || defaultOpen) <$> newIORef def <*> newIORef def
-                , receiveProps = \newprops oldstate -> return $
+                    MS def def (open || defaultOpen) <$> newIORef def <*> newIORef def
+                , receive = \newprops oldstate -> return $
                     (open newprops /= active oldstate)
                       ? oldstate { active = open newprops }
                       $ oldstate
                 , unmount = do
                     Modal_ {..} <- getProps self
                     handlePortalUnmount
-                    onUnmount
-                , render = \Modal_ {..} {..} ->
+                , render = \Modal_ {..} MS {..} ->
                     let
-                            dimmer #
+                        dimmerClasses
+                          | isJust dimmer =
                                 [ "ui"
                                 , (dimmer == Just "inverted") # "inverted"
                                 , "page modals dimmer transition visible active"
                                 ]
+                          | otherwise = []
 
-                        viewContent =
+                        viewContent f =
                             let
-                                ss = maybe styles (\mt -> (marginTop,pxs mt) : styles ) topMargin
+                                ss = maybe [] (\tm -> [(marginTop,pxs tm)]) topMargin
 
                                 cs =
                                     [ "ui"
@@ -203,30 +209,21 @@ instance Pure Modal where
                                     , "modal transition visible active"
                                     ]
 
-                                children' = flip map children $ \c ->
-                                    case c of
-                                        -- add ModalAction mapping here
-                                        _ -> c
-
                             in
-                                as
-                                    : StyleList ss
-                                    : HostRef handleRef
-                                    : attributes
-                                    )
-                                    children
+                                as (f $ features & Classes cs & Styles ss & Lifecycle (HostRef handleRef)) children
 
-                    in Portal.Portal $ withPortal $ def
+                    in (View :: Portal.Portal -> View) $ Portal.Portal $ withPortal $ def
                         & (closeOnDocumentClick ? CloseOnDocumentClick True $ id)
                         & (closeOnDimmerClick   ? CloseOnRootNodeClick True $ id)
-                        & Trigger trigger
+                        & Portal.PortalNode viewContent
                         & MountNode mountNode
+                        & Classes dimmerClasses
                         & Open active
-                        & OnClose handleClose
+                        & Portal.OnClose handleClose
                         & OnMount handlePortalMount
                         & OnOpen handleOpen
-                        & OnUnmount (liftIO handlePortalUnmount >> onUnmount)
-                        & Children [ viewContent ]
+                        & OnUnmount handlePortalUnmount
+                        & Children [ trigger ]
                 }
 
 instance HasProp As Modal where
@@ -268,7 +265,7 @@ instance HasProp DimmerType Modal where
     setProp _ d m = m { dimmer = d }
 
 instance HasProp MountNode Modal where
-    type Prop MountNode Modal = Maybe JSV
+    type Prop MountNode Modal = Maybe Element
     getProp _ = mountNode
     setProp _ mn m = m { mountNode = mn }
 
@@ -307,11 +304,6 @@ instance HasProp Size Modal where
     getProp _ = size
     setProp _ s m = m { size = s }
 
-instance HasProp Styles Modal where
-    type Prop Styles Modal = [(Txt,Txt)]
-    getProp _ = styles
-    setProp _ ss m = m { styles = ss }
-
 instance HasProp WithPortal Modal where
     type Prop WithPortal Modal = Portal.Portal -> Portal.Portal
     getProp _ = withPortal
@@ -335,11 +327,7 @@ pattern Actions :: Actions -> Actions
 pattern Actions ma = ma
 
 instance Pure Actions where
-    view Actions_ {..} =
-        as
-            : attributes
-            )
-            children
+    view Actions_ {..} = as (features & Class "actions") children
 
 instance HasProp As Actions where
     type Prop As Actions = Features -> [View] -> View
@@ -371,16 +359,14 @@ pattern Content mc = mc
 instance Pure Content where
     view Content_ {..} =
         let
+            cs =
                 [ image # "image"
                 , scrolling # "scrolling"
                 , "content"
                 ]
 
         in
-            as
-                : attributes
-                )
-                children
+            as (features & Classes cs) children
 
 instance HasProp As Content where
     type Prop As Content = Features -> [View] -> View
@@ -418,17 +404,7 @@ pattern Description :: Description -> Description
 pattern Description md = md
 
 instance Pure Description where
-    view Description_ {..} =
-        let
-            cs =
-                ( "description"
-                )
-
-        in
-            as
-                : attributes
-                )
-                children
+    view Description_ {..} = as (features & Class "description") children
 
 instance HasProp As Description where
     type Prop As Description = Features -> [View] -> View
@@ -456,14 +432,7 @@ pattern Header :: Header -> Header
 pattern Header mh = mh
 
 instance Pure Header where
-    view Header_ {..} =
-        let
-
-        in
-            as
-                : attributes
-                )
-                children
+    view Header_ {..} = as (features & Class "header") children
 
 instance HasProp As Header where
     type Prop As Header = Features -> [View] -> View

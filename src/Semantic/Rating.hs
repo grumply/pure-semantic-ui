@@ -3,15 +3,18 @@ module Semantic.Rating
   ( module Properties
   , module Tools
   , Rating(..), pattern Rating
-  , Icon(..), pattern Icon
+  , Icon(..), pattern Semantic.Rating.Icon
   ) where
 
+import Control.Monad
 import GHC.Generics as G
+import Pure.Data.Lifted
 import Pure.Data.View
 import Pure.Data.View.Patterns
-import Pure.Data.Txt
+import Pure.Data.Txt hiding (index)
 import Pure.Data.HTML
-import Pure.Data.Event
+import Pure.Data.HTML.Properties
+import Pure.Data.Events
 
 import Semantic.Utils
 
@@ -22,8 +25,6 @@ import Semantic.Properties as Properties
   , pattern Index, Index(..)
   , pattern Selected, Selected(..)
   , pattern As, As(..)
-  , pattern Attributes, Attributes(..)
-  , pattern Children, Children(..)
   , pattern Clearable, Clearable(..)
   , pattern CurrentRating, CurrentRating(..)
   , pattern DefaultRating, DefaultRating(..)
@@ -53,7 +54,7 @@ data Rating = Rating_
     } deriving (Generic)
 
 instance Default Rating where
-    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs, clearable = Just "auto", maxRating = 1 }
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Pure.Data.View.Patterns.Children cs, clearable = Just "auto", maxRating = 1 }
 
 pattern Rating :: Rating -> Rating
 pattern Rating r = r
@@ -68,43 +69,48 @@ instance Pure Rating where
     view =
         LibraryComponentIO $ \self ->
             let
-                handleIconClick n = do
+                handleIconClick n _ = do
                     Rating_ {..} <- getProps self
                     RS {..} <- getState self
                     not disabled # do
                         let newRating =
                                 (clearable == Just "auto" && maxRating == 1)
-                                    ? (currentRating ? Nothing $ Just 1)
+                                    ? ((currentRating /= Nothing) ? Nothing $ Just 1)
                                     $ (clearable == Just "" && Just n == currentRating)
                                         ? Nothing
                                         $ Just n
-                        void $ setState self $ \_ RS {..} ->
-                            RS { currentRating = newRating
+                        void $ setState self $ \_ RS {..} -> return
+                            (RS { currentRating = newRating
                                , isSelecting = False
                                , ..
                                }
+                            , return ()
+                            )
                         onRate newRating
 
-                handleIconMouseEnter n = do
+                handleIconMouseEnter n _ = do
                     Rating_ {..} <- getProps self
                     not disabled #
-                        void (setState self $ \_ RS {..} ->
-                                RS { selectedIndex = Just n
+                        void (setState self $ \_ RS {..} -> return
+                                (RS { selectedIndex = Just n
                                    , isSelecting = True
                                    , ..
                                    }
+                                , return ()
+                                )
                              )
 
                 handleMouseLeave = do
                     Rating_ {..} <- getProps self
                     not disabled #
-                        void (setState self $ \_ RS {..} ->
-                                RS { selectedIndex = Nothing
+                        void (setState self $ \_ RS {..} -> return
+                                (RS { selectedIndex = Nothing
                                    , isSelecting = False
                                    , ..
                                    }
+                                , return ()
+                                )
                              )
-                    return Nothing
 
             in def
                 { construct = do
@@ -121,18 +127,14 @@ instance Pure Rating where
                             , "rating"
                             ]
                     in
-                        as
-                            : Role "radiogroup"
-                            : On "mouseleave" def (\_ -> handleMouseLeave)
-                            : attributes
-                            )
-                            (flip map [1..maxRating] $ \n ->
-                                Icon $ def
+                        as (features & Classes cs & Role "radiogroup" & OnMouseLeave (const handleMouseLeave))
+                            (flip fmap [1..maxRating] $ \n ->
+                                View $ Semantic.Rating.Icon $ def
                                     & Active (rating >= Just n)
                                     & Index n
-                                    & OnClick handleIconClick
-                                    & OnMouseEnter handleIconMouseEnter
-                                    & Selected (selectedIndex >= Just n && isSelecting)
+                                    & OnClick (handleIconClick n)
+                                    & OnMouseEnter (handleIconMouseEnter n)
+                                    & Pure.Data.HTML.Properties.Selected (toTxt $ selectedIndex >= Just n && isSelecting)
                             )
                 }
 
@@ -201,7 +203,7 @@ data Icon = Icon_
     } deriving (Generic)
 
 instance Default Icon where
-    def = (G.to gdef) { as = \fs cs -> I & Features fs & Children cs }
+    def = (G.to gdef) { as = \fs cs -> I & Features fs & Pure.Data.View.Patterns.Children cs }
 
 pattern Icon :: Icon -> Icon
 pattern Icon ri = ri
@@ -209,21 +211,20 @@ pattern Icon ri = ri
 instance Pure Icon where
     view Icon_ {..} =
         let
-            handleClick _ =
-                let oc = onClick index
-                in return $ oc # Just oc
+            handleClick _ = onClick index
 
             handleKeyUp e@Enter = do
-                prevDef e
-                return $ Just (onKeyUp index e >> onClick index)
+              prevDef e
+              onKeyUp index e
+              onClick index
             handleKeyUp e@Space = do
-                prevDef e
-                return $ Just (onKeyUp index e >> onClick index)
-            handleKeyUp e = return $ Just $ onKeyUp index e
+              prevDef e
+              onKeyUp index e
+              onClick index
+            handleKeyUp e =
+              onKeyUp index e
 
-            handleMouseEnter _ =
-                let ome = onMouseEnter index
-                in return $ ome # Just ome
+            handleMouseEnter _ = onMouseEnter index
 
             cs =
                 [ active # "active"
@@ -232,15 +233,8 @@ instance Pure Icon where
                 ]
 
         in
-            as
-                : On "click" def handleClick
-                : On "keyup" def handleKeyUp
-                : On "mouseenter" def handleMouseEnter
-                : Tabindex 0
-                : Role "radio"
-                : attributes
-                )
-                []
+            as (features & Classes cs & OnClick handleClick & Pure.Data.Events.OnKeyUp handleKeyUp & OnMouseEnter handleMouseEnter & TabIndex "0" & Role "radio")
+               []
 
 instance HasProp As Icon where
     type Prop As Icon = Features -> [View] -> View
@@ -260,21 +254,6 @@ instance HasProp Index Icon where
     type Prop Index Icon = Int
     getProp _ = index
     setProp _ i ri = ri { index = i }
-
-instance HasProp OnClick Icon where
-    type Prop OnClick Icon = Int -> IO ()
-    getProp _ = onClick
-    setProp _ oc ri = ri { onClick = oc }
-
-instance HasProp OnKeyUp Icon where
-    type Prop OnKeyUp Icon = Int -> Evt -> IO ()
-    getProp _ = onKeyUp
-    setProp _ oku ri = ri { onKeyUp = oku }
-
-instance HasProp OnMouseEnter Icon where
-    type Prop OnMouseEnter Icon = Int -> IO ()
-    getProp _ = onMouseEnter
-    setProp _ ome ri = ri { onMouseEnter = ome }
 
 instance HasProp Selected Icon where
     type Prop Selected Icon = Bool

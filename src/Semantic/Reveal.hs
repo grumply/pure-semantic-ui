@@ -18,8 +18,6 @@ import Semantic.Properties as Properties
   ( pattern Animated, Animated(..)
   , pattern As, As(..)
   , pattern Active, Active(..)
-  , pattern Attributes, Attributes(..)
-  , pattern Children, Children(..)
   , pattern Disabled, Disabled(..)
   , pattern Instant, Instant(..)
   )
@@ -55,10 +53,7 @@ instance Pure Reveal where
                 , "reveal"
                 ]
         in
-            as
-                : attributes
-                )
-                children
+            as (features & Classes cs) children
 
 instance HasProp Active Reveal where
     type Prop Active Reveal = Bool

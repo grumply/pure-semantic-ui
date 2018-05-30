@@ -501,7 +501,7 @@ pattern Or :: Or -> View
 pattern Or bo = View bo
 
 instance Pure Or where
-    view Or_ {..} = as (features & Class "or" & Property ("data-text",localize)) []
+    view Or_ {..} = as (features & Class "or" & Property "data-text" localize) []
 
 instance HasProp As Or where
     type Prop As Or = Features -> [View] -> View

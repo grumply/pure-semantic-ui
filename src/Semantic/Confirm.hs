@@ -13,7 +13,7 @@ import Pure.Data.View
 import Pure.Data.View.Patterns
 import Pure.Data.Txt
 import Pure.Data.HTML
-import Pure.Data.Event
+import Pure.Data.Events
 
 import Semantic.Utils
 
@@ -26,7 +26,6 @@ import Semantic.Properties as Tools ( HasProp(..) )
 import Semantic.Properties as Properties
   ( pattern Primary, Primary(..)
   , pattern Size, Size(..)
-  , pattern Children, Children(..)
   , pattern Open, Open(..)
   , pattern OnCancel, OnCancel(..)
   , pattern OnConfirm, OnConfirm(..)
@@ -63,20 +62,14 @@ pattern Confirm c = c
 
 instance Pure Confirm where
     view Confirm_ {..} =
-        let handleCancel = do
-                Button.onClick cancelButton
-                onCancel
-            handleConfirm = do
-                Button.onClick confirmButton
-                onConfirm
-        in Modal.Modal $ withModal $ def & Size "small" & OnClose onCancel & Children
-            [ Modal.Header header
-            , Modal.Content content
-            , Modal.Actions $ def & Children
-                [ Button.Button $ cancelButton & OnClick handleCancel
-                , Button.Button $ confirmButton & Primary True & OnClick handleConfirm
-                ]
+      View $ Modal.Modal $ withModal $ def & Size "small" & OnClose (\_ -> onCancel) & Children
+        [ View $ Modal.Header header
+        , View $ Modal.Content content
+        , View $ Modal.Actions $ def & Children
+            [ View $ Button.Button $ cancelButton & OnClick (\_ -> onCancel)
+            , View $ Button.Button $ confirmButton & Primary True & OnClick (\_ -> onConfirm)
             ]
+        ]
 
 instance HasProp Open Confirm where
     type Prop Open Confirm = Bool
@@ -98,7 +91,7 @@ pattern ConfirmHeader mh c <- (header &&& id -> (mh,c)) where
     ConfirmHeader mh c = c { header = mh }
 
 pattern ConfirmContent :: Modal.Content -> Confirm -> Confirm
-pattern ConfirmContent mc c <- (content &&& id -> (mc,c)) where
+pattern ConfirmContent mc c <- (Semantic.Confirm.content &&& id -> (mc,c)) where
     ConfirmContent mc c = c { content = mc }
 
 instance HasProp WithModal Confirm where

@@ -3,9 +3,9 @@ module Semantic.Step
   , module Tools
   , Step(..), pattern Step
   , Content(..), pattern Content
-  , Description(..), pattern Description
+  , Description(..), pattern Semantic.Step.Description
   , Group(..), pattern Group
-  , Title(..), pattern Title
+  , Title(..), pattern Semantic.Step.Title
   ) where
 
 import GHC.Generics as G
@@ -13,7 +13,7 @@ import Pure.Data.View
 import Pure.Data.View.Patterns
 import Pure.Data.Txt
 import Pure.Data.HTML
-import Pure.Data.Event
+import Pure.Data.Events
 
 import Semantic.Utils
 
@@ -21,8 +21,6 @@ import Semantic.Properties as Tools ( HasProp(..) )
 
 import Semantic.Properties as Properties
   ( pattern As, As(..)
-  , pattern Attributes, Attributes(..)
-  , pattern Children, Children(..)
   , pattern Active, Active(..)
   , pattern Completed, Completed(..)
   , pattern Disabled, Disabled(..)
@@ -53,9 +51,7 @@ data Step = Step_
     , active :: Bool
     , completed :: Bool
     , disabled :: Bool
-    , ref :: Feature
     , link :: Bool
-    , onClick :: IO ()
     , ordered :: Bool
     } deriving (Generic)
 
@@ -68,8 +64,6 @@ pattern Step s = s
 instance Pure Step where
     view Step_ {..} =
         let
-            e = onClick ? A $ as
-
             cs =
                 [ active # "active"
                 , completed # "completed"
@@ -78,11 +72,7 @@ instance Pure Step where
                 , "step"
                 ]
         in
-            e
-                : ref
-                : attributes
-                )
-                children
+            as (features & Classes cs) children
 
 instance HasProp As Step where
     type Prop As Step = Features -> [View] -> View
@@ -112,11 +102,6 @@ instance HasProp Disabled Step where
     getProp _ = disabled
     setProp _ d s = s { disabled = d }
 
-instance HasProp Ref Step where
-    type Prop Ref Step = Feature
-    getProp _ = ref
-    setProp _ r s = s { ref = r }
-
 instance HasProp Link Step where
     type Prop Link Step = Bool
     getProp _ = link
@@ -140,16 +125,7 @@ pattern Content :: Content -> Content
 pattern Content sc = sc
 
 instance Pure Content where
-    view Content_ {..} =
-        let
-            cs =
-                ( "content"
-                )
-        in
-            as
-                : attributes
-                )
-                children
+    view Content_ {..} = as (features & Class "content") children
 
 instance HasProp As Content where
     type Prop As Content = Features -> [View] -> View
@@ -177,16 +153,7 @@ pattern Description :: Description -> Description
 pattern Description sd = sd
 
 instance Pure Description where
-    view Description_ {..} =
-        let
-            cs =
-                ( "description"
-                )
-        in
-            as
-                : attributes
-                )
-                children
+    view Description_ {..} = as (features & Class "description") children
 
 instance HasProp As Description where
     type Prop As Description = Features -> [View] -> View
@@ -231,16 +198,13 @@ instance Pure Group where
                 , ordered # "ordered"
                 , unstackable # "unstackable"
                 , vertical # "vertical"
-                , may (<>> "attached") attached
-                , stackable # (stackable <>> "stackable")
+                , maybe "" (<>> "attached") attached
+                , (stackable /= mempty) # (stackable <>> "stackable")
                 , widthProp widths def def
                 , "steps"
                 ]
         in
-            as
-                : attributes
-                )
-                children
+            as (features & Classes cs) children
 
 instance HasProp As Group where
     type Prop As Group = Features -> [View] -> View
@@ -308,16 +272,7 @@ pattern Title :: Title -> Title
 pattern Title st = st
 
 instance Pure Title where
-    view Title_ {..} =
-        let
-            cs =
-                ( "title"
-                )
-        in
-            as
-                : attributes
-                )
-                children
+    view Title_ {..} = as (features & Class "title") children
 
 instance HasProp As Title where
     type Prop As Title = Features -> [View] -> View
