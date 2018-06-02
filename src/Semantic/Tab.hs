@@ -42,6 +42,7 @@ pattern Tab :: Tab -> Tab
 pattern Tab t = t
 
 instance Pure Tab where
+  view Tab_ {..} = as features children
 
 instance HasProp As Tab where
     type Prop As Tab = Features -> [View] -> View
