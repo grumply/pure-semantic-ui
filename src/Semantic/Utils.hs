@@ -1,5 +1,5 @@
 {-# LANGUAGE CPP #-}
-module Semantic.Utils where
+module Semantic.Utils (module Semantic.Utils, module Export) where
 
 -- from base
 import Control.Applicative (Alternative(..))
@@ -12,7 +12,10 @@ import Data.STRef (newSTRef,readSTRef,writeSTRef,modifySTRef')
 import GHC.Generics (Generic)
 
 -- from pure-default
-import Pure.Data.Default ((?),Default(..))
+import Pure.Data.Default (Default(..))
+
+-- from pure-cond
+import Pure.Data.Cond as Export
 
 -- from pure-lifted
 import Pure.Data.Lifted hiding (lookup)
@@ -28,9 +31,6 @@ import Pure.Data.Events as Ev
 
 (<<>>) :: Txt -> Txt -> Txt
 (<<>>) x y = x `Txt.append` " " `Txt.append` y
-
-(#) :: Default a => Bool -> a -> a
-(#) b t = b ? t $ def
 
 useKeyOrValueAndKey val key =
   case val of

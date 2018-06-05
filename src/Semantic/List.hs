@@ -17,7 +17,7 @@ import Pure.Data.View
 import Pure.Data.View.Patterns
 import Pure.Data.Txt
 import Pure.Data.HTML as HTML
-import Pure.Data.HTML.Properties as HTML hiding (Children)
+import Pure.Data.HTML.Properties as HTML hiding (Content_)
 
 import Semantic.Utils
 
