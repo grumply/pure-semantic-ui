@@ -55,7 +55,7 @@ instance Pure Accordion where
                 , styled # "styled"
                 ]
         in
-            as (features & AddClasses cs) children
+            as (features & Classes cs) children
 
 instance HasProp As Accordion where
     type Prop As Accordion = Features -> [View] -> View
@@ -134,7 +134,7 @@ instance Pure Content where
                 , active # "active"
                 ]
         in
-            as (features & AddClasses cs) children
+            as (features & Classes cs) children
 
 instance HasProp As Content where
     type Prop As Content = Features -> [View] -> View
@@ -176,7 +176,7 @@ instance Pure Title where
                 , "title"
                 ]
         in
-            as (features & AddClasses cs) children
+            as (features & Classes cs) children
 
 instance HasProp As Title where
     type Prop As Title = Features -> [View] -> View

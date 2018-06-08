@@ -109,7 +109,7 @@ instance Pure Dimmer where
 
                             dimmer =
                                 Proxy def <| OnMount handlePortalMount . OnUnmount handlePortalUnmount |>
-                                  [ as (features & AddClasses cs & Events.OnClick handleClick)
+                                  [ as (features & Classes cs & Events.OnClick handleClick)
                                       ( (not $ List.null children)
                                           ? [ Div <| Class "content" |>
                                                 [ Div <| Class "center" . Lifecycle (HostRef handleCenterRef) |>
@@ -200,7 +200,7 @@ instance Pure Dimmable where
                 , "dimmable"
                 ]
         in
-            as (features & AddClasses cs) children
+            as (features & Classes cs) children
 
 instance HasProp As Dimmable where
     type Prop As Dimmable = Features -> [View] -> View

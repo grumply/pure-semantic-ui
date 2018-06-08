@@ -146,8 +146,8 @@ instance Pure Button where
                     HTMLView _ "button" _ _ -> True
                     _                       -> False
 
-            fs | labeled   = features & AddClasses ("ui" : labeledClasses ("button" : wrapperClasses []))
-               | otherwise = features & AddClasses ("ui" : baseClasses (wrapperClasses (labeledClasses ["button"])))
+            fs | labeled   = features & Classes ("ui" : labeledClasses ("button" : wrapperClasses []))
+               | otherwise = features & Classes ("ui" : baseClasses (wrapperClasses (labeledClasses ["button"])))
                                       & ((disabled && isButton) ? HTML.Disabled "true" $ id)
                                       & HTML.Role "button"
                                       & (disabled ? HTML.TabIndex "-1"
@@ -161,7 +161,7 @@ instance Pure Button where
                   , (labelPosition == "right") # List.head labels
                   ]
                   where
-                    bfs = AddClasses ("ui" : baseClasses ["button"])
+                    bfs = Classes ("ui" : baseClasses ["button"])
                         . HTML.Disabled (disabled ? "true" $ "false")
                         . (disabled ? HTML.TabIndex "-1"
                                     $ maybe id (HTML.TabIndex . toTxt) tabIndex
@@ -312,7 +312,7 @@ instance Pure Content where
                 ]
 
         in
-            as (features & AddClasses cs) children
+            as (features & Classes cs) children
 
 instance HasProp As Content where
     type Prop As Content = Features -> [View] -> View

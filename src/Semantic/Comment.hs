@@ -57,7 +57,7 @@ instance Pure Comment where
                 , "comment"
                 ]
         in
-            as (features & AddClasses cs) children
+            as (features & Classes cs) children
 
 instance HasProp As Comment where
     type Prop As Comment = Features -> [View] -> View
@@ -252,7 +252,7 @@ instance Pure Group where
                 , "comments"
                 ]
         in
-            as (features & AddClasses cs) children
+            as (features & Classes cs) children
 
 instance HasProp As Group where
     type Prop As Group = Features -> [View] -> View

@@ -67,7 +67,7 @@ instance Pure Card where
                 , "card"
                 ]
         in
-            as (features & AddClasses cs) children
+            as (features & Classes cs) children
 
 instance HasProp As Card where
     type Prop As Card = Features -> [View] -> View
@@ -130,7 +130,7 @@ instance Pure Content where
                 , "content"
                 ]
         in
-            as (features & AddClasses cs) children
+            as (features & Classes cs) children
 
 instance HasProp As Content where
     type Prop As Content = Features -> [View] -> View
@@ -169,7 +169,7 @@ pattern Description :: Description -> Description
 pattern Description cd = cd
 
 instance Pure Description where
-    view Description_ {..} = as (features & AddClasses [ textAlign, "description" ]) children
+    view Description_ {..} = as (features & Classes [ textAlign, "description" ]) children
 
 instance HasProp As Description where
     type Prop As Description = Features -> [View] -> View
@@ -217,7 +217,7 @@ instance Pure Group where
                 , "cards"
                 ]
         in
-            as (features & AddClasses cs) children
+            as (features & Classes cs) children
 
 instance HasProp As Group where
     type Prop As Group = Features -> [View] -> View
@@ -266,7 +266,7 @@ pattern Header :: Header -> Header
 pattern Header ch = ch
 
 instance Pure Header where
-    view Header_ {..} = as (features & AddClasses [ textAlign, "header" ]) children
+    view Header_ {..} = as (features & Classes [ textAlign, "header" ]) children
 
 instance HasProp As Header where
     type Prop As Header = Features -> [View] -> View
@@ -300,7 +300,7 @@ pattern Meta :: Meta -> Meta
 pattern Meta cm = cm
 
 instance Pure Meta where
-    view Meta_ {..} = as (features & AddClasses [ textAlign, "meta" ]) children
+    view Meta_ {..} = as (features & Classes [ textAlign, "meta" ]) children
 
 instance HasProp As Meta where
     type Prop As Meta = Features -> [View] -> View

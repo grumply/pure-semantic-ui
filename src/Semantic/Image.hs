@@ -85,7 +85,7 @@ instance Pure Image where
                 , "image"
                 ]
         in
-            as (features & AddClasses cs) children
+            as (features & Classes cs) children
 
 instance HasProp Avatar Image where
     type Prop Avatar Image = Bool
@@ -197,7 +197,7 @@ instance Pure Group where
                 , "images"
                 ]
         in
-            as (features & AddClasses cs) children
+            as (features & Classes cs) children
 
 instance HasProp As Group where
     type Prop As Group = Features -> [View] -> View

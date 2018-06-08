@@ -54,7 +54,7 @@ instance Pure Advertisement where
                 , "ad"
                 ]
         in
-            as (features & AddClasses cs & property) children
+            as (features & Classes cs & property) children
 
 instance HasProp As Advertisement where
     type Prop As Advertisement = Features -> [View] -> View

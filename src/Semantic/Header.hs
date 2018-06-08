@@ -80,7 +80,7 @@ instance Pure Header where
                 , "header"
                 ]
         in
-            as (features & AddClasses cs) children
+            as (features & Classes cs) children
 
 instance HasProp As Header where
     type Prop As Header = Features -> [View] -> View
@@ -186,7 +186,7 @@ pattern Subheader :: Subheader -> Subheader
 pattern Subheader hs = hs
 
 instance Pure Subheader where
-    view Subheader_ {..} = as (features & AddClasses ["sub","header"]) children
+    view Subheader_ {..} = as (features & Classes ["sub","header"]) children
 
 instance HasProp As Subheader where
     type Prop As Subheader = Features -> [View] -> View

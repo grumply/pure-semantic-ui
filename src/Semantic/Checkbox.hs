@@ -84,7 +84,7 @@ instance Pure Checkbox where
                 ]
 
         in
-            as (features & AddClasses cs)
+            as (features & Classes cs)
                -- TODO: pull this out into its own component
                ( (HTML.Input
                    <| Class "hidden"

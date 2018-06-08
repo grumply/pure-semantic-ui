@@ -50,7 +50,7 @@ instance Pure Breadcrumb where
                 , "breadcrumb"
                 ]
         in
-            as (features & AddClasses cs) children
+            as (features & Classes cs) children
 
 instance HasProp As Breadcrumb where
     type Prop As Breadcrumb = Features -> [View] -> View
@@ -120,7 +120,7 @@ instance Pure Section where
                 , "section"
                 ]
         in
-            as (features & AddClasses cs) children
+            as (features & Classes cs) children
 
 instance HasProp As Section where
     type Prop As Section = Features -> [View] -> View

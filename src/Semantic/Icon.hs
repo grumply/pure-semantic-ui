@@ -79,7 +79,7 @@ instance Pure Icon where
                 , "icon"
                 ]
         in
-          as (features & AddClasses cs)
+          as (features & Classes cs)
 
 instance HasFeatures Icon where
     getFeatures = features
@@ -169,7 +169,7 @@ pattern Group :: Group -> Group
 pattern Group ig = ig
 
 instance Pure Group where
-    view Group_ {..} = as (features & AddClasses [size,"icons"]) children
+    view Group_ {..} = as (features & Classes [size,"icons"]) children
 
 instance HasFeatures Group where
     getFeatures = features
