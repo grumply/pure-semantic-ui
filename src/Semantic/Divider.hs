@@ -4,11 +4,9 @@ module Semantic.Divider
   , Divider(..), pattern Divider
   ) where
 
+import Pure hiding (hidden,horizontal,vertical)
+
 import GHC.Generics as G
-import Pure.Data.View
-import Pure.Data.View.Patterns
-import Pure.Data.Txt
-import Pure.Data.HTML
 
 import Semantic.Utils
 
@@ -26,7 +24,6 @@ import Semantic.Properties as Properties
   )
 
 import Data.Function as Tools ((&))
-import Pure.Data.Default as Tools
 
 data Divider = Divider_
     { as :: Features -> [View] -> View

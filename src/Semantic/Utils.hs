@@ -1,6 +1,14 @@
 {-# LANGUAGE CPP #-}
 module Semantic.Utils (module Semantic.Utils, module Export) where
 
+import Pure
+
+-- from pure-cond
+import Pure.Data.Cond as Export
+
+-- from pure-txt
+import qualified Pure.Data.Txt as Txt
+
 -- from base
 import Control.Applicative (Alternative(..))
 import Control.Monad.ST (ST,runST)
@@ -10,27 +18,6 @@ import Data.Maybe (fromMaybe,fromJust)
 import Data.Monoid ((<>))
 import Data.STRef (newSTRef,readSTRef,writeSTRef,modifySTRef')
 import GHC.Generics (Generic)
-
--- from pure-default
-import Pure.Data.Default (Default(..))
-
--- from pure-cond
-import Pure.Data.Cond as Export
-
--- from pure-lifted
-import Pure.Data.Lifted hiding (lookup)
-
--- from pure-txt
-import Pure.Data.Txt (Txt,ToTxt(..),FromTxt(..))
-import qualified Pure.Data.Txt as Txt
-
--- from pure-core
-import Pure.Data.View
-import Pure.Data.View.Patterns
-import Pure.Data.Events as Ev
-
-(<<>>) :: Txt -> Txt -> Txt
-(<<>>) x y = x `Txt.append` " " `Txt.append` y
 
 useKeyOrValueAndKey val key =
   case val of
@@ -77,7 +64,7 @@ foldPures f = foldr $ \x st ->
       _      -> st
 
 extractInputListeners :: [Listener] -> ([Listener],[Listener])
-extractInputListeners = partition (\(Ev.On ev _) -> ev `elem` inputEvents)
+extractInputListeners = partition (\(On ev _) -> ev `elem` inputEvents)
   where
     inputEvents =
       ["keydown","keypress","keyup","focus","blur","change","input","click","contextmenu"

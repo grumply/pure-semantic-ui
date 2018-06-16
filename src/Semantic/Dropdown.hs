@@ -9,14 +9,9 @@ module Semantic.Dropdown
   , SearchInput, pattern SearchInput
   ) where
 
+import Pure hiding (button,inline)
+
 import GHC.Generics as G
-import Pure.Data.View
-import Pure.Data.View.Patterns
-import Pure.Data.Txt
-import Pure.Data.HTML as HTML
-import Pure.Data.HTML.Properties as HTML hiding (Children)
-import Pure.Data.Events
-import Pure.Data.Lifted (JSV,Node(..),(.#))
 
 import Semantic.Utils
 
@@ -60,7 +55,6 @@ import Semantic.Properties as Properties
 import Prelude hiding (error,Floating)
 
 import Data.Function as Tools ((&))
-import Pure.Data.Default as Tools
 
 {-
 Approaching this differently than Semantic-UI-React. Instead of managing
@@ -131,7 +125,7 @@ instance Pure Dropdown where
                 , maybe "" (<<>> "pointing") pointing
                 , "dropdown"
                 ]
-        in as (features & Classes cs & (maybe id (HTML.TabIndex . toTxt) tabIndex)) children
+        in as (features & Classes cs & (maybe id (Pure.TabIndex . toTxt) tabIndex)) children
 
 instance HasProp As Dropdown where
     type Prop As Dropdown = Features -> [View] -> View
@@ -409,9 +403,9 @@ pattern SearchInput dh = dh
 instance Pure SearchInput where
     view SearchInput_ {..} =
         Input <| Class "search"
-                . HTML.Value value
-                . HTML.Type _type
-                . (maybe id (HTML.TabIndex . toTxt) tabIndex)
+                . Pure.Value value
+                . Pure.Type _type
+                . (maybe id (Pure.TabIndex . toTxt) tabIndex)
                 . Attribute "autoComplete" "off"
                 . setFeatures features
 

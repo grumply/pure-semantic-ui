@@ -8,12 +8,9 @@ module Semantic.Message
   , List(..), pattern List
   ) where
 
+import Pure hiding (Content,Content_,Icon,List,Name,color,hidden,visible)
+
 import GHC.Generics as G
-import Pure.Data.View
-import Pure.Data.View.Patterns
-import Pure.Data.Txt
-import Pure.Data.HTML
-import Pure.Data.Events
 
 import Semantic.Utils
 
@@ -43,7 +40,6 @@ import Semantic.Properties as Properties
 import Prelude hiding (error,Floating)
 
 import Data.Function as Tools ((&))
-import Pure.Data.Default as Tools
 
 data Message = Message_
     { as :: Features -> [View] -> View

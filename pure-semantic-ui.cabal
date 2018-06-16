@@ -16,12 +16,8 @@ library
   build-depends:
     base >=4.8,
     pure-cond >= 0.7 && < 1,
-    pure-core >= 0.7 && < 1,
-    pure-default >= 0.7 && < 1,
-    pure-events >= 0.7 && < 1,
-    pure-html >= 0.7 && < 1,
     pure-lifted >= 0.7 && < 1,
-    pure-styles >= 0.7 && < 1,
+    pure >= 0.7 && < 1,
     pure-txt >= 0.7 && < 1,
     pure-uri >= 0.7 && < 1
 

@@ -11,11 +11,9 @@ module Semantic.Item
   , Meta(..), pattern Semantic.Item.Meta
   ) where
 
+import Pure hiding (Content,Content_,hidden,inline,verticalAlign)
+
 import GHC.Generics as G hiding (Meta)
-import Pure.Data.View
-import Pure.Data.View.Patterns
-import Pure.Data.Txt
-import Pure.Data.HTML
 
 import Semantic.Utils
 
@@ -45,7 +43,6 @@ import Semantic.Properties as Properties
   )
 
 import Data.Function as Tools ((&))
-import Pure.Data.Default as Tools
 
 data Item = Item_
     { as :: Features -> [View] -> View

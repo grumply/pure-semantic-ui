@@ -7,11 +7,9 @@ module Semantic.Accordion
   , Title(..), pattern Title
   ) where
 
+import Pure hiding (Content,Content_,Title,index)
+
 import GHC.Generics as G (Generic,to)
-import Pure.Data.View
-import Pure.Data.View.Patterns
-import Pure.Data.Txt hiding (index)
-import Pure.Data.HTML hiding (Title)
 
 import Semantic.Utils
 
@@ -27,7 +25,6 @@ import Semantic.Properties as Properties
   )
 
 import Data.Function as Tools ((&))
-import Pure.Data.Default as Tools
 
 data Accordion = Accordion_
     { as :: Features -> [View] -> View

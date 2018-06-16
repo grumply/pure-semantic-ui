@@ -4,6 +4,9 @@ module Semantic.Portal
   , Portal(..), pattern Semantic.Portal.Portal
   ) where
 
+import Pure
+import Pure.Data.Txt as Txt (unwords)
+
 import Control.Concurrent
 import Control.Monad (when,void)
 import Data.Coerce (coerce)
@@ -14,13 +17,6 @@ import Data.Maybe (isJust,fromMaybe)
 import qualified Data.List as List
 import Data.Traversable (for)
 import GHC.Generics as G
-import Pure.Data.Lifted
-import Pure.Data.View
-import Pure.Data.View.Patterns
-import Pure.Data.Txt
-import Pure.Data.HTML
-import Pure.Data.Events
-import Pure.Data.Txt as Txt (unwords)
 
 import Semantic.Utils
 
@@ -44,7 +40,7 @@ import Semantic.Properties as Properties
   , pattern OnClose, OnClose(..)
   , pattern OnMount, OnMount(..)
   , pattern OnOpen, OnOpen(..)
-  , pattern OnUnmount, OnUnmount(..)
+  , pattern OnUnmounted, OnUnmounted(..)
   , pattern Open, Open(..)
   , pattern OpenOnTriggerClick, OpenOnTriggerClick(..)
   , pattern OpenOnTriggerFocus, OpenOnTriggerFocus(..)
@@ -53,7 +49,6 @@ import Semantic.Properties as Properties
   )
 
 import Data.Function as Tools ((&))
-import Pure.Data.Default as Tools
 
 data Portal = Portal_
     { as                       :: Features -> [View] -> View
@@ -74,7 +69,7 @@ data Portal = Portal_
     , onClose                  :: IO ()
     , onMount                  :: IO ()
     , onOpen                   :: Evt -> IO ()
-    , onUnmount                :: IO ()
+    , onUnmounted              :: IO ()
     , open                     :: Bool
     , openOnTriggerClick       :: Bool
     , openOnTriggerFocus       :: Bool
@@ -120,8 +115,8 @@ instance Pure Portal where
                 contained (Just s) t = toJSV s `contains` toJSV t
 
                 handleDocumentClick (evtTarget -> t) = do
-                    PS      {..} <- getState self
-                    Portal_ {..} <- getProps self
+                    PS      {..} <- get self
+                    Portal_ {..} <- ask self
                     PSN     {..} <- readIORef nodes
 
                     inTrigger <- contained triggerNode t
@@ -146,13 +141,13 @@ instance Pure Portal where
                     when eventShouldClosePortal closePortal
 
                 handleEscape Escape = do
-                    Portal_ {..} <- getProps self
+                    Portal_ {..} <- ask self
                     when closeOnEscape closePortal
                 handleEscape _ = return ()
 
                 handlePortalMouseLeave _ = do
-                    Portal_ {..} <- getProps self
-                    PS {..} <- getState self
+                    Portal_ {..} <- ask self
+                    PS {..} <- get self
                     when closeOnPortalMouseLeave $ do
                         tid <- forkIO $ do
                             threadDelay (mouseLeaveDelay * 1000)
@@ -161,15 +156,15 @@ instance Pure Portal where
                             PST { mouseLeaveTimer = Just tid, .. }
 
                 handlePortalMouseEnter _ = do
-                    Portal_ {..} <- getProps self
-                    PS {..} <- getState self
+                    Portal_ {..} <- ask self
+                    PS {..} <- get self
                     PST {..} <- readIORef timers
                     when closeOnPortalMouseLeave $
                         for_ mouseLeaveTimer killThread
 
                 handleTriggerBlur (RelatedTarget r) = do
-                    Portal_ {..} <- getProps self
-                    PS {..} <- getState self
+                    Portal_ {..} <- ask self
+                    PS {..} <- get self
                     PSN {..} <- readIORef nodes
                     didFocusPortal <- contained (toRoot mountNode) r
                     when (closeOnTriggerBlur && not didFocusPortal)
@@ -177,21 +172,21 @@ instance Pure Portal where
                 handleTriggerBlur _ = return ()
 
                 handleTriggerClick e = do
-                    PS {..} <- getState self
-                    Portal_ {..} <- getProps self
+                    PS {..} <- get self
+                    Portal_ {..} <- ask self
                     if active && closeOnTriggerClick
                         then closePortal
                         else when (not active && openOnTriggerClick)
                                 (openPortal e)
 
                 handleTriggerFocus e = do
-                    Portal_ {..} <- getProps self
+                    Portal_ {..} <- ask self
                     when openOnTriggerFocus
                         (openPortal e)
 
                 handleTriggerMouseLeave _ = do
-                    Portal_ {..} <- getProps self
-                    PS {..} <- getState self
+                    Portal_ {..} <- ask self
+                    PS {..} <- get self
                     when closeOnTriggerMouseLeave $ do
                         tid <- forkIO $ do
                             threadDelay (mouseLeaveDelay * 1000)
@@ -200,8 +195,8 @@ instance Pure Portal where
                             PST { mouseLeaveTimer = Just tid, .. }
 
                 handleTriggerMouseEnter e = do
-                    Portal_ {..} <- getProps self
-                    PS {..} <- getState self
+                    Portal_ {..} <- ask self
+                    PS {..} <- get self
                     when openOnTriggerMouseEnter $ do
                         tid <- forkIO $ do
                             threadDelay (mouseEnterDelay * 1000)
@@ -210,47 +205,47 @@ instance Pure Portal where
                             PST { mouseEnterTimer = Just tid, .. }
 
                 openPortal e = do
-                    Portal_ {..} <- getProps self
-                    setState self $ \_ PS {..} -> return (PS { active = True, .. },return())
+                    Portal_ {..} <- ask self
+                    modify self $ \_ PS {..} -> PS { active = True, .. }
                     onOpen e
 
                 closePortal = do
-                    Portal_ {..} <- getProps self
-                    setState self $ \_ PS {..} -> return (PS { active = False, .. },return ())
+                    Portal_ {..} <- ask self
+                    modify self $ \_ PS {..} -> PS { active = False, .. }
                     onClose
 
                 handleTriggerRef (Node r) = do
-                    PS {..} <- getState self
+                    PS {..} <- get self
                     modifyIORef nodes $ \PSN {..} ->
                         PSN { triggerNode = Just r, .. }
 
                 handlePortalRef (Node r) = do
-                    PS {..} <- getState self
+                    PS {..} <- get self
                     modifyIORef nodes $ \PSN {..} ->
                         PSN { portalNode = Just r, .. }
 
             in
                 def
                     { construct = do
-                        Portal_ {..} <- getProps self
+                        Portal_ {..} <- ask self
                         PS defaultOpen
                           <$> newIORef def
                           <*> newIORef def
                           <*> newIORef def
 
                     , receive = \newprops oldstate -> do
-                        oldprops <- getProps self
+                        oldprops <- ask self
                         let change = open newprops /= open oldprops
                         if | change && open newprops -> do
                             Semantic.Portal.onMount newprops
                             return oldstate { active = open newprops }
                            | change -> do
-                            Semantic.Portal.onUnmount newprops
+                            Semantic.Portal.onUnmounted newprops
                             return oldstate { active = open newprops }
                            | otherwise -> return oldstate
 
-                    , unmount = void $ do
-                        PS  {..} <- getState self
+                    , unmounted = void $ do
+                        PS  {..} <- get self
                         PST {..} <- readIORef timers
                         for mouseEnterTimer killThread
                         for mouseLeaveTimer killThread
@@ -367,10 +362,10 @@ instance HasProp OnOpen Portal where
     getProp _ = onOpen
     setProp _ oo p = p { onOpen = oo }
 
-instance HasProp OnUnmount Portal where
-    type Prop OnUnmount Portal = IO ()
-    getProp _ = onUnmount
-    setProp _ ou p = p { onUnmount = ou }
+instance HasProp OnUnmounted Portal where
+    type Prop OnUnmounted Portal = IO ()
+    getProp _ = onUnmounted
+    setProp _ ou p = p { onUnmounted = ou }
 
 instance HasProp Open Portal where
     type Prop Open Portal = Bool

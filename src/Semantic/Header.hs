@@ -6,11 +6,9 @@ module Semantic.Header
   , Subheader(..), pattern Subheader
   ) where
 
+import Pure hiding (Content,Content_,Header,block,color,textAlign)
+
 import GHC.Generics as G (Generic,to)
-import Pure.Data.View
-import Pure.Data.View.Patterns
-import Pure.Data.Txt
-import Pure.Data.HTML hiding (Header)
 
 import Semantic.Utils
 
@@ -34,7 +32,6 @@ import Semantic.Properties as Properties
   )
 
 import Data.Function as Tools ((&))
-import Pure.Data.Default as Tools
 
 data Header = Header_
     { as :: Features -> [View] -> View

@@ -6,12 +6,9 @@ module Semantic.Grid
   , Row(..), pattern Row
   ) where
 
+import Pure hiding (color,textAlign,verticalAlign,width)
+
 import GHC.Generics as G
-import Pure.Data.View
-import Pure.Data.View.Patterns
-import Pure.Data.Txt
-import Pure.Data.HTML
-import Pure.Data.Events
 
 import Semantic.Utils hiding (only)
 
@@ -52,7 +49,6 @@ import Semantic.Properties as Properties
   )
 
 import Data.Function as Tools ((&))
-import Pure.Data.Default as Tools
 
 data Grid = Grid_
     { as :: Features -> [View] -> View

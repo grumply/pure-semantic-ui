@@ -10,11 +10,9 @@ module Semantic.Table
   , Row(..), pattern Row
   ) where
 
+import Pure hiding (Body,color,fixed,textAlign,verticalAlign,width)
+
 import GHC.Generics as G
-import Pure.Data.View
-import Pure.Data.View.Patterns
-import Pure.Data.Txt
-import Pure.Data.HTML as HTML
 
 import Semantic.Utils
 
@@ -61,7 +59,6 @@ import Semantic.Properties as Properties
 import Prelude hiding (error)
 
 import Data.Function as Tools ((&))
-import Pure.Data.Default as Tools
 
 data Table = Table_
     { as :: Features -> [View] -> View
@@ -91,7 +88,7 @@ data Table = Table_
     } deriving (Generic)
 
 instance Default Table where
-    def = (G.to gdef) { as = \fs cs -> HTML.Table & Features fs & Children cs }
+    def = (G.to gdef) { as = \fs cs -> Pure.Table & Features fs & Children cs }
 
 pattern Table :: Table -> Table
 pattern Table t = t

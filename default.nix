@@ -1,4 +1,4 @@
-{ mkDerivation, base, pure-cond, pure-core, pure-default, pure-events, pure-html, pure-lifted, pure-styles, pure-txt, pure-uri, stdenv }:
+{ mkDerivation, base, pure-cond, pure, pure-lifted, pure-txt, pure-uri, stdenv }:
 mkDerivation {
   pname = "pure-semantic-ui";
   version = "0.7.0.0";

@@ -6,16 +6,11 @@ module Semantic.Responsive
   , pattern OnlyComputer, pattern OnlyLargeScreen, pattern OnlyWidescreen
   )where
 
+import Pure hiding (MinWidth,MaxWidth,minWidth,maxWidth)
+
 import Control.Monad (join,unless,void)
 import Data.IORef
 import GHC.Generics as G
-import Pure.Data.View
-import Pure.Data.View.Patterns
-import Pure.Data.Txt
-import Pure.Data.HTML
-import Pure.Data.Events
-import Pure.Data.Lifted (Win(..),Node(..),getWindow,onRaw)
-import Pure.Animation (addAnimation)
 
 import Semantic.Utils
 
@@ -30,7 +25,6 @@ import Semantic.Properties as Properties
   )
 
 import Data.Function as Tools ((&))
-import Pure.Data.Default as Tools
 
 data Responsive = Responsive_
     { as          :: Features -> [View] -> View
@@ -74,33 +68,33 @@ instance Pure Responsive where
         LibraryComponentIO $ \self ->
             let
                 handleResize = do
-                    RS {..} <- getState self
+                    RS {..} <- get self
                     tick <- readIORef ticking
                     unless tick $ do
                         writeIORef ticking True
                         void $ addAnimation handleUpdate
 
                 handleUpdate = do
-                    Responsive_ {..} <- getProps self
-                    RS {..} <- getState self
+                    Responsive_ {..} <- ask self
+                    RS {..} <- get self
                     writeIORef ticking False
                     w <- innerWidth
-                    setState self $ \_ RS {..} -> return (RS { width = w, .. }, return ())
+                    modify self $ \_ RS {..} -> RS { width = w, .. }
                     onUpdate
 
             in def
                 { construct = RS <$> innerWidth <*> newIORef def <*> newIORef def
 
                 , mounted = do
-                    Responsive_ {..} <- getProps self
-                    RS {..} <- getState self
+                    Responsive_ {..} <- ask self
+                    RS {..} <- get self
                     Win w <- getWindow
                     h <- onRaw (Node w) "resize" def (\_ _ -> handleResize)
                     writeIORef handler h
                     fireOnMount # handleUpdate
 
-                , unmount = do
-                    RS {..} <- getState self
+                , unmounted = do
+                    RS {..} <- get self
                     join $ readIORef handler
                     writeIORef handler def
 

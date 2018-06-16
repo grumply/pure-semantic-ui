@@ -7,12 +7,10 @@ module Semantic.Search
   , Results(..), pattern Results
   ) where
 
+import Pure
+
 import Control.Arrow ((&&&))
 import GHC.Generics as G
-import Pure.Data.View
-import Pure.Data.View.Patterns
-import Pure.Data.Txt
-import Pure.Data.HTML
 
 import Semantic.Utils
 
@@ -33,7 +31,6 @@ import Semantic.Properties as Properties
   )
 
 import Data.Function as Tools ((&))
-import Pure.Data.Default as Tools
 
 {-
 Approaching this differently than Semantic-UI-React. Instead of managing

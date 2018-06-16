@@ -6,12 +6,9 @@ module Semantic.Label
   , Group(..), pattern Group
   ) where
 
-import GHC.Generics as G (Generic,to)
+import Pure hiding (Label,color,horizontal)
 
-import Pure.Data.View
-import Pure.Data.View.Patterns
-import Pure.Data.Txt (Txt)
-import Pure.Data.HTML (pattern Div)
+import GHC.Generics as G (Generic,to)
 
 import Data.List as List (filter,null)
 
@@ -41,7 +38,6 @@ import Semantic.Properties as Properties
 import Prelude hiding (Floating)
 
 import Data.Function as Tools ((&))
-import Pure.Data.Default as Tools
 
 data Label = Label_
     { as :: Features -> [View] -> View

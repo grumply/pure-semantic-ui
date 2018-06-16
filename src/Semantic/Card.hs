@@ -9,11 +9,9 @@ module Semantic.Card
   , Meta(..), pattern Semantic.Card.Meta
   ) where
 
+import Pure hiding (Content,Content_,color,textAlign)
+
 import GHC.Generics as G hiding (Meta)
-import Pure.Data.View
-import Pure.Data.View.Patterns
-import Pure.Data.Txt
-import Pure.Data.HTML
 
 import Semantic.Utils
 
@@ -35,7 +33,6 @@ import Semantic.Properties as Properties
   )
 
 import Data.Function as Tools ((&))
-import Pure.Data.Default as Tools
 
 data Card = Card_
     { as :: Features -> [View] -> View

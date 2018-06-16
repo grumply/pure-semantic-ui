@@ -7,11 +7,9 @@ module Semantic.Statistic
   , Value(..), pattern Value
   ) where
 
+import Pure hiding (color,horizontal,text,Value)
+
 import GHC.Generics as G
-import Pure.Data.View
-import Pure.Data.View.Patterns
-import Pure.Data.Txt
-import Pure.Data.HTML
 
 import Semantic.Utils
 
@@ -33,7 +31,6 @@ import Semantic.Properties as Properties
   )
 
 import Data.Function as Tools ((&))
-import Pure.Data.Default as Tools
 
 data Statistic = Statistic_
     { as :: Features -> [View] -> View

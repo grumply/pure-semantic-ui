@@ -4,13 +4,9 @@ module Semantic.Checkbox
   , Checkbox(..), pattern Checkbox
   ) where
 
+import Pure as HTML
+
 import GHC.Generics as G
-import Pure.Data.View
-import Pure.Data.View.Patterns
-import Pure.Data.Txt
-import Pure.Data.HTML as HTML
-import qualified Pure.Data.HTML.Properties as HTML
-import Pure.Data.Lifted
 
 import Semantic.Utils
 
@@ -34,7 +30,6 @@ import Semantic.Properties as Properties
   )
 
 import Data.Function as Tools ((&))
-import Pure.Data.Default as Tools
 
 data Checkbox = Checkbox_
     { as :: Features -> [View] -> View
@@ -61,7 +56,7 @@ pattern Checkbox :: Checkbox -> Checkbox
 pattern Checkbox c = c
 
 pattern Radio :: Checkbox -> Checkbox
-pattern Radio r = (Type "radio" (IsRadio True r))
+pattern Radio r = (Properties.Type "radio" (IsRadio True r))
 
 viewChecked Nothing = HTML.Checked "false"
 viewChecked (Just True) = HTML.Checked "true"

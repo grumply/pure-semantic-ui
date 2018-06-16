@@ -1,13 +1,11 @@
 {-# LANGUAGE TypeApplications #-}
 module Semantic.Properties where
 
+import Pure (JSV,Default(..),Txt)
+
 import GHC.Generics
 
 import Control.Arrow ((&&&))
-
-import Pure.Data.Lifted (JSV)
-import Pure.Data.Txt (Txt)
-import Pure.Data.Default (Default(..))
 
 import qualified Data.Proxy as P
 
@@ -860,11 +858,6 @@ data OnTopVisibleReverse = OnTopVisibleReverse_
 pattern OnTopVisibleReverse :: HasProp OnTopVisibleReverse a => Prop OnTopVisibleReverse a -> a -> a
 pattern OnTopVisibleReverse p a <- (getProp OnTopVisibleReverse_ &&& id -> (p,a)) where
     OnTopVisibleReverse p a = setProp OnTopVisibleReverse_ p a
-
-data OnUnmount = OnUnmount_
-pattern OnUnmount :: HasProp OnUnmount a => Prop OnUnmount a -> a -> a
-pattern OnUnmount p a <- (getProp OnUnmount_ &&& id -> (p,a)) where
-    OnUnmount p a = setProp OnUnmount_ p a
 
 data OnUnmounted = OnUnmounted_
 pattern OnUnmounted :: HasProp OnUnmounted a => Prop OnUnmounted a -> a -> a

@@ -6,15 +6,10 @@ module Semantic.Rating
   , Icon(..), pattern Semantic.Rating.Icon
   ) where
 
+import Pure
+
 import Control.Monad
 import GHC.Generics as G
-import Pure.Data.Lifted
-import Pure.Data.View
-import Pure.Data.View.Patterns
-import Pure.Data.Txt hiding (index)
-import Pure.Data.HTML
-import Pure.Data.HTML.Properties
-import Pure.Data.Events
 
 import Semantic.Utils
 
@@ -37,7 +32,6 @@ import Semantic.Properties as Properties
   )
 
 import Data.Function as Tools ((&))
-import Pure.Data.Default as Tools
 
 data Rating = Rating_
     { as :: Features -> [View] -> View
@@ -54,7 +48,7 @@ data Rating = Rating_
     } deriving (Generic)
 
 instance Default Rating where
-    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Pure.Data.View.Patterns.Children cs, clearable = Just "auto", maxRating = 1 }
+    def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs, clearable = Just "auto", maxRating = 1 }
 
 pattern Rating :: Rating -> Rating
 pattern Rating r = r
@@ -70,8 +64,8 @@ instance Pure Rating where
         LibraryComponentIO $ \self ->
             let
                 handleIconClick n _ = do
-                    Rating_ {..} <- getProps self
-                    RS {..} <- getState self
+                    Rating_ {..} <- ask self
+                    RS {..} <- get self
                     not disabled # do
                         let newRating =
                                 (clearable == Just "auto" && maxRating == 1)
@@ -79,42 +73,34 @@ instance Pure Rating where
                                     $ (clearable == Just "" && Just n == currentRating)
                                         ? Nothing
                                         $ Just n
-                        void $ setState self $ \_ RS {..} -> return
-                            (RS { currentRating = newRating
+                        modify_ self $ \_ RS {..} ->
+                            RS { currentRating = newRating
                                , isSelecting = False
                                , ..
                                }
-                            , return ()
-                            )
                         onRate newRating
 
                 handleIconMouseEnter n _ = do
-                    Rating_ {..} <- getProps self
+                    Rating_ {..} <- ask self
                     not disabled #
-                        void (setState self $ \_ RS {..} -> return
-                                (RS { selectedIndex = Just n
-                                   , isSelecting = True
-                                   , ..
-                                   }
-                                , return ()
-                                )
-                             )
+                        modify_ self (\_ RS {..} ->
+                            RS { selectedIndex = Just n
+                               , isSelecting = True
+                               , ..
+                               })
 
                 handleMouseLeave = do
-                    Rating_ {..} <- getProps self
+                    Rating_ {..} <- ask self
                     not disabled #
-                        void (setState self $ \_ RS {..} -> return
-                                (RS { selectedIndex = Nothing
-                                   , isSelecting = False
-                                   , ..
-                                   }
-                                , return ()
-                                )
-                             )
+                        modify_ self (\_ RS {..} ->
+                            RS { selectedIndex = Nothing
+                                , isSelecting = False
+                                , ..
+                                })
 
             in def
                 { construct = do
-                    Rating_ {..} <- getProps self
+                    Rating_ {..} <- ask self
                     return (RS defaultRating def def)
                 , render = \Rating_ {..} RS {..} ->
                     let
@@ -134,7 +120,7 @@ instance Pure Rating where
                                     & Index n
                                     & OnClick (handleIconClick n)
                                     & OnMouseEnter (handleIconMouseEnter n)
-                                    & Pure.Data.HTML.Properties.Selected (toTxt $ selectedIndex >= Just n && isSelecting)
+                                    & Pure.Selected (toTxt $ selectedIndex >= Just n && isSelecting)
                             )
                 }
 
@@ -203,7 +189,7 @@ data Icon = Icon_
     } deriving (Generic)
 
 instance Default Icon where
-    def = (G.to gdef) { as = \fs cs -> I & Features fs & Pure.Data.View.Patterns.Children cs }
+    def = (G.to gdef) { as = \fs cs -> I & Features fs & Children cs }
 
 pattern Icon :: Icon -> Icon
 pattern Icon ri = ri
@@ -233,7 +219,7 @@ instance Pure Icon where
                 ]
 
         in
-            as (features & Classes cs & OnClick handleClick & Pure.Data.Events.OnKeyUp handleKeyUp & OnMouseEnter handleMouseEnter & TabIndex "0" & Role "radio")
+            as (features & Classes cs & OnClick handleClick & Pure.OnKeyUp handleKeyUp & OnMouseEnter handleMouseEnter & TabIndex "0" & Role "radio")
                []
 
 instance HasProp As Icon where

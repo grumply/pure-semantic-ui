@@ -6,16 +6,13 @@ module Semantic.Sidebar
   , Pusher(..), pattern Pusher
   ) where
 
+import Pure hiding (animation,direction,visible,width)
+
 import Control.Concurrent
 import Control.Monad
 import Data.Foldable
 import Data.IORef
 import GHC.Generics as G
-import Pure.Data.View
-import Pure.Data.View.Patterns
-import Pure.Data.Txt
-import Pure.Data.HTML
-import Pure.Data.Events
 
 import Semantic.Utils
 
@@ -36,7 +33,6 @@ import Semantic.Properties as Properties
   )
 
 import Data.Function as Tools ((&))
-import Pure.Data.Default as Tools
 
 data Sidebar = Sidebar_
     { as :: Features -> [View] -> View
@@ -72,16 +68,16 @@ instance Pure Sidebar where
                 { construct = SS def <$> newIORef def
 
                 , receive = \newprops oldstate -> do
-                    oldprops <- getProps self
+                    oldprops <- ask self
                     if visible newprops /= visible oldprops then do
-                        SS {..} <- getState self
+                        SS {..} <- get self
                         traverse_ killThread =<< readIORef animator
                         tid <- forkIO $ do
                             let d = case duration newprops of
                                         Uniform u   -> u
                                         Skewed {..} -> visible newprops ? show $ hide
                             threadDelay (1000 * d)
-                            void $ setState self $ \_ SS {..} -> return (SS { animating = False, .. },return ())
+                            modify_ self $ \_ SS {..} -> SS { animating = False, .. }
                         writeIORef animator (Just tid)
                         return oldstate { animating = True }
                     else

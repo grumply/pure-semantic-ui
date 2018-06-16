@@ -7,13 +7,11 @@ module Semantic.TransitionablePortal
   , TransitionablePortal(..), pattern TransitionablePortal
   ) where
 
+import Pure hiding (Animation,Transition,OnClose,Open,animation)
+
 import Control.Monad (void)
 import Data.Maybe (isNothing)
 import GHC.Generics as G
-import Pure.Data.View
-import Pure.Data.View.Patterns
-import Pure.Data.Txt
-import Pure.Data.HTML
 
 import Semantic.Utils
 
@@ -38,7 +36,6 @@ import Semantic.Properties as Properties
   )
 
 import Data.Function as Tools ((&))
-import Pure.Data.Default as Tools
 
 data TransitionablePortal = TransitionablePortal_
     { children       :: [View]
@@ -74,30 +71,26 @@ instance Pure TransitionablePortal where
         LibraryComponentIO $ \self ->
             let
                 handlePortalClose = do
-                    TransitionablePortal_ {..} <- getProps self
-                    TPS {..} <- getState self
+                    TransitionablePortal_ {..} <- ask self
+                    TPS {..} <- get self
                     (isNothing open) #
-                        void (setState self $ \_ TPS {..} -> return
-                                (TPS { portalOpen = not portalOpen, .. }, return ())
-                             )
+                        modify_ self (\_ TPS {..} -> TPS { portalOpen = not portalOpen, .. })
 
-                handlePortalOpen _ = void $ setState self $ \_ TPS {..} -> return (TPS { portalOpen = True, .. }, return ())
+                handlePortalOpen _ = modify_ self $ \_ TPS {..} -> TPS { portalOpen = True, .. }
 
                 handleTransitionHide status = do
-                    TransitionablePortal_ {..} <- getProps self
-                    TPS {..} <- getState self
-                    setState self $ \_ TPS {..} -> return
-                        (TPS { transitionVisible = False, .. }, return ())
+                    TransitionablePortal_ {..} <- ask self
+                    TPS {..} <- get self
+                    modify self $ \_ TPS {..} -> TPS { transitionVisible = False, .. }
                     onClose
                     onHide status
 
                 handleTransitionStart status = do
-                    TransitionablePortal_ {..} <- getProps self
-                    TPS {..} <- getState self
+                    TransitionablePortal_ {..} <- ask self
+                    TPS {..} <- get self
                     onStart status
                     (status == Entering) # do
-                        setState self $ \_ TPS {..} -> return
-                            (TPS { transitionVisible = True, .. }, return ())
+                        modify_ self (\_ TPS {..} -> TPS { transitionVisible = True, .. })
                         onOpen
 
             in def

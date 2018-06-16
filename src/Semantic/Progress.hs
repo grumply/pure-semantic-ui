@@ -4,14 +4,11 @@ module Semantic.Progress
   , Progress(..), pattern Semantic.Progress.Progress
   ) where
 
+import Pure hiding (color)
+
 import Data.Maybe
 import Data.Monoid
 import GHC.Generics as G
-import Pure.Data.Styles (width,per,int)
-import Pure.Data.View
-import Pure.Data.View.Patterns
-import Pure.Data.Txt
-import Pure.Data.HTML
 
 import Semantic.Utils
 
@@ -40,7 +37,6 @@ import Semantic.Properties as Properties
 import Prelude hiding (error)
 
 import Data.Function as Tools ((&))
-import Pure.Data.Default as Tools
 
 data Progress = Progress_
     { as :: Features -> [View] -> View
@@ -101,10 +97,10 @@ instance Pure Progress where
                 ]
         in
             as (features & Classes cs)
-                [ Div <| Class "bar" . Pure.Data.View.Patterns.Style width (per getPercent) |>
+                [ Div <| Class "bar" . Style width (per getPercent) |>
                       [ progress #
                             Div <| Class "progress" |>
-                                [ fromTxt $ maybe (int value <> "/" <> int total) per percent ]
+                                [ txt $ maybe (int value <> "/" <> int total) per percent ]
                       ]
                 , Div <| Class "label" |> children
                 ]

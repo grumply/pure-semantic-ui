@@ -7,6 +7,10 @@ module Semantic.Popup
   , Header(..), pattern Semantic.Popup.Header
   ) where
 
+import Pure hiding (Content,Content_,position)
+
+import Pure.Data.Txt (isInfixOf)
+
 import Control.Arrow ((&&&))
 import Control.Concurrent
 import Control.Monad (void,join)
@@ -15,13 +19,6 @@ import Data.IORef
 import Data.List hiding (isInfixOf)
 import Data.Maybe
 import GHC.Generics as G
-import Pure.Data.View
-import Pure.Data.View.Patterns
-import Pure.Data.Styles (left,right,bottom,top,auto,pxs)
-import Pure.Data.Txt hiding (filter)
-import Pure.Data.HTML
-import Pure.Data.Events
-import Pure.Data.Lifted
 
 import Semantic.Utils hiding (on)
 
@@ -44,7 +41,7 @@ import Semantic.Properties as Properties
   , pattern Wide, Wide(..)
   , pattern WithPortal, WithPortal(..)
   , pattern OnMount, OnMount(..)
-  , pattern OnUnmount, OnUnmount(..)
+  , pattern OnUnmounted, OnUnmounted(..)
   , pattern OnOpen, OnOpen(..)
   , pattern OnClose, OnClose(..)
   , pattern Trigger, Trigger(..)
@@ -61,7 +58,6 @@ import Semantic.Properties as Properties
   )
 
 import Data.Function as Tools ((&))
-import Pure.Data.Default as Tools
 
 data Popup = Popup_
     { as :: Features -> [View] -> View
@@ -183,8 +179,8 @@ instance Pure Popup where
                     in visibleTop && visibleBottom && visibleLeft && visibleRight
 
                 setPopupStyles = do
-                    WPS {..} <- getState self
-                    Popup_ {..} <- getProps self
+                    WPS {..} <- get self
+                    Popup_ {..} <- ask self
                     mcbr <- readIORef coords
                     mpbr <- readIORef popupCoords
                     for_ ((,) <$> mcbr <*> mpbr) $ \(cbr,pbr) -> do
@@ -218,49 +214,47 @@ instance Pure Popup where
 
                         let ss = [("position","absolute"),view left l,view right r,view top t,view bottom b]
 
-                        setState self $ \_ WPS {..} -> return
-                            ( WPS { currentStyles  = ss
-                               , currentPosition = p
-                               , ..
-                               }
-                            , return ()
-                            )
+                        modify_ self $ \_ WPS {..} ->
+                            WPS { currentStyles  = ss
+                                , currentPosition = p
+                                , ..
+                                }
 
                 handleOpen (evtTarget -> t) = do
-                    Popup_ {..} <- getProps self
-                    WPS {..} <- getState self
+                    Popup_ {..} <- ask self
+                    WPS {..} <- get self
                     br <- boundingRect (Element t)
                     writeIORef coords (Just br)
                     onOpen
 
                 handlePortalMount = do
-                    Popup_ {..} <- getProps self
-                    WPS {..} <- getState self
+                    Popup_ {..} <- ask self
+                    WPS {..} <- get self
                     sh <- onRaw (Node $ toJSV window) "scroll" def $ \_ _ -> do
-                        Popup_ {..} <- getProps self
-                        WPS {..} <- getState self
-                        setState self $ \_ WPS {..} -> return (WPS { closed = True, .. }, return ())
+                        Popup_ {..} <- ask self
+                        WPS {..} <- get self
+                        modify self $ \_ WPS {..} -> WPS { closed = True, .. }
                         join $ readIORef scrollHandler
                         forkIO $ do
                             threadDelay 50000
-                            void $ setState self $ \_ WPS {..} -> return (WPS { closed = False, .. }, return ())
+                            modify_ self $ \_ WPS {..} -> WPS { closed = False, .. }
                         onClose
                     writeIORef scrollHandler sh
                     onMount
 
                 handlePortalUnmount = do
-                    Popup_ {..} <- getProps self
-                    WPS {..} <- getState self
+                    Popup_ {..} <- ask self
+                    WPS {..} <- get self
                     join $ readIORef scrollHandler
                     onUnmount
 
                 handlePopupRef (Node n) = do
-                    void $ setState self $ \_ WPS {..} ->
-                        return (WPS {..},do
-                            br <- boundingRect (Element n)
-                            writeIORef popupCoords (isNull n ? Nothing $ Just br)
-                            setPopupStyles
-                          )
+                    modifyM_ self $ \_ WPS {..} -> return
+                        ( WPS {..} , do
+                          br <- boundingRect (Element n)
+                          writeIORef popupCoords (isNull n ? Nothing $ Just br)
+                          setPopupStyles
+                        )
 
             in def
                 { construct = WPS def def "top left" <$> newIORef def <*> newIORef def <*> newIORef def
@@ -292,8 +286,8 @@ instance Pure Popup where
                                 & Portal.OnClose onClose
                                 & OnMount handlePortalMount
                                 & OnOpen handleOpen
-                                & OnUnmount handlePortalUnmount
-                                & PortalNode (\f -> as (f $ features & Classes cs & Pure.Data.View.Patterns.Styles currentStyles & Lifecycle (HostRef handlePopupRef)) children)
+                                & OnUnmounted handlePortalUnmount
+                                & PortalNode (\f -> as (f $ features & Classes cs & Pure.Styles currentStyles & Lifecycle (HostRef handlePopupRef)) children)
                                 & Children [ trigger ]
                 }
 
@@ -355,8 +349,8 @@ instance HasProp OnOpen Popup where
     getProp _ = onOpen
     setProp _ oo p = p { onOpen = oo }
 
-instance HasProp OnUnmount Popup where
-    type Prop OnUnmount Popup = IO ()
+instance HasProp OnUnmounted Popup where
+    type Prop OnUnmounted Popup = IO ()
     getProp _ = onUnmount
     setProp _ ou p = p { onUnmount = ou }
 

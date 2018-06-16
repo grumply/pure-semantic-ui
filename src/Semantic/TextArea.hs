@@ -5,19 +5,14 @@ module Semantic.TextArea
   , TextArea(..), pattern TextArea
   ) where
 
+import Pure
+import qualified Pure.Data.Txt as T
+import Pure.Data.Lifted (setStyle,removeStyle,focusNode)
+
 import Control.Monad
 import Data.Foldable
 import Data.IORef
 import GHC.Generics as G
-import Pure.Data.View
-import Pure.Data.View.Patterns
-import Pure.Data.Txt
-import Pure.Data.HTML as HTML
-import Pure.Data.HTML.Properties as HTML
-import Pure.Data.Styles (pxs)
-import Pure.Data.Events
-import Pure.Data.Lifted (setStyle,removeStyle,focusNode,JSV,Node(..),Element(..),(.#))
-import qualified Pure.Data.Txt as T
 import Data.Char (isDigit)
 import Text.Read (readMaybe)
 
@@ -30,13 +25,11 @@ import Semantic.Properties as Properties
   ( pattern As, As(..)
   , pattern AutoHeight, AutoHeight(..)
   , pattern Rows, Rows(..)
-  , pattern Styles, Styles(..)
   , pattern Value, Value(..)
   , pattern Focus, Focus(..)
   )
 
 import Data.Function as Tools ((&))
-import Pure.Data.Default as Tools
 
 data TextArea = TextArea_
     { as         :: Features -> [View] -> View
@@ -48,7 +41,7 @@ data TextArea = TextArea_
     } deriving (Generic)
 
 instance Default TextArea where
-    def = (G.to gdef) { as = \fs cs -> Textarea & Features fs & Pure.Data.View.Patterns.Children cs, rows = 3 }
+    def = (G.to gdef) { as = \fs cs -> Textarea & Features fs & Children cs, rows = 3 }
 
 pattern TextArea :: TextArea -> TextArea
 pattern TextArea ta = ta
@@ -72,15 +65,15 @@ instance Pure TextArea where
                         return (mh,bbw,btw)
 
                 removeAutoHeightStyles = do
-                    TAS {..} <- getState self
+                    TAS {..} <- get self
                     mr <- readIORef ref
                     for_ mr $ \(Element -> r) -> do
                         removeStyle r "height"
                         removeStyle r "resize"
 
                 updateHeight = do
-                    TextArea_ {..} <- getProps self
-                    TAS {..} <- getState self
+                    TextArea_ {..} <- ask self
+                    TAS {..} <- get self
                     autoHeight # do
                         mr <- readIORef ref
                         for_ mr $ \(Element -> r) -> do
@@ -98,12 +91,12 @@ instance Pure TextArea where
                     updateHeight
 
                 handleFocus = do
-                    TAS {..} <- getState self
+                    TAS {..} <- get self
                     mr <- readIORef ref
                     traverse_ (focusNode . Node) mr
 
                 handleRef (Node n) = do
-                    TAS {..} <- getState self
+                    TAS {..} <- get self
                     writeIORef ref (Just n)
 
             in def
@@ -112,12 +105,12 @@ instance Pure TextArea where
                 , mounted = updateHeight
 
                 , receive = \newprops oldstate -> do
-                    oldprops <- getProps self
+                    oldprops <- ask self
                     when (not (focus oldprops) && focus newprops) handleFocus
                     return oldstate
 
-                , updated = \oldprops oldstate _ -> do
-                    props <- getProps self
+                , updated = \oldprops oldstate -> do
+                    props <- ask self
 
                     (not (autoHeight props) && autoHeight oldprops)
                         # removeAutoHeightStyles
@@ -129,9 +122,9 @@ instance Pure TextArea where
                     as (features
                           & OnInput (withInput handleInput)
                           & Lifecycle (HostRef handleRef)
-                          & HTML.Rows (toTxt rows)
-                          & Pure.Data.View.Patterns.Styles [("resize",autoHeight # "none")]
-                          & HTML.Value value
+                          & Pure.Rows (toTxt rows)
+                          & Styles [("resize",autoHeight # "none")]
+                          & Pure.Value value
                        )
                        []
 

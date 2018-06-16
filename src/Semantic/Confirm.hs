@@ -7,13 +7,10 @@ module Semantic.Confirm
   , Confirm(..), pattern Confirm
   ) where
 
+import Pure hiding (Size,content)
+
 import Control.Arrow ((&&&))
 import GHC.Generics as G
-import Pure.Data.View
-import Pure.Data.View.Patterns
-import Pure.Data.Txt
-import Pure.Data.HTML
-import Pure.Data.Events
 
 import Semantic.Utils
 
@@ -35,7 +32,6 @@ import Semantic.Properties as Properties
   )
 
 import Data.Function as Tools ((&))
-import Pure.Data.Default as Tools
 
 -- TODO: remove specialized children
 data Confirm = Confirm_

@@ -4,11 +4,9 @@ module Semantic.Container
   , Container(..), pattern Container, pattern TextContainer
   ) where
 
+import Pure hiding (text,textAlign)
+
 import GHC.Generics as G
-import Pure.Data.View
-import Pure.Data.View.Patterns
-import Pure.Data.Txt
-import Pure.Data.HTML
 
 import Semantic.Utils
 
@@ -22,7 +20,6 @@ import Semantic.Properties as Properties
   )
 
 import Data.Function as Tools ((&))
-import Pure.Data.Default as Tools
 
 data Container = Container_
   { as :: Features -> [View] -> View

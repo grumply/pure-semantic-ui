@@ -4,11 +4,9 @@ module Semantic.Input
   , Input(..), pattern Semantic.Input.Input
   ) where
 
+import Pure hiding (transparent)
+
 import GHC.Generics as G
-import Pure.Data.View
-import Pure.Data.View.Patterns
-import Pure.Data.Txt
-import Pure.Data.HTML
 
 import Semantic.Utils
 
@@ -33,7 +31,6 @@ import Semantic.Properties as Properties
 import Prelude hiding (error)
 
 import Data.Function as Tools ((&))
-import Pure.Data.Default as Tools
 
 data Input = Input_
     { as :: Features -> [View] -> View

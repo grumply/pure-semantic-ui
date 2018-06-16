@@ -5,17 +5,13 @@ module Semantic.Embed
   , Embed(..), pattern Semantic.Embed.Embed
   ) where
 
+import Pure hiding (Icon,Name,color,url)
+import Pure.Data.URI
+
 import Control.Arrow ((&&&))
 import Control.Monad
 import Data.Monoid
 import GHC.Generics as G
-import Pure.Data.View
-import Pure.Data.View.Patterns
-import Pure.Data.Txt
-import Pure.Data.HTML as HTML
-import Pure.Data.HTML.Properties (pattern Src)
-import Pure.Data.Events
-import Pure.Data.URI
 
 import Semantic.Utils hiding (id)
 
@@ -41,7 +37,6 @@ import Prelude hiding (id)
 import qualified Prelude
 
 import Data.Function as Tools ((&))
-import Pure.Data.Default as Tools
 
 data EmbedSource = YouTube | Vimeo | OtherSource Txt
 
@@ -80,13 +75,13 @@ instance Pure Embed where
         LibraryComponentIO $ \self ->
             let
                 handleClick _ = do
-                    Embed_ {..} <- getProps self
-                    isActive <- getState self
-                    unless active (void $ setState self $ \_ st -> return (not st,return ()))
+                    Embed_ {..} <- ask self
+                    isActive <- get self
+                    unless active (modify_ self (const not))
 
             in def
                 { construct = do
-                    Embed_ {..} <- getProps self
+                    Embed_ {..} <- ask self
                     return defaultActive
 
                 , render = \Embed_ {..} isActive ->
@@ -130,9 +125,9 @@ instance Pure Embed where
                                 _ -> url
 
                     in
-                        as (features & Classes cs & Pure.Data.Events.OnClick handleClick)
+                        as (features & Classes cs & Pure.OnClick handleClick)
                             [ View $ Icon icon
-                            , (placeholder /= mempty) # (HTML.Img <| Class "placeholder" . Src placeholder)
+                            , (placeholder /= mempty) # (Pure.Img <| Class "placeholder" . Src placeholder)
                             , active #
                                 (Div <| Class "embed" |>
                                     ((not $ Prelude.null children)

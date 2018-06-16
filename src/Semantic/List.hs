@@ -12,12 +12,9 @@ module Semantic.List
   , Keyed(..), pattern Semantic.List.Keyed
   ) where
 
+import Pure hiding (Content_,color,horizontal,verticalAlign)
+
 import GHC.Generics as G
-import Pure.Data.View
-import Pure.Data.View.Patterns
-import Pure.Data.Txt
-import Pure.Data.HTML as HTML
-import Pure.Data.HTML.Properties as HTML hiding (Content_)
 
 import Semantic.Utils
 
@@ -53,7 +50,6 @@ import Semantic.Properties as Properties
   )
 
 import Data.Function as Tools ((&))
-import Pure.Data.Default as Tools
 
 data List = List_
     { as :: Features -> [View] -> View
@@ -440,7 +436,7 @@ instance Pure Item where
                 , (not li) # "item"
                 ]
 
-            valueProp = li ? HTML.Value value $ Property "data-value" value
+            valueProp = li ? Pure.Value value $ Property "data-value" value
         in
             as (features & Classes cs & valueProp & Role "listitem") children
 
@@ -530,7 +526,7 @@ data Keyed = Keyed_
     } deriving (Generic)
 
 instance Default Keyed where
-    def = (G.to gdef) { as = \fs cs -> (Pure.Data.View.Patterns.Keyed Div) & Features fs & KeyedChildren cs }
+    def = (G.to gdef) { as = \fs cs -> (Pure.Keyed Div) & Features fs & KeyedChildren cs }
 
 pattern Keyed :: Keyed -> Keyed
 pattern Keyed l = l

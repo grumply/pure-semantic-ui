@@ -12,12 +12,9 @@ module Semantic.Comment
   , Text(..), pattern Text
   ) where
 
+import Pure hiding (Action,Content,Content_,Text)
+
 import GHC.Generics as G
-import Pure.Data.View hiding (Text)
-import Pure.Data.View.Patterns
-import Pure.Data.Txt
-import Pure.Data.HTML as HTML
-import qualified Pure.Data.HTML.Properties as HTML (pattern Src)
 
 import Semantic.Utils
 
@@ -34,7 +31,6 @@ import Semantic.Properties as Properties
   )
 
 import Data.Function as Tools ((&))
-import Pure.Data.Default as Tools
 
 data Comment = Comment_
     { as :: Features -> [View] -> View
@@ -180,7 +176,7 @@ pattern Avatar :: Avatar -> Avatar
 pattern Avatar ca = ca
 
 instance Pure Avatar where
-    view Avatar_ {..} = as (features & Class "avatar") [ HTML.Img <| HTML.Src src ]
+    view Avatar_ {..} = as (features & Class "avatar") [ Pure.Img <| Pure.Src src ]
 
 instance HasProp As Avatar where
     type Prop As Avatar = Features -> [View] -> View

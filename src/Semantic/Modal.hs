@@ -9,20 +9,14 @@ module Semantic.Modal
   , Header(..), pattern Semantic.Modal.Header
   ) where
 
+import Pure hiding (Open,Content_,Content)
+
 import Control.Arrow
 import Control.Monad
 import Data.Foldable
 import Data.IORef
 import Data.Maybe
 import GHC.Generics as G
-import Pure.Data.View
-import Pure.Data.View.Patterns
-import Pure.Data.Txt
-import Pure.Data.HTML
-import Pure.Data.Events
-import Pure.Data.Lifted (body,getBody,toJSV,JSV,Body(..),Node(..),Element(..))
-import Pure.Data.Styles
-import Pure.Animation (addAnimation)
 
 import Semantic.Utils
 
@@ -37,7 +31,7 @@ import Semantic.Properties as Properties
   , pattern OnClose, OnClose(..)
   , pattern OnMount, OnMount(..)
   , pattern OnOpen, OnOpen(..)
-  , pattern OnUnmount, OnUnmount(..)
+  , pattern OnUnmounted, OnUnmounted(..)
   , pattern Open, Open(..)
   , pattern Trigger, Trigger(..)
   , pattern MountNode, MountNode(..)
@@ -54,7 +48,6 @@ import Semantic.Properties as Properties
   )
 
 import Data.Function as Tools ((&))
-import Pure.Data.Default as Tools
 
 data Modal = Modal_
     { as :: Features -> [View] -> View
@@ -103,44 +96,41 @@ instance Pure Modal where
         LibraryComponentIO $ \self ->
             let
                 getMountNode = do
-                    Modal_ {..} <- getProps self
+                    Modal_ {..} <- ask self
                     b <- getBody
                     return $ fromMaybe (Element $ toJSV b) mountNode
 
                 handleRef (Node n) = do
-                    MS {..} <- getState self
+                    MS {..} <- get self
                     writeIORef ref (Just n)
 
                 handleOpen _ = do
-                    Modal_ {..} <- getProps self
+                    Modal_ {..} <- ask self
                     onOpen
-                    void $ setState self $ \_ MS {..} -> return
-                        (MS { active = True, .. }, return ())
+                    modify_ self $ \_ MS {..} -> MS { active = True, .. }
 
                 handleClose = do
-                    Modal_ {..} <- getProps self
+                    Modal_ {..} <- ask self
                     onClose
-                    void $ setState self $ \_ MS {..} -> return
-                        (MS { active = False, .. }, return ())
+                    modify_ self $ \_ MS {..} -> MS { active = False, .. }
 
                 handlePortalMount = do
-                    Modal_ {..} <- getProps self
-                    setState self $ \_ MS {..} -> return
-                        (MS { scrolling = Just False, .. }, return ())
+                    Modal_ {..} <- ask self
+                    modify_ self $ \_ MS {..} -> MS { scrolling = Just False, .. }
                     setPositionAndClassNames
                     onMount
 
                 handlePortalUnmount = do
-                    Modal_ {..} <- getProps self
-                    MS     {..} <- getState self
+                    Modal_ {..} <- ask self
+                    MS     {..} <- get self
                     n <- toJSV <$> getMountNode
                     traverse_ (removeClass n) ["blurring","dimmable","dimmed","scrolling"]
                     writeIORef pendingAnimation def
                     onUnmount
 
                 setPositionAndClassNames = do
-                    Modal_ {..} <- getProps self
-                    MS     {..} <- getState self
+                    Modal_ {..} <- ask self
+                    MS     {..} <- get self
                     n           <- toJSV <$> getMountNode
 
                     when (isJust dimmer) $
@@ -166,26 +156,25 @@ instance Pure Modal where
                           "scrolling"
 
                       (scrollingChange || topMarginChange) #
-                        setState self $ \_ MS {..} -> return
-                          (MS { topMargin = Just topMargin'
+                        modify_ self (\_ MS {..} ->
+                          MS { topMargin = Just topMargin'
                              , scrolling = Just scrolling'
                              , ..
-                             }
-                          , return ())
+                             })
 
                     writeIORef pendingAnimation setPositionAndClassNames
                     void $ addAnimation (join $ readIORef pendingAnimation)
 
             in def
                 { construct = do
-                    Modal_ {..} <- getProps self
+                    Modal_ {..} <- ask self
                     MS def def (open || defaultOpen) <$> newIORef def <*> newIORef def
                 , receive = \newprops oldstate -> return $
                     (open newprops /= active oldstate)
                       ? oldstate { active = open newprops }
                       $ oldstate
-                , unmount = do
-                    Modal_ {..} <- getProps self
+                , unmounted = do
+                    Modal_ {..} <- ask self
                     handlePortalUnmount
                 , render = \Modal_ {..} MS {..} ->
                     let
@@ -222,7 +211,7 @@ instance Pure Modal where
                         & Portal.OnClose handleClose
                         & OnMount handlePortalMount
                         & OnOpen handleOpen
-                        & OnUnmount handlePortalUnmount
+                        & OnUnmounted handlePortalUnmount
                         & Children [ trigger ]
                 }
 
@@ -284,8 +273,8 @@ instance HasProp OnOpen Modal where
     getProp _ = onOpen
     setProp _ oo m = m { onOpen = oo }
 
-instance HasProp OnUnmount Modal where
-    type Prop OnUnmount Modal = IO ()
+instance HasProp OnUnmounted Modal where
+    type Prop OnUnmounted Modal = IO ()
     getProp _ = onUnmount
     setProp _ ou m = m { onUnmount = ou }
 

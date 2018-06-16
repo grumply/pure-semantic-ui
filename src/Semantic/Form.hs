@@ -6,12 +6,9 @@ module Semantic.Form
   , Group(..), pattern Group
   ) where
 
+import Pure hiding (inline)
+
 import GHC.Generics as G
-import Pure.Data.View
-import Pure.Data.View.Patterns
-import Pure.Data.Txt
-import Pure.Data.HTML as HTML
-import Pure.Data.Events
 
 import Semantic.Utils
 import Prelude hiding (error)
@@ -44,7 +41,6 @@ import Semantic.Properties as Properties
   )
 
 import Data.Function as Tools ((&))
-import Pure.Data.Default as Tools
 
 data Form = Form_
     { as :: Features -> [View] -> View
@@ -64,7 +60,7 @@ data Form = Form_
     } deriving (Generic)
 
 instance Default Form where
-    def = (G.to gdef) { as = \fs cs -> HTML.Form & Features fs & Children cs }
+    def = (G.to gdef) { as = \fs cs -> Pure.Form & Features fs & Children cs }
 
 pattern Form :: Form -> Form
 pattern Form f = f
@@ -74,7 +70,7 @@ instance Pure Form where
         let
             fs = Classes cs
                . Property "action" action
-               . Pure.Data.Events.OnSubmit (\_ -> onSubmit)
+               . Pure.OnSubmit (\_ -> onSubmit)
 
             cs =
                 [ "ui"

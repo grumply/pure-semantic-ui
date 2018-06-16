@@ -5,11 +5,9 @@ module Semantic.Image
   , Group(..), pattern Group
   ) where
 
+import Pure hiding (inline,hidden,verticalAlign)
+
 import GHC.Generics as G (Generic,to)
-import Pure.Data.View
-import Pure.Data.View.Patterns
-import Pure.Data.Txt
-import Pure.Data.HTML
 
 import Semantic.Utils
 
@@ -35,7 +33,6 @@ import Semantic.Properties as Properties
   )
 
 import Data.Function as Tools ((&))
-import Pure.Data.Default as Tools
 
 data Image = Image_
     { as :: Features -> [View] -> View

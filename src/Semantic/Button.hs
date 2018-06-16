@@ -8,12 +8,9 @@ module Semantic.Button
   , Or(..), pattern Or
   ) where
 
+import Pure as HTML hiding (Content,Content_,color,hidden,visible,vertical)
+
 import GHC.Generics as G (Generic,to)
-import Pure.Data.View
-import Pure.Data.View.Patterns
-import Pure.Data.Txt
-import Pure.Data.HTML as HTML
-import qualified Pure.Data.HTML.Properties as HTML
 
 import Semantic.Utils
 
@@ -58,7 +55,6 @@ import Semantic.Properties as Properties
   )
 
 import Data.Function as Tools ((&))
-import Pure.Data.Default as Tools
 
 import Data.List as List (null,filter,partition,head)
 

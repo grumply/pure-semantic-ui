@@ -6,17 +6,13 @@ module Semantic.Dimmer
   , Dimmable(..), pattern Dimmable
   ) where
 
+import Pure
+
 import Control.Monad (unless)
 import Data.Coerce
 import Data.IORef
 import Data.List as List
 import GHC.Generics as G
-import Pure.Data.View
-import Pure.Data.View.Patterns
-import Pure.Data.Txt
-import Pure.Data.HTML
-import qualified Pure.Data.Events as Events
-import Pure.Data.Lifted
 
 import Semantic.Utils
 
@@ -42,7 +38,6 @@ import Semantic.Properties as Properties
   )
 
 import Data.Function as Tools ((&))
-import Pure.Data.Default as Tools
 
 data Dimmer = Dimmer_
     { as :: Features -> [View] -> View
@@ -76,8 +71,8 @@ instance Pure Dimmer where
                     removeBodyClass "dimmable"
 
                 handleClick e = do
-                    Dimmer_ {..} <- getProps self
-                    center       <- readIORef =<< getState self
+                    Dimmer_ {..} <- ask self
+                    center       <- readIORef =<< get self
                     onClick
                     case center of
                         Nothing       -> onClickOutside
@@ -87,7 +82,7 @@ instance Pure Dimmer where
                             unless (targetNotCenter && inside) onClickOutside
 
                 handleCenterRef n = do
-                    centerRef <- getState self
+                    centerRef <- get self
                     writeIORef centerRef (Just n)
 
             in
@@ -108,8 +103,8 @@ instance Pure Dimmer where
                                 ]
 
                             dimmer =
-                                Proxy def <| OnMount handlePortalMount . OnUnmount handlePortalUnmount |>
-                                  [ as (features & Classes cs & Events.OnClick handleClick)
+                                Proxy def <| OnMount handlePortalMount . OnUnmounted handlePortalUnmount |>
+                                  [ as (features & Classes cs & Pure.OnClick handleClick)
                                       ( (not $ List.null children)
                                           ? [ Div <| Class "content" |>
                                                 [ Div <| Class "center" . Lifecycle (HostRef handleCenterRef) |>
@@ -121,7 +116,7 @@ instance Pure Dimmer where
                                   ]
 
                             view
-                              | active && page = Portal (coerce Pure.Data.Lifted.body) dimmer
+                              | active && page = Portal (coerce Pure.body) dimmer
                               | active         = dimmer
                               | otherwise      = Null
 

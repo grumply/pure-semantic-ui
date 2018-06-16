@@ -5,18 +5,12 @@ module Semantic.Sticky
   , Sticky(..), pattern Sticky
   ) where
 
+import Pure
+
 import Control.Monad
 import Data.IORef
 import Data.Maybe
 import GHC.Generics as G
-import Pure.Data.View
-import Pure.Data.View.Patterns
-import Pure.Data.Styles
-import Pure.Data.Txt
-import Pure.Data.HTML
-import Pure.Data.Events
-import Pure.Data.Lifted
-import Pure.Animation (addAnimation)
 
 import Semantic.Utils hiding (body)
 
@@ -37,7 +31,6 @@ import Semantic.Properties as Properties
   )
 
 import Data.Function as Tools ((&))
-import Pure.Data.Default as Tools
 
 data Sticky = Sticky_
     { as :: Features -> [View] -> View
@@ -85,8 +78,8 @@ instance Pure Sticky where
         LibraryComponentIO $ \self ->
             let
                 getRects = do
-                    Sticky_ {..} <- getProps self
-                    SS {..} <- getState self
+                    Sticky_ {..} <- ask self
+                    SS {..} <- get self
 
                     mtr <- readIORef triggerRef
                     tr <- case mtr of
@@ -103,12 +96,12 @@ instance Pure Sticky where
                     return (tr,cr,sr)
 
                 upd (triggerRect,contextRect,stickyRect) = do
-                    s <- getProps self
-                    ss@SS {..} <- getState self
+                    s <- ask self
+                    ss@SS {..} <- get self
                     writeIORef ticking False
                     ih <- innerHeight
                     (brWidth triggerRect /= triggerWidth) #
-                        void (setState self $ \_ SS {..} -> return (SS { triggerWidth = brWidth triggerRect, .. },return ()))
+                        modify_ self (\_ SS {..} -> SS { triggerWidth = brWidth triggerRect, .. })
                     void (upd' s ss ih)
                     where
                         upd' Sticky_ {..} SS {..} (fromIntegral -> ih)
@@ -123,11 +116,11 @@ instance Pure Sticky where
                             | True                                                  = stickToContextTop
                             where
 
-                                setPushing p = pushing # do
-                                    void (setState self $ \_ SS {..} -> return (SS { isPushing = p, .. },return ()))
+                                setPushing p = pushing #
+                                    modify_ self (\_ SS {..} -> SS { isPushing = p, .. })
 
                                 setSticking sticking = void $ do
-                                    setState self $ \_ SS {..} -> return (SS { isSticking = sticking, .. },return ())
+                                    modify_ self $ \_ SS {..} -> SS { isSticking = sticking, .. }
                                     sticking
                                         ? onStick
                                         $ onUnstick
@@ -135,14 +128,11 @@ instance Pure Sticky where
                                 stickToContextBottom = void $ do
                                     onBottom
                                     setSticking True
-                                    setState self $ \_ SS {..} -> return
-                                      ( SS
-                                        { top = Just (brBottom contextRect - brHeight stickyRect)
-                                        , bottom = Nothing
-                                        , ..
-                                        }
-                                      , return ()
-                                      )
+                                    modify self $ \_ SS {..} ->
+                                        SS { top = Just (brBottom contextRect - brHeight stickyRect)
+                                           , bottom = Nothing
+                                           , ..
+                                           }
                                     setPushing True
 
                                 stickToContextTop = void $ do
@@ -150,30 +140,24 @@ instance Pure Sticky where
                                     setSticking False
                                     setPushing False
 
-                                stickToScreenBottom = void $ do
+                                stickToScreenBottom = do
                                     setSticking True
-                                    setState self $ \_ SS {..} -> return
-                                      ( SS
-                                        { bottom = Just bottomOffset
-                                        , top = Nothing
-                                        , ..
-                                        }
-                                      , return ()
-                                      )
+                                    modify_ self $ \_ SS {..} ->
+                                        SS { bottom = Just bottomOffset
+                                           , top = Nothing
+                                           , ..
+                                           }
 
-                                stickToScreenTop = void $ do
+                                stickToScreenTop = do
                                     setSticking True
-                                    setState self $ \_ SS {..} -> return
-                                      ( SS
-                                        { top = Just offset
-                                        , bottom = Nothing
-                                        , ..
-                                        }
-                                      , return ()
-                                      )
+                                    modify_ self $ \_ SS {..} ->
+                                        SS { top = Just offset
+                                           , bottom = Nothing
+                                           , ..
+                                           }
 
                 handleUpdate = do
-                    SS {..} <- getState self
+                    SS {..} <- get self
                     tckng <- readIORef ticking
                     (not tckng) # do
                         writeIORef ticking True
@@ -182,7 +166,7 @@ instance Pure Sticky where
                             upd newrects
 
                 addListeners Sticky_ {..} = do
-                    SS {..} <- getState self
+                    SS {..} <- get self
                     let sc = fromMaybe (toJSV window) scrollContext
                     sl <- onRaw (Node sc) "scroll" def (\_ _ -> handleUpdate)
                     writeIORef scrollListener sl
@@ -190,16 +174,16 @@ instance Pure Sticky where
                     writeIORef resizeListener rl
 
                 removeListeners = do
-                    SS {..} <- getState self
+                    SS {..} <- get self
                     join $ readIORef resizeListener
                     join $ readIORef scrollListener
 
                 handleStickyRef (Node n) = do
-                    SS {..} <- getState self
+                    SS {..} <- get self
                     writeIORef stickyRef (Just n)
 
                 handleTriggerRef (Node n) = do
-                    SS {..} <- getState self
+                    SS {..} <- get self
                     writeIORef triggerRef (Just n)
 
             in def
@@ -212,13 +196,13 @@ instance Pure Sticky where
                         <*> newIORef def
 
                 , mounted = do
-                    s@Sticky_ {..} <- getProps self
+                    s@Sticky_ {..} <- ask self
                     active # do
                         handleUpdate
                         addListeners s
 
                 , receive = \newprops oldstate -> do
-                    oldprops <- getProps self
+                    oldprops <- ask self
                     let newContext =
                           case (scrollContext oldprops,scrollContext newprops) of
                             (Just x,Just y) -> same x y
@@ -232,8 +216,8 @@ instance Pure Sticky where
                        | active newprops -> handleUpdate >> addListeners newprops >> return oldstate
                        | True -> removeListeners >> return oldstate { isSticking = False }
 
-                , unmount = do
-                    Sticky_ {..} <- getProps self
+                , unmounted = do
+                    Sticky_ {..} <- ask self
                     removeListeners
 
                 , render = \Sticky_ {..} SS {..} ->

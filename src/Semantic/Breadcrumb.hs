@@ -6,11 +6,9 @@ module Semantic.Breadcrumb
   , Section(..), pattern Section
   ) where
 
+import Pure hiding (Section)
+
 import GHC.Generics as G (Generic,to)
-import Pure.Data.View
-import Pure.Data.View.Patterns
-import Pure.Data.Txt
-import Pure.Data.HTML hiding (Section)
 
 import Semantic.Utils
 
@@ -26,7 +24,6 @@ import Semantic.Properties as Properties
 import qualified Data.List as List
 
 import Data.Function as Tools ((&))
-import Pure.Data.Default as Tools
 
 data Breadcrumb = Breadcrumb_
     { as       :: Features -> [View] -> View

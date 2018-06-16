@@ -12,11 +12,9 @@ module Semantic.Feed
   , User(..), pattern User
   ) where
 
+import Pure hiding (Content,Content_,text)
+
 import GHC.Generics as G hiding (Meta)
-import Pure.Data.View
-import Pure.Data.View.Patterns
-import Pure.Data.Txt
-import Pure.Data.HTML
 
 import Semantic.Utils
 
@@ -31,7 +29,6 @@ import Semantic.Properties as Properties
   )
 
 import Data.Function as Tools ((&))
-import Pure.Data.Default as Tools
 
 data Feed = Feed_
     { as :: Features -> [View] -> View

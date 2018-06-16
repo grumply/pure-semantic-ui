@@ -4,10 +4,7 @@ module Semantic.Proxy
   , Proxy(..), pattern Proxy
   )where
 
-import Pure.Data.Lifted (Node,IsNode(..))
-import Pure.Data.View hiding (children,getHost)
-import Pure.Data.Default
-import Pure.Data.View.Patterns
+import Pure
 
 import Control.Monad (join)
 import Data.Foldable (traverse_)
@@ -24,18 +21,14 @@ import Semantic.Properties as Properties
   ( pattern InnerRef, InnerRef(..)
   , pattern OnMount, OnMount(..)
   , pattern OnMounted, OnMounted(..)
-  , pattern OnUnmount, OnUnmount(..)
   , pattern OnUnmounted, OnUnmounted(..)
   )
-
-import Pure.Data.Default as Tools
 
 data Proxy = Proxy_
     { child :: View
     , innerRef :: Node -> IO ()
     , onMount :: IO ()
     , onMounted :: IO ()
-    , onUnmount :: IO ()
     , onUnmounted :: IO ()
     } deriving (Generic)
 
@@ -48,26 +41,17 @@ instance Pure Proxy where
     view = LibraryComponentIO $ \self ->
         let
             withRef (getHost -> h) = do
-                f <- innerRef <$> getProps self
+                f <- innerRef <$> ask self
                 traverse_ f h
         in
             def
                 { construct = return ()
-                , mount     = \_ -> do
-                    p <- getProps self
-                    onMount p
-                , mounted   = do
-                    p <- getProps self
-                    onMounted p
-                    getView self >>= withRef
-                , unmount   = do
-                    p <- getProps self
-                    onUnmount p
-                , unmounted = do
-                    p <- getProps self
-                    onUnmounted p
-                , updated   = \_ _ -> withRef
-                , render    = \ref _ -> child ref
+                , mount     = \_ ->   ask  self >>= onMount
+                , mounted   =         ask  self >>= onMounted >>
+                                      look self >>= withRef
+                , unmounted =         ask  self >>= onUnmounted
+                , updated   = \_ _ -> look self >>= withRef
+                , render    = \r _ -> child r
                 }
 
 instance HasChildren Proxy where
@@ -89,19 +73,7 @@ instance HasProp OnMounted Proxy where
     getProp _ = onMount
     setProp _ om p = p { onMounted = om }
 
-instance HasProp OnUnmount Proxy where
-    type Prop OnUnmount Proxy = IO ()
-    getProp _ = onUnmount
-    setProp _ om p = p { onUnmount = om }
-
 instance HasProp OnUnmounted Proxy where
     type Prop OnUnmounted Proxy = IO ()
     getProp _ = onUnmounted
     setProp _ om p = p { onUnmounted = om }
-
--- TODO: expose this in pure-dom
-getHost :: View -> Maybe Node
-getHost ComponentView {..} = join $ for record (getHost . unsafePerformIO . readIORef . crView)
-getHost TextView  {..} = fmap toNode textHost
-getHost SomeView {}    = Nothing
-getHost x              = fmap toNode $ elementHost x

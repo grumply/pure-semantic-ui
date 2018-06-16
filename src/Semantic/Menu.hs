@@ -8,11 +8,9 @@ module Semantic.Menu
   , Submenu (..), pattern Submenu
   ) where
 
+import Pure hiding (Icon,color,fixed,position,text,vertical)
+
 import GHC.Generics as G
-import Pure.Data.View
-import Pure.Data.View.Patterns
-import Pure.Data.Txt hiding (index)
-import Pure.Data.HTML
 
 import Semantic.Utils
 
@@ -54,7 +52,6 @@ import Semantic.Properties as Properties
 import Semantic.Icon
 
 import Data.Function as Tools ((&))
-import Pure.Data.Default as Tools
 
 data Menu = Menu_
     { as :: Features -> [View] -> View

@@ -8,12 +8,9 @@ module Semantic.Step
   , Title(..), pattern Semantic.Step.Title
   ) where
 
+import Pure hiding (Content_,Content,Step,vertical)
+
 import GHC.Generics as G
-import Pure.Data.View
-import Pure.Data.View.Patterns
-import Pure.Data.Txt
-import Pure.Data.HTML
-import Pure.Data.Events
 
 import Semantic.Utils
 
@@ -42,7 +39,6 @@ import Semantic.Properties as Properties
   )
 
 import Data.Function as Tools ((&))
-import Pure.Data.Default as Tools
 
 data Step = Step_
     { as :: Features -> [View] -> View

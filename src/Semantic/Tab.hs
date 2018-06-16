@@ -5,11 +5,9 @@ module Semantic.Tab
   , Pane(..), pattern Pane
   ) where
 
+import Pure hiding (Tab)
+
 import GHC.Generics as G
-import Pure.Data.View
-import Pure.Data.View.Patterns
-import Pure.Data.Txt
-import Pure.Data.HTML
 
 import Semantic.Utils
 
@@ -27,7 +25,6 @@ import Semantic.Properties
 import Semantic.Segment (pattern Segment)
 
 import Data.Function as Tools ((&))
-import Pure.Data.Default as Tools
 
 data Tab = Tab_
     { as :: Features -> [View] -> View

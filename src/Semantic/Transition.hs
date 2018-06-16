@@ -7,6 +7,8 @@ module Semantic.Transition
   , TransitionStatus(..)
   ) where
 
+import Pure hiding (Transition,animation,visible)
+
 import Control.Concurrent
 import Control.Monad (void)
 import Data.Foldable (for_)
@@ -14,11 +16,6 @@ import Data.IORef
 import Data.Maybe
 import Data.Monoid
 import GHC.Generics as G
-import Pure.Data.View
-import Pure.Data.View.Patterns
-import Pure.Data.Styles (ms)
-import Pure.Data.Txt
-import Pure.Data.HTML
 
 import Semantic.Utils
 
@@ -40,7 +37,6 @@ import Semantic.Properties as Properties
   )
 
 import Data.Function as Tools ((&))
-import Pure.Data.Default as Tools
 
 data TransitionStatus = Unmounted | Entered | Entering | Exited | Exiting
     deriving (Generic,Default,Ord,Eq)
@@ -92,18 +88,18 @@ instance Pure Transition where
             let
 
                 setSafeState f = do
-                    TS {..} <- getState self
+                    TS {..} <- get self
                     mtd <- readIORef mounted
-                    mtd # void (setState self (\_ st -> return (f st)))
+                    mtd # modifyM_ self (const f)
 
                 handleStart = do
-                    Transition_ {..} <- getProps self
-                    TS          {..} <- getState self
+                    Transition_ {..} <- ask self
+                    TS          {..} <- get self
 
                     upcoming <- readIORef next
                     writeIORef next def
 
-                    setSafeState $ \TS {..} ->
+                    setSafeState $ \TS {..} -> return
                         ( TS { status = fromMaybe status upcoming
                              , animating = True
                              , ..
@@ -117,28 +113,28 @@ instance Pure Transition where
                         )
 
                 handleComplete = do
-                    Transition_ {..} <- getProps self
-                    TS          {..} <- getState self
+                    Transition_ {..} <- ask self
+                    TS          {..} <- get self
                     onComplete status
                     maybe (return ()) (const handleStart) =<< readIORef next
                     s <- computeCompletedStatus
                     let callback = (status == Entering) ? onShow $ onHide
-                    setSafeState $ \TS {..} ->
+                    setSafeState $ \TS {..} -> return
                         ( TS { status = s, animating = False, .. }
                         , callback s
                         )
 
                 updateStatus = do
-                    Transition_ {..} <- getProps self
-                    TS          {..} <- getState self
+                    Transition_ {..} <- ask self
+                    TS          {..} <- get self
                     upcoming <- readIORef next
                     (isJust upcoming) # do
                         writeIORef next . Just =<< computeNextStatus
                         (not animating) # handleStart
 
                 computeCompletedStatus = do
-                    Transition_ {..} <- getProps self
-                    TS          {..} <- getState self
+                    Transition_ {..} <- ask self
+                    TS          {..} <- get self
 
                     return $
                       (status == Entering)
@@ -148,7 +144,7 @@ instance Pure Transition where
                             $ Exited
 
                 computeInitialStatuses = do
-                    Transition_ {..} <- getProps self
+                    Transition_ {..} <- ask self
                     return $
                         if | visible && transitionOnMount -> (Exited   ,Just Entering)
                            | visible                      -> (Entered  ,Nothing)
@@ -156,7 +152,7 @@ instance Pure Transition where
                            | otherwise                    -> (Exited   ,Nothing)
 
                 computeNextStatus = do
-                    TS {..} <- getState self
+                    TS {..} <- get self
                     return $
                         if animating
                             then (status == Entering) ? Exiting $ Entering
@@ -176,13 +172,13 @@ instance Pure Transition where
                         TS status def <$> newIORef def <*> newIORef next <*> newIORef def
 
                     , mounted = do
-                        TS {..} <- getState self
+                        TS {..} <- get self
                         writeIORef mounted True
                         updateStatus
 
                     , receive = \newprops oldstate -> do
-                        oldprops <- getProps self
-                        TS {..}  <- getState self
+                        oldprops <- ask self
+                        TS {..}  <- get self
                         let (current,upcoming) = computeStatuses (visible newprops) status
                         writeIORef next upcoming
                         let newStatus = fromMaybe status current
@@ -191,11 +187,11 @@ instance Pure Transition where
                             , ..
                             }
 
-                    , updated = \_ _ _ ->
+                    , updated = \_ _ ->
                         updateStatus
 
-                    , unmount = do
-                        TS {..} <- getState self
+                    , unmounted = do
+                        TS {..} <- get self
                         writeIORef mounted False
 
                     , render = \Transition_ {..} TS {..} ->
@@ -321,8 +317,7 @@ instance Pure Group where
         LibraryComponentIO $ \self ->
             let
                 handleOnHide key _ =
-                    void $ setState self $ \_ TGS {..} -> return
-                        (TGS { buffer = Prelude.filter ((/= key) . fst) buffer, .. }, return ())
+                    modify_ self $ \_ TGS {..} -> TGS { buffer = Prelude.filter ((/= key) . fst) buffer, .. }
 
                 wrapChild anim dur vis tom (key,child) =
                     (key,View $ Transition def
@@ -343,7 +338,7 @@ instance Pure Group where
 
             in def
                 { construct = do
-                    tg@Group_ {..} <- getProps self
+                    tg@Group_ {..} <- ask self
                     return TGS
                         { buffer = fmap (wrapChild animation duration True False) children
                         }

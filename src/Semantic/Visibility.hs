@@ -5,18 +5,13 @@ module Semantic.Visibility
   , Visibility(..), pattern Visibility
   ) where
 
+import Pure hiding (Visibility)
+
 import Control.Monad (unless,void,when)
 import Data.Coerce
 import Data.Foldable (for_,traverse_)
 import Data.IORef
 import GHC.Generics as G
-import Pure.Data.View
-import Pure.Data.View.Patterns
-import Pure.Data.Txt
-import Pure.Data.HTML
-import Pure.Data.Events
-import Pure.Data.Lifted hiding (Offset)
-import Pure.Animation (addAnimation)
 
 import Semantic.Utils
 
@@ -46,7 +41,6 @@ import Semantic.Properties as Properties
   )
 
 import Data.Function as Tools ((&))
-import Pure.Data.Default as Tools
 
 data Passed = PixelsPassed Double | PercentPassed Double
     deriving (Generic,Default,Ord,Eq)
@@ -129,13 +123,13 @@ instance Pure Visibility where
         LibraryComponentIO $ \self ->
             let
                 handleRef (Node n) = do
-                    VS {..} <- getState self
+                    VS {..} <- get self
                     writeIORef ref (Just n)
 
                 execute Nothing _ = return ()
                 execute (Just callback) name = do
-                    Visibility_ {..} <- getProps self
-                    VS          {..} <- getState self
+                    Visibility_ {..} <- ask self
+                    VS          {..} <- get self
 
                     cs <- readIORef calculations
                     fs <- readIORef fired
@@ -145,8 +139,8 @@ instance Pure Visibility where
                       writeIORef fired (name:fs)
 
                 fire callback name value rev = do
-                    Visibility_ {..} <- getProps self
-                    VS          {..} <- getState self
+                    Visibility_ {..} <- ask self
+                    VS          {..} <- get self
 
                     oldcs <- readIORef oldCalculations
                     cs    <- readIORef calculations
@@ -159,8 +153,8 @@ instance Pure Visibility where
                     unless once $ modifyIORef fired (Prelude.filter (/= name))
 
                 fireOnPassed = do
-                    Visibility_  {..} <- getProps self
-                    VS           {..} <- getState self
+                    Visibility_  {..} <- ask self
+                    VS           {..} <- get self
                     Calculations {..} <- readIORef calculations
 
                     for_ onPassed $ \(callback,passed) ->
@@ -171,7 +165,7 @@ instance Pure Visibility where
                         in thresholdReached # execute (Just callback) name
 
                 handleUpdate = do
-                    VS {..} <- getState self
+                    VS {..} <- get self
 
                     t       <- readIORef ticking
 
@@ -180,8 +174,8 @@ instance Pure Visibility where
                         void $ addAnimation update
 
                 update = do
-                    Visibility_ {..} <- getProps self
-                    VS          {..} <- getState self
+                    Visibility_ {..} <- ask self
+                    VS          {..} <- get self
 
                     writeIORef ticking False
 
@@ -216,8 +210,8 @@ instance Pure Visibility where
                         ]
 
                 compute = do
-                    Visibility_ {..} <- getProps self
-                    VS          {..} <- getState self
+                    Visibility_ {..} <- ask self
+                    VS          {..} <- get self
 
                     Just r <- readIORef ref
 
@@ -257,8 +251,8 @@ instance Pure Visibility where
                                  <*> newIORef def
 
                 , mounted = do
-                    Visibility_ {..} <- getProps self
-                    VS          {..} <- getState self
+                    Visibility_ {..} <- ask self
+                    VS          {..} <- get self
                     for_ context $ \c -> do
                       rh <- onRaw (Node c) "resize" def (\_ _ -> handleUpdate)
                       sh <- onRaw (Node c) "scroll" def (\_ _ -> handleUpdate)
@@ -267,13 +261,13 @@ instance Pure Visibility where
                     when fireOnMount update
 
                 , receive = \newprops oldstate@VS{..} -> do
-                    oldprops <- getProps self
+                    oldprops <- ask self
                     (continuous newprops /= continuous oldprops || once newprops /= once oldprops) #
                         writeIORef fired []
                     return oldstate
 
-                , unmount = do
-                    VS {..} <- getState self
+                , unmounted = do
+                    VS {..} <- get self
                     VH {..} <- readIORef handlers
                     resizeHandler
                     scrollHandler
