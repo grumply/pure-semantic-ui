@@ -78,8 +78,8 @@ instance HasChildren Rail where
 
 instance HasProp Close Rail where
     type Prop Close Rail = Maybe Txt
-    getProp _ = close
-    setProp _ c r = r { close = c }
+    getProp _ = Semantic.Rail.close
+    setProp _ c r = r { Semantic.Rail.close = c }
 
 instance HasProp Dividing Rail where
     type Prop Dividing Rail = Bool

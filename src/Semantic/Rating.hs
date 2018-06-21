@@ -117,7 +117,7 @@ instance Pure Rating where
                             (flip fmap [1..maxRating] $ \n ->
                                 View $ Semantic.Rating.Icon $ def
                                     & Active (rating >= Just n)
-                                    & Index n
+                                    & Properties.Index n
                                     & OnClick (handleIconClick n)
                                     & OnMouseEnter (handleIconMouseEnter n)
                                     & Pure.Selected (toTxt $ selectedIndex >= Just n && isSelecting)
@@ -236,8 +236,8 @@ instance HasProp Active Icon where
     getProp _ = active
     setProp _ a ri = ri { active = a }
 
-instance HasProp Index Icon where
-    type Prop Index Icon = Int
+instance HasProp Properties.Index Icon where
+    type Prop Properties.Index Icon = Int
     getProp _ = index
     setProp _ i ri = ri { index = i }
 
