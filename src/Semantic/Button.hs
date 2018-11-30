@@ -295,8 +295,8 @@ data Content = Content_
 instance Default Content where
     def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
-pattern Content :: Content -> View
-pattern Content bc = View bc
+pattern Content :: Content -> Content
+pattern Content bc = bc
 
 instance Pure Content where
     view Content_ {..} =
@@ -358,8 +358,8 @@ data Group = Group_
 instance Default Group where
     def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
-pattern Group :: Group -> View
-pattern Group bc = View bc
+pattern Group :: Group -> Group
+pattern Group bc = bc
 
 instance Pure Group where
     view Group_ {..} =
@@ -493,8 +493,8 @@ data Or = Or_
 instance Default Or where
     def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
-pattern Or :: Or -> View
-pattern Or bo = View bo
+pattern Or :: Or -> Or
+pattern Or bo = bo
 
 instance Pure Or where
     view Or_ {..} = as (features & Class "or" & Property "data-text" localize) []

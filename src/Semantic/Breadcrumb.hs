@@ -35,8 +35,8 @@ data Breadcrumb = Breadcrumb_
 instance Default Breadcrumb where
     def = (G.to gdef) { as = \fs cs -> Div & Features fs & Children cs }
 
-pattern Breadcrumb :: Breadcrumb -> View
-pattern Breadcrumb bc = View bc
+pattern Breadcrumb :: Breadcrumb -> Breadcrumb
+pattern Breadcrumb bc = bc
 
 instance Pure Breadcrumb where
     view Breadcrumb_ {..} =
