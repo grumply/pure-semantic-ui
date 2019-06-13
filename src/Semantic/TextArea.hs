@@ -87,6 +87,7 @@ instance Pure TextArea where
                                 setStyle r "height" (pxs (max mh' sh'))
                                 setStyle r "overflowY" mempty
 
+                handleInput :: Txt -> IO ()
                 handleInput txt = do
                     updateHeight
 
