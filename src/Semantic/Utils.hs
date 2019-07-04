@@ -2,6 +2,7 @@
 module Semantic.Utils (module Semantic.Utils, module Export) where
 
 import Pure
+import Pure.Data.View as V
 
 -- from pure-cond
 import Pure.Data.Cond as Export
@@ -64,7 +65,7 @@ foldPures f = foldr $ \x st ->
       _      -> st
 
 extractInputListeners :: [Listener] -> ([Listener],[Listener])
-extractInputListeners = partition (\(On ev _) -> ev `elem` inputEvents)
+extractInputListeners = partition (\(V.On ev _ _ _ _) -> ev `elem` inputEvents)
   where
     inputEvents =
       ["keydown","keypress","keyup","focus","blur","change","input","click","contextmenu"

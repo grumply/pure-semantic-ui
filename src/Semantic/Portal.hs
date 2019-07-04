@@ -253,15 +253,15 @@ instance Pure Portal where
                     , render = \Portal_ {..} ps ->
                         let
                             p | active ps = PortalView Nothing (fromMaybe (coerce body) mountNode) $ portal
-                                          $ Lifecycle (HostRef handlePortalRef)
+                                          $ WithHost handlePortalRef
                                           . OnMouseEnter handlePortalMouseEnter
                                           . OnMouseLeave handlePortalMouseLeave
-                                          . Listener (OnDoc "click" handleDocumentClick)
-                                          . Listener (OnDoc "keydown" handleEscape)
+                                          . OnDoc "click" handleDocumentClick
+                                          . OnDoc "keydown" handleEscape
                               | otherwise = Null
 
                             addTriggerHandlers =
-                                Lifecycle (HostRef handleTriggerRef)
+                                WithHost handleTriggerRef
                               . OnBlur handleTriggerBlur
                               . OnClick handleTriggerClick
                               . OnFocus handleTriggerFocus
