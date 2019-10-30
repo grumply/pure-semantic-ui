@@ -199,11 +199,11 @@ instance Pure Icon where
         let
             handleClick _ = onClick index
 
-            handleKeyUp e@Enter = do
+            handleKeyUp (Enter e) = do
               prevDef e
               onKeyUp index e
               onClick index
-            handleKeyUp e@Space = do
+            handleKeyUp (Space e) = do
               prevDef e
               onKeyUp index e
               onClick index

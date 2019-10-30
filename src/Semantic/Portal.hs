@@ -140,7 +140,7 @@ instance Pure Portal where
 
                     when eventShouldClosePortal closePortal
 
-                handleEscape Escape = do
+                handleEscape (Escape _) = do
                     Portal_ {..} <- ask self
                     when closeOnEscape closePortal
                 handleEscape _ = return ()
@@ -162,7 +162,7 @@ instance Pure Portal where
                     when closeOnPortalMouseLeave $
                         for_ mouseLeaveTimer killThread
 
-                handleTriggerBlur (RelatedTarget r) = do
+                handleTriggerBlur (RelatedTarget r _) = do
                     Portal_ {..} <- ask self
                     PS {..} <- get self
                     PSN {..} <- readIORef nodes
