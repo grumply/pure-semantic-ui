@@ -1,26 +1,29 @@
 name:              pure-semantic-ui
-version:           0.7.0.0
-synopsis:          
-homepage:          
-author:            S. M. Hickman
-maintainer:        sean@grump.ly
+version:           0.8.0.0
+homepage:          purehs.org/doc/pure-semantic-ui
+author:            Sean Hickman
+maintainer:        sean@grumply.com
 license:           BSD3
 license-file:      LICENSE
 cabal-version:     >= 1.10
 build-type:        Simple
+
+source-repository head
+  type: git
+  location: https://github.com/grumply/pure-semantic-ui.git
 
 library
   hs-source-dirs:
       src
 
   build-depends:
-    base >=4.8,
-    pure-cond >= 0.7 && < 1,
-    pure-core >= 0.7 && < 1,
-    pure-lifted >= 0.7 && < 1,
-    pure >= 0.7 && < 1,
-    pure-txt >= 0.7 && < 1,
-    pure-uri >= 0.7 && < 1
+    base,
+    pure-cond,
+    pure-core,
+    pure-lifted,
+    pure,
+    pure-txt,
+    pure-uri
 
   default-extensions:
     BangPatterns
