@@ -8,7 +8,7 @@ module Semantic.Button
   , Or(..), pattern Or
   ) where
 
-import Pure as HTML hiding (Content,Content_,color,hidden,visible,vertical)
+import Pure as HTML hiding (Content,Content_,color,hidden,visible,vertical,size,not,positive,focus,disabled,active,(#))
 
 import GHC.Generics as G (Generic,to)
 

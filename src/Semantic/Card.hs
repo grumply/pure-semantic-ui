@@ -9,7 +9,7 @@ module Semantic.Card
   , Meta(..), pattern Semantic.Card.Meta
   ) where
 
-import Pure hiding (Content,Content_,color,textAlign)
+import Pure hiding (Content,Content_,color,link,(#))
 
 import GHC.Generics as G hiding (Meta)
 

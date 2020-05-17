@@ -6,7 +6,7 @@ module Semantic.Breadcrumb
   , Section(..), pattern Section
   ) where
 
-import Pure hiding (Section)
+import Pure hiding (Section,size,link,active,(#))
 
 import GHC.Generics as G (Generic,to)
 

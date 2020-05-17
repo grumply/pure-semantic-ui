@@ -6,7 +6,7 @@ module Semantic.Sidebar
   , Pusher(..), pattern Pusher
   ) where
 
-import Pure hiding (animation,direction,visible,width)
+import Pure hiding (animation,direction,visible,width,duration,(#))
 
 import Control.Concurrent
 import Control.Monad

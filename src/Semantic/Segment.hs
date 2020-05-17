@@ -5,7 +5,7 @@ module Semantic.Segment
   , Group(..), pattern Group
   ) where
 
-import Pure hiding (color,textAlign,vertical,horizontal)
+import Pure hiding (color,vertical,horizontal,size,disabled,(#))
 
 import GHC.Generics as G
 

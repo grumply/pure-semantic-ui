@@ -4,7 +4,7 @@ module Semantic.Input
   , Input(..), pattern Semantic.Input.Input
   ) where
 
-import Pure hiding (transparent)
+import Pure hiding (transparent,size,disabled,focus,(#))
 
 import GHC.Generics as G
 

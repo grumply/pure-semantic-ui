@@ -7,7 +7,7 @@ module Semantic.TransitionablePortal
   , TransitionablePortal(..), pattern TransitionablePortal
   ) where
 
-import Pure hiding (Animation,Transition,OnClose,Open,animation)
+import Pure hiding (Animation,Transition,OnClose,Open,animation,duration,not,(#))
 
 import Control.Monad (void)
 import Data.Maybe (isNothing)

@@ -4,7 +4,8 @@ module Semantic.Progress
   , Progress(..), pattern Semantic.Progress.Progress
   ) where
 
-import Pure hiding (color)
+import Pure hiding (color,size,min,max,percent,disabled,active,(#))
+import qualified Pure
 
 import Data.Maybe
 import Data.Monoid
@@ -97,10 +98,10 @@ instance Pure Progress where
                 ]
         in
             as (features & Classes cs)
-                [ Div <| Class "bar" . Style width (per getPercent) |>
+                [ Div <| Class "bar" . Style width (Pure.percent getPercent) |>
                       [ progress #
                             Div <| Class "progress" |>
-                                [ txt $ maybe (int value <> "/" <> int total) per percent ]
+                                [ txt $ maybe (int value <> "/" <> int total) Pure.percent percent ]
                       ]
                 , Div <| Class "label" |> children
                 ]

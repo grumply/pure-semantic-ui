@@ -10,7 +10,7 @@ module Semantic.Table
   , Row(..), pattern Row
   ) where
 
-import Pure hiding (Body,color,fixed,textAlign,verticalAlign,width)
+import Pure hiding (Body,color,fixed,width,size,columns,positive,disabled,active,(#))
 
 import GHC.Generics as G
 

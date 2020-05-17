@@ -4,7 +4,7 @@ module Semantic.Reveal
   , Reveal(..), pattern Reveal
   ) where
 
-import Pure
+import Pure hiding (disabled,active,(#))
 
 import GHC.Generics as G
 

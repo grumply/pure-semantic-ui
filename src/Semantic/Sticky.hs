@@ -5,7 +5,7 @@ module Semantic.Sticky
   , Sticky(..), pattern Sticky
   ) where
 
-import Pure
+import Pure hiding (offset,context,not,active,(#))
 
 import Control.Monad
 import Data.IORef
@@ -223,10 +223,10 @@ instance Pure Sticky where
                 , render = \Sticky_ {..} SS {..} ->
                     let
                         computedStyles = isSticking #
-                            [ maybe def (\b -> ("bottom",pxs $ round b)) bottom
-                            , maybe def (\t -> ("top",pxs $ round t)) top
-                            , ("position","fixed")
-                            , (triggerWidth /= 0) # ("width",pxs $ round triggerWidth)
+                            [ maybe def (\b -> ("bottom",b <#> px)) bottom
+                            , maybe def (\t -> ("top",t <#> px)) top
+                            , (position,fixed)
+                            , (triggerWidth /= 0) # (width,triggerWidth <#> px)
                             ]
                     in
                         as features

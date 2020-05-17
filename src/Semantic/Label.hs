@@ -6,7 +6,7 @@ module Semantic.Label
   , Group(..), pattern Group
   ) where
 
-import Pure hiding (Label,color,horizontal)
+import Pure hiding (Label,color,horizontal,size,empty,corner,not,active,(#))
 
 import GHC.Generics as G (Generic,to)
 

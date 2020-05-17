@@ -5,7 +5,7 @@ module Semantic.TextArea
   , TextArea(..), pattern TextArea
   ) where
 
-import Pure
+import Pure hiding (focus,rows,max,not,(#))
 import qualified Pure.Data.Txt as T
 import Pure.Data.Lifted (setStyle,removeStyle,focusNode)
 
@@ -84,7 +84,7 @@ instance Pure TextArea where
                                 sh <- fromIntegral <$> scrollHeight r
                                 let mh' = Prelude.round mh
                                     sh' = ceiling (sh + bbw + btw)
-                                setStyle r "height" (pxs (max mh' sh'))
+                                setStyle r "height" (fromIntegral (max mh' sh') px)
                                 setStyle r "overflowY" mempty
 
                 handleInput :: Txt -> IO ()

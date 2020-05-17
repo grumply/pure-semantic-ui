@@ -7,7 +7,8 @@ module Semantic.Popup
   , Header(..), pattern Semantic.Popup.Header
   ) where
 
-import Pure hiding (Content,Content_,position)
+import Pure hiding (Content,Content_,position,size,offset,not,Styles,(#))
+import qualified Pure
 
 import Pure.Data.Txt (isInfixOf)
 
@@ -186,7 +187,7 @@ instance Pure Popup where
                     for_ ((,) <$> mcbr <*> mpbr) $ \(cbr,pbr) -> do
                         bs  <- bounds
                         let
-                            view d x = (d,maybe auto (pxs . round) x)
+                            view d x = (d,maybe auto (\x -> fromIntegral (round x) px) x)
 
                             compute = computePopupStyle offset pbr cbr bs
 

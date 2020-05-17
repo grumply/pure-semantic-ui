@@ -4,7 +4,7 @@ module Semantic.Proxy
   , Proxy(..), pattern Proxy
   )where
 
-import Pure
+import Pure hiding (child)
 
 import Control.Monad (join)
 import Data.Foldable (traverse_)

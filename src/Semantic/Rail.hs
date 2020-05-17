@@ -4,7 +4,7 @@ module Semantic.Rail
   , Rail(..), pattern Rail
   ) where
 
-import Pure hiding (position)
+import Pure hiding (position,size,(#))
 
 import GHC.Generics as G
 

@@ -6,7 +6,7 @@ module Semantic.Rating
   , Icon(..), pattern Semantic.Rating.Icon
   ) where
 
-import Pure
+import Pure hiding (index,size,not,active,disabled,(#))
 
 import Control.Monad
 import GHC.Generics as G

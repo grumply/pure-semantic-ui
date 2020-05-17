@@ -12,7 +12,7 @@ module Semantic.Comment
   , Text(..), pattern Text
   ) where
 
-import Pure hiding (Action,Content,Content_,Text)
+import Pure hiding (Action,Content,Content_,Text,size,active,(#))
 
 import GHC.Generics as G
 

@@ -5,7 +5,7 @@ module Semantic.Tab
   , Pane(..), pattern Pane
   ) where
 
-import Pure hiding (Tab)
+import Pure hiding (Tab,(#),active)
 
 import GHC.Generics as G
 

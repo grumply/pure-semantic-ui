@@ -12,7 +12,7 @@ module Semantic.Feed
   , User(..), pattern User
   ) where
 
-import Pure hiding (Content,Content_,text)
+import Pure hiding (Content,Content_,text,size,(#))
 
 import GHC.Generics as G hiding (Meta)
 

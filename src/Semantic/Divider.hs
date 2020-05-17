@@ -4,7 +4,7 @@ module Semantic.Divider
   , Divider(..), pattern Divider
   ) where
 
-import Pure hiding (hidden,horizontal,vertical)
+import Pure hiding (hidden,horizontal,vertical,(#))
 
 import GHC.Generics as G
 

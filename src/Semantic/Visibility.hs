@@ -5,7 +5,7 @@ module Semantic.Visibility
   , Visibility(..), pattern Visibility
   ) where
 
-import Pure hiding (Visibility)
+import Pure hiding (Visibility,offset,context,(#),not,max,Nothing)
 
 import Control.Monad (unless,void,when)
 import Data.Coerce

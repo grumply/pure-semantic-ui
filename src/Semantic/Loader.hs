@@ -4,7 +4,7 @@ module Semantic.Loader
   , Loader(..), pattern Loader
   ) where
 
-import Pure hiding (inline)
+import Pure hiding (inline,size,not,link,disabled,active,(#))
 
 import GHC.Generics as G
 

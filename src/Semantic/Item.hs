@@ -11,7 +11,7 @@ module Semantic.Item
   , Meta(..), pattern Semantic.Item.Meta
   ) where
 
-import Pure hiding (Content,Content_,hidden,inline,verticalAlign)
+import Pure hiding (Content,Content_,hidden,inline,size,disabled,link,(#))
 
 import GHC.Generics as G hiding (Meta)
 

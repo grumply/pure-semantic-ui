@@ -6,7 +6,7 @@ module Semantic.Form
   , Group(..), pattern Group
   ) where
 
-import Pure hiding (inline)
+import Pure hiding (inline,size,action,required,disabled,(#))
 
 import GHC.Generics as G
 

@@ -7,7 +7,7 @@ module Semantic.Accordion
   , Title(..), pattern Title
   ) where
 
-import Pure hiding (Content,Content_,Title,index)
+import Pure hiding (Content,Content_,Title,index,context,active,styled,(#))
 
 import GHC.Generics as G (Generic,to)
 

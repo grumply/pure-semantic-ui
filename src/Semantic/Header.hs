@@ -6,7 +6,7 @@ module Semantic.Header
   , Subheader(..), pattern Subheader
   ) where
 
-import Pure hiding (Content,Content_,Header,block,color,textAlign)
+import Pure hiding (Content,Content_,Header,block,color,size,disabled,link,active,(#))
 
 import GHC.Generics as G (Generic,to)
 

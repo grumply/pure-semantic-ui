@@ -5,7 +5,7 @@ module Semantic.Icon
   , Group(..), pattern Group
   ) where
 
-import Pure hiding (Icon,color)
+import Pure hiding (Icon,color,size,corner,name,link,disabled,(#))
 
 import GHC.Generics as G (Generic,to)
 

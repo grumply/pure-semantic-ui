@@ -4,7 +4,7 @@ module Semantic.Portal
   , Portal(..), pattern Semantic.Portal.Portal
   ) where
 
-import Pure
+import Pure hiding (not,active)
 import Pure.Data.Txt as Txt (unwords)
 
 import Control.Concurrent

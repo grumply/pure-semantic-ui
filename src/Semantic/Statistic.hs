@@ -7,7 +7,7 @@ module Semantic.Statistic
   , Value(..), pattern Value
   ) where
 
-import Pure hiding (color,horizontal,text,Value)
+import Pure hiding (color,horizontal,text,Value,size,(#))
 
 import GHC.Generics as G
 

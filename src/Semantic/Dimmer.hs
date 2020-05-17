@@ -6,7 +6,7 @@ module Semantic.Dimmer
   , Dimmable(..), pattern Dimmable
   ) where
 
-import Pure
+import Pure hiding (not,disabled,active,(#))
 
 import Control.Monad (unless)
 import Data.Coerce

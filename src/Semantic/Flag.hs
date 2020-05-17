@@ -4,7 +4,7 @@ module Semantic.Flag
   , Flag(..), pattern Flag
   ) where
 
-import Pure
+import Pure hiding (name)
 
 import GHC.Generics as G
 

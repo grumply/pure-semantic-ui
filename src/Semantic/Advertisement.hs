@@ -4,7 +4,7 @@ module Semantic.Advertisement
   , Advertisement(..), pattern Advertisement
   ) where
 
-import Pure
+import Pure hiding ((#))
 
 import GHC.Generics as G (Generic,to)
 

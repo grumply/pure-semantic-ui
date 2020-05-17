@@ -9,7 +9,7 @@ module Semantic.Modal
   , Header(..), pattern Semantic.Modal.Header
   ) where
 
-import Pure hiding (Open,Content_,Content)
+import Pure hiding (Open,Content_,Content,image,size,active,scrolling,(#))
 
 import Control.Arrow
 import Control.Monad
@@ -188,7 +188,7 @@ instance Pure Modal where
 
                         viewContent f =
                             let
-                                ss = maybe [] (\tm -> [(marginTop,pxs tm)]) topMargin
+                                ss = maybe [] (\tm -> [(margin-top,fromIntegral tm px)]) topMargin
 
                                 cs =
                                     [ "ui"

@@ -8,7 +8,7 @@ module Semantic.Step
   , Title(..), pattern Semantic.Step.Title
   ) where
 
-import Pure hiding (Content_,Content,Step,vertical)
+import Pure hiding (Content_,Content,Step,vertical,size,link,disabled,active,(#))
 
 import GHC.Generics as G
 

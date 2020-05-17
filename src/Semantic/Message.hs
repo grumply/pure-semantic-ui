@@ -8,7 +8,7 @@ module Semantic.Message
   , List(..), pattern List
   ) where
 
-import Pure hiding (Content,Content_,Icon,List,Name,color,hidden,visible)
+import Pure hiding (Content,Content_,Icon,List,Name,color,hidden,visible,size,positive,(#))
 
 import GHC.Generics as G
 

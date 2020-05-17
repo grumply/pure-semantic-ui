@@ -7,7 +7,7 @@ module Semantic.Search
   , Results(..), pattern Results
   ) where
 
-import Pure
+import Pure hiding ((#),active,focus,size,name)
 
 import Control.Arrow ((&&&))
 import GHC.Generics as G

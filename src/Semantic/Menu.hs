@@ -8,7 +8,7 @@ module Semantic.Menu
   , Submenu (..), pattern Submenu
   ) where
 
-import Pure hiding (Icon,color,fixed,position,text,vertical)
+import Pure hiding (Icon,color,fixed,position,text,vertical,index,size,active,link,disabled,(#))
 
 import GHC.Generics as G
 

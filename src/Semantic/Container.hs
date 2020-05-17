@@ -4,7 +4,7 @@ module Semantic.Container
   , Container(..), pattern Container, pattern TextContainer
   ) where
 
-import Pure hiding (text,textAlign)
+import Pure hiding (text,(#))
 
 import GHC.Generics as G
 

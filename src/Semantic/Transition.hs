@@ -7,7 +7,7 @@ module Semantic.Transition
   , TransitionStatus(..)
   ) where
 
-import Pure hiding (Transition,animation,visible)
+import Pure hiding (Transition,animation,visible,duration,not,(#))
 
 import Control.Concurrent
 import Control.Monad (void)
@@ -203,7 +203,7 @@ instance Pure Transition where
                                               [ animating # "animating"
                                               , case status of
                                                   Entering -> "in"
-                                                  Exiting  -> "out"
+                                                  Exiting  -> "out" 
                                                   Exited   -> "hidden"
                                                   _        -> def
                                               , (status /= Exited) # "visible"
@@ -215,8 +215,8 @@ instance Pure Transition where
                               animationStyles styles =
                                   let ad =
                                           case status of
-                                              Entering -> ("animation-duration",ms(calculateTransitionDuration status duration))
-                                              Exiting  -> ("animation-duration",ms(calculateTransitionDuration status duration))
+                                              Entering -> (animation-"duration",fromIntegral (calculateTransitionDuration status duration) ms)
+                                              Exiting  -> (animation-"duration",fromIntegral (calculateTransitionDuration status duration) ms)
                                               _        -> def
                                   in styles <> [ ad ]
 

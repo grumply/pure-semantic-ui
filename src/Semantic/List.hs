@@ -12,7 +12,7 @@ module Semantic.List
   , Keyed(..), pattern Semantic.List.Keyed
   ) where
 
-import Pure hiding (Content_,color,horizontal,verticalAlign)
+import Pure hiding (Content_,color,horizontal,size,not,corner,name,link,disabled,active,(#))
 
 import GHC.Generics as G
 

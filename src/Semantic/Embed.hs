@@ -5,7 +5,7 @@ module Semantic.Embed
   , Embed(..), pattern Semantic.Embed.Embed
   ) where
 
-import Pure hiding (Icon,Name,color,url)
+import Pure hiding (Icon,Name,color,url,source,not,active,(#))
 import Pure.Data.URI
 
 import Control.Arrow ((&&&))

@@ -6,7 +6,7 @@ module Semantic.Grid
   , Row(..), pattern Row
   ) where
 
-import Pure hiding (color,textAlign,verticalAlign,width)
+import Pure hiding (color,width,columns,(#))
 
 import GHC.Generics as G
 

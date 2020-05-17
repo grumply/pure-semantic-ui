@@ -5,7 +5,7 @@ module Semantic.Image
   , Group(..), pattern Group
   ) where
 
-import Pure hiding (inline,hidden,verticalAlign)
+import Pure hiding (inline,hidden,size,disabled,link,(#))
 
 import GHC.Generics as G (Generic,to)
 

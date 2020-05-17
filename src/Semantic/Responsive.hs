@@ -6,7 +6,7 @@ module Semantic.Responsive
   , pattern OnlyComputer, pattern OnlyLargeScreen, pattern OnlyWidescreen
   )where
 
-import Pure hiding (MinWidth,MaxWidth,minWidth,maxWidth)
+import Pure hiding (MinWidth,MaxWidth,(#))
 
 import Control.Monad (join,unless,void)
 import Data.IORef
