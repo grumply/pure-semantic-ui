@@ -106,7 +106,7 @@ data PortalStateNodes = PSN
 
 instance Pure Portal where
     view =
-        LibraryComponentIO $ \self ->
+        Component $ \self ->
             let
 
                 toRoot = Just . maybe (coerce body) id

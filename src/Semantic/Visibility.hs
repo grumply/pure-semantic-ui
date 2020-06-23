@@ -120,7 +120,7 @@ data Calculations = Calculations
 
 instance Pure Visibility where
     view =
-        LibraryComponentIO $ \self ->
+        Component $ \self ->
             let
                 handleRef (Node n) = do
                     VS {..} <- get self

@@ -60,7 +60,7 @@ pattern Dimmer d = d
 
 instance Pure Dimmer where
     view =
-        LibraryComponentIO $ \self ->
+        Component $ \self ->
             let
                 handlePortalMount = do
                     addBodyClass "dimmed"

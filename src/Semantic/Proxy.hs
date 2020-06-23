@@ -38,7 +38,7 @@ pattern Proxy :: Proxy -> Proxy
 pattern Proxy a = a
 
 instance Pure Proxy where
-    view = LibraryComponentIO $ \self ->
+    view = Component $ \self ->
         let
             withRef (getHost -> h) = do
                 f <- innerRef <$> ask self

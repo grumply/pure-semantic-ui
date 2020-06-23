@@ -52,7 +52,7 @@ data TextAreaState = TAS
 
 instance Pure TextArea where
     view =
-        LibraryComponentIO $ \self ->
+        Component $ \self ->
             let
                 computedTextAreaStyles :: Element -> IO (Maybe (Double,Double,Double))
                 computedTextAreaStyles e = do

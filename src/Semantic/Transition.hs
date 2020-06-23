@@ -84,7 +84,7 @@ data TransitionState = TS
 
 instance Pure Transition where
     view =
-        LibraryComponentIO $ \self ->
+        Component $ \self ->
             let
 
                 setSafeState f = do
@@ -314,7 +314,7 @@ data GroupState = TGS
 
 instance Pure Group where
     view =
-        LibraryComponentIO $ \self ->
+        Component $ \self ->
             let
                 handleOnHide key _ =
                     modify_ self $ \_ TGS {..} -> TGS { buffer = Prelude.filter ((/= key) . fst) buffer, .. }

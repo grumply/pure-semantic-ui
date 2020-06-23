@@ -65,7 +65,7 @@ data ResponsiveState = RS
 
 instance Pure Responsive where
     view =
-        LibraryComponentIO $ \self ->
+        Component $ \self ->
             let
                 handleResize = do
                     RS {..} <- get self

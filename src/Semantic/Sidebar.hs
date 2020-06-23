@@ -62,7 +62,7 @@ data SidebarState = SS
 
 instance Pure Sidebar where
     view =
-        LibraryComponentIO $ \self ->
+        Component $ \self ->
             let
             in def
                 { construct = SS def <$> newIORef def

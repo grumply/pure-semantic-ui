@@ -61,7 +61,7 @@ data RatingState = RS
 
 instance Pure Rating where
     view =
-        LibraryComponentIO $ \self ->
+        Component $ \self ->
             let
                 handleIconClick n _ = do
                     Rating_ {..} <- ask self

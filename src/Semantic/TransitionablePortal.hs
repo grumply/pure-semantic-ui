@@ -68,7 +68,7 @@ data TransitionablePortalState = TPS
 
 instance Pure TransitionablePortal where
     view =
-        LibraryComponentIO $ \self ->
+        Component $ \self ->
             let
                 handlePortalClose = do
                     TransitionablePortal_ {..} <- ask self

@@ -72,7 +72,7 @@ pattern Embed e = e
 
 instance Pure Embed where
     view =
-        LibraryComponentIO $ \self ->
+        Component $ \self ->
             let
                 handleClick _ = do
                     Embed_ {..} <- ask self

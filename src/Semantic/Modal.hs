@@ -93,7 +93,7 @@ data ModalState = MS
 
 instance Pure Modal where
     view =
-        LibraryComponentIO $ \self ->
+        Component $ \self ->
             let
                 getMountNode = do
                     Modal_ {..} <- ask self

@@ -105,7 +105,7 @@ data PopupState = WPS
 
 instance Pure Popup where
     view =
-        LibraryComponentIO $ \self ->
+        Component $ \self ->
             let
                 bounds = do
                     let fi = fromIntegral :: Int -> Double
