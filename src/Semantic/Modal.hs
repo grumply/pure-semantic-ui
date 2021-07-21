@@ -199,7 +199,7 @@ instance Pure Modal where
                                     ]
 
                             in
-                                as (f $ features & Classes cs & Styles ss & Lifecycle (HostRef handleRef)) children
+                                as (f $ features & Classes cs & Styles ss & WithHost handleRef) children
 
                     in (View :: Portal.Portal -> View) $ Portal.Portal $ withPortal $ def
                         & (closeOnDocumentClick ? CloseOnDocumentClick True $ id)

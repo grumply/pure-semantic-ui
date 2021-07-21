@@ -107,7 +107,7 @@ instance Pure Dimmer where
                                   [ as (features & Classes cs & Pure.OnClick handleClick)
                                       ( (not $ List.null children)
                                           ? [ Div <| Class "content" |>
-                                                [ Div <| Class "center" . Lifecycle (HostRef handleCenterRef) |>
+                                                [ Div <| Class "center" . WithHost handleCenterRef |>
                                                     children
                                                 ]
                                             ]

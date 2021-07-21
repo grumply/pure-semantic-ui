@@ -83,7 +83,7 @@ instance Pure Checkbox where
                -- TODO: pull this out into its own component
                ( (HTML.Input
                    <| Class "hidden"
-                    . Lifecycle (HostRef withRef)
+                    . WithHost withRef
                     . viewChecked checked
                     . HTML.Name name
                     . (readOnly ? HTML.ReadOnly "true" $ id)

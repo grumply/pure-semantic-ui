@@ -230,8 +230,8 @@ instance Pure Sticky where
                             ]
                     in
                         as features
-                            [ Div <| Lifecycle (HostRef handleTriggerRef)
-                            , Div <| Lifecycle (HostRef handleStickyRef) . Styles computedStyles |> children
+                            [ Div <| WithHost handleTriggerRef
+                            , Div <| WithHost handleStickyRef . Styles computedStyles |> children
                             ]
 
                 }

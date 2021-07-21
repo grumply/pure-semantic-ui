@@ -122,7 +122,7 @@ instance Pure TextArea where
                 , render = \TextArea_ {..} TAS {..} ->
                     as (features
                           & OnInput (withInput handleInput)
-                          & Lifecycle (HostRef handleRef)
+                          & WithHost handleRef
                           & Pure.Rows (toTxt rows)
                           & Styles [("resize",autoHeight # "none")]
                           & Pure.Value value

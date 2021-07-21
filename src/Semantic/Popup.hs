@@ -288,7 +288,7 @@ instance Pure Popup where
                                 & OnMount handlePortalMount
                                 & OnOpen handleOpen
                                 & OnUnmounted handlePortalUnmount
-                                & PortalNode (\f -> as (f $ features & Classes cs & Pure.Styles currentStyles & Lifecycle (HostRef handlePopupRef)) children)
+                                & PortalNode (\f -> as (f $ features & Classes cs & Pure.Styles currentStyles & WithHost handlePopupRef) children)
                                 & Children [ trigger ]
                 }
 
