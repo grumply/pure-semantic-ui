@@ -70,7 +70,7 @@ pattern Progress p = p
 instance Pure Progress where
     view Progress_ {..} =
         let
-            decimals p x = (fromInteger $ Prelude.round $ x * (10^p)) / (10.0^^p)
+            decimals p x = (fromInteger $ Prelude.round $ x * (10^p)) / (10.0 Prelude.^^ p)
 
             totalPercent =
                 (total > 0)
