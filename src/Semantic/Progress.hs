@@ -4,7 +4,7 @@ module Semantic.Progress
   , Progress(..), pattern Semantic.Progress.Progress
   ) where
 
-import Pure hiding (color,size,min,max,percent,disabled,active,(#))
+import Pure hiding (color,size,min,max,percent,disabled,active,(#),value)
 import qualified Pure
 
 import Data.Maybe

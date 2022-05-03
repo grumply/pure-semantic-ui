@@ -65,7 +65,7 @@ foldPures f = foldr $ \x st ->
       _      -> st
 
 extractInputListeners :: [Listener] -> ([Listener],[Listener])
-extractInputListeners = partition (\(V.On ev _ _ _ _) -> ev `elem` inputEvents)
+extractInputListeners = partition (\(V.On ev _ _ _ _ _) -> ev `elem` inputEvents)
   where
     inputEvents =
       ["keydown","keypress","keyup","focus","blur","change","input","click","contextmenu"

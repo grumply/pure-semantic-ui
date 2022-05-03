@@ -4,7 +4,7 @@ module Semantic.Checkbox
   , Checkbox(..), pattern Checkbox
   ) where
 
-import Pure as HTML hiding (name,readOnly,checked,disabled,(#))
+import Pure as HTML hiding (name,readOnly,checked,disabled,(#),value)
 
 import GHC.Generics as G
 

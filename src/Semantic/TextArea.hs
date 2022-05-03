@@ -5,7 +5,7 @@ module Semantic.TextArea
   , TextArea(..), pattern TextArea
   ) where
 
-import Pure hiding (focus,rows,max,not,(#))
+import Pure hiding (focus,rows,max,not,(#),value)
 import qualified Pure.Data.Txt as T
 import Pure.Data.Lifted (setStyle,removeStyle,focusNode)
 

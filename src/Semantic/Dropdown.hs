@@ -9,7 +9,7 @@ module Semantic.Dropdown
   , SearchInput, pattern SearchInput
   ) where
 
-import Pure hiding (button,inline,(#),disabled,active,scrolling,item,selection)
+import Pure hiding (button,inline,(#),disabled,active,scrolling,item,selection,value)
 
 import GHC.Generics as G
 
